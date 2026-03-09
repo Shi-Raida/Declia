@@ -2,6 +2,8 @@
 
 ## V1 — Launch
 
+> Detailed milestone breakdown with user stories: [roadmap-v1.md](roadmap-v1.md)
+
 Core platform covering the full photographer workflow end-to-end.
 
 **Public-facing:**
