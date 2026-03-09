@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Statistiques</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .period-tab { padding:8px 18px; border-radius:var(--fl-radius-full); font-size:0.8125rem; font-weight:500; border:none; cursor:pointer; background:transparent; color:var(--fl-warm-gray); transition:all var(--fl-transition); }
+  .period-tab.active { background:var(--fl-rose); color:white; box-shadow:var(--fl-shadow-cta); }
+  .period-tab:hover:not(.active) { background:var(--fl-border); color:var(--fl-charcoal); }
+  .source-bar { display:flex; align-items:center; gap:var(--fl-space-md); margin-bottom:var(--fl-space-sm); }
+  .source-bar-label { width:150px; font-size:0.875rem; flex-shrink:0; }
+  .source-bar-track { flex:1; height:8px; background:var(--fl-border); border-radius:var(--fl-radius-full); overflow:hidden; }
+  .source-bar-fill { height:100%; border-radius:var(--fl-radius-full); }
+  .source-bar-pct { width:36px; font-size:0.8125rem; font-weight:600; text-align:right; flex-shrink:0; }
+  .heatmap-cell { width:24px; height:24px; border-radius:3px; flex-shrink:0; }
+  .product-row { display:flex; align-items:center; gap:var(--fl-space-md); padding:12px 0; border-bottom:1px solid var(--fl-border); }
+  .product-row:last-child { border-bottom:none; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Statistiques</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header fl-flex-between">
+        <div>
+          <div class="fl-page-title">Statistiques</div>
+          <div class="fl-page-subtitle">Vue d'ensemble de votre activité et de vos performances</div>
+        </div>
+        <button class="fl-btn fl-btn-ghost">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exporter CSV
+        </button>
+      </div>
+
+      <!-- Period Filter -->
+      <div style="display:flex;gap:6px;background:var(--fl-bg-alt);border:1px solid var(--fl-border);border-radius:var(--fl-radius-full);padding:4px;width:fit-content;margin-bottom:var(--fl-space-lg);">
+        <button class="period-tab">Aujourd'hui</button>
+        <button class="period-tab">7 jours</button>
+        <button class="period-tab active">30 jours</button>
+        <button class="period-tab">12 mois</button>
+        <button class="period-tab">Personnalisé</button>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="fl-grid-4 fl-mb-lg" style="grid-template-columns:repeat(5,1fr);">
+        <div class="fl-kpi" style="border-top:3px solid var(--fl-rose);">
+          <div class="fl-kpi-label">Chiffre d'affaires</div>
+          <div class="fl-kpi-value">4 280€</div>
+          <div class="fl-kpi-trend up">↑ +12% vs mois préc.</div>
+        </div>
+        <div class="fl-kpi" style="border-top:3px solid var(--fl-prune);">
+          <div class="fl-kpi-label">Séances réalisées</div>
+          <div class="fl-kpi-value">18</div>
+          <div class="fl-kpi-trend up">↑ +3 vs mois préc.</div>
+        </div>
+        <div class="fl-kpi" style="border-top:3px solid var(--fl-sauge);">
+          <div class="fl-kpi-label">Nouveaux clients</div>
+          <div class="fl-kpi-value">12</div>
+          <div class="fl-kpi-trend up">↑ 67% nouveaux</div>
+        </div>
+        <div class="fl-kpi" style="border-top:3px solid var(--fl-or);">
+          <div class="fl-kpi-label">Panier moyen</div>
+          <div class="fl-kpi-value">238€</div>
+          <div class="fl-kpi-trend up">↑ +14€ vs mois préc.</div>
+        </div>
+        <div class="fl-kpi" style="border-top:3px solid var(--fl-or);">
+          <div class="fl-kpi-label">Satisfaction</div>
+          <div class="fl-kpi-value" style="color:var(--fl-or);">4.9 ★</div>
+          <div class="fl-kpi-trend up">↑ 43 avis collectés</div>
+        </div>
+      </div>
+
+      <!-- Revenue Chart + Specialty Donut -->
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- Revenue Chart 12 months -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Chiffre d'affaires mensuel — 2025/2026</h3>
+            <svg width="100%" height="160" viewBox="0 0 520 160" preserveAspectRatio="xMidYMid meet">
+              <!-- Grid -->
+              <line x1="40" y1="10" x2="40" y2="120" stroke="var(--fl-border)" stroke-width="1"/>
+              <line x1="40" y1="120" x2="510" y2="120" stroke="var(--fl-border)" stroke-width="1"/>
+              <line x1="40" y1="10" x2="510" y2="10" stroke="var(--fl-border)" stroke-width="0.5" stroke-dasharray="3,3"/>
+              <line x1="40" y1="65" x2="510" y2="65" stroke="var(--fl-border)" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+              <!-- Y labels -->
+              <text x="35" y="14" text-anchor="end" font-size="9" fill="var(--fl-warm-gray)">5k€</text>
+              <text x="35" y="69" text-anchor="end" font-size="9" fill="var(--fl-warm-gray)">2.5k€</text>
+              <text x="35" y="124" text-anchor="end" font-size="9" fill="var(--fl-warm-gray)">0</text>
+
+              <!-- Bars (12 months) -->
+              <!-- Avr 25 -->
+              <rect x="47" y="95" width="28" height="25" rx="3" fill="var(--fl-rose)" opacity="0.35"/>
+              <text x="61" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">A'25</text>
+              <!-- Mai -->
+              <rect x="86" y="70" width="28" height="50" rx="3" fill="var(--fl-rose)" opacity="0.45"/>
+              <text x="100" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">M</text>
+              <!-- Juin -->
+              <rect x="125" y="65" width="28" height="55" rx="3" fill="var(--fl-rose)" opacity="0.55"/>
+              <text x="139" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">J</text>
+              <!-- Juil -->
+              <rect x="164" y="75" width="28" height="45" rx="3" fill="var(--fl-rose)" opacity="0.45"/>
+              <text x="178" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">Jl</text>
+              <!-- Août -->
+              <rect x="203" y="80" width="28" height="40" rx="3" fill="var(--fl-rose)" opacity="0.40"/>
+              <text x="217" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">Ao</text>
+              <!-- Sept -->
+              <rect x="242" y="60" width="28" height="60" rx="3" fill="var(--fl-rose)" opacity="0.60"/>
+              <text x="256" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">S</text>
+              <!-- Oct -->
+              <rect x="281" y="55" width="28" height="65" rx="3" fill="var(--fl-rose)" opacity="0.65"/>
+              <text x="295" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">O</text>
+              <!-- Nov -->
+              <rect x="320" y="85" width="28" height="35" rx="3" fill="var(--fl-rose)" opacity="0.40"/>
+              <text x="334" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">N</text>
+              <!-- Déc -->
+              <rect x="359" y="70" width="28" height="50" rx="3" fill="var(--fl-rose)" opacity="0.50"/>
+              <text x="373" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">D</text>
+              <!-- Jan 26 -->
+              <rect x="398" y="90" width="28" height="30" rx="3" fill="var(--fl-rose)" opacity="0.50"/>
+              <text x="412" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">J'26</text>
+              <!-- Fév -->
+              <rect x="437" y="75" width="28" height="45" rx="3" fill="var(--fl-rose)" opacity="0.65"/>
+              <text x="451" y="134" text-anchor="middle" font-size="7" fill="var(--fl-warm-gray)">F</text>
+              <!-- Mars (current) -->
+              <rect x="476" y="40" width="28" height="80" rx="3" fill="var(--fl-rose)" opacity="1"/>
+              <text x="490" y="36" text-anchor="middle" font-size="8" font-weight="700" fill="var(--fl-prune)">4 280€</text>
+              <text x="490" y="134" text-anchor="middle" font-size="7" font-weight="700" fill="var(--fl-prune)">M</text>
+
+              <!-- Trend line -->
+              <polyline points="61,107 100,95 139,92 178,98 217,100 256,90 295,87 334,103 373,95 412,105 451,98 490,80"
+                fill="none" stroke="var(--fl-or)" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Donut Chart + Sources -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Répartition par spécialité</h3>
+            <div style="display:flex;gap:var(--fl-space-lg);align-items:center;">
+              <!-- Donut SVG -->
+              <svg width="130" height="130" viewBox="0 0 130 130" flex-shrink="0">
+                <!-- Famille 35% -->
+                <circle cx="65" cy="65" r="50" fill="none" stroke="var(--fl-rose)" stroke-width="22"
+                  stroke-dasharray="110 204" stroke-dashoffset="0" transform="rotate(-90 65 65)"/>
+                <!-- Équestre 25% -->
+                <circle cx="65" cy="65" r="50" fill="none" stroke="var(--fl-sauge)" stroke-width="22"
+                  stroke-dasharray="78 236" stroke-dashoffset="-110" transform="rotate(-90 65 65)"/>
+                <!-- Événementiel 20% -->
+                <circle cx="65" cy="65" r="50" fill="none" stroke="var(--fl-or)" stroke-width="22"
+                  stroke-dasharray="63 251" stroke-dashoffset="-188" transform="rotate(-90 65 65)"/>
+                <!-- Maternité 12% -->
+                <circle cx="65" cy="65" r="50" fill="none" stroke="var(--fl-info)" stroke-width="22"
+                  stroke-dasharray="38 276" stroke-dashoffset="-251" transform="rotate(-90 65 65)"/>
+                <!-- Scolaire 8% -->
+                <circle cx="65" cy="65" r="50" fill="none" stroke="var(--fl-border-dark)" stroke-width="22"
+                  stroke-dasharray="25 289" stroke-dashoffset="-289" transform="rotate(-90 65 65)"/>
+                <text x="65" y="60" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="18" font-weight="700" fill="var(--fl-charcoal)">18</text>
+                <text x="65" y="75" text-anchor="middle" font-family="Outfit,sans-serif" font-size="9" fill="var(--fl-warm-gray)">séances</text>
+              </svg>
+              <!-- Legend -->
+              <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:var(--fl-rose);flex-shrink:0;"></span>
+                  <span style="flex:1;">Famille</span><span style="font-weight:700;">35%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:var(--fl-sauge);flex-shrink:0;"></span>
+                  <span style="flex:1;">Équestre</span><span style="font-weight:700;">25%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:var(--fl-or);flex-shrink:0;"></span>
+                  <span style="flex:1;">Événementiel</span><span style="font-weight:700;">20%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:var(--fl-info);flex-shrink:0;"></span>
+                  <span style="flex:1;">Maternité</span><span style="font-weight:700;">12%</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:var(--fl-border-dark);flex-shrink:0;"></span>
+                  <span style="flex:1;">Scolaire</span><span style="font-weight:700;">8%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- Top Products -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Top prestations</h3>
+            <div class="product-row">
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:0.875rem;">Formule Signature</div>
+                <div class="fl-text-xs fl-text-muted">Séance 2h + galerie complète</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;color:var(--fl-prune);font-family:var(--fl-font-heading);">1 890€</div>
+                <div class="fl-text-xs fl-text-muted">8 ventes</div>
+              </div>
+              <span class="fl-badge fl-badge-success">+18%</span>
+            </div>
+            <div class="product-row">
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:0.875rem;">Tirage Fine-Art</div>
+                <div class="fl-text-xs fl-text-muted">Impressions premium encadrées</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;color:var(--fl-prune);font-family:var(--fl-font-heading);">840€</div>
+                <div class="fl-text-xs fl-text-muted">12 commandes</div>
+              </div>
+              <span class="fl-badge fl-badge-success">+24%</span>
+            </div>
+            <div class="product-row">
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:0.875rem;">Album Luxe</div>
+                <div class="fl-text-xs fl-text-muted">Album cuir 30x30 · 50 pages</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;color:var(--fl-prune);font-family:var(--fl-font-heading);">760€</div>
+                <div class="fl-text-xs fl-text-muted">4 albums</div>
+              </div>
+              <span class="fl-badge fl-badge-warning">+5%</span>
+            </div>
+            <div class="product-row">
+              <div style="flex:1;">
+                <div style="font-weight:600;font-size:0.875rem;">Séance Sur-Mesure</div>
+                <div class="fl-text-xs fl-text-muted">Formule personnalisée</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700;color:var(--fl-prune);font-family:var(--fl-font-heading);">590€</div>
+                <div class="fl-text-xs fl-text-muted">3 séances</div>
+              </div>
+              <span class="fl-badge fl-badge-success">+32%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acquisition sources -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Acquisition clients</h3>
+            <div class="source-bar">
+              <span class="source-bar-label">Instagram</span>
+              <div class="source-bar-track"><div class="source-bar-fill" style="width:42%;background:var(--fl-rose);"></div></div>
+              <span class="source-bar-pct" style="color:var(--fl-rose);">42%</span>
+            </div>
+            <div class="source-bar">
+              <span class="source-bar-label">Bouche-à-oreille</span>
+              <div class="source-bar-track"><div class="source-bar-fill" style="width:35%;background:var(--fl-prune);"></div></div>
+              <span class="source-bar-pct" style="color:var(--fl-prune);">35%</span>
+            </div>
+            <div class="source-bar">
+              <span class="source-bar-label">Google</span>
+              <div class="source-bar-track"><div class="source-bar-fill" style="width:23%;background:var(--fl-sauge);"></div></div>
+              <span class="source-bar-pct" style="color:var(--fl-sauge);">23%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seasonality Heatmap -->
+      <div class="fl-card">
+        <div class="fl-card-body">
+          <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Carte de saisonnalité — Périodes chargées</h3>
+          <div style="overflow-x:auto;">
+            <div style="min-width:600px;">
+              <!-- Month labels -->
+              <div style="display:flex;gap:4px;margin-bottom:6px;padding-left:60px;">
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Jan</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Fév</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-rose);text-transform:uppercase;">Mar ←</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Avr</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Mai</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Juin</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Juil</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Aoû</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Sep</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Oct</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Nov</div>
+                <div style="flex:1;text-align:center;font-size:0.625rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;">Déc</div>
+              </div>
+              <!-- Rows (weeks 1-4 per month) -->
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <div style="width:56px;font-size:0.625rem;color:var(--fl-warm-gray);text-align:right;padding-right:4px;">Sem. 1</div>
+                  <!-- Jan W1 -->
+                  <div style="flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;">
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.1);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.15);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.7);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.5);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.9);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.85);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.5);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.4);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.95);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.8);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.2);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.4);border-radius:3px;"></div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <div style="width:56px;font-size:0.625rem;color:var(--fl-warm-gray);text-align:right;padding-right:4px;">Sem. 2</div>
+                  <div style="flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;">
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.1);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.2);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.9);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.6);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,1);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.7);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.3);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.25);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.8);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.75);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.15);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.35);border-radius:3px;"></div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <div style="width:56px;font-size:0.625rem;color:var(--fl-warm-gray);text-align:right;padding-right:4px;">Sem. 3</div>
+                  <div style="flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;">
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.05);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.3);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.8);border-radius:3px;border:2px solid var(--fl-rose);"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.55);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.85);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.75);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.45);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.35);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,1);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.9);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.1);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.5);border-radius:3px;"></div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <div style="width:56px;font-size:0.625rem;color:var(--fl-warm-gray);text-align:right;padding-right:4px;">Sem. 4</div>
+                  <div style="flex:1;display:grid;grid-template-columns:repeat(12,1fr);gap:3px;">
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.08);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.2);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.75);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.65);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.95);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.8);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.4);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.3);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.85);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.7);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.12);border-radius:3px;"></div>
+                    <div class="heatmap-cell" style="background:rgba(194,114,126,0.45);border-radius:3px;"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Legend -->
+              <div class="fl-flex fl-gap-md fl-mt-md" style="font-size:0.75rem;align-items:center;padding-left:60px;">
+                <span class="fl-text-muted">Moins chargé</span>
+                <div style="display:flex;gap:3px;">
+                  <div style="width:16px;height:16px;border-radius:3px;background:rgba(194,114,126,0.1);"></div>
+                  <div style="width:16px;height:16px;border-radius:3px;background:rgba(194,114,126,0.35);"></div>
+                  <div style="width:16px;height:16px;border-radius:3px;background:rgba(194,114,126,0.6);"></div>
+                  <div style="width:16px;height:16px;border-radius:3px;background:rgba(194,114,126,0.8);"></div>
+                  <div style="width:16px;height:16px;border-radius:3px;background:rgba(194,114,126,1);"></div>
+                </div>
+                <span class="fl-text-muted">Plus chargé</span>
+                <div style="width:16px;height:16px;border-radius:3px;background:rgba(194,114,126,0.8);border:2px solid var(--fl-rose);"></div>
+                <span class="fl-text-muted">Semaine actuelle</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads, Social & Tri IA — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.sw-btn{padding:9px 18px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}
+.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.page-header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:18px 24px}
+.ph-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ai-logo{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
+.ph-info h1{font-size:20px;color:var(--prune)}.ph-info h1 em{color:var(--rose);font-style:italic}
+.ph-info p{font-size:12px;color:var(--gris)}
+.ph-badge{margin-left:auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--radius-full)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);overflow:hidden}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:14px;color:var(--prune);flex:1}
+.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+
+/* LEADS */
+.lead-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(74,46,61,.04)}
+.lead-item:last-child{border:none}
+.lead-score-ring{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-titre);font-size:16px;font-weight:700;border:3px solid}
+.lr-hot{border-color:var(--rose);color:var(--rose);background:var(--rose-light)}
+.lr-warm{border-color:var(--or);color:var(--or);background:var(--or-light)}
+.lr-cool{border-color:var(--gris-light);color:var(--gris);background:var(--bg-alt)}
+.lead-info{flex:1}.lead-name{font-weight:700;font-size:13px;color:var(--prune)}.lead-detail{font-size:11px;color:var(--gris)}.lead-signals{font-size:10px;color:var(--or);margin-top:2px}
+.lead-action{padding:6px 12px;border-radius:var(--radius);font-size:11px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;transition:var(--tr)}
+.la-send{background:var(--sauge);color:#fff}.la-send:hover{background:#5a6e4b}
+.la-view{background:var(--rose-light);color:var(--rose)}.la-view:hover{background:var(--rose);color:#fff}
+
+.alert-box{background:linear-gradient(135deg,rgba(194,114,126,.06),rgba(212,160,60,.06));border:1px solid rgba(194,114,126,.15);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+.alert-box .ab-title{font-size:12px;font-weight:700;color:var(--rose);display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.alert-box p{font-size:12px;color:var(--gris);line-height:1.5}
+.alert-box .ab-action{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:12px;font-weight:700;color:var(--rose);cursor:pointer}
+
+.source-bar{display:flex;gap:4px;height:24px;border-radius:var(--radius);overflow:hidden;margin:12px 0}
+.sb-seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff}
+
+/* PIPELINE LEAD */
+.pipe-lead{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pl-col{background:var(--bg-alt);border-radius:var(--radius-md);padding:10px;min-height:80px}
+.pl-h{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gris);margin-bottom:8px;display:flex;justify-content:space-between}
+.pl-n{background:var(--gris-border);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:9px}
+.pl-card{background:var(--bg);border-radius:var(--radius);padding:8px;margin-bottom:6px;border:1px solid var(--gris-border);font-size:11px}
+.pl-card .plc-n{font-weight:700;color:var(--prune)}.pl-card .plc-d{font-size:10px;color:var(--gris)}.pl-card .plc-s{font-weight:700;margin-top:2px}
+.plc-hot{color:var(--rose)}.plc-warm{color:var(--or)}.plc-cool{color:var(--gris)}
+
+/* SOCIAL */
+.post-card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:18px;box-shadow:var(--shadow-sm);margin-bottom:18px}
+.post-top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.post-channel{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ch-insta{background:linear-gradient(135deg,#833AB4,#E1306C,#F77737);color:#fff}
+.ch-fb{background:#1877F2;color:#fff}
+.ch-tiktok{background:#000;color:#fff}
+.post-meta{flex:1}.post-meta .pm-channel{font-weight:700;font-size:13px;color:var(--prune)}.post-meta .pm-time{font-size:11px;color:var(--gris)}
+.post-status{font-size:10px;font-weight:700;padding:4px 12px;border-radius:var(--radius-full)}
+.ps-ready{background:var(--sauge-light);color:var(--sauge)}.ps-draft{background:var(--or-light);color:#92750c}.ps-scheduled{background:var(--prune-light);color:var(--prune)}
+.post-body{font-size:13px;color:var(--texte);line-height:1.7;font-style:italic;padding:14px;background:var(--bg-alt);border-radius:var(--radius);border-left:3px solid var(--or);margin-bottom:12px;position:relative}
+.post-body::before{content:'✨ Généré par l\'IA';position:absolute;top:-8px;left:10px;font-size:9px;font-weight:700;color:var(--or);background:var(--bg-alt);padding:0 6px}
+.post-hashtags{font-size:11px;color:var(--rose);margin-bottom:12px}
+.post-btns{display:flex;gap:6px}
+.post-btns button{padding:7px 14px;border-radius:var(--radius);font-size:11px;font-weight:700;cursor:pointer;transition:var(--tr)}
+.pb-publish{background:var(--sauge);color:#fff;border:none}.pb-publish:hover{background:#5a6e4b}
+.pb-edit{background:transparent;color:var(--prune);border:1px solid var(--gris-border)}.pb-edit:hover{background:var(--prune-light)}
+.pb-regen{background:transparent;color:var(--gris);border:1px solid var(--gris-border)}
+.pb-regen:hover{color:var(--prune)}
+
+.planning-row{display:flex;gap:6px;margin-top:10px}
+.plan-day{flex:1;text-align:center;padding:8px;border-radius:var(--radius);font-size:10px;border:1px solid var(--gris-border)}
+.plan-day.has-post{background:var(--rose-light);border-color:var(--rose);font-weight:700;color:var(--prune)}
+.plan-day .pd-day{font-weight:700;display:block;margin-bottom:2px}
+.plan-day .pd-type{font-size:9px;color:var(--gris)}
+
+/* TRI ASSISTÉ */
+.gallery-demo{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.gal-item{border-radius:var(--radius);overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer;transition:var(--tr)}
+.gal-item:hover{transform:scale(1.03);box-shadow:var(--shadow-md)}
+.gal-ph{width:100%;height:100%}
+.gp1{background:linear-gradient(135deg,#e8d5c4,#d0bba6)}.gp2{background:linear-gradient(135deg,#d4cfc5,#b8b0a0)}.gp3{background:linear-gradient(135deg,#f0d9a8,#dfc080)}.gp4{background:linear-gradient(135deg,#cec3ad,#b0a58f)}.gp5{background:linear-gradient(135deg,#d5c8b8,#bbad9a)}.gp6{background:linear-gradient(135deg,#e0d5c0,#c0b49c)}.gp7{background:linear-gradient(135deg,#d8ccb8,#b8ac96)}.gp8{background:linear-gradient(135deg,#f5ede6,#e2d5c8)}
+.gal-badge{position:absolute;top:6px;left:6px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:var(--radius-full);color:#fff}
+.gb-heart{background:var(--rose)}.gb-best{background:var(--or)}
+.gal-check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.gal-check.selected{background:var(--sauge);border-color:var(--sauge)}
+
+.ai-tip{background:linear-gradient(135deg,rgba(212,160,60,.06),rgba(194,114,126,.06));border:1px solid rgba(212,160,60,.2);border-radius:var(--radius);padding:14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.ai-tip .tip-icon{font-size:20px;flex-shrink:0}
+.ai-tip .tip-text{font-size:12px;color:var(--texte);line-height:1.6}
+.ai-tip .tip-text strong{color:var(--prune)}
+
+.cat-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cat-chip{padding:7px 14px;border-radius:var(--radius-full);font-size:11px;font-weight:700;border:1.5px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--tr)}
+.cat-chip:hover{border-color:var(--or);color:var(--or)}
+.cat-chip.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+.sel-counter{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--prune);border-radius:var(--radius);color:#fff;margin-bottom:16px}
+.sel-counter .sc-num{font-family:var(--font-titre);font-size:22px;font-weight:700;color:var(--or)}
+.sel-bar{flex:1;height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
+.sel-fill{height:100%;background:var(--or);border-radius:3px;width:68%}
+.sel-label{font-size:12px}
+
+@media(max-width:1024px){.grid-2{grid-template-columns:1fr}.pipe-lead{grid-template-columns:repeat(2,1fr)}.gallery-demo{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.pipe-lead,.gallery-demo{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('leads',this)">💬 Gestion Leads</button>
+  <button class="sw-btn" onclick="switchView('social',this)">📝 Textes Sociaux</button>
+  <button class="sw-btn" onclick="switchView('tri',this)">📸 Tri Assisté Client</button>
+</div>
+
+<!-- GESTION DES LEADS -->
+<div class="page-view active" id="view-leads">
+<div class="page-header"><div class="ph-inner"><div class="ai-logo" style="background:linear-gradient(135deg,var(--sauge),#8aad6f)">💬</div><div class="ph-info"><h1>Gestion des <em>Leads</em></h1><p>Qualification automatique, scoring d'intention, pipeline commerciale</p></div><span class="ph-badge" style="background:rgba(220,38,38,.08);color:#DC2626">7 leads chauds</span></div></div>
+<div class="container">
+<div class="grid-2">
+  <div class="card"><div class="card-h"><h3>🔥 Leads actifs — classés par score</h3><span class="card-badge">23 total</span></div><div class="card-b">
+    <div class="alert-box"><div class="ab-title">🚨 Alerte IA</div><p><strong>Emma L.</strong> a visité la page Équestre 4 fois, téléchargé le guide tenues et comparé les formules. Score 87/100 — forte intention ! Suggérer le code BIENVENUE10 par email.</p><span class="ab-action">📧 Envoyer le code →</span></div>
+    <div class="lead-item"><div class="lead-score-ring lr-hot">87</div><div class="lead-info"><div class="lead-name">Emma L.</div><div class="lead-detail">Intéressée Équestre Signature</div><div class="lead-signals">📄 4 visites · 📥 Guide tenues · ⏱ 12 min sur tarifs</div></div><button class="lead-action la-send">Envoyer code</button></div>
+    <div class="lead-item"><div class="lead-score-ring lr-hot">83</div><div class="lead-info"><div class="lead-name">Claire D.</div><div class="lead-detail">Intéressée Famille Signature</div><div class="lead-signals">📄 3 visites · 📅 Vu calendrier · 💬 Chat démarré</div></div><button class="lead-action la-view">Voir chat</button></div>
+    <div class="lead-item"><div class="lead-score-ring lr-warm">68</div><div class="lead-info"><div class="lead-name">Thomas R.</div><div class="lead-detail">Mariage — demande devis</div><div class="lead-signals">📝 Formulaire devis rempli · 💍 Événementiel</div></div><button class="lead-action la-send">Envoyer devis</button></div>
+    <div class="lead-item"><div class="lead-score-ring lr-warm">54</div><div class="lead-info"><div class="lead-name">Sarah M.</div><div class="lead-detail">Carte cadeau consultée</div><div class="lead-signals">🎁 2 visites carte cadeau · Via Instagram</div></div><button class="lead-action la-view">Voir</button></div>
+    <div class="lead-item"><div class="lead-score-ring lr-cool">32</div><div class="lead-info"><div class="lead-name">Pierre B.</div><div class="lead-detail">1ère visite — navigation rapide</div><div class="lead-signals">📄 1 visite · ⏱ 2 min · Via Google</div></div><button class="lead-action la-view">Voir</button></div>
+  </div></div>
+
+  <div class="card"><div class="card-h"><h3>📊 Sources d'acquisition</h3><span class="card-badge">Ce mois</span></div><div class="card-b">
+    <div class="source-bar"><div class="sb-seg" style="flex:47;background:#E1306C">Insta 47%</div><div class="sb-seg" style="flex:23;background:#4285F4">Google 23%</div><div class="sb-seg" style="flex:15;background:var(--or)">Parrainage 15%</div><div class="sb-seg" style="flex:15;background:var(--gris)">Autre 15%</div></div>
+    <p style="font-size:12px;color:var(--gris);margin-bottom:16px">Instagram reste votre canal #1. Les leads Instagram convertissent à 34% contre 18% pour Google.</p>
+    <div class="pipe-lead">
+      <div class="pl-col"><div class="pl-h">Visiteurs <div class="pl-n">89</div></div><div class="pl-card"><div class="plc-n">89 visiteurs</div><div class="plc-d">Ce mois</div></div></div>
+      <div class="pl-col"><div class="pl-h">Intéressés <div class="pl-n">23</div></div><div class="pl-card"><div class="plc-n">23 leads</div><div class="plc-d">Score > 30</div><div class="plc-s plc-warm">26% du trafic</div></div></div>
+      <div class="pl-col"><div class="pl-h">Chauds <div class="pl-n">7</div></div><div class="pl-card"><div class="plc-n">7 leads</div><div class="plc-d">Score > 70</div><div class="plc-s plc-hot">30% des leads</div></div></div>
+      <div class="pl-col"><div class="pl-h">Convertis <div class="pl-n">4</div></div><div class="pl-card"><div class="plc-n">4 réservations</div><div class="plc-d">Ce mois</div><div class="plc-s plc-hot">68% conversion</div></div></div>
+    </div>
+  </div></div>
+</div>
+</div></div>
+
+<!-- TEXTES RÉSEAUX SOCIAUX -->
+<div class="page-view" id="view-social">
+<div class="page-header"><div class="ph-inner"><div class="ai-logo" style="background:linear-gradient(135deg,var(--prune),#7a5a6d)">📝</div><div class="ph-info"><h1>Textes <em>Réseaux Sociaux</em></h1><p>Légendes générées dans votre ton · Planning éditorial · Multi-canal</p></div><span class="ph-badge" style="background:var(--sauge-light);color:var(--sauge)">3 posts prêts</span></div></div>
+<div class="container">
+
+<div class="post-card">
+  <div class="post-top"><div class="post-channel ch-insta">📸</div><div class="post-meta"><div class="pm-channel">Instagram — Séance équestre</div><div class="pm-time">Meilleur moment : demain 18h30</div></div><span class="post-status ps-ready">✅ Prêt</span></div>
+  <div class="post-body">Il y a des liens qui ne s'expliquent pas. Celui entre Marie et son cheval, c'est de ceux-là — un regard, une main posée sur l'encolure, et toute l'émotion du monde dans la lumière dorée du soir. 🐴✨<br><br>C'est ça, ma mission : capturer l'invisible entre vous.<br><br>📸 Séance Équestre Signature<br>🌅 À l'Heure Dorée<br>📍 Tarn & Toulouse</div>
+  <div class="post-hashtags">#photographeequestre #heuredoree #chevaux #cavaliere #fleurdelumiere #tarn #lumierenaturelle #complicite</div>
+  <div class="post-btns"><button class="pb-publish">📤 Publier</button><button class="pb-edit">✏️ Modifier</button><button class="pb-regen">🔄 Régénérer</button></div>
+</div>
+
+<div class="post-card">
+  <div class="post-top"><div class="post-channel ch-insta">📸</div><div class="post-meta"><div class="pm-channel">Instagram — Témoignage client</div><div class="pm-time">Suggéré : jeudi 19h00</div></div><span class="post-status ps-draft">📝 Brouillon</span></div>
+  <div class="post-body">« Capucine a su capturer l'essence de notre famille avec une douceur incroyable. On a ri, on a joué, on ne s'est pas rendu compte que c'était une séance photo. » — Sophie & Thomas 🌸<br><br>Merci pour votre confiance. C'est pour ces moments-là que je fais ce métier. 💛</div>
+  <div class="post-hashtags">#avis #temoignage #photographefamille #toulouse #tarn #seancephoto #fleurdelumiere #famille</div>
+  <div class="post-btns"><button class="pb-publish">📤 Publier</button><button class="pb-edit">✏️ Modifier</button><button class="pb-regen">🔄 Régénérer</button></div>
+</div>
+
+<div class="post-card">
+  <div class="post-top"><div class="post-channel ch-fb">f</div><div class="post-meta"><div class="pm-channel">Facebook — Offre mini-session</div><div class="pm-time">Programmé : samedi 10h00</div></div><span class="post-status ps-scheduled">📅 Programmé</span></div>
+  <div class="post-body">🌸 MINI-SESSIONS PRINTEMPS 🌸<br><br>20 minutes à l'Heure Dorée, 5 photos retouchées, à seulement 75€ (au lieu de 150€). Samedi 15 mars — Places limitées !<br><br>Parfait pour un premier essai ou un cadeau. Réservez vite sur fleurdelumiere.fr 💛</div>
+  <div class="post-hashtags">#minisession #printemps #promos #photographetarn #toulouse</div>
+  <div class="post-btns"><button class="pb-edit">✏️ Modifier</button><button class="pb-regen">🔄 Régénérer</button></div>
+</div>
+
+<div class="card"><div class="card-h"><h3>📅 Planning éditorial — Mars 2026</h3><span class="card-badge">Suggestion IA</span></div><div class="card-b">
+<p style="font-size:12px;color:var(--gris);margin-bottom:10px">Répartition suggérée : 3 posts famille, 2 équestre, 1 témoignage, 1 promo, 1 behind-the-scenes</p>
+<div class="planning-row">
+  <div class="plan-day"><span class="pd-day">L</span><span class="pd-type">—</span></div>
+  <div class="plan-day"><span class="pd-day">M</span><span class="pd-type">—</span></div>
+  <div class="plan-day has-post"><span class="pd-day">M</span><span class="pd-type">🐴 Équestre</span></div>
+  <div class="plan-day"><span class="pd-day">J</span><span class="pd-type">—</span></div>
+  <div class="plan-day has-post"><span class="pd-day">V</span><span class="pd-type">⭐ Avis</span></div>
+  <div class="plan-day has-post"><span class="pd-day">S</span><span class="pd-type">👨‍👩‍👧 Famille</span></div>
+  <div class="plan-day"><span class="pd-day">D</span><span class="pd-type">—</span></div>
+</div>
+</div></div>
+
+</div></div>
+
+<!-- TRI ASSISTÉ CLIENT -->
+<div class="page-view" id="view-tri">
+<div class="page-header"><div class="ph-inner"><div class="ai-logo" style="background:linear-gradient(135deg,var(--or),var(--rose))">📸</div><div class="ph-info"><h1>Tri Assisté <em>Galerie Client</em></h1><p>L'IA aide vos clients à choisir leurs photos — Vue côté client</p></div><span class="ph-badge" style="background:var(--sauge-light);color:var(--sauge)">Galerie Sophie Mercier</span></div></div>
+<div class="container">
+
+<div class="sel-counter">
+  <div class="sc-num">17/25</div>
+  <div class="sel-bar"><div class="sel-fill"></div></div>
+  <div class="sel-label">photos sélectionnées</div>
+</div>
+
+<div class="ai-tip"><div class="tip-icon">✨</div><div class="tip-text"><strong>Suggestion IA :</strong> Vous n'avez pas encore choisi de photo avec votre fils aîné Lucas. Voici 3 photos où il est particulièrement expressif — regardez la catégorie « Portraits Lucas » ci-dessous !</div></div>
+
+<div class="cat-chips">
+  <span class="cat-chip active">Toutes (80)</span>
+  <span class="cat-chip">❤️ Coups de cœur IA (12)</span>
+  <span class="cat-chip">👨‍👩‍👧‍👦 Plans famille (18)</span>
+  <span class="cat-chip">👦 Portraits Lucas (8)</span>
+  <span class="cat-chip">👧 Portraits Emma (10)</span>
+  <span class="cat-chip">🐕 Avec le chien (6)</span>
+  <span class="cat-chip">🌅 Paysages & ambiance (8)</span>
+  <span class="cat-chip">😄 Moments spontanés (14)</span>
+</div>
+
+<div class="gallery-demo">
+  <div class="gal-item"><div class="gal-ph gp1"></div><div class="gal-badge gb-heart">❤️ Coup de cœur</div><div class="gal-check selected">✓</div></div>
+  <div class="gal-item"><div class="gal-ph gp2"></div><div class="gal-check selected">✓</div></div>
+  <div class="gal-item"><div class="gal-ph gp3"></div><div class="gal-badge gb-best">⭐ Top 5</div><div class="gal-check selected">✓</div></div>
+  <div class="gal-item"><div class="gal-ph gp4"></div><div class="gal-check selected">✓</div></div>
+  <div class="gal-item"><div class="gal-ph gp5"></div><div class="gal-badge gb-heart">❤️ Coup de cœur</div><div class="gal-check selected">✓</div></div>
+  <div class="gal-item"><div class="gal-ph gp6"></div><div class="gal-check"></div></div>
+  <div class="gal-item"><div class="gal-ph gp7"></div><div class="gal-check"></div></div>
+  <div class="gal-item"><div class="gal-ph gp8"></div><div class="gal-badge gb-heart">❤️ Coup de cœur</div><div class="gal-check"></div></div>
+</div>
+
+<div class="ai-tip"><div class="tip-icon">🤔</div><div class="tip-text"><strong>Aide à la décision :</strong> Vous hésitez entre les photos 23 et 24 ? Elles sont très similaires, mais la photo 23 a une meilleure composition (règle des tiers) et l'expression de votre fille y est plus naturelle. Je vous recommande la 23 !</div></div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-h"><h3>📊 Équilibre de votre sélection</h3></div><div class="card-b">
+    <p style="font-size:12px;color:var(--gris);margin-bottom:10px">L'IA vérifie que chaque membre de la famille est bien représenté :</p>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>👩 Maman Sophie</span><span style="font-weight:700;color:var(--sauge)">6 photos ✓</span></div><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:85%;background:var(--sauge);border-radius:3px"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>👨 Papa Thomas</span><span style="font-weight:700;color:var(--sauge)">5 photos ✓</span></div><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:70%;background:var(--sauge);border-radius:3px"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>👧 Emma (7 ans)</span><span style="font-weight:700;color:var(--sauge)">5 photos ✓</span></div><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:70%;background:var(--sauge);border-radius:3px"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>👦 Lucas (4 ans)</span><span style="font-weight:700;color:var(--rose)">1 photo ⚠️</span></div><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:15%;background:var(--rose);border-radius:3px"></div></div></div>
+    <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>🐕 Filou</span><span style="font-weight:700;color:var(--sauge)">3 photos ✓</span></div><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:45%;background:var(--sauge);border-radius:3px"></div></div></div>
+  </div></div>
+
+  <div class="card"><div class="card-h"><h3>✨ Fonctionnalités IA actives</h3></div><div class="card-b">
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(74,46,61,.04);font-size:12px"><span style="font-size:16px">❤️</span><strong>Coups de cœur</strong> — 12 photos mises en avant par l'IA</div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(74,46,61,.04);font-size:12px"><span style="font-size:16px">📂</span><strong>Catégories intelligentes</strong> — Tri auto par personne et type de plan</div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(74,46,61,.04);font-size:12px"><span style="font-size:16px">⚖️</span><strong>Équilibre de sélection</strong> — Alerte si un membre est sous-représenté</div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid rgba(74,46,61,.04);font-size:12px"><span style="font-size:16px">🤔</span><strong>Aide à la décision</strong> — Compare les photos similaires automatiquement</div>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-size:12px"><span style="font-size:16px">🛒</span><strong>Suggestion tirages</strong> — Propose les meilleurs formats par photo</div>
+  </div></div>
+</div>
+
+</div></div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

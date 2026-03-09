@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scolaire Admin — Fleur de Lumière Admin</title>
+  <link rel="stylesheet" href="../design-system.css" />
+  <style>
+    /* ── School card ── */
+    .school-card {
+      background: var(--fl-bg-card);
+      border: 1px solid var(--fl-border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .school-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--fl-prune), var(--fl-rose));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .school-name { font-weight: 600; font-size: 0.9rem; color: var(--fl-charcoal); }
+    .school-meta { font-size: 0.78rem; color: var(--fl-warm-gray); margin-top: 0.2rem; }
+    /* ── Progress bar ── */
+    .progress-wrap { margin-top: 0.6rem; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--fl-warm-gray);
+      margin-bottom: 0.25rem;
+    }
+    .progress-bar {
+      height: 6px;
+      background: var(--fl-border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--fl-prune), var(--fl-rose));
+    }
+    /* ── Calendar grid ── */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: 80px repeat(5, 1fr);
+      gap: 1px;
+      background: var(--fl-border);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--fl-border);
+    }
+    .cal-cell {
+      background: var(--fl-bg-card);
+      padding: 0.55rem 0.5rem;
+      font-size: 0.78rem;
+    }
+    .cal-cell.header {
+      background: var(--fl-bg);
+      font-weight: 600;
+      color: var(--fl-prune);
+      text-align: center;
+    }
+    .cal-cell.time-col {
+      color: var(--fl-warm-gray);
+      font-size: 0.73rem;
+      text-align: right;
+      padding-right: 0.65rem;
+      background: var(--fl-bg);
+    }
+    .cal-event {
+      border-radius: 6px;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.74rem;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+    .cal-event.ecole-a { background: rgba(74,46,61,0.10); color: var(--fl-prune); }
+    .cal-event.ecole-b { background: rgba(194,114,126,0.12); color: #8B3A45; }
+    .cal-event.ecole-c { background: rgba(107,127,90,0.12); color: var(--fl-sauge); }
+    .cal-event.ecole-d { background: rgba(212,160,60,0.12); color: #8B6A1A; }
+    /* ── Tab nav ── */
+    .tab-nav {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 2px solid var(--fl-border);
+      margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 0.55rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--fl-warm-gray);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn.active { color: var(--fl-prune); border-bottom-color: var(--fl-prune); font-weight: 600; }
+    /* ── Pack card ── */
+    .pack-card {
+      background: var(--fl-bg-card);
+      border: 1px solid var(--fl-border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .pack-title { font-weight: 600; font-size: 0.87rem; color: var(--fl-charcoal); }
+    .pack-price { font-family: var(--fl-font-heading); font-size: 1.3rem; color: var(--fl-prune); margin: 0.2rem 0; }
+    .pack-desc { font-size: 0.78rem; color: var(--fl-warm-gray); }
+  </style>
+</head>
+<body>
+
+<div class="fl-admin-layout">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-brand">
+      <div class="fl-sidebar-logo">FL</div>
+      <div>
+        <div class="fl-sidebar-name">Fleur de Lumière</div>
+        <div class="fl-sidebar-role">Administration</div>
+      </div>
+    </div>
+
+    <nav class="fl-sidebar-nav">
+      <div class="fl-sidebar-section">Général</div>
+
+      <a href="01-dashboard.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Tableau de bord
+      </a>
+
+      <a href="02-facturation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        Facturation
+      </a>
+
+      <div class="fl-sidebar-section">Outils</div>
+
+      <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Assistant Admin
+      </a>
+
+      <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Automatisation
+      </a>
+
+      <a href="10-export-comptable.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Comptable
+      </a>
+
+      <div class="fl-sidebar-section">Scolaire</div>
+
+      <a href="07-scolaire-admin.html" class="fl-sidebar-item active">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Scolaire Admin
+      </a>
+
+      <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        École &amp; Parents
+      </a>
+
+      <div class="fl-sidebar-section">Configuration</div>
+
+      <a href="03-parametres-1.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </a>
+
+      <a href="05-personnalisation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        Personnalisation
+      </a>
+    </nav>
+
+    <div class="fl-sidebar-footer">
+      <div class="fl-sidebar-user">
+        <div class="fl-sidebar-avatar">M</div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal)">Marie Lefèvre</div>
+          <div style="font-size:0.72rem;color:var(--fl-warm-gray)">Administratrice</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main class="fl-admin-main">
+
+    <!-- Topbar -->
+    <div class="fl-topbar">
+      <nav class="fl-breadcrumb">
+        <span>Admin</span>
+        <span>›</span>
+        <span class="current">Scolaire Admin</span>
+      </nav>
+      <div style="display:flex;gap:0.75rem">
+        <button class="fl-btn fl-btn-outline" style="font-size:0.82rem;padding:0.4rem 0.9rem">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exporter
+        </button>
+        <button class="fl-btn fl-btn-primary" style="font-size:0.82rem;padding:0.4rem 0.9rem">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvelle session scolaire
+        </button>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+
+      <!-- ── KPI row ── -->
+      <div class="fl-grid-4" style="margin-bottom:2rem">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Établissements</div>
+          <div class="fl-kpi-value">5</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">+1 vs 2025</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Élèves inscrits</div>
+          <div class="fl-kpi-value">280</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">+34 vs 2025</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Classes</div>
+          <div class="fl-kpi-value">12</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-warm-gray)">5 sessions planifiées</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">CA Scolaire 2025–26</div>
+          <div class="fl-kpi-value">5 240 €</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">+18 %</div>
+        </div>
+      </div>
+
+      <!-- ── Tabs ── -->
+      <div class="tab-nav">
+        <button class="tab-btn active">Établissements</button>
+        <button class="tab-btn">Calendrier</button>
+        <button class="tab-btn">Autorisations</button>
+        <button class="tab-btn">Commandes &amp; Pochettes</button>
+      </div>
+
+      <!-- ══ TAB: Établissements ══ -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem">
+
+        <!-- École 1 -->
+        <div class="school-card">
+          <div class="school-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="school-name">École Primaire Sainte-Marie</div>
+            <div class="school-meta">Paris 15e · 3 classes · 72 élèves · Contact : Mme Brunot</div>
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Autorisations</span><span>64 / 72</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:89%"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
+            <span class="fl-badge fl-badge-success">Session planifiée</span>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Gérer</button>
+          </div>
+        </div>
+
+        <!-- École 2 -->
+        <div class="school-card">
+          <div class="school-icon" style="background:linear-gradient(135deg,var(--fl-sauge),#8FA87A)">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="school-name">Collège Jean Moulin</div>
+            <div class="school-meta">Paris 13e · 4 classes · 98 élèves · Contact : M. Petit</div>
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Autorisations</span><span>71 / 98</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
+            <span class="fl-badge fl-badge-warning">En cours</span>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Gérer</button>
+          </div>
+        </div>
+
+        <!-- École 3 -->
+        <div class="school-card">
+          <div class="school-icon" style="background:linear-gradient(135deg,var(--fl-or),#E8B84A)">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="school-name">Maternelle Les Petits Loups</div>
+            <div class="school-meta">Vincennes · 2 classes · 48 élèves · Contact : Mme Laurent</div>
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Autorisations</span><span>46 / 48</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:96%"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
+            <span class="fl-badge fl-badge-success">Prête</span>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Gérer</button>
+          </div>
+        </div>
+
+        <!-- École 4 -->
+        <div class="school-card">
+          <div class="school-icon" style="background:linear-gradient(135deg,#6A9BC8,#4A7FA8)">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div class="school-name">École Bilingue Victor Hugo</div>
+            <div class="school-meta">Boulogne · 2 classes · 42 élèves · Contact : Ms Thompson</div>
+            <div class="progress-wrap">
+              <div class="progress-label"><span>Autorisations</span><span>18 / 42</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:43%;background:linear-gradient(90deg,var(--fl-or),#E8B84A)"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0.4rem;align-items:flex-end">
+            <span class="fl-badge fl-badge-error">Relance nécessaire</span>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Gérer</button>
+          </div>
+        </div>
+
+        <!-- École 5 — Nouveau -->
+        <div class="school-card" style="border-style:dashed;border-color:var(--fl-rose);background:rgba(194,114,126,0.03)">
+          <div class="school-icon" style="background:var(--fl-bg);border:2px dashed var(--fl-rose)">
+            <svg width="20" height="20" fill="none" stroke="var(--fl-rose)" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <div style="flex:1">
+            <div class="school-name" style="color:var(--fl-warm-gray)">École élémentaire Saint-Exupéry</div>
+            <div class="school-meta">Montreuil · Session 2026 en cours de configuration · Contact : M. Rossi</div>
+          </div>
+          <div>
+            <span class="fl-badge" style="background:rgba(194,114,126,0.1);color:var(--fl-rose)">Nouvelle</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══ Calendrier des sessions ══ -->
+      <div class="fl-card" style="margin-bottom:2rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+          <h3 class="fl-card-title">Calendrier — Semaine du 10 mars 2026</h3>
+          <div style="display:flex;gap:0.5rem">
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.35rem 0.7rem">‹ Préc.</button>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.35rem 0.7rem">Suiv. ›</button>
+          </div>
+        </div>
+        <div class="cal-grid">
+          <!-- En-têtes -->
+          <div class="cal-cell header"></div>
+          <div class="cal-cell header">Lun 10</div>
+          <div class="cal-cell header">Mar 11</div>
+          <div class="cal-cell header">Mer 12</div>
+          <div class="cal-cell header">Jeu 13</div>
+          <div class="cal-cell header">Ven 14</div>
+          <!-- 8h -->
+          <div class="cal-cell time-col">08:30</div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"><div class="cal-event ecole-a">Ste-Marie<br>CP-A (25 él.)</div></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"></div>
+          <!-- 10h -->
+          <div class="cal-cell time-col">10:00</div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"><div class="cal-event ecole-a">Ste-Marie<br>CP-B (23 él.)</div></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"><div class="cal-event ecole-c">Petits Loups<br>MS-A (24 él.)</div></div>
+          <div class="cal-cell"></div>
+          <!-- 14h -->
+          <div class="cal-cell time-col">14:00</div>
+          <div class="cal-cell"><div class="cal-event ecole-b">Jean Moulin<br>6e-A (26 él.)</div></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"><div class="cal-event ecole-d">Victor Hugo<br>CE1 (21 él.)</div></div>
+          <div class="cal-cell"><div class="cal-event ecole-c">Petits Loups<br>MS-B (24 él.)</div></div>
+          <div class="cal-cell"></div>
+          <!-- 16h -->
+          <div class="cal-cell time-col">16:00</div>
+          <div class="cal-cell"><div class="cal-event ecole-b">Jean Moulin<br>6e-B (24 él.)</div></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"></div>
+        </div>
+      </div>
+
+      <!-- ══ Commandes & Pochettes ══ -->
+      <div class="fl-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+          <h3 class="fl-card-title">Packs disponibles</h3>
+          <button class="fl-btn fl-btn-outline" style="font-size:0.8rem">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nouveau pack
+          </button>
+        </div>
+        <div class="fl-grid-4">
+          <div class="pack-card">
+            <div class="pack-title">Pochette Souvenir</div>
+            <div class="pack-price">12 €</div>
+            <div class="pack-desc">1 portrait individuel + classe imprimés en 13×18</div>
+          </div>
+          <div class="pack-card" style="border-color:var(--fl-rose);background:rgba(194,114,126,0.03)">
+            <div style="font-size:0.7rem;color:var(--fl-rose);font-weight:600;margin-bottom:0.3rem">Populaire</div>
+            <div class="pack-title">Pack Famille</div>
+            <div class="pack-price">22 €</div>
+            <div class="pack-desc">Pochette + 3 formats dont 20×28 · Numérique inclus</div>
+          </div>
+          <div class="pack-card">
+            <div class="pack-title">Pack Prestige</div>
+            <div class="pack-price">38 €</div>
+            <div class="pack-desc">6 formats · Cadre magnétique · Toile 20×30 optionnelle</div>
+          </div>
+          <div class="pack-card">
+            <div class="pack-title">Numérique Seul</div>
+            <div class="pack-price">8 €</div>
+            <div class="pack-desc">Téléchargement HD portrait + classe (licence personnelle)</div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
+            <h3 class="fl-card-title">Commandes récentes</h3>
+            <span class="fl-badge fl-badge-info">156 commandes cette saison</span>
+          </div>
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th>Famille</th>
+                <th>École</th>
+                <th>Pack</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Famille Martin</td>
+                <td>Sainte-Marie</td>
+                <td>Pack Famille</td>
+                <td>22 €</td>
+                <td><span class="fl-badge fl-badge-success">Payée</span></td>
+                <td><button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.25rem 0.6rem">Voir</button></td>
+              </tr>
+              <tr>
+                <td>Famille Dubois</td>
+                <td>Jean Moulin</td>
+                <td>Pack Prestige</td>
+                <td>38 €</td>
+                <td><span class="fl-badge fl-badge-success">Payée</span></td>
+                <td><button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.25rem 0.6rem">Voir</button></td>
+              </tr>
+              <tr>
+                <td>Famille Chen</td>
+                <td>Victor Hugo</td>
+                <td>Pochette Souvenir</td>
+                <td>12 €</td>
+                <td><span class="fl-badge fl-badge-warning">En attente</span></td>
+                <td><button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.25rem 0.6rem">Voir</button></td>
+              </tr>
+              <tr>
+                <td>Famille Rousseau</td>
+                <td>Petits Loups</td>
+                <td>Pack Famille</td>
+                <td>22 €</td>
+                <td><span class="fl-badge fl-badge-success">Payée</span></td>
+                <td><button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.25rem 0.6rem">Voir</button></td>
+              </tr>
+              <tr>
+                <td>Famille Kowalski</td>
+                <td>Jean Moulin</td>
+                <td>Numérique Seul</td>
+                <td>8 €</td>
+                <td><span class="fl-badge fl-badge-success">Payée</span></td>
+                <td><button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.25rem 0.6rem">Voir</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /fl-admin-content -->
+  </main>
+</div><!-- /fl-admin-layout -->
+
+</body>
+</html>

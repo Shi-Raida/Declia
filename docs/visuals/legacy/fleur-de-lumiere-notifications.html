@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centre de Notifications — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--bleu:#3B82F6;--bleu-light:rgba(59,130,246,.08);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sw-btn{padding:9px 20px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.page-header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:18px 24px}
+.ph-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ph-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ph-info h1{font-size:20px;color:var(--prune)}.ph-info h1 em{color:var(--rose);font-style:italic}.ph-info p{font-size:12px;color:var(--gris)}
+.ph-badge{margin-left:auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--radius-full)}
+.container{max-width:1000px;margin:0 auto;padding:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:14px;color:var(--prune);flex:1}
+.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:none}
+.btn-primary{background:var(--rose);color:#fff}.btn-primary:hover{background:var(--rose-hover)}
+.btn-secondary{background:transparent;color:var(--prune);border:1.5px solid var(--gris-border)}.btn-secondary:hover{background:var(--prune-light)}
+.btn-sm{padding:6px 12px;font-size:11px}
+
+/* FILTER TABS */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.filter-tab{padding:8px 16px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:1.5px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:6px}
+.filter-tab:hover{border-color:var(--prune);color:var(--prune)}
+.filter-tab.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+.filter-count{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:9px}
+.filter-tab:not(.active) .filter-count{background:var(--gris-border);color:var(--gris)}
+
+/* NOTIFICATION ITEMS */
+.notif-list{display:flex;flex-direction:column}
+.notif-group-h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris-light);padding:12px 0 6px}
+.notif-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:var(--radius);margin-bottom:4px;transition:var(--tr);cursor:pointer;position:relative}
+.notif-item:hover{background:var(--bg-alt)}
+.notif-item.unread{background:var(--bg-alt);border-left:3px solid var(--rose)}
+.notif-item.unread::after{content:'';position:absolute;top:18px;right:16px;width:8px;height:8px;border-radius:50%;background:var(--rose)}
+.ni-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ni-resa{background:var(--sauge-light)}.ni-paiement{background:var(--or-light)}.ni-galerie{background:var(--bleu-light)}.ni-boutique{background:var(--rose-light)}.ni-scolaire{background:var(--prune-light)}.ni-lead{background:rgba(220,38,38,.06)}.ni-ia{background:linear-gradient(135deg,rgba(212,160,60,.1),rgba(194,114,126,.1))}.ni-system{background:var(--bg-alt)}
+.ni-content{flex:1}
+.ni-content .ni-title{font-weight:700;font-size:13px;color:var(--prune);margin-bottom:2px}
+.ni-content .ni-desc{font-size:12px;color:var(--gris);line-height:1.5}
+.ni-content .ni-action{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:var(--rose);margin-top:6px;cursor:pointer}
+.ni-content .ni-action:hover{color:var(--rose-hover)}
+.ni-time{font-size:10px;color:var(--gris-light);white-space:nowrap;flex-shrink:0;padding-top:2px}
+
+/* SETTINGS */
+.setting-section{margin-bottom:24px}
+.setting-section h3{font-size:15px;color:var(--prune);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.setting-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(74,46,61,.04)}
+.setting-row:last-child{border:none}
+.sr-icon{font-size:18px;width:24px;text-align:center;flex-shrink:0}
+.sr-info{flex:1}.sr-info .sr-name{font-weight:700;font-size:13px;color:var(--prune)}.sr-info .sr-desc{font-size:11px;color:var(--gris)}
+.toggle-group{display:flex;gap:4px}
+.toggle-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--gris-border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:var(--tr)}
+.toggle-btn:hover{border-color:var(--prune)}
+.toggle-btn.on{background:var(--sauge);border-color:var(--sauge);color:#fff}
+.toggle-btn.off{background:var(--bg);color:var(--gris-light)}
+
+/* Toggle switch */
+.switch{width:44px;height:24px;background:var(--gris-border);border-radius:12px;position:relative;cursor:pointer;transition:var(--tr);flex-shrink:0}
+.switch.on{background:var(--sauge)}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:var(--tr);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on::after{left:22px}
+
+@media(max-width:768px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('centre',this)">🔔 Centre de notifications</button>
+  <button class="sw-btn" onclick="switchView('settings',this)">⚙️ Paramétrage</button>
+</div>
+
+<!-- CENTRE DE NOTIFICATIONS -->
+<div class="page-view active" id="view-centre">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--rose-light)">🔔</div><div class="ph-info"><h1>Centre de <em>notifications</em></h1><p>Toutes vos alertes en un seul endroit</p></div><span class="ph-badge" style="background:rgba(220,38,38,.08);color:#DC2626">6 non lues</span><button class="btn btn-secondary btn-sm" style="margin-left:8px">✓ Tout marquer lu</button></div></div>
+<div class="container">
+
+<div class="filter-row">
+  <span class="filter-tab active">Toutes <span class="filter-count">14</span></span>
+  <span class="filter-tab">📅 Réservations <span class="filter-count">3</span></span>
+  <span class="filter-tab">💰 Paiements <span class="filter-count">2</span></span>
+  <span class="filter-tab">🖼️ Galeries <span class="filter-count">2</span></span>
+  <span class="filter-tab">🛒 Boutique <span class="filter-count">1</span></span>
+  <span class="filter-tab">🎓 Scolaire <span class="filter-count">2</span></span>
+  <span class="filter-tab">🤖 IA <span class="filter-count">3</span></span>
+  <span class="filter-tab">💬 Leads <span class="filter-count">1</span></span>
+</div>
+
+<div class="notif-list">
+
+  <div class="notif-group-h">Aujourd'hui</div>
+
+  <div class="notif-item unread">
+    <div class="ni-icon ni-resa">📅</div>
+    <div class="ni-content"><div class="ni-title">Nouvelle réservation !</div><div class="ni-desc"><strong>Claire Dupont</strong> a réservé une séance <strong>Signature Famille</strong> le samedi 21 mars à 17h30. Acompte de 84€ reçu.</div><span class="ni-action">Voir la réservation →</span></div>
+    <span class="ni-time">Il y a 25 min</span>
+  </div>
+
+  <div class="notif-item unread">
+    <div class="ni-icon ni-lead">🔥</div>
+    <div class="ni-content"><div class="ni-title">Lead chaud détecté — Score 87</div><div class="ni-desc"><strong>Emma L.</strong> a visité la page Équestre 4 fois et téléchargé le guide tenues. L'IA suggère d'envoyer le code BIENVENUE10.</div><span class="ni-action">Envoyer le code →</span></div>
+    <span class="ni-time">Il y a 1h</span>
+  </div>
+
+  <div class="notif-item unread">
+    <div class="ni-icon ni-ia">✨</div>
+    <div class="ni-content"><div class="ni-title">IA — Post Instagram prêt</div><div class="ni-desc">Légende générée pour la séance équestre Delcourt. Meilleur moment de publication : demain 18h30.</div><span class="ni-action">Voir le post →</span></div>
+    <span class="ni-time">Il y a 2h</span>
+  </div>
+
+  <div class="notif-item unread">
+    <div class="ni-icon ni-galerie">🖼️</div>
+    <div class="ni-content"><div class="ni-title">Galerie consultée 3 fois sans téléchargement</div><div class="ni-desc"><strong>Julie Bonnet</strong> a revisité sa galerie hier soir. Elle expire dans 5 jours. Email de relance pré-rédigé disponible.</div><span class="ni-action">Voir la relance →</span></div>
+    <span class="ni-time">Il y a 3h</span>
+  </div>
+
+  <div class="notif-item unread">
+    <div class="ni-icon ni-scolaire">🎓</div>
+    <div class="ni-content"><div class="ni-title">Autorisation signée — Crèche Petits Soleils</div><div class="ni-desc">Famille Martin a signé l'autorisation pour <strong>Léo Martin</strong> (section Grands). Il reste <strong>2 autorisations</strong> manquantes.</div><span class="ni-action">Voir les autorisations →</span></div>
+    <span class="ni-time">Il y a 4h</span>
+  </div>
+
+  <div class="notif-item unread">
+    <div class="ni-icon ni-paiement">💰</div>
+    <div class="ni-content"><div class="ni-title">Paiement solde reçu — 196€</div><div class="ni-desc"><strong>Famille Rousseau</strong> a réglé le solde de sa séance Signature. Paiement complet (280€). Galerie à livrer.</div><span class="ni-action">Préparer la galerie →</span></div>
+    <span class="ni-time">Il y a 5h</span>
+  </div>
+
+  <div class="notif-group-h">Hier</div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-boutique">🛒</div>
+    <div class="ni-content"><div class="ni-title">Nouvelle commande boutique — #0152</div><div class="ni-desc"><strong>Marie Delcourt</strong> a commandé 2 tirages 20×30 et 1 Boîte Souvenir. Montant : 85€.</div><span class="ni-action">Voir la commande →</span></div>
+    <span class="ni-time">Hier 19h30</span>
+  </div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-ia">✨</div>
+    <div class="ni-content"><div class="ni-title">IA — Recommandation tarifaire</div><div class="ni-desc">Vos samedis se remplissent en 48h. L'IA suggère d'augmenter le tarif Signature samedi de +15% (impact : +504€/mois).</div><span class="ni-action">Voir la recommandation →</span></div>
+    <span class="ni-time">Hier 09h30</span>
+  </div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-resa">📅</div>
+    <div class="ni-content"><div class="ni-title">Rappel : 2 séances samedi 7 mars</div><div class="ni-desc">16h00 — Marie Delcourt (Équestre) · 17h30 — Famille Rousseau (Famille). Météo : ☀️ 17°C. Golden Hour : 17h12-18h12.</div><span class="ni-action">Voir le planning →</span></div>
+    <span class="ni-time">Hier 08h00</span>
+  </div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-scolaire">🎓</div>
+    <div class="ni-content"><div class="ni-title">Commandes scolaires — Maternelle Hugo</div><div class="ni-desc">58 pochettes commandées, prêtes pour livraison le 12 mars. Montant total : 1 740€.</div><span class="ni-action">Voir les commandes →</span></div>
+    <span class="ni-time">Hier 14h00</span>
+  </div>
+
+  <div class="notif-group-h">Cette semaine</div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-galerie">🖼️</div>
+    <div class="ni-content"><div class="ni-title">Galerie Mercier — Sélection terminée</div><div class="ni-desc"><strong>Sophie Mercier</strong> a finalisé sa sélection de 25 photos avec l'aide du tri assisté IA. 3 tirages ajoutés au panier.</div></div>
+    <span class="ni-time">Lun. 10h</span>
+  </div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-paiement">💰</div>
+    <div class="ni-content"><div class="ni-title">Acompte reçu — Sophie Mercier</div><div class="ni-desc">Acompte de 84€ pour séance Signature Famille le 14 mars. Solde : 196€ dû avant livraison galerie.</div></div>
+    <span class="ni-time">Lun. 09h</span>
+  </div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-ia">✨</div>
+    <div class="ni-content"><div class="ni-title">IA — Anniversaire séance Rousseau (1 an)</div><div class="ni-desc">Relance pré-rédigée avec code -10% prête à envoyer.</div></div>
+    <span class="ni-time">Dim. 08h</span>
+  </div>
+
+  <div class="notif-item">
+    <div class="ni-icon ni-resa">📅</div>
+    <div class="ni-content"><div class="ni-title">Report séance — Léa Fournier</div><div class="ni-desc">Séance Essentiel reportée du 1er au 15 mars (demande cliente). Créneau 17h30 libéré.</div></div>
+    <span class="ni-time">Sam.</span>
+  </div>
+
+</div>
+</div></div>
+
+<!-- PARAMÉTRAGE NOTIFICATIONS -->
+<div class="page-view" id="view-settings">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--prune-light)">⚙️</div><div class="ph-info"><h1>Paramétrage des <em>notifications</em></h1><p>Choisissez comment et quand vous êtes alerté</p></div></div></div>
+<div class="container">
+
+<div class="setting-section">
+  <h3>📅 Réservations & Planning</h3>
+  <div class="card"><div class="card-b">
+    <div class="setting-row"><div class="sr-icon">📅</div><div class="sr-info"><div class="sr-name">Nouvelle réservation</div><div class="sr-desc">Quand un client confirme une réservation</div></div><div class="toggle-group"><div class="toggle-btn on" title="In-app">🔔</div><div class="toggle-btn on" title="Email">📧</div><div class="toggle-btn on" title="SMS">💬</div><div class="toggle-btn off" title="Push">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">🔄</div><div class="sr-info"><div class="sr-name">Report ou annulation</div><div class="sr-desc">Quand un client modifie ou annule sa séance</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn on">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">⏰</div><div class="sr-info"><div class="sr-name">Rappel J-1 avant séance</div><div class="sr-desc">Résumé de la séance du lendemain avec météo</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+  </div></div>
+</div>
+
+<div class="setting-section">
+  <h3>💰 Paiements</h3>
+  <div class="card"><div class="card-b">
+    <div class="setting-row"><div class="sr-icon">💳</div><div class="sr-info"><div class="sr-name">Acompte reçu</div><div class="sr-desc">Quand un acompte de 30% est encaissé via Stripe</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">✅</div><div class="sr-info"><div class="sr-name">Solde réglé</div><div class="sr-desc">Quand le paiement complet est reçu</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">⚠️</div><div class="sr-info"><div class="sr-name">Impayé / Échec paiement</div><div class="sr-desc">Quand un paiement échoue ou est en retard</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn on">💬</div><div class="toggle-btn off">📱</div></div></div>
+  </div></div>
+</div>
+
+<div class="setting-section">
+  <h3>🖼️ Galeries & Boutique</h3>
+  <div class="card"><div class="card-b">
+    <div class="setting-row"><div class="sr-icon">👁️</div><div class="sr-info"><div class="sr-name">Galerie consultée</div><div class="sr-desc">Quand un client visite sa galerie</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn off">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">⏳</div><div class="sr-info"><div class="sr-name">Galerie bientôt expirée</div><div class="sr-desc">Alerte J-7 et J-3 avant expiration</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">🛒</div><div class="sr-info"><div class="sr-name">Commande boutique</div><div class="sr-desc">Quand un client passe commande dans la boutique</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+  </div></div>
+</div>
+
+<div class="setting-section">
+  <h3>🎓 Scolaire</h3>
+  <div class="card"><div class="card-b">
+    <div class="setting-row"><div class="sr-icon">📋</div><div class="sr-info"><div class="sr-name">Autorisation signée</div><div class="sr-desc">Quand un parent signe l'autorisation droit à l'image</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn off">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">📦</div><div class="sr-info"><div class="sr-name">Commande pochette</div><div class="sr-desc">Quand un parent commande un pack scolaire</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+  </div></div>
+</div>
+
+<div class="setting-section">
+  <h3>🤖 Intelligence IA & Leads</h3>
+  <div class="card"><div class="card-b">
+    <div class="setting-row"><div class="sr-icon">🔥</div><div class="sr-info"><div class="sr-name">Lead chaud détecté</div><div class="sr-desc">Quand un visiteur atteint un score > 80</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn on">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">✨</div><div class="sr-info"><div class="sr-name">Recommandation IA</div><div class="sr-desc">Quand l'IA génère une suggestion business ou un contenu</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn off">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+    <div class="setting-row"><div class="sr-icon">📧</div><div class="sr-info"><div class="sr-name">Relance CRM prête</div><div class="sr-desc">Quand l'IA prépare une relance client à valider</div></div><div class="toggle-group"><div class="toggle-btn on">🔔</div><div class="toggle-btn on">📧</div><div class="toggle-btn off">💬</div><div class="toggle-btn off">📱</div></div></div>
+  </div></div>
+</div>
+
+<div class="card"><div class="card-h"><h3>🕐 Heures calmes</h3></div><div class="card-b">
+  <div class="setting-row"><div class="sr-icon">🌙</div><div class="sr-info"><div class="sr-name">Mode silencieux</div><div class="sr-desc">Pas de notifications push/SMS entre 21h00 et 08h00</div></div><div class="switch on"></div></div>
+  <div class="setting-row"><div class="sr-icon">📵</div><div class="sr-info"><div class="sr-name">Pause pendant les shootings</div><div class="sr-desc">Silencier les notifications non-urgentes pendant une séance</div></div><div class="switch on"></div></div>
+</div></div>
+
+</div></div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

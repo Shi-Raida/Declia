@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Intégration Lightroom & Capture One</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--warning:#E8985E;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08);--lr:#31A8FF;--lr-bg:#E8F4FF;--lr-dark:#1A1A2E}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#2A2A3A;color:var(--charcoal)}
+.tag{display:inline-block;background:#7C5CFC;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.divider{background:var(--prune);padding:20px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.divider span{background:rgba(255,255,255,.08);padding:6px 20px;border-radius:20px}
+
+/* ===== LIGHTROOM PLUGIN MOCKUP ===== */
+.lr-screen{background:var(--lr-dark);min-height:100vh;padding:40px;display:flex;justify-content:center;align-items:flex-start;gap:24px;flex-wrap:wrap}
+
+/* Lightroom frame */
+.lr-frame{background:#232332;border-radius:12px;border:1px solid rgba(255,255,255,.08);overflow:hidden;width:560px;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.lr-titlebar{background:#1E1E2E;padding:8px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06)}
+.lr-dots{display:flex;gap:6px}.lr-dot{width:10px;height:10px;border-radius:50%}
+.lr-titlebar-text{font-size:11px;color:rgba(255,255,255,.3);margin-left:8px}
+.lr-body{padding:20px}
+
+.lr-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.06)}
+.lr-plugin-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--rose),#D4889A);display:flex;align-items:center;justify-content:center;font-size:18px}
+.lr-plugin-name{font-size:16px;font-weight:600;color:rgba(255,255,255,.9)}.lr-plugin-ver{font-size:11px;color:rgba(255,255,255,.3)}
+.lr-connected{margin-left:auto;font-size:11px;color:var(--success);display:flex;align-items:center;gap:4px}
+.lr-connected::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--success)}
+
+/* Gallery selector */
+.lr-section{margin-bottom:18px}
+.lr-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.lr-select{width:100%;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:rgba(255,255,255,.8);font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;appearance:none}
+.lr-select option{background:#232332}
+
+/* Upload progress */
+.lr-upload-area{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px}
+.lr-upload-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.lr-upload-title{font-size:13px;font-weight:500;color:rgba(255,255,255,.7)}.lr-upload-count{font-size:12px;color:var(--lr)}
+.lr-progress{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.lr-progress-fill{height:100%;background:linear-gradient(90deg,var(--lr),var(--rose));border-radius:3px;transition:width .5s}
+.lr-progress-text{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35)}
+
+.lr-file-list{margin-top:12px;max-height:150px;overflow-y:auto}
+.lr-file{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11.5px}
+.lr-file-icon{font-size:14px}.lr-file-name{flex:1;color:rgba(255,255,255,.5)}.lr-file-size{color:rgba(255,255,255,.25);font-size:10px}
+.lr-file-status{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px}
+.lr-file-status.done{background:rgba(76,175,124,.15);color:var(--success)}.lr-file-status.uploading{background:rgba(49,168,255,.15);color:var(--lr)}.lr-file-status.queue{background:rgba(255,255,255,.05);color:rgba(255,255,255,.25)}
+
+/* Settings */
+.lr-settings{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.lr-setting{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.lr-setting-label{font-size:12px;color:rgba(255,255,255,.5)}
+.lr-mini-tog{width:34px;height:18px;background:rgba(255,255,255,.1);border-radius:9px;cursor:pointer;position:relative}
+.lr-mini-tog.on{background:var(--success)}
+.lr-mini-tog::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:all .3s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.lr-mini-tog.on::after{left:18px}
+
+.lr-btn{width:100%;padding:12px;background:var(--rose);color:#fff;border:none;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(194,114,126,.3)}
+
+/* Right panel — sync status */
+.lr-status-panel{width:320px;background:#232332;border-radius:12px;border:1px solid rgba(255,255,255,.08);overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.lr-sp-header{padding:16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.lr-sp-title{font-size:14px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px}.lr-sp-sub{font-size:11px;color:rgba(255,255,255,.3)}
+.lr-sp-body{padding:16px}
+
+.lr-sync-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.lr-sync-item:last-child{border-bottom:none}
+.lr-sync-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.lr-sync-icon.ok{background:rgba(76,175,124,.1);color:var(--success)}.lr-sync-icon.pending{background:rgba(232,152,94,.1);color:var(--warning)}.lr-sync-icon.info{background:rgba(49,168,255,.1);color:var(--lr)}
+.lr-sync-text{flex:1}
+.lr-sync-title{font-size:12px;font-weight:500;color:rgba(255,255,255,.7)}.lr-sync-detail{font-size:10.5px;color:rgba(255,255,255,.3)}
+
+/* Reverse sync */
+.lr-reverse{background:rgba(194,114,126,.08);border:1px solid rgba(194,114,126,.15);border-radius:10px;padding:14px;margin-top:14px}
+.lr-reverse-title{font-size:12px;font-weight:600;color:var(--rose);margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.lr-reverse-text{font-size:11px;color:rgba(255,255,255,.4);line-height:1.4}
+
+/* ===== ADMIN CONFIG ===== */
+.admin{background:var(--bg);padding:40px;min-height:50vh}
+.admin-c{max-width:700px;margin:0 auto}
+.at{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--prune);margin-bottom:6px}
+.as{font-size:13px;color:var(--warm-gray);margin-bottom:24px}
+.acard{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.acard-h{padding:14px 20px;background:var(--lr-bg);border-bottom:1px solid #C8DDE6;font-size:14px;font-weight:600;color:#1A6B9A;display:flex;align-items:center;gap:8px}
+.acard-b{padding:20px}
+
+.integrations{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.integ{background:var(--cream);border-radius:14px;padding:18px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.integ.connected{border-color:var(--success)}
+.integ:hover{border-color:var(--lr)}
+.integ-icon{font-size:28px;margin-bottom:8px}
+.integ-name{font-size:13px;font-weight:600;color:var(--charcoal)}.integ-status{font-size:11px;margin-top:4px}
+.integ-status.on{color:var(--success);font-weight:500}.integ-status.off{color:var(--warm-gray)}
+</style>
+</head>
+<body>
+
+<!-- ===== LIGHTROOM PLUGIN ===== -->
+<div class="lr-screen">
+  <div class="lr-frame">
+    <div class="lr-titlebar">
+      <div class="lr-dots"><div class="lr-dot" style="background:#FF6058"></div><div class="lr-dot" style="background:#FFBD2E"></div><div class="lr-dot" style="background:#28CA42"></div></div>
+      <div class="lr-titlebar-text">Adobe Lightroom Classic — Plugin Fleur de Lumière <span class="tag">V2</span></div>
+    </div>
+    <div class="lr-body">
+      <div class="lr-header">
+        <div class="lr-plugin-icon">🌸</div>
+        <div><div class="lr-plugin-name">Fleur de Lumière</div><div class="lr-plugin-ver">Plugin v1.0 · Connecté</div></div>
+        <div class="lr-connected">Connecté à fleurdelumiere.fr</div>
+      </div>
+
+      <div class="lr-section">
+        <div class="lr-label">Galerie de destination</div>
+        <select class="lr-select">
+          <option>+ Créer une nouvelle galerie</option>
+          <option selected>Sophie Dupont — Famille (22 fév 2026)</option>
+          <option>Marie & Thomas — Mariage (14 sept 2025)</option>
+          <option>Lucas Girard — Équestre (8 mars 2026)</option>
+        </select>
+      </div>
+
+      <div class="lr-section">
+        <div class="lr-label">Options d'export</div>
+        <div class="lr-settings">
+          <div class="lr-setting"><span class="lr-setting-label">Qualité JPEG</span><span style="font-size:12px;color:var(--lr)">95%</span></div>
+          <div class="lr-setting"><span class="lr-setting-label">Redimensionner (bord long)</span><span style="font-size:12px;color:var(--lr)">4000px</span></div>
+          <div class="lr-setting"><span class="lr-setting-label">Inclure les métadonnées</span><div class="lr-mini-tog on"></div></div>
+          <div class="lr-setting"><span class="lr-setting-label">Synchroniser les étoiles Lightroom</span><div class="lr-mini-tog on"></div></div>
+          <div class="lr-setting"><span class="lr-setting-label">Synchroniser les mots-clés</span><div class="lr-mini-tog on"></div></div>
+        </div>
+      </div>
+
+      <div class="lr-section">
+        <div class="lr-upload-area">
+          <div class="lr-upload-header">
+            <div class="lr-upload-title">Publication en cours...</div>
+            <div class="lr-upload-count">18 / 30 photos</div>
+          </div>
+          <div class="lr-progress"><div class="lr-progress-fill" style="width:60%"></div></div>
+          <div class="lr-progress-text"><span>60% complété</span><span>~2 min restantes</span></div>
+          <div class="lr-file-list">
+            <div class="lr-file"><span class="lr-file-icon">🖼</span><span class="lr-file-name">DSC_4521_retouche.jpg</span><span class="lr-file-size">8.2 MB</span><span class="lr-file-status done">✓</span></div>
+            <div class="lr-file"><span class="lr-file-icon">🖼</span><span class="lr-file-name">DSC_4522_retouche.jpg</span><span class="lr-file-size">7.8 MB</span><span class="lr-file-status done">✓</span></div>
+            <div class="lr-file"><span class="lr-file-icon">🖼</span><span class="lr-file-name">DSC_4523_retouche.jpg</span><span class="lr-file-size">9.1 MB</span><span class="lr-file-status uploading">⟳ Upload...</span></div>
+            <div class="lr-file"><span class="lr-file-icon">🖼</span><span class="lr-file-name">DSC_4524_retouche.jpg</span><span class="lr-file-size">8.5 MB</span><span class="lr-file-status queue">En attente</span></div>
+            <div class="lr-file"><span class="lr-file-icon">🖼</span><span class="lr-file-name">DSC_4525_retouche.jpg</span><span class="lr-file-size">7.4 MB</span><span class="lr-file-status queue">En attente</span></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="lr-btn">📤 Publier 30 photos vers la galerie</button>
+    </div>
+  </div>
+
+  <!-- Status panel -->
+  <div class="lr-status-panel">
+    <div class="lr-sp-header">
+      <div class="lr-sp-title">Statut de synchronisation</div>
+      <div class="lr-sp-sub">Dernière sync : il y a 3 min</div>
+    </div>
+    <div class="lr-sp-body">
+      <div class="lr-sync-item"><div class="lr-sync-icon ok">✓</div><div class="lr-sync-text"><div class="lr-sync-title">Galerie Dupont — Famille</div><div class="lr-sync-detail">30 photos · Sync en cours (60%)</div></div></div>
+      <div class="lr-sync-item"><div class="lr-sync-icon ok">✓</div><div class="lr-sync-text"><div class="lr-sync-title">Galerie Marie & Thomas</div><div class="lr-sync-detail">487 photos · Synchronisé</div></div></div>
+      <div class="lr-sync-item"><div class="lr-sync-icon pending">⏳</div><div class="lr-sync-text"><div class="lr-sync-title">Galerie Girard — Équestre</div><div class="lr-sync-detail">En attente de retouche</div></div></div>
+      <div class="lr-sync-item"><div class="lr-sync-icon info">↓</div><div class="lr-sync-text"><div class="lr-sync-title">Sélection client récupérée</div><div class="lr-sync-detail">Dupont : 20 photos sélectionnées marquées ★ dans LR</div></div></div>
+
+      <div class="lr-reverse">
+        <div class="lr-reverse-title">🔄 Sync inverse (sélection client → Lightroom)</div>
+        <div class="lr-reverse-text">Quand Sophie valide sa sélection dans la galerie FL, les photos choisies sont automatiquement marquées avec ★ dans votre catalogue Lightroom. Vous savez instantanément quelles photos retoucher.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"><span>↓ Configuration admin — Intégrations logiciels ↓</span></div>
+
+<!-- ===== ADMIN ===== -->
+<div class="admin">
+<div class="admin-c">
+  <div class="at">Intégrations Logiciels <span class="tag">V2</span></div>
+  <div class="as">Connectez vos outils de retouche pour un workflow sans friction</div>
+
+  <div class="acard">
+    <div class="acard-h">🔗 Logiciels connectés</div>
+    <div class="acard-b">
+      <div class="integrations">
+        <div class="integ connected">
+          <div class="integ-icon">📷</div>
+          <div class="integ-name">Lightroom Classic</div>
+          <div class="integ-status on">● Connecté</div>
+        </div>
+        <div class="integ">
+          <div class="integ-icon">🎨</div>
+          <div class="integ-name">Capture One</div>
+          <div class="integ-status off">Non connecté</div>
+        </div>
+        <div class="integ">
+          <div class="integ-icon">🖼</div>
+          <div class="integ-name">Adobe Bridge</div>
+          <div class="integ-status off">Non connecté</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

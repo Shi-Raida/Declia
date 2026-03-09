@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Blog SEO Intégré</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--warning:#E8985E;--warning-bg:#FFF3EB;--info:#5B8FA8;--info-bg:#E8F0F4;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#EDEAEB;color:var(--charcoal)}
+.tag{display:inline-block;background:#D4BBFF;color:#3A1D6E;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.divider{background:var(--prune);padding:20px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.divider span{background:rgba(255,255,255,.08);padding:6px 20px;border-radius:20px}
+
+/* ===== ADMIN — Blog editor ===== */
+.admin{background:var(--bg);padding:32px 40px;min-height:100vh}
+.admin-c{max-width:1000px;margin:0 auto}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.pt{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--prune)}
+.ps{font-size:13px;color:var(--warm-gray);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;padding:9px 18px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-p{background:var(--rose);color:#fff;box-shadow:0 2px 8px rgba(194,114,126,.2)}.btn-s{background:var(--white);color:var(--prune);border:1.5px solid var(--border)}
+.btn-ai{background:linear-gradient(135deg,#8E6BAA,#A87FC0);color:#fff;box-shadow:0 2px 8px rgba(142,107,170,.25)}
+
+/* Stats row */
+.blog-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.bs{background:var(--white);border-radius:12px;padding:16px;box-shadow:var(--shadow);border:1px solid var(--border);text-align:center}
+.bs-v{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--prune)}.bs-l{font-size:11px;color:var(--warm-gray);margin-top:2px}
+
+/* Articles list */
+.articles{margin-bottom:24px}
+.article-row{background:var(--white);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--border);padding:16px 20px;margin-bottom:10px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .2s}
+.article-row:hover{box-shadow:var(--shadow-lg);transform:translateY(-1px)}
+.ar-thumb{width:80px;height:56px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.5)}
+.t1{background:linear-gradient(135deg,#D4B8A0,#C0A088)}.t2{background:linear-gradient(135deg,#C8D8C0,#A8C098)}.t3{background:linear-gradient(135deg,#D0C8E0,#B8A8D0)}.t4{background:linear-gradient(135deg,#E8D0C8,#D4B8B0)}
+.ar-info{flex:1}
+.ar-title{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}.ar-meta{font-size:11.5px;color:var(--warm-gray)}
+.ar-seo{display:flex;gap:8px;margin-top:4px}
+.seo-score{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px}
+.seo-score.good{background:var(--success-bg);color:var(--success)}.seo-score.ok{background:var(--warning-bg);color:var(--warning)}.seo-score.bad{background:#FDECEA;color:#C62828}
+.ar-status{font-size:11px;font-weight:600;padding:4px 12px;border-radius:6px;flex-shrink:0}
+.ar-status.pub{background:var(--success-bg);color:var(--success)}.ar-status.draft{background:#F0EAEB;color:var(--warm-gray)}.ar-status.sched{background:var(--info-bg);color:var(--info)}
+.ar-views{text-align:right;flex-shrink:0;min-width:60px}
+.ar-views-v{font-size:14px;font-weight:600;color:var(--prune)}.ar-views-l{font-size:10px;color:var(--warm-gray)}
+
+/* Editor */
+.editor-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:20px}
+.ec-h{padding:14px 20px;background:var(--rose-pale);border-bottom:1px solid var(--border);font-size:14px;font-weight:600;color:var(--prune);display:flex;align-items:center;gap:8px;justify-content:space-between}
+.ec-b{padding:22px}
+
+.field{margin-bottom:16px}.field:last-child{margin-bottom:0}
+.fl{font-size:12px;font-weight:600;color:var(--charcoal);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.fl-hint{font-size:10px;color:var(--warm-gray);font-weight:400}
+.fi{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--charcoal);background:var(--cream)}.fi:focus{outline:none;border-color:var(--rose)}
+.ft{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--charcoal);background:var(--cream);resize:vertical;min-height:120px;line-height:1.6}
+
+/* SEO panel */
+.seo-panel{background:var(--cream);border-radius:12px;padding:16px 18px;margin-top:12px}
+.seo-title{font-size:13px;font-weight:600;color:var(--prune);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.seo-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px}
+.seo-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.seo-dot.green{background:var(--success)}.seo-dot.orange{background:var(--warning)}.seo-dot.red{background:#E85D5D}
+.seo-item-text{flex:1;color:var(--charcoal)}.seo-item-text.ok{color:var(--success)}.seo-item-text.warn{color:var(--warning)}
+
+/* AI assist */
+.ai-banner{background:linear-gradient(135deg,#F0E8F8,#E8E0F4);border:1px solid #D8CCE4;border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.ai-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#8E6BAA,#A87FC0);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ai-text{flex:1;font-size:12.5px;color:#5A3D6E;line-height:1.4}
+.ai-text strong{font-weight:600}
+
+/* Gallery link */
+.gallery-link{display:flex;align-items:center;gap:10px;padding:12px;background:var(--rose-pale);border-radius:10px;border:1px solid var(--rose-light);cursor:pointer;transition:all .2s}
+.gallery-link:hover{background:var(--rose-light)}
+.gl-thumb{width:48px;height:36px;border-radius:6px;flex-shrink:0}
+.g1{background:linear-gradient(135deg,#D4B8A0,#C0A088)}.gl-info{flex:1}.gl-name{font-size:12px;font-weight:600;color:var(--prune)}.gl-detail{font-size:10px;color:var(--warm-gray)}
+
+/* ===== PUBLIC BLOG ===== */
+.public{background:var(--cream);min-height:100vh}
+.pub-nav{background:var(--white);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.pub-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--prune)}.pub-logo span{color:var(--rose)}
+.pub-links{display:flex;gap:20px;font-size:13px;color:var(--warm-gray)}
+
+.blog-c{max-width:680px;margin:0 auto;padding:40px 24px}
+.blog-hero-img{width:100%;height:300px;border-radius:20px;margin-bottom:28px;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,.4);background:linear-gradient(135deg,#D4B8A0,#C8A890,#B89078,#C89868)}
+.blog-cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--rose);background:var(--rose-pale);padding:4px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+.blog-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--prune);line-height:1.2;margin-bottom:12px}
+.blog-meta{font-size:13px;color:var(--warm-gray);margin-bottom:28px;display:flex;align-items:center;gap:12px}
+.blog-author-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--rose-light),var(--rose));display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:600}
+
+.blog-text{font-size:15px;color:var(--charcoal);line-height:1.8;margin-bottom:20px}
+.blog-text strong{color:var(--prune)}
+.blog-h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--prune);margin:28px 0 12px}
+
+.blog-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:24px 0;border-radius:14px;overflow:hidden}
+.blog-gallery-img{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.4)}
+.bg1{background:linear-gradient(135deg,#D4B8A0,#C0A088)}.bg2{background:linear-gradient(135deg,#E0D4C0,#D0C4A8)}.bg3{background:linear-gradient(135deg,#C8A888,#B89878)}
+
+.blog-cta{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);padding:24px;text-align:center;margin:28px 0}
+.blog-cta-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--prune);margin-bottom:6px}
+.blog-cta-sub{font-size:13px;color:var(--warm-gray);margin-bottom:14px}
+.blog-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--rose);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 16px rgba(194,114,126,.3)}
+
+.blog-tags{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0}
+.blog-tag{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;background:var(--cream);border:1px solid var(--border);color:var(--warm-gray)}
+</style>
+</head>
+<body>
+
+<!-- ===== ADMIN — Blog management ===== -->
+<div class="admin">
+<div class="admin-c">
+  <div class="ph">
+    <div>
+      <div class="pt">Blog & Journal <span class="tag">V1.5</span></div>
+      <div class="ps">Créez des articles SEO liés à vos galeries pour attirer de nouveaux clients</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ai">🤖 Rédiger avec l'IA</button>
+      <button class="btn btn-p">+ Nouvel article</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="blog-stats">
+    <div class="bs"><div class="bs-v">8</div><div class="bs-l">Articles publiés</div></div>
+    <div class="bs"><div class="bs-v">1 240</div><div class="bs-l">Visites ce mois</div></div>
+    <div class="bs"><div class="bs-v">12</div><div class="bs-l">Réservations via blog</div></div>
+    <div class="bs"><div class="bs-v">78</div><div class="bs-l">Score SEO moyen</div></div>
+  </div>
+
+  <!-- Articles list -->
+  <div class="articles">
+    <div class="article-row">
+      <div class="ar-thumb t1"></div>
+      <div class="ar-info">
+        <div class="ar-title">Séance famille d'automne au Parc de la Maourine</div>
+        <div class="ar-meta">15 mars 2026 · Famille · Lié à la galerie Dupont</div>
+        <div class="ar-seo"><span class="seo-score good">SEO 92</span><span style="font-size:10px;color:var(--warm-gray)">photographe-famille-toulouse, séance-automne</span></div>
+      </div>
+      <div class="ar-status pub">● Publié</div>
+      <div class="ar-views"><div class="ar-views-v">342</div><div class="ar-views-l">vues</div></div>
+    </div>
+    <div class="article-row">
+      <div class="ar-thumb t3"></div>
+      <div class="ar-info">
+        <div class="ar-title">Mariage de Marie & Thomas au Château de Lastours</div>
+        <div class="ar-meta">10 mars 2026 · Mariage · Lié à la galerie Marie & Thomas</div>
+        <div class="ar-seo"><span class="seo-score good">SEO 88</span><span style="font-size:10px;color:var(--warm-gray)">photographe-mariage-tarn, chateau-lastours</span></div>
+      </div>
+      <div class="ar-status pub">● Publié</div>
+      <div class="ar-views"><div class="ar-views-v">587</div><div class="ar-views-l">vues</div></div>
+    </div>
+    <div class="article-row">
+      <div class="ar-thumb t2"></div>
+      <div class="ar-info">
+        <div class="ar-title">Séance équestre au coucher du soleil — Luna & Camille</div>
+        <div class="ar-meta">8 mars 2026 · Équestre · Lié à la galerie Moreau</div>
+        <div class="ar-seo"><span class="seo-score ok">SEO 74</span><span style="font-size:10px;color:var(--warm-gray)">photographe-equestre-toulouse</span></div>
+      </div>
+      <div class="ar-status pub">● Publié</div>
+      <div class="ar-views"><div class="ar-views-v">198</div><div class="ar-views-l">vues</div></div>
+    </div>
+    <div class="article-row">
+      <div class="ar-thumb t4"></div>
+      <div class="ar-info">
+        <div class="ar-title">5 conseils pour préparer votre séance photo en famille</div>
+        <div class="ar-meta">Brouillon · Guide pratique · Non lié</div>
+        <div class="ar-seo"><span class="seo-score bad">SEO 45</span><span style="font-size:10px;color:var(--warm-gray)">Pas encore optimisé</span></div>
+      </div>
+      <div class="ar-status draft">Brouillon</div>
+      <div class="ar-views"><div class="ar-views-v">—</div><div class="ar-views-l"></div></div>
+    </div>
+  </div>
+
+  <!-- Editor preview -->
+  <div class="editor-card">
+    <div class="ec-h"><span>✏️ Éditeur d'article</span><div style="display:flex;gap:6px"><button class="btn btn-s" style="padding:6px 14px;font-size:12px">👁 Prévisualiser</button><button class="btn btn-p" style="padding:6px 14px;font-size:12px">Publier</button></div></div>
+    <div class="ec-b">
+      <!-- AI assist -->
+      <div class="ai-banner">
+        <div class="ai-icon">🤖</div>
+        <div class="ai-text"><strong>Assistant IA de rédaction :</strong> Sélectionnez une galerie et je vous propose un brouillon d'article avec titre SEO, introduction, récit de la séance et mots-clés optimisés. Vous n'avez plus qu'à personnaliser !</div>
+      </div>
+
+      <div class="field"><div class="fl">Titre de l'article</div><input class="fi" value="Séance famille d'automne au Parc de la Maourine — Sophie & sa tribu"></div>
+      <div class="field"><div class="fl">Slug URL <span class="fl-hint">— auto-généré, modifiable</span></div><input class="fi" value="seance-famille-automne-parc-maourine-toulouse" style="font-size:12px;color:var(--warm-gray)"></div>
+      <div class="field"><div class="fl">Extrait / Meta description <span class="fl-hint">— 155 caractères max pour Google</span></div><input class="fi" value="Découvrez cette magnifique séance famille en lumière dorée au Parc de la Maourine à Toulouse. Photographe famille Tarn & Toulouse."></div>
+      <div class="field">
+        <div class="fl">Galerie liée</div>
+        <div class="gallery-link">
+          <div class="gl-thumb g1"></div>
+          <div class="gl-info"><div class="gl-name">Galerie Sophie Dupont — Famille</div><div class="gl-detail">30 photos · 22 fév 2026 · Les photos de cet article seront tirées de cette galerie</div></div>
+        </div>
+      </div>
+      <div class="field"><div class="fl">Contenu de l'article</div><textarea class="ft">Il y a des séances qui sont une pure magie dès la première minute. Celle de Sophie et sa famille au Parc de la Maourine en fait partie.
+
+Nous nous sommes retrouvés en fin d'après-midi, quand la lumière commence à se teinter de doré entre les feuilles d'automne. La petite Léa, 4 ans, a immédiatement couru vers les tas de feuilles mortes — et c'est là que les plus beaux moments se sont créés spontanément...
+
+[📷 Insérer galerie : 3 photos sélectionnées]
+
+Le parc offre une variété de décors naturels incroyable en quelques mètres : l'allée de platanes pour les portraits en contre-jour, la clairière pour les jeux en famille, et le grand chêne pour les photos de groupe intimes...</textarea></div>
+
+      <!-- SEO panel -->
+      <div class="seo-panel">
+        <div class="seo-title">🔍 Analyse SEO en temps réel</div>
+        <div class="seo-item"><div class="seo-dot green"></div><div class="seo-item-text ok">Titre contient le mot-clé principal "séance famille"</div></div>
+        <div class="seo-item"><div class="seo-dot green"></div><div class="seo-item-text ok">Meta description de bonne longueur (128 caractères)</div></div>
+        <div class="seo-item"><div class="seo-dot green"></div><div class="seo-item-text ok">URL optimisée avec mots-clés locaux</div></div>
+        <div class="seo-item"><div class="seo-dot green"></div><div class="seo-item-text ok">Images avec attributs alt (auto-générés)</div></div>
+        <div class="seo-item"><div class="seo-dot orange"></div><div class="seo-item-text warn">Contenu un peu court — visez 600+ mots pour un meilleur classement</div></div>
+        <div class="seo-item"><div class="seo-dot green"></div><div class="seo-item-text ok">Mots-clés locaux présents : Toulouse, Tarn, Parc de la Maourine</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="divider"><span>↓ Rendu public de l'article ↓</span></div>
+
+<!-- ===== PUBLIC BLOG ===== -->
+<div class="public">
+<nav class="pub-nav">
+  <div class="pub-logo">Fleur de <span>Lumière</span></div>
+  <div class="pub-links"><span>Accueil</span><span>Portfolio</span><span>Tarifs</span><span style="color:var(--rose);font-weight:600">Journal</span><span>Contact</span></div>
+</nav>
+
+<div class="blog-c">
+  <div class="blog-hero-img">Photo de couverture — Famille au parc</div>
+  <div class="blog-cat">📸 Séance Famille</div>
+  <div class="blog-title">Séance famille d'automne au Parc de la Maourine</div>
+  <div class="blog-meta">
+    <div class="blog-author-av">C</div>
+    <span>Par <strong>Capucine</strong> · 15 mars 2026 · 4 min de lecture</span>
+  </div>
+
+  <div class="blog-text">Il y a des séances qui sont une pure magie dès la première minute. Celle de <strong>Sophie et sa famille</strong> au Parc de la Maourine en fait partie.</div>
+  <div class="blog-text">Nous nous sommes retrouvés en fin d'après-midi, quand la lumière commence à se teinter de doré entre les feuilles d'automne. La petite Léa, 4 ans, a immédiatement couru vers les tas de feuilles mortes — et c'est là que les plus beaux moments se sont créés spontanément.</div>
+
+  <div class="blog-gallery">
+    <div class="blog-gallery-img bg1"></div>
+    <div class="blog-gallery-img bg2"></div>
+    <div class="blog-gallery-img bg3"></div>
+  </div>
+
+  <div class="blog-h2">Le Parc de la Maourine, un écrin de lumière</div>
+  <div class="blog-text">Le parc offre une variété de décors naturels incroyable en quelques mètres : l'allée de platanes pour les <strong>portraits en contre-jour</strong>, la clairière pour les jeux en famille, et le grand chêne pour les photos de groupe intimes.</div>
+  <div class="blog-text">En automne, les couleurs chaudes des feuilles se marient parfaitement avec la lumière dorée de fin d'après-midi — c'est ce qu'on appelle la <strong>Golden Hour</strong>, ce moment magique où tout est sublimé.</div>
+
+  <div class="blog-h2">Un conseil pour votre séance</div>
+  <div class="blog-text">Si vous aussi vous rêvez d'une séance famille dans ce cadre enchanteur, le meilleur moment c'est <strong>octobre et novembre</strong> quand les couleurs sont à leur apogée. Réservez tôt car les créneaux Golden Hour partent vite !</div>
+
+  <!-- CTA -->
+  <div class="blog-cta">
+    <div class="blog-cta-title">Envie d'une séance comme celle-ci ?</div>
+    <div class="blog-cta-sub">Réservez votre séance famille en lumière naturelle dans le Tarn ou à Toulouse</div>
+    <button class="blog-cta-btn">Réserver ma séance →</button>
+  </div>
+
+  <div class="blog-tags">
+    <div class="blog-tag">photographe famille toulouse</div>
+    <div class="blog-tag">séance photo automne</div>
+    <div class="blog-tag">parc maourine</div>
+    <div class="blog-tag">golden hour</div>
+    <div class="blog-tag">photographe tarn</div>
+  </div>
+</div>
+</div>
+</body>
+</html>

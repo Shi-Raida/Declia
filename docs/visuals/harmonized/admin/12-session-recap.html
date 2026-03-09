@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Récap Post-Séance</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .photo-thumb { aspect-ratio:4/3; border-radius:var(--fl-radius-sm); display:flex; align-items:center; justify-content:center; font-size:0.625rem; color:rgba(255,255,255,0.4); position:relative; overflow:hidden; cursor:pointer; }
+  .photo-thumb:hover .photo-actions { opacity:1; }
+  .photo-actions { position:absolute; inset:0; background:rgba(45,34,38,0.6); display:flex; align-items:center; justify-content:center; gap:6px; opacity:0; transition:opacity var(--fl-transition); }
+  .photo-action-btn { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.875rem; border:none; cursor:pointer; }
+  .photo-action-btn.like { background:var(--fl-success-light); color:var(--fl-success); }
+  .photo-action-btn.reject { background:var(--fl-error-light); color:var(--fl-error); }
+  .photo-action-btn.keep { background:var(--fl-rose-light); color:var(--fl-rose); }
+  .checklist-item { display:flex; align-items:center; gap:var(--fl-space-md); padding:12px 0; border-bottom:1px solid var(--fl-border); }
+  .checklist-item:last-child { border-bottom:none; }
+  .check-box { width:22px; height:22px; border-radius:6px; border:2px solid var(--fl-border-dark); display:flex; align-items:center; justify-content:center; font-size:0.75rem; flex-shrink:0; }
+  .check-box.done { background:var(--fl-success); border-color:var(--fl-success); color:white; }
+  .check-box.progress { background:var(--fl-or-light); border-color:var(--fl-or); color:var(--fl-or); }
+  .timeline-item { display:flex; align-items:flex-start; gap:var(--fl-space-md); padding:10px 0; border-bottom:1px solid var(--fl-border); }
+  .timeline-item:last-child { border-bottom:none; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Récap Post-Séance</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <!-- Header -->
+      <div class="fl-page-header fl-flex-between">
+        <div>
+          <div class="fl-page-title">Récap Post-Séance</div>
+          <div class="fl-page-subtitle">Documentez et partagez le bilan de votre séance avec votre client</div>
+        </div>
+        <button class="fl-btn fl-btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Envoyer le récap client
+        </button>
+      </div>
+
+      <!-- Session Selector -->
+      <div class="fl-card fl-mb-lg">
+        <div class="fl-card-body">
+          <div class="fl-form-group">
+            <label class="fl-label">Sélectionner une séance</label>
+            <select class="fl-select">
+              <option selected>Sophie Martin — 15/03/2026 — Séance Famille</option>
+              <option>Marie Leroy — 10/03/2026 — Séance Équestre</option>
+              <option>Famille Dupont — 08/03/2026 — Portraits</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- Session Info Card -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Informations séance</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--fl-space-md);">
+              <div>
+                <div class="fl-text-xs fl-text-muted" style="text-transform:uppercase;letter-spacing:0.8px;">Date</div>
+                <div style="font-weight:600;font-size:0.875rem;margin-top:2px;">15 mars 2026</div>
+              </div>
+              <div>
+                <div class="fl-text-xs fl-text-muted" style="text-transform:uppercase;letter-spacing:0.8px;">Durée</div>
+                <div style="font-weight:600;font-size:0.875rem;margin-top:2px;">1h05</div>
+              </div>
+              <div>
+                <div class="fl-text-xs fl-text-muted" style="text-transform:uppercase;letter-spacing:0.8px;">Lieu</div>
+                <div style="font-weight:600;font-size:0.875rem;margin-top:2px;">Forêt de Grésigne</div>
+              </div>
+              <div>
+                <div class="fl-text-xs fl-text-muted" style="text-transform:uppercase;letter-spacing:0.8px;">Spécialité</div>
+                <div style="font-weight:600;font-size:0.875rem;margin-top:2px;">Famille</div>
+              </div>
+            </div>
+
+            <hr class="fl-divider">
+
+            <!-- Photo Count -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--fl-space-md);text-align:center;">
+              <div style="padding:12px;background:var(--fl-bg-alt);border-radius:var(--fl-radius-sm);">
+                <div style="font-family:var(--fl-font-heading);font-size:1.5rem;font-weight:700;color:var(--fl-charcoal);">247</div>
+                <div class="fl-text-xs fl-text-muted" style="margin-top:2px;">Photos brutes</div>
+              </div>
+              <div style="padding:12px;background:var(--fl-or-light);border-radius:var(--fl-radius-sm);">
+                <div style="font-family:var(--fl-font-heading);font-size:1.5rem;font-weight:700;color:var(--fl-or-hover);">45</div>
+                <div class="fl-text-xs" style="color:var(--fl-or-hover);margin-top:2px;">Sélectionnées</div>
+              </div>
+              <div style="padding:12px;background:var(--fl-rose-light);border-radius:var(--fl-radius-sm);">
+                <div style="font-family:var(--fl-font-heading);font-size:1.5rem;font-weight:700;color:var(--fl-rose-hover);">25</div>
+                <div class="fl-text-xs" style="color:var(--fl-rose-hover);margin-top:2px;">À retoucher</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post-Processing Checklist -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Workflow post-traitement</h3>
+            <div class="checklist-item">
+              <div class="check-box done">✓</div>
+              <div style="flex:1;font-size:0.875rem;">Sélection des photos</div>
+              <span class="fl-badge fl-badge-success">Fait</span>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box done">✓</div>
+              <div style="flex:1;font-size:0.875rem;">Tri (culling)</div>
+              <span class="fl-badge fl-badge-success">Fait</span>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box progress">~</div>
+              <div style="flex:1;font-size:0.875rem;">Retouche</div>
+              <span class="fl-badge fl-badge-warning">En cours</span>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box"></div>
+              <div style="flex:1;font-size:0.875rem;">Export galerie</div>
+              <span class="fl-badge" style="background:var(--fl-bg-alt);color:var(--fl-warm-gray);">À faire</span>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box"></div>
+              <div style="flex:1;font-size:0.875rem;">Partage galerie client</div>
+              <span class="fl-badge" style="background:var(--fl-bg-alt);color:var(--fl-warm-gray);">À faire</span>
+            </div>
+
+            <div style="margin-top:var(--fl-space-md);padding:12px;background:var(--fl-rose-pale);border-radius:var(--fl-radius-sm);font-size:0.8125rem;color:var(--fl-rose-hover);">
+              <strong>Communication client :</strong>
+              <div style="margin-top:8px;">
+                <button class="fl-btn fl-btn-primary fl-btn-sm fl-w-full">Envoyer "Votre galerie sera prête dans 5 jours"</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes & Photo Culling -->
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- Notes -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Notes de shooting</h3>
+            <div class="fl-form-group fl-mb-md">
+              <label class="fl-label">Observations générales</label>
+              <textarea class="fl-textarea" rows="3" placeholder="Ambiance, comportement client, moments forts...">Superbe séance ! La famille très détendue, enfants joueurs. Lumière Golden Hour absolument parfaite dès 19h45.</textarea>
+            </div>
+            <div class="fl-form-group fl-mb-md">
+              <label class="fl-label">Conditions lumineuses</label>
+              <textarea class="fl-textarea" rows="2" placeholder="Lumière, météo, contraintes...">Golden Hour 19h45–20h15, lumière chaude et rasante. Léger contre-jour sous les chênes à corriger en retouche.</textarea>
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Note interne <span class="fl-text-muted" style="font-weight:400;">(non visible client)</span></label>
+              <textarea class="fl-textarea" rows="2" placeholder="Rappels retouche...">Corriger surexposition série sous le grand chêne. Client demande N&B sur portrait père + enfants.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Timeline de la séance</h3>
+            <div class="timeline-item">
+              <div style="width:60px;font-size:0.75rem;color:var(--fl-warm-gray);flex-shrink:0;">18h50</div>
+              <div style="flex:1;font-size:0.875rem;">Arrivée et installation</div>
+            </div>
+            <div class="timeline-item">
+              <div style="width:60px;font-size:0.75rem;color:var(--fl-warm-gray);flex-shrink:0;">19h00</div>
+              <div style="flex:1;font-size:0.875rem;">Portraits individuels — clairière</div>
+              <span class="fl-badge fl-badge-rose">34 photos</span>
+            </div>
+            <div class="timeline-item">
+              <div style="width:60px;font-size:0.75rem;color:var(--fl-warm-gray);flex-shrink:0;">19h30</div>
+              <div style="flex:1;font-size:0.875rem;">Portraits de groupe — grand chêne</div>
+              <span class="fl-badge fl-badge-rose">58 photos</span>
+            </div>
+            <div class="timeline-item">
+              <div style="width:60px;font-size:0.75rem;color:var(--fl-warm-gray);flex-shrink:0;">19h45</div>
+              <div style="flex:1;font-size:0.875rem;">Golden Hour — série enfants</div>
+              <span class="fl-badge fl-badge-or">Coucher de soleil ★</span>
+            </div>
+            <div class="timeline-item">
+              <div style="width:60px;font-size:0.75rem;color:var(--fl-warm-gray);flex-shrink:0;">20h05</div>
+              <div style="flex:1;font-size:0.875rem;">Détails — mains, chaussures</div>
+              <span class="fl-badge fl-badge-rose">22 photos</span>
+            </div>
+            <div class="timeline-item">
+              <div style="width:60px;font-size:0.75rem;color:var(--fl-warm-gray);flex-shrink:0;">20h15</div>
+              <div style="flex:1;font-size:0.875rem;">Fin de séance</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo Culling Grid -->
+      <div class="fl-card">
+        <div class="fl-card-body">
+          <div class="fl-flex-between fl-mb-md">
+            <h3 class="fl-h3" style="font-size:1.125rem;">Sélection des photos</h3>
+            <div class="fl-flex fl-gap-sm">
+              <span class="fl-badge fl-badge-success">12 gardées</span>
+              <span class="fl-badge fl-badge-error">3 rejetées</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;">
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#D4B8A0,#C0A088);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#C8D8C0,#A8C098);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#D0C8E0,#B8A8D0);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#E8D0C8,#D4B8B0);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#F0E4D4,#E0CDB8);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#D8E8E0,#C0D8C8);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#E4D8F0,#D0C0E4);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#F0D8C8,#E0C4B0);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#C8E0D4,#A8D0BC);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#D4C8E0,#C0B0D0);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#E8C8C8,#D8B0B0);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+            <div class="photo-thumb" style="background:linear-gradient(135deg,#D0E8E0,#B8D8D0);">
+              <div class="photo-actions">
+                <button class="photo-action-btn like">♥</button>
+                <button class="photo-action-btn keep">★</button>
+                <button class="photo-action-btn reject">✕</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

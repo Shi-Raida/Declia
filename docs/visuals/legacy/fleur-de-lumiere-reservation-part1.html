@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver ma séance — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;
+    --bg:#FFFFFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;
+    --texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;
+    --rose-hover:#A85965;--rose-light:rgba(194,114,126,0.08);
+    --or-light:rgba(212,160,60,0.1);--sauge-light:rgba(107,127,90,0.1);
+    --prune-light:rgba(74,46,61,0.05);
+    --font-titre:'Playfair Display',Georgia,serif;
+    --font:'Lato',-apple-system,sans-serif;
+    --radius:8px;--radius-md:12px;--radius-full:9999px;
+    --shadow-sm:0 1px 3px rgba(74,46,61,0.06);--shadow:0 2px 8px rgba(74,46,61,0.08);
+    --shadow-md:0 4px 16px rgba(74,46,61,0.12);--shadow-cta:0 4px 12px rgba(194,114,126,0.3);
+    --transition:0.25s ease;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  a{text-decoration:none;color:inherit;}
+  button{font-family:var(--font);cursor:pointer;}
+  h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:700;padding:14px 32px;border-radius:var(--radius);cursor:pointer;transition:var(--transition);border:2px solid transparent;}
+  .btn-primary{background:var(--rose);color:#fff;border-color:var(--rose);box-shadow:var(--shadow-cta);}
+  .btn-primary:hover{background:var(--rose-hover);border-color:var(--rose-hover);transform:translateY(-1px);}
+  .btn-secondary{background:transparent;color:var(--prune);border:2px solid var(--prune);}
+  .btn-secondary:hover{background:var(--prune);color:#fff;}
+  .btn-ghost{background:transparent;color:var(--gris);border:none;padding:14px 16px;font-size:14px;font-weight:700;}
+  .btn-ghost:hover{color:var(--prune);}
+  .btn-sm{padding:10px 20px;font-size:13px;}
+
+  /* HEADER */
+  .header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:var(--font-titre);font-size:20px;font-weight:700;color:var(--prune);}
+  .logo span{color:var(--or);}
+  .header-help{font-size:13px;color:var(--gris);}
+  .header-help a{color:var(--rose);font-weight:700;}
+
+  /* STEPPER */
+  .stepper-wrap{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:20px 24px;position:sticky;top:0;z-index:50;}
+  .stepper{display:flex;align-items:center;justify-content:center;max-width:750px;margin:0 auto;}
+  .step-item{display:flex;align-items:center;}
+  .step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid var(--gris-border);color:var(--gris-light);background:var(--bg);transition:var(--transition);flex-shrink:0;position:relative;}
+  .step-dot.active{border-color:var(--rose);color:var(--rose);background:var(--rose-light);}
+  .step-dot.done{border-color:var(--sauge);background:var(--sauge);color:#fff;}
+  .step-label{font-size:10px;color:var(--gris-light);position:absolute;top:42px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+  .step-dot.active .step-label,.step-dot.done .step-label{color:var(--prune);font-weight:700;}
+  .step-line{width:40px;height:2px;background:var(--gris-border);margin:0 4px;}
+  .step-line.done{background:var(--sauge);}
+
+  /* LAYOUT */
+  .booking-layout{display:grid;grid-template-columns:1fr 340px;min-height:calc(100vh - 130px);}
+  .booking-main{padding:36px 40px;max-width:700px;width:100%;}
+  .booking-sidebar{background:var(--bg);border-left:1px solid var(--gris-border);padding:28px 24px;position:sticky;top:130px;align-self:start;}
+
+  .step-view{display:none;}
+  .step-view.active{display:block;animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  .step-title{font-size:clamp(22px,3vw,28px);color:var(--prune);margin-bottom:8px;}
+  .step-title em{color:var(--rose);font-style:italic;}
+  .step-desc{font-size:15px;color:var(--gris);margin-bottom:28px;line-height:1.7;}
+
+  /* STEP 1 */
+  .spec-selector{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+  .spec-chip{padding:10px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--transition);}
+  .spec-chip:hover{border-color:var(--rose);color:var(--rose);}
+  .spec-chip.selected{background:var(--prune);color:#fff;border-color:var(--prune);}
+
+  .formule-options{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .formule-opt{background:var(--bg);border-radius:var(--radius-md);padding:24px 18px;text-align:center;border:2px solid var(--gris-border);cursor:pointer;transition:var(--transition);position:relative;}
+  .formule-opt:hover{border-color:var(--rose);box-shadow:var(--shadow);}
+  .formule-opt.selected{border-color:var(--rose);background:var(--rose-light);box-shadow:var(--shadow-md);}
+  .formule-opt.selected::after{content:'✓';position:absolute;top:10px;right:10px;width:24px;height:24px;border-radius:50%;background:var(--rose);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .formule-opt .fo-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--rose);color:#fff;font-size:11px;font-weight:700;padding:3px 14px;border-radius:var(--radius-full);}
+  .formule-opt h3{font-size:18px;color:var(--prune);margin-bottom:4px;}
+  .formule-opt .fo-price{font-family:var(--font-titre);font-size:28px;font-weight:700;color:var(--or);margin:8px 0;}
+  .formule-opt .fo-price small{display:block;font-family:var(--font);font-size:12px;font-weight:400;color:var(--gris);margin-top:4px;}
+  .formule-opt .fo-list{list-style:none;text-align:left;margin-top:14px;font-size:12px;}
+  .formule-opt .fo-list li{padding:3px 0;display:flex;align-items:flex-start;gap:6px;color:var(--texte);}
+  .formule-opt .fo-list li::before{content:'✓';color:var(--sauge);font-weight:700;flex-shrink:0;}
+
+  /* STEP 2 */
+  .options-list{display:flex;flex-direction:column;gap:10px;}
+  .option-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:2px solid var(--gris-border);border-radius:var(--radius);padding:14px 18px;cursor:pointer;transition:var(--transition);}
+  .option-row:hover{border-color:var(--or);}
+  .option-row.selected{border-color:var(--or);background:var(--or-light);}
+  .option-left{display:flex;align-items:center;gap:12px;}
+  .option-check{width:20px;height:20px;border-radius:4px;border:2px solid var(--gris-border);display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;font-size:11px;}
+  .option-row.selected .option-check{background:var(--or);border-color:var(--or);color:#fff;}
+  .option-name{font-weight:700;color:var(--prune);font-size:14px;}
+  .option-desc{font-size:12px;color:var(--gris);}
+  .option-price{font-family:var(--font-titre);font-size:17px;font-weight:700;color:var(--or);white-space:nowrap;}
+
+  /* STEP 3 */
+  .mini-cal{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);overflow:hidden;box-shadow:var(--shadow-sm);}
+  .mini-cal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--gris-border);background:var(--bg-alt);}
+  .mini-cal-header h3{font-size:16px;color:var(--prune);}
+  .mini-cal-header button{width:32px;height:32px;border-radius:50%;border:1px solid var(--gris-border);background:var(--bg);font-size:14px;cursor:pointer;}
+  .mini-cal-days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;}
+  .mc-head{padding:10px 4px;font-size:10px;font-weight:700;color:var(--gris);text-transform:uppercase;letter-spacing:1px;}
+  .mc-day{padding:10px 4px;font-size:13px;color:var(--texte);cursor:pointer;transition:var(--transition);border-radius:var(--radius);margin:2px;}
+  .mc-day:hover:not(.disabled){background:var(--rose-light);}
+  .mc-day.disabled{color:var(--gris-light);cursor:default;opacity:0.35;}
+  .mc-day.available{font-weight:700;color:var(--sauge);position:relative;}
+  .mc-day.available::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--sauge);}
+  .mc-day.selected{background:var(--rose);color:#fff;font-weight:700;}
+  .mc-day.selected::after{display:none;}
+
+  .timeslots{margin-top:20px;}
+  .timeslots h4{font-size:14px;color:var(--prune);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .slots-grid{display:flex;gap:10px;flex-wrap:wrap;}
+  .slot{padding:12px 22px;border-radius:var(--radius-full);border:2px solid var(--gris-border);font-size:14px;font-weight:700;color:var(--gris);cursor:pointer;transition:var(--transition);background:var(--bg);text-align:center;}
+  .slot:hover{border-color:var(--or);color:var(--or);}
+  .slot.selected{background:var(--or);color:var(--texte);border-color:var(--or);}
+  .slot .slot-sub{display:block;font-size:10px;font-weight:400;margin-top:2px;}
+  .slot.selected .slot-sub{color:rgba(45,34,38,0.6);}
+
+  .golden-note{display:flex;align-items:center;gap:10px;background:var(--or-light);border-radius:var(--radius);padding:14px 18px;margin-top:20px;font-size:13px;color:var(--texte);}
+  .golden-note .gn-icon{font-size:24px;flex-shrink:0;}
+
+  /* STEP 4 */
+  .form-group{margin-bottom:18px;}
+  .form-group label{display:block;font-size:13px;font-weight:700;color:var(--prune);margin-bottom:5px;}
+  .form-group label .req{color:var(--rose);}
+  .form-group input,.form-group select,.form-group textarea{width:100%;padding:11px 14px;border:2px solid var(--gris-border);border-radius:var(--radius);font-family:var(--font);font-size:14px;color:var(--texte);background:var(--bg);transition:var(--transition);outline:none;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(194,114,126,0.12);}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--gris-light);}
+  .form-group textarea{min-height:90px;resize:vertical;}
+  .form-group select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-hint{font-size:11px;color:var(--gris);margin-top:4px;}
+  .form-section-title{font-size:16px;color:var(--prune);margin:28px 0 16px;padding-top:20px;border-top:1px solid var(--gris-border);}
+
+  /* SIDEBAR */
+  .sidebar-title{font-family:var(--font-titre);font-size:17px;color:var(--prune);margin-bottom:18px;}
+  .recap-section{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--gris-border);}
+  .recap-section:last-of-type{border:none;}
+  .recap-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris-light);margin-bottom:4px;}
+  .recap-value{font-size:14px;color:var(--prune);font-weight:700;}
+  .recap-value.light{font-weight:400;color:var(--texte);}
+  .recap-price-row{display:flex;justify-content:space-between;padding:3px 0;font-size:13px;}
+  .recap-price-row .rp-l{color:var(--gris);}
+  .recap-price-row .rp-v{font-weight:700;color:var(--prune);}
+  .recap-total{display:flex;justify-content:space-between;padding:14px 0 0;margin-top:8px;border-top:2px solid var(--gris-border);}
+  .recap-total .rp-l{font-weight:700;color:var(--prune);font-size:15px;}
+  .recap-total .rp-v{font-family:var(--font-titre);font-size:22px;font-weight:700;color:var(--or);}
+  .recap-deposit{background:var(--or-light);border-radius:var(--radius);padding:12px;text-align:center;margin-top:12px;font-size:13px;}
+  .recap-deposit strong{color:var(--or);font-family:var(--font-titre);font-size:18px;}
+  .sidebar-secure{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gris);margin-top:16px;}
+
+  /* NAV */
+  .step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--gris-border);}
+  .step-nav-right{display:flex;gap:8px;}
+
+  /* RESPONSIVE */
+  @media(max-width:1024px){.booking-layout{grid-template-columns:1fr;}.booking-sidebar{position:static;border-left:none;border-top:1px solid var(--gris-border);}}
+  @media(max-width:768px){.formule-options{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}.booking-main{padding:24px 16px;}.stepper{overflow-x:auto;justify-content:flex-start;padding-bottom:20px;}.step-line{width:20px;}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <a class="logo">Fleur de <span>L</span>umière</a>
+  <div class="header-help">Besoin d'aide ? <a href="#">Contactez-moi</a></div>
+</div>
+
+<!-- STEPPER -->
+<div class="stepper-wrap">
+  <div class="stepper" id="stepper">
+    <div class="step-item"><div class="step-dot active" id="dot-1"><span>1</span><span class="step-label">Formule</span></div></div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-item"><div class="step-dot" id="dot-2"><span>2</span><span class="step-label">Options</span></div></div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-item"><div class="step-dot" id="dot-3"><span>3</span><span class="step-label">Créneau</span></div></div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step-item"><div class="step-dot" id="dot-4"><span>4</span><span class="step-label">Infos</span></div></div>
+    <div class="step-line" id="line-4"></div>
+    <div class="step-item"><div class="step-dot" id="dot-5"><span>5</span><span class="step-label">CGV</span></div></div>
+    <div class="step-line" id="line-5"></div>
+    <div class="step-item"><div class="step-dot" id="dot-6"><span>6</span><span class="step-label">Paiement</span></div></div>
+    <div class="step-line" id="line-6"></div>
+    <div class="step-item"><div class="step-dot" id="dot-7"><span>7</span><span class="step-label">Confirmé</span></div></div>
+  </div>
+</div>
+
+<div class="booking-layout">
+  <div class="booking-main">
+
+    <!-- ===== STEP 1 ===== -->
+    <div class="step-view active" id="step-1">
+      <h2 class="step-title">Choisissez votre <em>formule</em></h2>
+      <p class="step-desc">Sélectionnez votre spécialité puis la formule qui vous correspond.</p>
+
+      <div class="spec-selector">
+        <span class="spec-chip selected" onclick="selectChip(this)">👨‍👩‍👧‍👦 Famille</span>
+        <span class="spec-chip" onclick="selectChip(this)">🐴 Équestre</span>
+        <span class="spec-chip" onclick="selectChip(this)">💍 Événementiel</span>
+        <span class="spec-chip" onclick="selectChip(this)">🤱 Maternité</span>
+      </div>
+
+      <div class="formule-options">
+        <div class="formule-opt" onclick="selectFormule(this,'Essentiel',150)">
+          <h3>Essentiel</h3>
+          <div class="fo-price">150€<small>30 min · 10 photos</small></div>
+          <ul class="fo-list"><li>Séance en extérieur</li><li>Galerie privée (90j)</li><li>Photos HD</li></ul>
+        </div>
+        <div class="formule-opt selected" onclick="selectFormule(this,'Signature',280)">
+          <div class="fo-badge">★ Populaire</div>
+          <h3>Signature</h3>
+          <div class="fo-price">280€<small>1h · 25 photos</small></div>
+          <ul class="fo-list"><li>Tout Essentiel inclus</li><li>Galerie de sélection</li><li>Changement de tenue</li><li>3 tirages 20×30 offerts</li></ul>
+        </div>
+        <div class="formule-opt" onclick="selectFormule(this,'Sur-Mesure',0)">
+          <h3>Sur-Mesure</h3>
+          <div class="fo-price" style="font-size:20px;font-style:italic;">Sur devis<small>Personnalisé</small></div>
+          <ul class="fo-list"><li>Durée libre</li><li>Multi-lieux</li><li>Devis sous 48h</li></ul>
+        </div>
+      </div>
+
+      <div class="step-nav"><span></span><button class="btn btn-primary" onclick="goStep(2)">Continuer →</button></div>
+    </div>
+
+    <!-- ===== STEP 2 ===== -->
+    <div class="step-view" id="step-2">
+      <h2 class="step-title">Personnalisez avec des <em>options</em></h2>
+      <p class="step-desc">Ajoutez des extras à votre séance. Vous pourrez aussi les ajouter après, depuis votre galerie.</p>
+
+      <div class="options-list">
+        <div class="option-row" onclick="toggleOption(this,75)">
+          <div class="option-left"><div class="option-check"></div><div><div class="option-name">5 photos supplémentaires</div><div class="option-desc">5 photos retouchées en plus de votre formule</div></div></div>
+          <div class="option-price">+75€</div>
+        </div>
+        <div class="option-row selected" onclick="toggleOption(this,35)">
+          <div class="option-left"><div class="option-check">✓</div><div><div class="option-name">Boîte Souvenir « L'Écrin »</div><div class="option-desc">Coffret kraft : clé USB, 3 tirages, mot manuscrit</div></div></div>
+          <div class="option-price">+35€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this,25)">
+          <div class="option-left"><div class="option-check"></div><div><div class="option-name">Tirage 20×30 cm</div><div class="option-desc">Tirage professionnel papier Fine Art</div></div></div>
+          <div class="option-price">+25€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this,40)">
+          <div class="option-left"><div class="option-check"></div><div><div class="option-name">Tirage 30×40 cm</div><div class="option-desc">Grand format idéal pour encadrer</div></div></div>
+          <div class="option-price">+40€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this,85)">
+          <div class="option-left"><div class="option-check"></div><div><div class="option-name">Toile 40×60 cm</div><div class="option-desc">Impression canvas sur châssis bois</div></div></div>
+          <div class="option-price">+85€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this,120)">
+          <div class="option-left"><div class="option-check"></div><div><div class="option-name">Album photo 20 pages</div><div class="option-desc">Album relié cuir, impression premium</div></div></div>
+          <div class="option-price">+120€</div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-ghost" onclick="goStep(1)">← Retour</button>
+        <div class="step-nav-right">
+          <button class="btn btn-secondary btn-sm" onclick="goStep(3)">Passer</button>
+          <button class="btn btn-primary" onclick="goStep(3)">Continuer →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3 ===== -->
+    <div class="step-view" id="step-3">
+      <h2 class="step-title">Choisissez votre <em>créneau</em></h2>
+      <p class="step-desc">Les jours verts sont disponibles. Chaque créneau est calé à l'Heure Dorée ☀️</p>
+
+      <div class="mini-cal">
+        <div class="mini-cal-header">
+          <button>‹</button><h3>Mars 2026</h3><button>›</button>
+        </div>
+        <div class="mini-cal-days">
+          <span class="mc-head">Lun</span><span class="mc-head">Mar</span><span class="mc-head">Mer</span><span class="mc-head">Jeu</span><span class="mc-head">Ven</span><span class="mc-head">Sam</span><span class="mc-head">Dim</span>
+          <span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span>
+          <span class="mc-day available" onclick="selectDay(this)">1</span>
+          <span class="mc-day disabled">2</span>
+          <span class="mc-day available" onclick="selectDay(this)">3</span>
+          <span class="mc-day disabled">4</span><span class="mc-day disabled">5</span><span class="mc-day disabled">6</span>
+          <span class="mc-day available" onclick="selectDay(this)">7</span>
+          <span class="mc-day available" onclick="selectDay(this)">8</span>
+          <span class="mc-day disabled">9</span><span class="mc-day disabled">10</span>
+          <span class="mc-day available" onclick="selectDay(this)">11</span>
+          <span class="mc-day disabled">12</span><span class="mc-day disabled">13</span>
+          <span class="mc-day available selected" onclick="selectDay(this)">14</span>
+          <span class="mc-day available" onclick="selectDay(this)">15</span>
+          <span class="mc-day disabled">16</span><span class="mc-day disabled">17</span><span class="mc-day disabled">18</span><span class="mc-day disabled">19</span>
+          <span class="mc-day available" onclick="selectDay(this)">20</span>
+          <span class="mc-day available" onclick="selectDay(this)">21</span>
+          <span class="mc-day disabled">22</span><span class="mc-day disabled">23</span><span class="mc-day disabled">24</span><span class="mc-day disabled">25</span><span class="mc-day disabled">26</span>
+          <span class="mc-day available" onclick="selectDay(this)">27</span>
+          <span class="mc-day available" onclick="selectDay(this)">28</span>
+          <span class="mc-day disabled">29</span><span class="mc-day disabled">30</span><span class="mc-day disabled">31</span>
+          <span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span><span class="mc-day disabled"></span>
+        </div>
+      </div>
+
+      <div class="timeslots">
+        <h4>☀️ Créneaux — Samedi 14 mars</h4>
+        <div class="slots-grid">
+          <div class="slot" onclick="selectSlot(this)">17h00<span class="slot-sub">Coucher 18h42</span></div>
+          <div class="slot selected" onclick="selectSlot(this)">17h30<span class="slot-sub">Golden Hour</span></div>
+          <div class="slot" onclick="selectSlot(this)">18h00<span class="slot-sub">Dernière lumière</span></div>
+        </div>
+      </div>
+
+      <div class="golden-note">
+        <span class="gn-icon">🌅</span>
+        <div><strong>L'Heure Dorée garantie</strong> — Chaque créneau est calculé en fonction du coucher du soleil. Si la météo ne le permet pas, je vous propose un report gratuit.</div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-ghost" onclick="goStep(2)">← Retour</button>
+        <button class="btn btn-primary" onclick="goStep(4)">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 4 ===== -->
+    <div class="step-view" id="step-4">
+      <h2 class="step-title">Parlez-moi de <em>vous</em></h2>
+      <p class="step-desc">Ces informations m'aident à préparer une séance qui vous ressemble. Remplissez ce que vous pouvez !</p>
+
+      <div class="form-row">
+        <div class="form-group"><label>Prénom <span class="req">*</span></label><input type="text" placeholder="Votre prénom"></div>
+        <div class="form-group"><label>Nom <span class="req">*</span></label><input type="text" placeholder="Votre nom"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email <span class="req">*</span></label><input type="email" placeholder="votre@email.fr"></div>
+        <div class="form-group"><label>Téléphone <span class="req">*</span></label><input type="tel" placeholder="06 12 34 56 78"></div>
+      </div>
+
+      <h4 class="form-section-title">À propos de la séance</h4>
+
+      <div class="form-group">
+        <label>Combien de personnes sur les photos ?</label>
+        <select><option>Sélectionnez...</option><option>1 personne</option><option>2 personnes (couple)</option><option>3-4 personnes (petite famille)</option><option>5+ personnes (grande famille)</option></select>
+      </div>
+      <div class="form-group">
+        <label>Y a-t-il des enfants ? Si oui, quels âges ?</label>
+        <input type="text" placeholder="Ex : 2 enfants — 4 ans et 7 ans">
+      </div>
+      <div class="form-group">
+        <label>Avez-vous un lieu en tête ?</label>
+        <input type="text" placeholder="Ex : Parc, champ, forêt, bord de rivière...">
+        <div class="form-hint">Si vous n'avez pas d'idée, je vous proposerai mes spots préférés !</div>
+      </div>
+      <div class="form-group">
+        <label>Des tenues prévues ? Changement de tenue ?</label>
+        <input type="text" placeholder="Ex : Robe longue + tenue décontractée">
+      </div>
+      <div class="form-group">
+        <label>Y a-t-il quelque chose de spécial à savoir ?</label>
+        <textarea placeholder="Occasion spéciale, surprise, besoins particuliers, personnes timides devant l'objectif..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Comment avez-vous connu Fleur de Lumière ?</label>
+        <select><option>Sélectionnez...</option><option>Instagram</option><option>Bouche-à-oreille</option><option>Google</option><option>Parrainage</option><option>Autre</option></select>
+      </div>
+      <div class="form-group">
+        <label>Code promo ou parrainage</label>
+        <input type="text" placeholder="Ex : SOPHIE-FDL ou LUMIERE20">
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-ghost" onclick="goStep(3)">← Retour</button>
+        <button class="btn btn-primary" onclick="goStep(5)">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- STEPS 5-7 come in Part 2 -->
+    <div class="step-view" id="step-5">
+      <div style="text-align:center;padding:60px 0;">
+        <p style="font-size:48px;margin-bottom:16px;">📄</p>
+        <h2 class="step-title">Étapes 5 à 7</h2>
+        <p class="step-desc">CGV + Paiement + Confirmation → voir le fichier Partie 2</p>
+        <button class="btn-ghost" onclick="goStep(4)">← Retour à l'étape 4</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR RÉCAP -->
+  <div class="booking-sidebar">
+    <h3 class="sidebar-title">📋 Récapitulatif</h3>
+
+    <div class="recap-section">
+      <div class="recap-label">Spécialité</div>
+      <div class="recap-value">👨‍👩‍👧‍👦 Famille & Portraits</div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Formule</div>
+      <div class="recap-value">Signature</div>
+      <div class="recap-value light" style="font-size:13px;">1h · 25 photos retouchées</div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Options</div>
+      <div class="recap-price-row"><span class="rp-l">Boîte Souvenir « L'Écrin »</span><span class="rp-v">+35€</span></div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Créneau</div>
+      <div class="recap-value">Sam. 14 mars 2026</div>
+      <div class="recap-value light" style="font-size:13px;">17h30 — Heure Dorée ☀️</div>
+    </div>
+
+    <div class="recap-price-row"><span class="rp-l">Formule Signature</span><span class="rp-v">280€</span></div>
+    <div class="recap-price-row"><span class="rp-l">Options</span><span class="rp-v">+35€</span></div>
+    <div class="recap-total"><span class="rp-l">Total</span><span class="rp-v">315€</span></div>
+
+    <div class="recap-deposit">Acompte à régler : <strong>94,50€</strong><br><span style="font-size:11px;color:var(--gris);">30% du total · Solde avant livraison</span></div>
+
+    <div class="sidebar-secure">🔒 Paiement sécurisé via Stripe</div>
+    <div class="sidebar-secure">↩️ Report gratuit si météo défavorable</div>
+    <div class="sidebar-secure">✅ Annulation gratuite > 7 jours avant</div>
+  </div>
+</div>
+
+<script>
+  let currentStep = 1;
+
+  function goStep(n) {
+    document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('step-' + n);
+    if (target) target.classList.add('active');
+
+    // Update stepper dots
+    for (let i = 1; i <= 7; i++) {
+      const dot = document.getElementById('dot-' + i);
+      const line = document.getElementById('line-' + (i - 1));
+      if (!dot) continue;
+      dot.className = 'step-dot';
+      if (i < n) { dot.classList.add('done'); dot.querySelector('span')?.style && (dot.innerHTML = '<span class="step-label">' + dot.querySelector('.step-label')?.textContent + '</span>'); }
+      else if (i === n) dot.classList.add('active');
+      if (line) line.className = i <= n ? 'step-line done' : 'step-line';
+    }
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectChip(el) {
+    document.querySelectorAll('.spec-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectFormule(el, name, price) {
+    document.querySelectorAll('.formule-opt').forEach(f => f.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function toggleOption(el, price) {
+    el.classList.toggle('selected');
+    const check = el.querySelector('.option-check');
+    check.textContent = el.classList.contains('selected') ? '✓' : '';
+  }
+
+  function selectDay(el) {
+    if (el.classList.contains('disabled')) return;
+    document.querySelectorAll('.mc-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectSlot(el) {
+    document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>

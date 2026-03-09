@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace École & Parent — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--bleu:#3B82F6;--bleu-light:rgba(59,130,246,.08);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.sw-btn{padding:9px 20px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.container{max-width:900px;margin:0 auto;padding:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:none}
+.btn-primary{background:var(--rose);color:#fff}.btn-primary:hover{background:var(--rose-hover)}
+.btn-secondary{background:transparent;color:var(--prune);border:1.5px solid var(--gris-border)}.btn-secondary:hover{background:var(--prune-light)}
+.btn-sauge{background:var(--sauge);color:#fff}.btn-sauge:hover{background:#5a6e4b}
+.btn-or{background:var(--or);color:var(--texte);border:none}.btn-or:hover{background:#c49535}
+.btn-sm{padding:6px 12px;font-size:11px}
+.btn-full{width:100%}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:14px;color:var(--prune);flex:1}
+.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.or-line{width:50px;height:2px;background:var(--or);margin:10px auto;border-radius:1px}
+
+/* ============================== */
+/* ESPACE ÉCOLE                   */
+/* ============================== */
+.ecole-header{background:var(--bleu-light);padding:28px 24px;text-align:center;border-bottom:1px solid var(--gris-border)}
+.ecole-header h1{font-size:22px;color:var(--prune);margin-bottom:4px}.ecole-header h1 em{color:var(--bleu);font-style:italic}
+.ecole-header p{font-size:13px;color:var(--gris)}
+.ecole-header .eh-school{font-size:16px;font-weight:700;color:var(--prune);margin-top:8px}
+
+.step-bar{display:flex;align-items:center;gap:0;max-width:700px;margin:20px auto;padding:0 24px}
+.step{flex:1;text-align:center;position:relative}
+.step::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--gris-border);z-index:0}
+.step:last-child::after{display:none}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin:0 auto 4px;position:relative;z-index:1;border:2px solid var(--gris-border);background:var(--bg);color:var(--gris)}
+.step.done .step-dot{background:var(--sauge);border-color:var(--sauge);color:#fff}
+.step.active .step-dot{background:var(--bleu);border-color:var(--bleu);color:#fff}
+.step-label{font-size:10px;color:var(--gris)}
+.step.done .step-label{color:var(--sauge);font-weight:700}
+.step.active .step-label{color:var(--bleu);font-weight:700}
+
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:10px 12px;font-size:12px;text-align:left;border-bottom:1px solid var(--gris-border)}
+.tbl th{background:var(--bg-alt);font-weight:700;color:var(--prune);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{color:var(--gris)}.tbl tr:hover td{background:var(--bg-alt)}
+.sb{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);display:inline-block}
+.sb-ok{background:var(--sauge-light);color:var(--sauge)}.sb-pending{background:var(--or-light);color:#92750c}.sb-no{background:rgba(220,38,38,.08);color:#DC2626}
+
+.auth-progress{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg-alt);border-radius:var(--radius);margin-bottom:16px}
+.ap-circle{width:56px;height:56px;border-radius:50%;border:4px solid var(--sauge);display:flex;align-items:center;justify-content:center;font-family:var(--font-titre);font-size:18px;font-weight:700;color:var(--sauge);flex-shrink:0}
+.ap-info{flex:1}.ap-info .ap-title{font-weight:700;font-size:14px;color:var(--prune)}.ap-info p{font-size:12px;color:var(--gris)}
+.ap-bar{height:6px;background:var(--gris-border);border-radius:3px;margin-top:6px;overflow:hidden}.ap-fill{height:100%;border-radius:3px;background:var(--sauge)}
+
+/* ============================== */
+/* ESPACE PARENT                  */
+/* ============================== */
+.parent-header{background:linear-gradient(135deg,var(--bg-alt),rgba(212,160,60,.05));padding:28px 24px;text-align:center;border-bottom:1px solid var(--gris-border)}
+.parent-header h1{font-size:22px;color:var(--prune);margin-bottom:4px}.parent-header h1 em{color:var(--rose);font-style:italic}
+.parent-header p{font-size:13px;color:var(--gris)}
+
+.code-box{max-width:400px;margin:0 auto 20px;display:flex;gap:8px}
+.code-box input{flex:1;padding:12px 16px;border:2px solid var(--gris-border);border-radius:var(--radius);font-size:16px;font-family:monospace;letter-spacing:3px;text-align:center;text-transform:uppercase;outline:none}.code-box input:focus{border-color:var(--rose)}
+.code-box input::placeholder{font-family:var(--font);font-size:13px;letter-spacing:0}
+
+.child-banner{display:flex;align-items:center;gap:14px;padding:16px;background:var(--prune);border-radius:var(--radius-md);color:#fff;margin-bottom:20px}
+.child-avatar{width:52px;height:52px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--texte);flex-shrink:0}
+.child-info h3{font-size:16px;font-family:var(--font)}.child-info p{font-size:12px;color:rgba(255,255,255,.6)}
+.child-school{margin-left:auto;text-align:right;font-size:12px;color:rgba(255,255,255,.5)}
+.child-school strong{color:var(--or);display:block}
+
+/* Photo grid */
+.photo-section{margin-bottom:24px}
+.photo-section h3{font-size:16px;color:var(--prune);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.photo-item{border-radius:var(--radius);overflow:hidden;aspect-ratio:3/4;position:relative;cursor:pointer;transition:var(--tr);border:3px solid transparent}
+.photo-item:hover{transform:scale(1.03);box-shadow:var(--shadow-md)}
+.photo-item.selected{border-color:var(--or);box-shadow:0 0 0 2px var(--or)}
+.photo-ph{width:100%;height:100%}
+.pp1{background:linear-gradient(135deg,#e8d5c4,#d0bba6)}.pp2{background:linear-gradient(135deg,#d4cfc5,#b8b0a0)}.pp3{background:linear-gradient(135deg,#f0d9a8,#dfc080)}.pp4{background:linear-gradient(135deg,#cec3ad,#b0a58f)}.pp5{background:linear-gradient(135deg,#d5c8b8,#bbad9a)}
+.photo-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(45,34,38,.7));padding:8px;color:#fff;font-size:10px;font-weight:700}
+.photo-check{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.3);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.photo-item.selected .photo-check{background:var(--or);border-color:var(--or)}
+
+/* Packs */
+.pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.pack{background:var(--bg);border-radius:var(--radius-md);border:2px solid var(--gris-border);padding:18px;text-align:center;cursor:pointer;transition:var(--tr);position:relative}
+.pack:hover{border-color:var(--or);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.pack.selected{border-color:var(--or);background:var(--or-light)}
+.pack-pop{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:700;padding:2px 10px;border-radius:var(--radius-full);background:var(--or);color:var(--texte)}
+.pack-icon{font-size:28px;margin-bottom:8px}
+.pack h4{font-size:14px;color:var(--prune);margin-bottom:6px}
+.pack-desc{font-size:11px;color:var(--gris);line-height:1.5;margin-bottom:10px}
+.pack-price{font-family:var(--font-titre);font-size:22px;font-weight:700;color:var(--or)}
+
+/* Options */
+.option-row{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--gris-border);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;transition:var(--tr)}
+.option-row:hover{border-color:var(--or);background:var(--or-light)}
+.option-row.selected{border-color:var(--or);background:var(--or-light)}
+.opt-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--gris-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;transition:var(--tr)}
+.option-row.selected .opt-check{background:var(--or);border-color:var(--or);color:#fff}
+.opt-info{flex:1}.opt-info .opt-name{font-weight:700;font-size:13px;color:var(--prune)}.opt-info .opt-desc{font-size:11px;color:var(--gris)}
+.opt-price{font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--or)}
+
+/* Fratrie */
+.fratrie-add{display:flex;align-items:center;gap:10px;padding:14px;border:2px dashed var(--gris-border);border-radius:var(--radius);margin-bottom:16px;cursor:pointer;transition:var(--tr)}
+.fratrie-add:hover{border-color:var(--rose);background:var(--rose-light)}
+.fratrie-add .fa-icon{font-size:24px;flex-shrink:0}.fratrie-add .fa-text{flex:1}.fratrie-add .fa-text strong{color:var(--prune);display:block;font-size:13px}.fratrie-add .fa-text span{font-size:11px;color:var(--gris)}
+
+/* Cart summary */
+.cart-summary{background:var(--prune);border-radius:var(--radius-md);padding:20px;color:#fff;margin-bottom:20px}
+.cart-summary h3{font-size:16px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.cart-line{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.08)}
+.cart-line:last-of-type{border:none}
+.cart-line .cl-label{color:rgba(255,255,255,.7)}.cart-line .cl-val{font-weight:700}
+.cart-total{display:flex;justify-content:space-between;padding:12px 0 0;margin-top:8px;border-top:2px solid rgba(255,255,255,.15);font-size:16px;font-weight:700}
+.cart-total .ct-val{font-family:var(--font-titre);font-size:22px;color:var(--or)}
+
+.trust-row{display:flex;gap:16px;justify-content:center;margin-bottom:16px}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gris)}
+
+@media(max-width:768px){.photo-grid,.pack-grid{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}.step-bar{overflow-x:auto}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('ecole',this)">🏫 Espace École</button>
+  <button class="sw-btn" onclick="switchView('parent',this)">👨‍👩‍👧 Espace Parent</button>
+</div>
+
+<!-- ================================ -->
+<!-- ESPACE ÉCOLE                     -->
+<!-- ================================ -->
+<div class="page-view active" id="view-ecole">
+<div class="ecole-header">
+  <h1>Espace <em>École</em></h1><div class="or-line"></div>
+  <p>Interface de gestion pour votre établissement</p>
+  <div class="eh-school">🏫 École Jean Jaurès — Saint-Sulpice</div>
+</div>
+
+<div class="container">
+
+  <div class="step-bar">
+    <div class="step done"><div class="step-dot">✓</div><div class="step-label">Convention</div></div>
+    <div class="step done"><div class="step-dot">✓</div><div class="step-label">Autorisations</div></div>
+    <div class="step active"><div class="step-dot">3</div><div class="step-label">Shooting</div></div>
+    <div class="step"><div class="step-dot">4</div><div class="step-label">Épreuves</div></div>
+    <div class="step"><div class="step-dot">5</div><div class="step-label">Commandes</div></div>
+    <div class="step"><div class="step-dot">6</div><div class="step-label">Livraison</div></div>
+  </div>
+
+  <div class="auth-progress">
+    <div class="ap-circle">92%</div>
+    <div class="ap-info"><div class="ap-title">Autorisations parentales</div><p>88 / 96 autorisations reçues · 8 en attente</p><div class="ap-bar"><div class="ap-fill" style="width:92%"></div></div></div>
+    <button class="btn btn-secondary btn-sm">📧 Relancer</button>
+  </div>
+
+  <div class="grid-2">
+    <div class="card"><div class="card-h"><h3>📅 Informations shooting</h3></div><div class="card-b">
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px"><div style="font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Date</div><div style="font-weight:700;font-size:15px;color:var(--prune)">Jeudi 6 mars 2026</div></div>
+        <div style="flex:1;min-width:120px"><div style="font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Horaires</div><div style="font-weight:700;font-size:15px;color:var(--prune)">8h30 — 15h00</div></div>
+        <div style="flex:1;min-width:120px"><div style="font-size:11px;color:var(--gris);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Photographe</div><div style="font-weight:700;font-size:15px;color:var(--prune)">Capucine 📸</div></div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-h"><h3>📋 Planning de la journée</h3></div><div class="card-b">
+      <table class="tbl">
+        <tr><th>Horaire</th><th>Classe</th><th>Enseignant</th></tr>
+        <tr><td style="font-weight:700">08h30</td><td>CP — 24 élèves</td><td>Mme Dupuis</td></tr>
+        <tr><td style="font-weight:700">09h30</td><td>CE1 — 26 élèves</td><td>M. Bernard</td></tr>
+        <tr><td style="font-weight:700">10h30</td><td>CE2 — 23 élèves + fratries</td><td>Mme Roche</td></tr>
+        <tr><td style="font-weight:700">13h30</td><td>CM1 — 23 élèves</td><td>M. Lefèvre</td></tr>
+        <tr><td style="font-weight:700">14h30</td><td colspan="2">Photo de groupe (cour)</td></tr>
+      </table>
+    </div></div>
+  </div>
+
+  <div class="card"><div class="card-h"><h3>📋 Suivi autorisations par classe</h3><span class="card-badge">8 manquantes</span></div><div class="card-b">
+    <table class="tbl">
+      <tr><th>Classe</th><th>Enseignant</th><th>Reçues</th><th>Manquantes</th><th>Statut</th><th>Action</th></tr>
+      <tr><td style="font-weight:700">CP</td><td>Mme Dupuis</td><td>24 / 24</td><td>0</td><td><span class="sb sb-ok">✅ Complet</span></td><td>—</td></tr>
+      <tr><td style="font-weight:700">CE1</td><td>M. Bernard</td><td>25 / 26</td><td>1</td><td><span class="sb sb-pending">⏳ 1 restante</span></td><td><button class="btn btn-sm btn-secondary">📧 Relancer</button></td></tr>
+      <tr><td style="font-weight:700">CE2</td><td>Mme Roche</td><td>20 / 23</td><td>3</td><td><span class="sb sb-pending">⏳ 3 restantes</span></td><td><button class="btn btn-sm btn-secondary">📧 Relancer</button></td></tr>
+      <tr><td style="font-weight:700">CM1</td><td>M. Lefèvre</td><td>19 / 23</td><td>4</td><td><span class="sb sb-no">⚠️ 4 restantes</span></td><td><button class="btn btn-sm btn-primary">📧 Relancer</button></td></tr>
+    </table>
+  </div></div>
+
+  <div class="card"><div class="card-h"><h3>📸 Épreuves & Validation</h3><span class="card-badge">Disponible après le shooting</span></div><div class="card-b" style="text-align:center;padding:40px">
+    <div style="font-size:48px;margin-bottom:12px;opacity:.3">📸</div>
+    <p style="font-size:14px;color:var(--gris)">Les épreuves seront disponibles ici après le shooting du <strong>6 mars</strong>.</p>
+    <p style="font-size:12px;color:var(--gris-light);margin-top:6px">Vous pourrez les valider avant la mise en ligne pour les parents.</p>
+  </div></div>
+
+</div>
+</div>
+
+<!-- ================================ -->
+<!-- ESPACE PARENT                    -->
+<!-- ================================ -->
+<div class="page-view" id="view-parent">
+<div class="parent-header">
+  <h1>Photos <em>scolaires</em></h1><div class="or-line"></div>
+  <p>Visualisez et commandez les photos de votre enfant</p>
+</div>
+
+<div class="container">
+
+  <!-- Code d'accès (state: already logged in) -->
+  <div class="child-banner">
+    <div class="child-avatar">LE</div>
+    <div class="child-info"><h3>Lucas Évrard</h3><p>Code d'accès : JJAURES-CE2-LUCAS</p></div>
+    <div class="child-school"><strong>🏫 École Jean Jaurès</strong>CE2 — Mme Roche<br>Shooting du 6 mars 2026</div>
+  </div>
+
+  <!-- Photos individuelles -->
+  <div class="photo-section">
+    <h3>📸 Photos individuelles de Lucas</h3>
+    <div class="photo-grid">
+      <div class="photo-item selected"><div class="photo-ph pp1"></div><div class="photo-label">Portrait classique</div><div class="photo-check selected">✓</div></div>
+      <div class="photo-item"><div class="photo-ph pp2"></div><div class="photo-label">Portrait sourire</div><div class="photo-check"></div></div>
+      <div class="photo-item selected"><div class="photo-ph pp3"></div><div class="photo-label">Portrait buste</div><div class="photo-check selected">✓</div></div>
+    </div>
+  </div>
+
+  <!-- Photo de classe -->
+  <div class="photo-section">
+    <h3>👨‍👩‍👧‍👦 Photo de classe — CE2</h3>
+    <div style="border-radius:var(--radius-md);overflow:hidden;aspect-ratio:16/9;margin-bottom:8px"><div class="photo-ph pp4" style="width:100%;height:100%"></div></div>
+  </div>
+
+  <!-- Fratrie -->
+  <div class="photo-section">
+    <h3>👧👦 Photo fratrie</h3>
+    <div class="fratrie-add">
+      <div class="fa-icon">👧👦</div>
+      <div class="fa-text"><strong>Ajouter une photo fratrie</strong><span>Lucas (CE2) a une sœur dans l'école ? Ajoutez une photo fratrie à votre commande.</span></div>
+      <button class="btn btn-secondary btn-sm">+ Ajouter</button>
+    </div>
+  </div>
+
+  <!-- Choix du pack -->
+  <h3 style="font-family:var(--font-titre);font-size:16px;color:var(--prune);margin-bottom:12px">📦 Choisissez votre pack</h3>
+  <div class="pack-grid">
+    <div class="pack"><div class="pack-icon">📸</div><h4>Essentiel</h4><div class="pack-desc">1 individuelle 13×18<br>1 classe 20×30</div><div class="pack-price">12€</div></div>
+    <div class="pack selected"><div class="pack-pop">⭐ Populaire</div><div class="pack-icon">⭐</div><h4>Famille</h4><div class="pack-desc">2 individuelles<br>1 classe 20×30<br>4 photos identité</div><div class="pack-price">22€</div></div>
+    <div class="pack"><div class="pack-icon">💎</div><h4>Premium</h4><div class="pack-desc">3 individuelles<br>1 classe + 8 identités<br>1 magnet personnalisé</div><div class="pack-price">35€</div></div>
+  </div>
+
+  <!-- Options -->
+  <h3 style="font-family:var(--font-titre);font-size:16px;color:var(--prune);margin-bottom:12px">✨ Options supplémentaires</h3>
+  <div class="option-row selected"><div class="opt-check">✓</div><div class="opt-info"><div class="opt-name">👨‍👩‍👧‍👦 Photo fratrie</div><div class="opt-desc">1 photo fratrie 20×30 avec Lucas et Emma</div></div><div class="opt-price">+8€</div></div>
+  <div class="option-row"><div class="opt-check"></div><div class="opt-info"><div class="opt-name">💾 Pack numérique</div><div class="opt-desc">Toutes les photos en HD téléchargeables</div></div><div class="opt-price">+10€</div></div>
+  <div class="option-row"><div class="opt-check"></div><div class="opt-info"><div class="opt-name">🖼️ Tirage grand format 30×45</div><div class="opt-desc">1 portrait au choix en grand format</div></div><div class="opt-price">+15€</div></div>
+
+  <div style="height:20px"></div>
+
+  <!-- Cart -->
+  <div class="cart-summary">
+    <h3>🛒 Votre commande</h3>
+    <div class="cart-line"><span class="cl-label">Pack Famille</span><span class="cl-val">22€</span></div>
+    <div class="cart-line"><span class="cl-label">Option fratrie (Lucas + Emma)</span><span class="cl-val">8€</span></div>
+    <div class="cart-total"><span>Total</span><span class="ct-val">30€</span></div>
+  </div>
+
+  <button class="btn btn-or btn-full" style="font-size:15px;padding:14px 0;border-radius:var(--radius-md)">💳 Payer 30€ — Paiement sécurisé Stripe</button>
+
+  <div class="trust-row" style="margin-top:14px">
+    <span class="trust-item">🔒 Paiement sécurisé</span>
+    <span class="trust-item">📦 Livré à l'école</span>
+    <span class="trust-item">📸 Qualité pro</span>
+    <span class="trust-item">💚 Satisfaction garantie</span>
+  </div>
+
+</div>
+</div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

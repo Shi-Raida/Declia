@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Réseau Prestataires</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .vendor-card { background:var(--fl-bg-card); border:1px solid var(--fl-border); border-radius:var(--fl-radius); box-shadow:var(--fl-shadow-sm); padding:var(--fl-space-md); transition:transform var(--fl-transition), box-shadow var(--fl-transition); cursor:pointer; }
+  .vendor-card:hover { transform:translateY(-2px); box-shadow:var(--fl-shadow-md); }
+  .vendor-logo { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .vendor-logo.fleuriste { background:#E8F0E8; }
+  .vendor-logo.imprimerie { background:#E8E4F0; }
+  .vendor-logo.beaute { background:var(--fl-rose-light); }
+  .vendor-logo.traiteur { background:var(--fl-or-light); }
+  .stars { color:var(--fl-or); font-size:0.875rem; }
+  .map-placeholder { height:220px; background:linear-gradient(135deg,#EDE8E6,#E0D8D4,#D8CFCB); border-radius:var(--fl-radius); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+  .map-dot { position:absolute; width:12px; height:12px; border-radius:50%; background:var(--fl-rose); box-shadow:0 0 0 4px rgba(194,114,126,0.2); }
+  .map-label { position:absolute; font-size:0.625rem; font-weight:600; color:var(--fl-prune); background:rgba(255,255,255,0.9); padding:2px 6px; border-radius:4px; white-space:nowrap; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Réseau Prestataires</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header fl-flex-between">
+        <div>
+          <div class="fl-page-title">Réseau Prestataires</div>
+          <div class="fl-page-subtitle">Gérez vos partenaires et suivez les recommandations croisées dans le Tarn</div>
+        </div>
+        <button class="fl-btn fl-btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter un prestataire
+        </button>
+      </div>
+
+      <!-- KPIs -->
+      <div class="fl-grid-3 fl-mb-lg">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Partenaires actifs</div>
+          <div class="fl-kpi-value">4</div>
+          <div class="fl-kpi-trend up">Tous validés</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Galeries partagées</div>
+          <div class="fl-kpi-value">12</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Clients envoyés ce mois</div>
+          <div class="fl-kpi-value" style="color:var(--fl-sauge);">3</div>
+          <div class="fl-kpi-trend up">Via partenaires</div>
+        </div>
+      </div>
+
+      <!-- Map + Vendors -->
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- Map -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Zone d'intervention — Tarn</h3>
+            <div class="map-placeholder">
+              <div style="position:absolute;font-size:1.5rem;font-weight:200;letter-spacing:6px;color:rgba(74,46,61,0.12);text-transform:uppercase;top:30%;left:15%;">TARN</div>
+              <div style="position:absolute;font-size:1rem;font-weight:200;letter-spacing:4px;color:rgba(74,46,61,0.08);text-transform:uppercase;bottom:30%;right:15%;">TOULOUSE</div>
+              <!-- Dots -->
+              <div class="map-dot" style="top:40%;left:35%;"></div>
+              <div class="map-label" style="top:32%;left:22%;">Parisot · Studio</div>
+              <div class="map-dot" style="top:55%;left:60%;"></div>
+              <div class="map-label" style="top:60%;left:62%;">Castres · Imprimerie</div>
+              <div class="map-dot" style="top:30%;left:70%;"></div>
+              <div class="map-label" style="top:22%;left:60%;">Albi · Studio Beauté</div>
+              <div class="map-dot" style="top:65%;left:45%;"></div>
+              <div class="map-label" style="top:70%;left:35%;">Lavaur · Traiteur</div>
+              <div class="map-dot" style="top:45%;left:50%;width:8px;height:8px;background:var(--fl-prune);"></div>
+              <svg style="position:absolute;bottom:10px;right:10px;opacity:0.4;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="fl-text-xs fl-text-muted fl-mt-sm">Zone de 60km autour de Parisot · 4 partenaires référencés</div>
+          </div>
+        </div>
+
+        <!-- Referral Stats -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Clients reçus via partenaires — Mars</h3>
+            <div style="display:flex;flex-direction:column;gap:var(--fl-space-md);">
+              <div style="padding:var(--fl-space-md);background:var(--fl-success-light);border-radius:var(--fl-radius-sm);border-left:3px solid var(--fl-success);">
+                <div style="font-size:0.875rem;font-weight:600;color:var(--fl-charcoal);">Atelier Fleurs du Tarn</div>
+                <div class="fl-text-sm fl-text-muted">2 clientes recommandées · Emma G. + Nathalie F.</div>
+                <span class="fl-badge fl-badge-success fl-mt-sm">+2 réservations</span>
+              </div>
+              <div style="padding:var(--fl-space-md);background:var(--fl-or-light);border-radius:var(--fl-radius-sm);border-left:3px solid var(--fl-or);">
+                <div style="font-size:0.875rem;font-weight:600;color:var(--fl-charcoal);">Studio Beauté Albi</div>
+                <div class="fl-text-sm fl-text-muted">1 cliente recommandée · Isabelle R.</div>
+                <span class="fl-badge fl-badge-or fl-mt-sm">+1 réservation</span>
+              </div>
+              <div style="padding:var(--fl-space-md);background:var(--fl-bg-alt);border-radius:var(--fl-radius-sm);border-left:3px solid var(--fl-border-dark);">
+                <div style="font-size:0.875rem;font-weight:600;color:var(--fl-charcoal);">Imprimerie Castres</div>
+                <div class="fl-text-sm fl-text-muted">0 ce mois · 3 le mois dernier</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vendor Cards Grid -->
+      <div class="fl-card">
+        <div class="fl-card-body">
+          <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-lg);">Carnet des partenaires</h3>
+          <div class="fl-grid-3" style="grid-template-columns:repeat(2,1fr);">
+
+            <!-- Fleuriste -->
+            <div class="vendor-card">
+              <div class="fl-flex fl-gap-md fl-mb-md" style="align-items:flex-start;">
+                <div class="vendor-logo fleuriste">💐</div>
+                <div style="flex:1;">
+                  <div class="fl-flex-between">
+                    <span class="fl-h4">Atelier Fleurs du Tarn</span>
+                    <span class="fl-badge fl-badge-or" style="font-size:0.625rem;">Préféré</span>
+                  </div>
+                  <div style="font-size:0.8125rem;color:var(--fl-rose);font-weight:500;">Fleuriste</div>
+                  <div class="stars" style="margin-top:2px;">★★★★★ <span class="fl-text-muted" style="font-size:0.75rem;">5.0</span></div>
+                </div>
+              </div>
+              <div class="fl-text-sm fl-text-muted fl-mb-md">Parisot, Tarn · Spécialiste fleurs de saison pour mariages et événements</div>
+              <div class="fl-flex fl-gap-md" style="font-size:0.75rem;color:var(--fl-warm-gray);margin-bottom:var(--fl-space-md);">
+                <span>06 12 34 56 78</span>
+                <span>·</span>
+                <span>8 collaborations</span>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm fl-w-full">Contacter</button>
+            </div>
+
+            <!-- Imprimerie -->
+            <div class="vendor-card">
+              <div class="fl-flex fl-gap-md fl-mb-md" style="align-items:flex-start;">
+                <div class="vendor-logo imprimerie">🖨️</div>
+                <div style="flex:1;">
+                  <span class="fl-h4">Imprimerie Castres</span>
+                  <div style="font-size:0.8125rem;color:var(--fl-rose);font-weight:500;">Tirages photo</div>
+                  <div class="stars" style="margin-top:2px;">★★★★★ <span class="fl-text-muted" style="font-size:0.75rem;">4.8</span></div>
+                </div>
+              </div>
+              <div class="fl-text-sm fl-text-muted fl-mb-md">Castres, Tarn · Tirages fine-art, albums, toiles canvas premium</div>
+              <div class="fl-flex fl-gap-md" style="font-size:0.75rem;color:var(--fl-warm-gray);margin-bottom:var(--fl-space-md);">
+                <span>05 63 12 34 56</span>
+                <span>·</span>
+                <span>15 commandes</span>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm fl-w-full">Contacter</button>
+            </div>
+
+            <!-- Studio Beauté -->
+            <div class="vendor-card">
+              <div class="fl-flex fl-gap-md fl-mb-md" style="align-items:flex-start;">
+                <div class="vendor-logo beaute">💄</div>
+                <div style="flex:1;">
+                  <span class="fl-h4">Studio Beauté Albi</span>
+                  <div style="font-size:0.8125rem;color:var(--fl-rose);font-weight:500;">Maquillage & coiffure</div>
+                  <div class="stars" style="margin-top:2px;">★★★★★ <span class="fl-text-muted" style="font-size:0.75rem;">5.0</span></div>
+                </div>
+              </div>
+              <div class="fl-text-sm fl-text-muted fl-mb-md">Albi, Tarn · Maquillage professionnel pour séances photo et mariages</div>
+              <div class="fl-flex fl-gap-md" style="font-size:0.75rem;color:var(--fl-warm-gray);margin-bottom:var(--fl-space-md);">
+                <span>06 78 90 12 34</span>
+                <span>·</span>
+                <span>6 collaborations</span>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm fl-w-full">Contacter</button>
+            </div>
+
+            <!-- Traiteur -->
+            <div class="vendor-card">
+              <div class="fl-flex fl-gap-md fl-mb-md" style="align-items:flex-start;">
+                <div class="vendor-logo traiteur">🍽️</div>
+                <div style="flex:1;">
+                  <span class="fl-h4">Traiteur Soleil du Midi</span>
+                  <div style="font-size:0.8125rem;color:var(--fl-rose);font-weight:500;">Traiteur événementiel</div>
+                  <div class="stars" style="margin-top:2px;">★★★★ <span class="fl-text-muted" style="font-size:0.75rem;">4.6</span></div>
+                </div>
+              </div>
+              <div class="fl-text-sm fl-text-muted fl-mb-md">Lavaur, Tarn · Cuisine du terroir pour réceptions, mariages et séminaires</div>
+              <div class="fl-flex fl-gap-md" style="font-size:0.75rem;color:var(--fl-warm-gray);margin-bottom:var(--fl-space-md);">
+                <span>05 63 98 76 54</span>
+                <span>·</span>
+                <span>4 collaborations</span>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm fl-w-full">Contacter</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

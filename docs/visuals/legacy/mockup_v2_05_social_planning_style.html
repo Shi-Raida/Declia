@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Pack Réseaux, Planning Éditorial & Style Check</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--warning:#E8985E;--warning-bg:#FFF3EB;--info:#5B8FA8;--info-bg:#E8F0F4;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08);--ai:#7C5CFC;--ai-bg:#F5F3FF;--insta:#E1306C;--insta-bg:#FDE8F0}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#EDEAEB;color:var(--charcoal)}
+.tag{display:inline-block;background:#7C5CFC;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.divider{background:var(--prune);padding:20px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.divider span{background:rgba(255,255,255,.08);padding:6px 20px;border-radius:20px}
+
+.admin{background:var(--bg);padding:32px 40px;min-height:100vh}
+.admin-c{max-width:960px;margin:0 auto}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.pt{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--prune)}
+.ps{font-size:13px;color:var(--warm-gray);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;padding:9px 18px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-p{background:var(--rose);color:#fff;box-shadow:0 2px 8px rgba(194,114,126,.2)}.btn-ai{background:linear-gradient(135deg,var(--ai),#9B7FFF);color:#fff;box-shadow:0 2px 8px rgba(124,92,252,.25)}
+.btn-s{background:var(--white);color:var(--prune);border:1.5px solid var(--border)}
+
+/* ===== PACK RÉSEAUX SOCIAUX ===== */
+.card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:20px;overflow:hidden}
+.card-h{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;justify-content:space-between}
+.card-h.insta{background:var(--insta-bg)}.card-h.ai{background:var(--ai-bg)}.card-h.check{background:var(--warning-bg)}
+.card-h-title{font-size:14px;font-weight:600;color:var(--prune);display:flex;align-items:center;gap:8px}
+.card-b{padding:22px}
+
+/* Social formats generated */
+.social-gallery{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px;overflow-x:auto;padding-bottom:8px}
+
+.social-preview{flex-shrink:0;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--border);position:relative}
+.social-preview.feed{width:200px}
+.social-preview.story{width:130px}
+.social-preview.cover{width:240px}
+
+.sp-img{display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.4)}
+.sp-img.feed{aspect-ratio:1;background:linear-gradient(135deg,#C89878,#D4A888)}
+.sp-img.story{aspect-ratio:9/16;background:linear-gradient(135deg,#D4A888,#C89070)}
+.sp-img.cover{aspect-ratio:16/9;background:linear-gradient(135deg,#C89878,#B88868)}
+
+.sp-watermark{position:absolute;bottom:8px;right:8px;font-family:'Cormorant Garamond',serif;font-size:9px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.2);padding:2px 6px;border-radius:3px}
+.sp-format{padding:8px 10px;background:var(--cream);text-align:center}
+.sp-format-name{font-size:11px;font-weight:600;color:var(--charcoal)}.sp-format-size{font-size:10px;color:var(--warm-gray)}
+
+/* Share text */
+.share-text{background:var(--cream);border-radius:12px;padding:16px;margin-bottom:16px}
+.share-text-label{font-size:11px;font-weight:600;color:var(--prune);margin-bottom:6px}
+.share-text-content{font-size:12.5px;color:var(--charcoal);line-height:1.5;font-style:italic}
+.share-text-credit{font-size:11px;color:var(--rose);margin-top:6px;font-weight:500}
+.share-text-copy{margin-top:8px;padding:6px 14px;border-radius:8px;font-size:11px;font-weight:500;background:var(--white);border:1px solid var(--border);cursor:pointer;font-family:'Outfit',sans-serif;color:var(--prune)}
+
+/* ===== PLANNING ÉDITORIAL ===== */
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.cal-header{font-size:11px;font-weight:600;color:var(--prune);text-align:center;padding:6px}
+.cal-day{border-radius:10px;padding:8px;min-height:90px;font-size:11px;border:1px solid var(--border);background:var(--white);transition:all .2s;cursor:pointer}
+.cal-day:hover{border-color:var(--rose-light);box-shadow:var(--shadow)}
+.cal-day.today{border-color:var(--rose);background:var(--rose-pale)}
+.cal-day-num{font-weight:600;color:var(--charcoal);margin-bottom:4px}
+.cal-day.other .cal-day-num{color:var(--border)}
+.cal-post{padding:4px 6px;border-radius:6px;font-size:9.5px;margin-bottom:3px;font-weight:500;line-height:1.2;cursor:pointer}
+.cal-post.scheduled{background:var(--success-bg);color:var(--success)}.cal-post.draft{background:var(--warning-bg);color:var(--warning)}.cal-post.suggested{background:var(--ai-bg);color:var(--ai)}
+
+/* Post suggestion detail */
+.post-detail{background:var(--cream);border-radius:14px;padding:18px;display:flex;gap:14px;margin-bottom:14px}
+.pd-thumb{width:70px;height:70px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.4)}
+.pd1{background:linear-gradient(135deg,#C89878,#D4A888)}.pd2{background:linear-gradient(135deg,#A8C098,#90B080)}.pd3{background:linear-gradient(135deg,#B8A8C0,#A898B0)}
+.pd-content{flex:1}
+.pd-type{font-size:10px;font-weight:600;color:var(--ai);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pd-title{font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:3px}
+.pd-caption{font-size:11.5px;color:var(--warm-gray);line-height:1.4;font-style:italic}
+.pd-tags{font-size:10px;color:var(--rose);margin-top:4px}
+.pd-actions{display:flex;gap:6px;margin-top:8px}
+.pd-btn{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:500;cursor:pointer;border:none;font-family:'Outfit',sans-serif}
+.pd-btn.approve{background:var(--success);color:#fff}.pd-btn.edit{background:var(--white);color:var(--prune);border:1px solid var(--border)}.pd-btn.skip{background:transparent;color:var(--warm-gray)}
+
+/* ===== STYLE CONSISTENCY CHECK ===== */
+.check-results{display:flex;flex-direction:column;gap:10px}
+.check-item{display:flex;align-items:center;gap:14px;padding:14px;background:var(--cream);border-radius:12px;transition:all .2s}
+.check-item:hover{background:var(--white);box-shadow:var(--shadow)}
+.check-thumb{width:60px;height:45px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.4)}
+.ct1{background:linear-gradient(135deg,#C89878,#D4A888)}.ct2{background:linear-gradient(135deg,#D4C088,#C8B478)}.ct3{background:linear-gradient(135deg,#B89078,#A88068)}.ct4{background:linear-gradient(135deg,#C8A888,#B89878)}
+.check-info{flex:1}
+.check-name{font-size:12.5px;font-weight:500;color:var(--charcoal)}.check-issue{font-size:11px;color:var(--warning);margin-top:2px;font-weight:500}
+.check-severity{font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;flex-shrink:0}
+.check-severity.minor{background:var(--warning-bg);color:var(--warning)}.check-severity.ok{background:var(--success-bg);color:var(--success)}.check-severity.info{background:var(--info-bg);color:var(--info)}
+.check-fix{padding:5px 12px;border-radius:6px;font-size:10px;font-weight:500;cursor:pointer;border:none;font-family:'Outfit',sans-serif;background:var(--white);color:var(--prune);border:1px solid var(--border);flex-shrink:0}
+
+.consistency-score{display:flex;align-items:center;gap:16px;padding:18px;background:var(--white);border-radius:14px;border:1px solid var(--border);margin-bottom:16px}
+.cs-circle{width:64px;height:64px;border-radius:50%;border:4px solid var(--success);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cs-value{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--prune)}
+.cs-info{flex:1}
+.cs-title{font-size:14px;font-weight:600;color:var(--charcoal)}.cs-text{font-size:12px;color:var(--warm-gray);line-height:1.4;margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- ===== PACK RÉSEAUX SOCIAUX ===== -->
+<div class="admin">
+<div class="admin-c">
+  <div class="ph">
+    <div>
+      <div class="pt">Contenu & Réseaux Sociaux <span class="tag">V2</span></div>
+      <div class="ps">Générez automatiquement du contenu optimisé pour vos réseaux et planifiez vos publications</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ai">🤖 Générer le planning du mois</button>
+    </div>
+  </div>
+
+  <!-- Pack réseaux sociaux -->
+  <div class="card">
+    <div class="card-h insta"><div class="card-h-title">📱 Pack Réseaux Sociaux — Galerie Sophie Dupont</div><span style="font-size:12px;color:var(--warm-gray)">30 photos → 30 visuels générés</span></div>
+    <div class="card-b">
+      <div style="font-size:12px;color:var(--warm-gray);margin-bottom:12px">Visuels générés automatiquement avec votre watermark pour chaque photo de la galerie :</div>
+      <div class="social-gallery">
+        <div class="social-preview feed">
+          <div class="sp-img feed">Photo feed Instagram</div>
+          <div class="sp-watermark">Fleur de Lumière</div>
+          <div class="sp-format"><div class="sp-format-name">Feed Instagram</div><div class="sp-format-size">1080 × 1080 px</div></div>
+        </div>
+        <div class="social-preview story">
+          <div class="sp-img story">Photo Story</div>
+          <div class="sp-watermark">FL</div>
+          <div class="sp-format"><div class="sp-format-name">Story</div><div class="sp-format-size">1080 × 1920 px</div></div>
+        </div>
+        <div class="social-preview cover">
+          <div class="sp-img cover">Photo couverture Facebook</div>
+          <div class="sp-watermark">Fleur de Lumière</div>
+          <div class="sp-format"><div class="sp-format-name">Couverture FB</div><div class="sp-format-size">1200 × 630 px</div></div>
+        </div>
+        <div class="social-preview feed">
+          <div class="sp-img feed" style="background:linear-gradient(135deg,#A8C098,#90B080)">Photo feed 2</div>
+          <div class="sp-watermark">Fleur de Lumière</div>
+          <div class="sp-format"><div class="sp-format-name">Feed Instagram</div><div class="sp-format-size">1080 × 1080 px</div></div>
+        </div>
+      </div>
+
+      <div class="share-text">
+        <div class="share-text-label">Texte de partage généré pour le client</div>
+        <div class="share-text-content">"Un après-midi magique en famille dans les couleurs d'automne 🍂 Merci Capucine pour ces souvenirs précieux !"</div>
+        <div class="share-text-credit">📸 @fleurdelumiere.photo — Photographe famille & lifestyle · Tarn & Toulouse</div>
+        <button class="share-text-copy">📋 Copier le texte</button>
+      </div>
+
+      <div style="font-size:12px;color:var(--info);background:var(--info-bg);padding:10px 14px;border-radius:10px;display:flex;align-items:center;gap:8px">
+        <span>📊</span> Lien de tracking intégré : chaque partage client génère du trafic mesurable vers votre site
+      </div>
+    </div>
+  </div>
+
+  <!-- Planning éditorial -->
+  <div class="card">
+    <div class="card-h ai"><div class="card-h-title">📅 Planning Éditorial — Mars 2026</div><span style="font-size:12px;color:var(--warm-gray)">12 publications suggérées par l'IA</span></div>
+    <div class="card-b">
+      <div class="calendar">
+        <div class="cal-header">Lun</div><div class="cal-header">Mar</div><div class="cal-header">Mer</div><div class="cal-header">Jeu</div><div class="cal-header">Ven</div><div class="cal-header">Sam</div><div class="cal-header">Dim</div>
+        <div class="cal-day other"><div class="cal-day-num">24</div></div>
+        <div class="cal-day other"><div class="cal-day-num">25</div></div>
+        <div class="cal-day other"><div class="cal-day-num">26</div></div>
+        <div class="cal-day other"><div class="cal-day-num">27</div></div>
+        <div class="cal-day other"><div class="cal-day-num">28</div></div>
+        <div class="cal-day"><div class="cal-day-num">1</div></div>
+        <div class="cal-day"><div class="cal-day-num">2</div><div class="cal-post scheduled">✓ Mariage M&T</div></div>
+        <div class="cal-day"><div class="cal-day-num">3</div></div>
+        <div class="cal-day"><div class="cal-day-num">4</div><div class="cal-post suggested">🤖 Carrousel B/A</div></div>
+        <div class="cal-day today"><div class="cal-day-num">5</div><div class="cal-post draft">📝 Story coulisses</div></div>
+        <div class="cal-day"><div class="cal-day-num">6</div></div>
+        <div class="cal-day"><div class="cal-day-num">7</div><div class="cal-post suggested">🤖 Famille Dupont</div></div>
+        <div class="cal-day"><div class="cal-day-num">8</div></div>
+        <div class="cal-day"><div class="cal-day-num">9</div></div>
+        <div class="cal-day"><div class="cal-day-num">10</div><div class="cal-post suggested">🤖 Témoignage</div></div>
+        <div class="cal-day"><div class="cal-day-num">11</div></div>
+        <div class="cal-day"><div class="cal-day-num">12</div><div class="cal-post suggested">🤖 Équestre</div></div>
+        <div class="cal-day"><div class="cal-day-num">13</div></div>
+        <div class="cal-day"><div class="cal-day-num">14</div></div>
+        <div class="cal-day"><div class="cal-day-num">15</div></div>
+        <div class="cal-day"><div class="cal-day-num">16</div><div class="cal-post suggested">🤖 Reel retouche</div></div>
+        <div class="cal-day"><div class="cal-day-num">17</div></div>
+        <div class="cal-day"><div class="cal-day-num">18</div></div>
+        <div class="cal-day"><div class="cal-day-num">19</div><div class="cal-post suggested">🤖 Guide tenues</div></div>
+        <div class="cal-day"><div class="cal-day-num">20</div></div>
+        <div class="cal-day"><div class="cal-day-num">21</div></div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;color:var(--prune);margin-bottom:12px">Publications suggérées par l'IA cette semaine :</div>
+
+      <div class="post-detail">
+        <div class="pd-thumb pd1"></div>
+        <div class="pd-content">
+          <div class="pd-type">🤖 Suggestion IA — Vendredi 7 mars</div>
+          <div class="pd-title">Post Feed — Séance Famille Dupont</div>
+          <div class="pd-caption">"Il y a des séances où la magie opère dès la première seconde. Sophie, Thomas et la petite Léa dans la lumière dorée du Parc de la Maourine 🍂✨"</div>
+          <div class="pd-tags">#photographefamille #toulouse #goldenhour #séancephoto #automne</div>
+          <div class="pd-actions"><button class="pd-btn approve">✓ Valider</button><button class="pd-btn edit">✏ Modifier</button><button class="pd-btn skip">Passer</button></div>
+        </div>
+      </div>
+
+      <div class="post-detail">
+        <div class="pd-thumb pd2"></div>
+        <div class="pd-content">
+          <div class="pd-type">🤖 Suggestion IA — Mercredi 12 mars</div>
+          <div class="pd-title">Carrousel — Séance Équestre Moreau</div>
+          <div class="pd-caption">"La complicité entre Camille et Luna, ce lien invisible qui ne trompe pas 🐴💛 Séance équestre en fin de journée dans le Tarn."</div>
+          <div class="pd-tags">#photographeequestre #cheval #equestrian #tarn #lumierenaturelle</div>
+          <div class="pd-actions"><button class="pd-btn approve">✓ Valider</button><button class="pd-btn edit">✏ Modifier</button><button class="pd-btn skip">Passer</button></div>
+        </div>
+      </div>
+
+      <div class="post-detail">
+        <div class="pd-thumb pd3"></div>
+        <div class="pd-content">
+          <div class="pd-type">🤖 Suggestion IA — Mercredi 4 mars</div>
+          <div class="pd-title">Carrousel Avant/Après — Retouche</div>
+          <div class="pd-caption">"Du RAW au rendu final ✨ Un aperçu de mon processus de retouche qui sublime la lumière naturelle. Swipez pour voir la transformation !"</div>
+          <div class="pd-tags">#retouchephoto #avantapres #lightroom #photographe #processus</div>
+          <div class="pd-actions"><button class="pd-btn approve">✓ Valider</button><button class="pd-btn edit">✏ Modifier</button><button class="pd-btn skip">Passer</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Style Consistency Check -->
+  <div class="card">
+    <div class="card-h check"><div class="card-h-title">🎨 Style Consistency Check — Galerie Dupont</div><span style="font-size:12px;color:var(--warm-gray)">Analyse IA de la cohérence des retouches</span></div>
+    <div class="card-b">
+      <div class="consistency-score">
+        <div class="cs-circle"><div class="cs-value">94</div></div>
+        <div class="cs-info">
+          <div class="cs-title">Score de cohérence : 94/100 — Excellent</div>
+          <div class="cs-text">Votre galerie est visuellement très cohérente. L'IA a détecté 2 photos légèrement décalées que vous pourriez ajuster pour une galerie parfaite.</div>
+        </div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;color:var(--prune);margin-bottom:10px">Anomalies détectées :</div>
+      <div class="check-results">
+        <div class="check-item">
+          <div class="check-thumb ct2"></div>
+          <div class="check-info">
+            <div class="check-name">Photo n°14 — DSC_4534.jpg</div>
+            <div class="check-issue">⚠ Balance des blancs plus chaude (+400K) que la moyenne de la galerie</div>
+          </div>
+          <div class="check-severity minor">Mineur</div>
+          <button class="check-fix">Voir dans LR</button>
+        </div>
+        <div class="check-item">
+          <div class="check-thumb ct3"></div>
+          <div class="check-info">
+            <div class="check-name">Photo n°22 — DSC_4558.jpg</div>
+            <div class="check-issue">⚠ Contraste légèrement plus élevé que le reste</div>
+          </div>
+          <div class="check-severity minor">Mineur</div>
+          <button class="check-fix">Voir dans LR</button>
+        </div>
+        <div class="check-item">
+          <div class="check-thumb ct1"></div>
+          <div class="check-info">
+            <div class="check-name">28 autres photos</div>
+            <div class="check-issue" style="color:var(--success)">✓ Cohérence parfaite — aucun ajustement nécessaire</div>
+          </div>
+          <div class="check-severity ok">OK</div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;font-size:12px;color:var(--info);background:var(--info-bg);padding:10px 14px;border-radius:10px;display:flex;align-items:center;gap:8px">
+        <span>💡</span> L'IA compare la balance des blancs, la saturation, le contraste et la luminosité de chaque photo par rapport à la médiane de la galerie.
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

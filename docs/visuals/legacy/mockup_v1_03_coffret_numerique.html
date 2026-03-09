@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Coffret Numérique — Livraison Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --prune-deep: #2D1A25;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --cream: #FDF9F7;
+    --white: #FFFFFF;
+    --gold: #C9A96E;
+    --gold-light: #F5EDE0;
+    --border: #F0E8EB;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ===================================================================
+     SCREEN 1: THE ENVELOPE / GIFT REVEAL
+     =================================================================== */
+  .screen-envelope {
+    min-height: 100vh;
+    background: var(--prune-deep);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 24px;
+  }
+
+  /* Ambient particles */
+  .screen-envelope::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(194,114,126,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float1 8s ease-in-out infinite;
+  }
+
+  .screen-envelope::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: 15%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float2 10s ease-in-out infinite;
+  }
+
+  @keyframes float1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -20px); }
+  }
+
+  @keyframes float2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-20px, 15px); }
+  }
+
+  .envelope-content {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1.2s ease-out;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .envelope-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    animation: fadeInUp 1.2s ease-out 0.2s both;
+  }
+
+  .envelope-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 32px;
+    position: relative;
+    animation: fadeInUp 1.2s ease-out 0.4s both;
+  }
+
+  .envelope-icon-inner {
+    width: 100px;
+    height: 100px;
+    border: 2px solid rgba(201,169,110,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    animation: breathe 3s ease-in-out infinite;
+    position: relative;
+  }
+
+  .envelope-icon-inner::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 1px solid rgba(201,169,110,0.12);
+    border-radius: 50%;
+    animation: breathe 3s ease-in-out infinite 0.5s;
+  }
+
+  .envelope-icon-inner::after {
+    content: '';
+    position: absolute;
+    inset: -18px;
+    border: 1px solid rgba(201,169,110,0.06);
+    border-radius: 50%;
+    animation: breathe 3s ease-in-out infinite 1s;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+  }
+
+  .envelope-for {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 8px;
+    animation: fadeInUp 1.2s ease-out 0.6s both;
+  }
+
+  .envelope-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 8px;
+    animation: fadeInUp 1.2s ease-out 0.7s both;
+  }
+
+  .envelope-session {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 1px;
+    margin-bottom: 48px;
+    animation: fadeInUp 1.2s ease-out 0.8s both;
+  }
+
+  .envelope-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    padding: 16px 40px;
+    border-radius: 60px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s;
+    animation: fadeInUp 1.2s ease-out 1s both;
+  }
+
+  .envelope-btn:hover {
+    background: var(--gold);
+    color: var(--prune-deep);
+    box-shadow: 0 4px 30px rgba(201,169,110,0.3);
+    transform: translateY(-2px);
+  }
+
+  .envelope-btn svg {
+    transition: transform 0.3s;
+  }
+
+  .envelope-btn:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* ===================================================================
+     SCREEN 2: THE MESSAGE + GALLERY REVEAL
+     =================================================================== */
+  .screen-reveal {
+    min-height: 100vh;
+    background: var(--cream);
+    position: relative;
+  }
+
+  /* Top decorative band */
+  .reveal-band {
+    height: 6px;
+    background: linear-gradient(90deg, var(--prune), var(--rose), var(--gold), var(--rose), var(--prune));
+    background-size: 200% 100%;
+    animation: shimmer 4s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .reveal-container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px;
+  }
+
+  .reveal-logo {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .reveal-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .reveal-logo-text span { color: var(--rose); }
+
+  .reveal-logo-sub {
+    font-size: 11px;
+    color: var(--warm-gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Personal message card */
+  .message-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 36px 32px;
+    box-shadow: 0 4px 24px rgba(74,46,61,0.06);
+    border: 1px solid var(--border);
+    margin-bottom: 36px;
+    position: relative;
+  }
+
+  .message-card::before {
+    content: '"';
+    position: absolute;
+    top: 16px;
+    left: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    color: var(--rose-light);
+    line-height: 1;
+  }
+
+  .message-from {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .message-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose-light), var(--rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .message-from-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .message-from-role {
+    font-size: 12px;
+    color: var(--warm-gray);
+  }
+
+  .message-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--charcoal);
+    line-height: 1.7;
+    padding-left: 8px;
+    margin-bottom: 20px;
+  }
+
+  .message-audio {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--rose-pale);
+    border: 1px solid var(--rose-light);
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .message-audio:hover {
+    background: var(--rose-light);
+  }
+
+  .audio-play {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--rose);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .audio-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 20px;
+  }
+
+  .audio-wave span {
+    width: 3px;
+    border-radius: 2px;
+    background: var(--rose);
+    animation: wave 1.2s ease-in-out infinite;
+  }
+
+  .audio-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+  .audio-wave span:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+  .audio-wave span:nth-child(3) { height: 20px; animation-delay: 0.2s; }
+  .audio-wave span:nth-child(4) { height: 12px; animation-delay: 0.3s; }
+  .audio-wave span:nth-child(5) { height: 16px; animation-delay: 0.4s; }
+  .audio-wave span:nth-child(6) { height: 10px; animation-delay: 0.5s; }
+  .audio-wave span:nth-child(7) { height: 18px; animation-delay: 0.6s; }
+  .audio-wave span:nth-child(8) { height: 8px; animation-delay: 0.7s; }
+
+  @keyframes wave {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.4); }
+  }
+
+  .audio-duration {
+    font-size: 12px;
+    color: var(--rose);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  /* Session recap */
+  .recap-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 24px 28px;
+    box-shadow: 0 2px 16px rgba(74,46,61,0.05);
+    border: 1px solid var(--border);
+    margin-bottom: 36px;
+  }
+
+  .recap-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 16px;
+  }
+
+  .recap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .recap-item {
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .recap-item-icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+
+  .recap-item-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--prune);
+  }
+
+  .recap-item-label {
+    font-size: 11px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  /* Gallery preview / teaser */
+  .gallery-preview {
+    margin-bottom: 36px;
+  }
+
+  .gallery-preview-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--prune);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .gallery-preview-sub {
+    font-size: 13px;
+    color: var(--warm-gray);
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .gallery-mosaic {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 180px 120px;
+    gap: 8px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .gallery-mosaic-item {
+    background: linear-gradient(135deg, var(--rose-light) 0%, #E8D4D8 50%, var(--gold-light) 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--warm-gray);
+    font-weight: 500;
+  }
+
+  .gallery-mosaic-item:first-child {
+    grid-row: 1 / 3;
+  }
+
+  .gallery-mosaic-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 60%, rgba(45,26,37,0.15) 100%);
+  }
+
+  .gallery-mosaic-item.hero { background: linear-gradient(135deg, #E8C8C0, #D4A8A0, #C89898); }
+  .gallery-mosaic-item.warm { background: linear-gradient(135deg, #E8D8C8, #D4C0A8, #C8B498); }
+  .gallery-mosaic-item.soft { background: linear-gradient(135deg, #D8D0E0, #C8B8D4, #B8A8C8); }
+  .gallery-mosaic-item.golden { background: linear-gradient(135deg, #E8DCC8, #D4C8A8, #C8BC98); }
+  .gallery-mosaic-item.tender { background: linear-gradient(135deg, #E0D0D4, #D4C0C4, #C8B0B8); }
+
+  /* CTA */
+  .gallery-cta {
+    text-align: center;
+  }
+
+  .gallery-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 16px 40px;
+    border-radius: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(194,114,126,0.3);
+  }
+
+  .gallery-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(194,114,126,0.4);
+  }
+
+  .gallery-cta-btn svg { transition: transform 0.3s; }
+  .gallery-cta-btn:hover svg { transform: translateX(4px); }
+
+  /* Promo inside coffret */
+  .coffret-promo {
+    background: linear-gradient(135deg, var(--prune) 0%, var(--prune-deep) 100%);
+    border-radius: 16px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 28px;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .coffret-promo::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 100px;
+    height: 100px;
+    background: rgba(201,169,110,0.1);
+    border-radius: 50%;
+  }
+
+  .coffret-promo-left h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .coffret-promo-left p {
+    font-size: 12.5px;
+    opacity: 0.65;
+  }
+
+  .coffret-promo-badge {
+    background: var(--gold);
+    color: var(--prune-deep);
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Footer */
+  .coffret-footer {
+    text-align: center;
+    padding: 40px 24px 32px;
+  }
+
+  .coffret-footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--warm-gray);
+    margin-bottom: 8px;
+  }
+
+  .coffret-footer-text {
+    font-size: 12px;
+    color: var(--pending, #D4CDD0);
+  }
+
+  .coffret-footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .coffret-footer-social a {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--warm-gray);
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .coffret-footer-social a:hover {
+    background: var(--rose-light);
+    color: var(--rose);
+  }
+
+  /* ===================================================================
+     SCREEN 3: ADMIN CONFIG VIEW (how photographer sets it up)
+     =================================================================== */
+  .screen-admin {
+    min-height: 100vh;
+    background: #F8F5F6;
+    padding: 40px;
+  }
+
+  .admin-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .admin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .admin-subtitle {
+    font-size: 13px;
+    color: var(--warm-gray);
+    margin-top: 4px;
+  }
+
+  .mockup-tag {
+    display: inline-block;
+    background: #FFE066;
+    color: #5D4E00;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .admin-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 2px 16px rgba(74,46,61,0.05);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .admin-card-header {
+    padding: 18px 24px;
+    background: var(--rose-pale);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .admin-card-header-icon {
+    font-size: 18px;
+  }
+
+  .admin-card-header-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .admin-card-body {
+    padding: 24px;
+  }
+
+  .admin-field {
+    margin-bottom: 20px;
+  }
+
+  .admin-field:last-child { margin-bottom: 0; }
+
+  .admin-field-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .admin-field-hint {
+    font-size: 11px;
+    color: var(--warm-gray);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .admin-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    color: var(--charcoal);
+    background: var(--cream);
+    transition: border-color 0.2s;
+  }
+
+  .admin-input:focus {
+    outline: none;
+    border-color: var(--rose);
+  }
+
+  .admin-textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--charcoal);
+    background: var(--cream);
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+  }
+
+  .admin-textarea:focus {
+    outline: none;
+    border-color: var(--rose);
+  }
+
+  .admin-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+
+  .admin-toggle-label {
+    font-size: 13px;
+    color: var(--charcoal);
+  }
+
+  .toggle {
+    width: 42px;
+    height: 22px;
+    background: #E0D6D9;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .toggle.on { background: #4CAF7C; }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+    width: 17px;
+    height: 17px;
+    background: var(--white);
+    border-radius: 50%;
+    transition: all 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .toggle.on::after { left: 22.5px; }
+
+  .admin-variables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .admin-variable {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--rose-pale);
+    border: 1px solid var(--rose-light);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--rose);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .admin-variable:hover {
+    background: var(--rose-light);
+  }
+
+  .admin-btn-save {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(194,114,126,0.25);
+  }
+
+  .admin-btn-save:hover {
+    background: #B5656F;
+    transform: translateY(-1px);
+  }
+
+  .admin-btn-preview {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    color: var(--prune);
+    border: 1.5px solid var(--border);
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .admin-btn-preview:hover {
+    border-color: var(--rose);
+    color: var(--rose);
+  }
+
+  .admin-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+  }
+
+  /* ===================================================================
+     DIVIDERS BETWEEN SCREENS
+     =================================================================== */
+  .screen-divider {
+    background: var(--prune);
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .screen-divider span {
+    background: rgba(255,255,255,0.08);
+    padding: 6px 20px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     SCREEN 1: L'ENVELOPPE (ce que le client voit en premier)
+     ===================================================== -->
+<div class="screen-envelope">
+  <div class="envelope-content">
+    <div class="envelope-logo">Fleur de Lumière</div>
+
+    <div class="envelope-icon">
+      <div class="envelope-icon-inner">🎁</div>
+    </div>
+
+    <div class="envelope-for">Un coffret spécialement préparé pour</div>
+    <div class="envelope-name">Sophie & sa famille</div>
+    <div class="envelope-session">Séance Famille — Parc de la Maourine · 22 février 2026</div>
+
+    <button class="envelope-btn">
+      Ouvrir mon coffret
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Après clic sur « Ouvrir mon coffret » ↓</span></div>
+
+<!-- =====================================================
+     SCREEN 2: LE CONTENU DU COFFRET
+     ===================================================== -->
+<div class="screen-reveal">
+  <div class="reveal-band"></div>
+
+  <div class="reveal-container">
+    <!-- Logo -->
+    <div class="reveal-logo">
+      <div class="reveal-logo-text">Fleur de <span>Lumière</span></div>
+      <div class="reveal-logo-sub">Photographie en lumière naturelle</div>
+    </div>
+
+    <!-- Personal message from photographer -->
+    <div class="message-card">
+      <div class="message-from">
+        <div class="message-avatar">C</div>
+        <div>
+          <div class="message-from-name">Capucine</div>
+          <div class="message-from-role">Votre photographe</div>
+        </div>
+      </div>
+      <div class="message-text">
+        Sophie, quelle séance merveilleuse ! La lumière de cette fin d'après-midi au parc était absolument magique. J'ai adoré capturer les éclats de rire de vos enfants et la complicité de votre famille. La photo de Léa avec les feuilles dorées est mon coup de cœur — j'espère qu'elle sera aussi le vôtre. Bonne découverte !
+      </div>
+
+      <!-- Audio message option -->
+      <div class="message-audio">
+        <div class="audio-play">▶</div>
+        <div class="audio-wave">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <span class="audio-duration">0:32</span>
+      </div>
+    </div>
+
+    <!-- Session recap card -->
+    <div class="recap-card">
+      <div class="recap-title">Votre séance en un clin d'œil</div>
+      <div class="recap-grid">
+        <div class="recap-item">
+          <div class="recap-item-icon">📸</div>
+          <div class="recap-item-value">30</div>
+          <div class="recap-item-label">photos retouchées</div>
+        </div>
+        <div class="recap-item">
+          <div class="recap-item-icon">🌅</div>
+          <div class="recap-item-value">1h15</div>
+          <div class="recap-item-label">de shooting</div>
+        </div>
+        <div class="recap-item">
+          <div class="recap-item-icon">✨</div>
+          <div class="recap-item-value">Golden</div>
+          <div class="recap-item-label">Hour lumière</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery preview mosaic -->
+    <div class="gallery-preview">
+      <div class="gallery-preview-title">Un aperçu de vos souvenirs</div>
+      <div class="gallery-preview-sub">30 photos HD vous attendent dans votre galerie</div>
+
+      <div class="gallery-mosaic">
+        <div class="gallery-mosaic-item hero">Aperçu photo 1</div>
+        <div class="gallery-mosaic-item warm">Aperçu photo 2</div>
+        <div class="gallery-mosaic-item soft">Aperçu photo 3</div>
+        <div class="gallery-mosaic-item golden">Aperçu photo 4</div>
+        <div class="gallery-mosaic-item tender">Aperçu photo 5</div>
+      </div>
+
+      <div class="gallery-cta">
+        <button class="gallery-cta-btn">
+          Explorer ma galerie complète
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+      <!-- Promo (connected to marketing automation) -->
+      <div class="coffret-promo">
+        <div class="coffret-promo-left">
+          <h4>🎁 Offre Avant-Première</h4>
+          <p>Valable 14 jours sur tous les tirages et produits</p>
+        </div>
+        <div class="coffret-promo-badge">-15%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="coffret-footer">
+    <div class="coffret-footer-logo">Fleur de Lumière</div>
+    <div class="coffret-footer-text">Photographie en lumière naturelle · Tarn & Toulouse</div>
+    <div class="coffret-footer-social">
+      <a href="#">📷</a>
+      <a href="#">💌</a>
+      <a href="#">🌐</a>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Vue Admin — Configuration du coffret ↓</span></div>
+
+<!-- =====================================================
+     SCREEN 3: ADMIN CONFIG
+     ===================================================== -->
+<div class="screen-admin">
+  <div class="admin-container">
+    <div class="admin-header">
+      <div>
+        <div class="admin-title">Coffret Numérique <span class="mockup-tag">Admin</span></div>
+        <div class="admin-subtitle">Personnalisez l'expérience de livraison pour chaque galerie</div>
+      </div>
+    </div>
+
+    <!-- Message personnel -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-header-icon">💬</span>
+        <span class="admin-card-header-text">Message personnel</span>
+      </div>
+      <div class="admin-card-body">
+        <div class="admin-field">
+          <div class="admin-field-label">
+            Votre message au client
+            <span class="admin-field-hint">— Personnalisez pour chaque galerie</span>
+          </div>
+          <textarea class="admin-textarea">Sophie, quelle séance merveilleuse ! La lumière de cette fin d'après-midi au parc était absolument magique. J'ai adoré capturer les éclats de rire de vos enfants et la complicité de votre famille. La photo de Léa avec les feuilles dorées est mon coup de cœur — j'espère qu'elle sera aussi le vôtre. Bonne découverte !</textarea>
+          <div class="admin-variables">
+            <span class="admin-variable">+ {prénom}</span>
+            <span class="admin-variable">+ {type_séance}</span>
+            <span class="admin-variable">+ {date}</span>
+            <span class="admin-variable">+ {lieu}</span>
+            <span class="admin-variable">+ {nb_photos}</span>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <div class="admin-toggle-row">
+            <span class="admin-toggle-label">Ajouter un message audio (30 sec max)</span>
+            <div class="toggle on"></div>
+          </div>
+          <div style="margin-top: 8px; display: flex; align-items: center; gap: 10px;">
+            <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--rose); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer;">🎙</div>
+            <div style="flex: 1; height: 4px; background: var(--border); border-radius: 2px; position: relative;">
+              <div style="width: 65%; height: 100%; background: var(--rose); border-radius: 2px;"></div>
+            </div>
+            <span style="font-size: 12px; color: var(--warm-gray);">0:32</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apparence -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-header-icon">🎨</span>
+        <span class="admin-card-header-text">Apparence du coffret</span>
+      </div>
+      <div class="admin-card-body">
+        <div class="admin-field">
+          <div class="admin-field-label">Titre affiché au client</div>
+          <input class="admin-input" type="text" value="Sophie & sa famille">
+        </div>
+        <div class="admin-field">
+          <div class="admin-field-label">Sous-titre</div>
+          <input class="admin-input" type="text" value="Séance Famille — Parc de la Maourine · 22 février 2026">
+        </div>
+        <div class="admin-field">
+          <div class="admin-field-label">Photos de couverture (aperçu mosaïque)</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <div style="width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(135deg, var(--rose-light), #E8D4D8); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--warm-gray); border: 2px solid var(--rose);">Photo 1</div>
+            <div style="width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(135deg, #E8D8C8, #D4C0A8); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--warm-gray); border: 2px solid var(--rose);">Photo 2</div>
+            <div style="width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(135deg, #D8D0E0, #C8B8D4); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--warm-gray); border: 2px solid var(--rose);">Photo 3</div>
+            <div style="width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(135deg, #E8DCC8, #D4C8A8); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--warm-gray); border: 2px solid var(--rose);">Photo 4</div>
+            <div style="width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(135deg, #E0D0D4, #D4C0C4); display: flex; align-items: center; justify-content: center; font-size: 10px; color: var(--warm-gray); border: 2px solid var(--rose);">Photo 5</div>
+            <div style="width: 64px; height: 64px; border-radius: 10px; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--border); cursor: pointer;">+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="admin-card">
+      <div class="admin-card-header">
+        <span class="admin-card-header-icon">⚙️</span>
+        <span class="admin-card-header-text">Options de livraison</span>
+      </div>
+      <div class="admin-card-body">
+        <div class="admin-toggle-row">
+          <span class="admin-toggle-label">Afficher le récapitulatif de séance</span>
+          <div class="toggle on"></div>
+        </div>
+        <div class="admin-toggle-row">
+          <span class="admin-toggle-label">Afficher la mosaïque d'aperçu</span>
+          <div class="toggle on"></div>
+        </div>
+        <div class="admin-toggle-row">
+          <span class="admin-toggle-label">Intégrer l'offre Avant-Première (si campagne active)</span>
+          <div class="toggle on"></div>
+        </div>
+        <div class="admin-toggle-row">
+          <span class="admin-toggle-label">Permettre le partage du coffret par le client</span>
+          <div class="toggle on"></div>
+        </div>
+        <div class="admin-toggle-row">
+          <span class="admin-toggle-label">Envoyer une notification SMS en plus de l'email</span>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="admin-actions">
+      <button class="admin-btn-preview">
+        👁 Prévisualiser le coffret
+      </button>
+      <button class="admin-btn-save">
+        ✓ Enregistrer & envoyer au client
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

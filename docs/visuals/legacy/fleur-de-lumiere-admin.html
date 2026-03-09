@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --prune: #4A2E3D;
+    --or: #D4A03C;
+    --sauge: #6B7F5A;
+    --bg: #FFFFFF;
+    --bg-alt: #FFF9F7;
+    --bg-shell: #F8F6F4;
+    --texte: #2D2226;
+    --gris: #6B7280;
+    --gris-light: #9CA3AF;
+    --gris-border: #E5E7EB;
+    --rose-hover: #A85965;
+    --rose-light: rgba(194,114,126,0.08);
+    --or-light: rgba(212,160,60,0.1);
+    --sauge-light: rgba(107,127,90,0.1);
+    --prune-light: rgba(74,46,61,0.05);
+    --erreur: #DC2626;
+    --erreur-light: rgba(220,38,38,0.08);
+    --font-titre: 'Playfair Display', Georgia, serif;
+    --font: 'Lato', -apple-system, sans-serif;
+    --radius: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-sm: 0 1px 3px rgba(74,46,61,0.06);
+    --shadow: 0 2px 8px rgba(74,46,61,0.08);
+    --shadow-md: 0 4px 16px rgba(74,46,61,0.1);
+    --transition: 0.2s ease;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font); color: var(--texte); background: var(--bg-shell); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  a { text-decoration: none; color: inherit; }
+  button { font-family: var(--font); cursor: pointer; }
+
+  /* ===== LAYOUT ===== */
+  .admin-layout { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    background: var(--bg); border-right: 1px solid var(--gris-border);
+    padding: 24px 0; display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; width: 260px; z-index: 50;
+    overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 0 24px 24px; border-bottom: 1px solid var(--gris-border);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo .logo {
+    font-family: var(--font-titre); font-size: 20px; font-weight: 700;
+    color: var(--prune);
+  }
+  .sidebar-logo .logo span { color: var(--or); }
+  .sidebar-logo .logo-sub {
+    font-size: 11px; color: var(--gris); text-transform: uppercase;
+    letter-spacing: 1.5px; margin-top: 4px;
+  }
+
+  .sidebar-section { padding: 8px 12px; }
+  .sidebar-section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; color: var(--gris-light); padding: 8px 12px 6px;
+  }
+  .sidebar-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; border-radius: var(--radius);
+    font-size: 14px; color: var(--texte); transition: var(--transition);
+    border: none; background: none; width: 100%; text-align: left;
+    cursor: pointer;
+  }
+  .sidebar-link:hover { background: var(--prune-light); color: var(--prune); }
+  .sidebar-link.active { background: var(--rose-light); color: var(--rose); font-weight: 700; }
+  .sidebar-link .icon { width: 20px; text-align: center; font-size: 16px; flex-shrink: 0; }
+  .sidebar-link .badge {
+    margin-left: auto; background: var(--rose); color: #fff;
+    font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 99px; min-width: 22px; text-align: center;
+  }
+  .sidebar-link .badge-or { background: var(--or); color: var(--texte); }
+
+  .sidebar-bottom {
+    margin-top: auto; padding: 16px 24px; border-top: 1px solid var(--gris-border);
+  }
+  .sidebar-user {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sidebar-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), #d4a0a8);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 14px;
+  }
+  .sidebar-user-info .user-name { font-weight: 700; font-size: 13px; color: var(--prune); }
+  .sidebar-user-info .user-role { font-size: 11px; color: var(--gris); }
+
+  /* ===== MAIN CONTENT ===== */
+  .main { margin-left: 260px; padding: 0; }
+
+  /* Top bar */
+  .topbar {
+    background: var(--bg); border-bottom: 1px solid var(--gris-border);
+    padding: 16px 32px; display: flex; align-items: center;
+    justify-content: space-between; position: sticky; top: 0; z-index: 40;
+  }
+  .topbar-left h1 {
+    font-family: var(--font-titre); font-size: 22px; font-weight: 700;
+    color: var(--prune);
+  }
+  .topbar-left h1 em { color: var(--rose); font-style: italic; }
+  .topbar-left .topbar-date { font-size: 13px; color: var(--gris); margin-top: 2px; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .topbar-btn {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gris-border);
+    background: var(--bg); display: flex; align-items: center; justify-content: center;
+    font-size: 18px; transition: var(--transition); position: relative; cursor: pointer;
+  }
+  .topbar-btn:hover { background: var(--prune-light); border-color: var(--rose); }
+  .topbar-btn .notif-dot {
+    position: absolute; top: 8px; right: 8px; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--rose); border: 2px solid var(--bg);
+  }
+  .btn-admin {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: var(--radius); font-size: 14px;
+    font-weight: 700; border: none; transition: var(--transition); cursor: pointer;
+  }
+  .btn-admin-primary { background: var(--rose); color: #fff; }
+  .btn-admin-primary:hover { background: var(--rose-hover); transform: translateY(-1px); }
+
+  /* ===== PAGE CONTENT ===== */
+  .page-content { padding: 28px 32px; }
+  .page-view { display: none; }
+  .page-view.active { display: block; }
+
+  /* ===== DASHBOARD ===== */
+  /* Stats row */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+  .stat-card {
+    background: var(--bg); border-radius: var(--radius-md); padding: 24px;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gris-border);
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .stat-card:nth-child(1)::before { background: var(--rose); }
+  .stat-card:nth-child(2)::before { background: var(--or); }
+  .stat-card:nth-child(3)::before { background: var(--sauge); }
+  .stat-card:nth-child(4)::before { background: var(--prune); }
+  .stat-label { font-size: 12px; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .stat-value { font-family: var(--font-titre); font-size: 32px; font-weight: 700; color: var(--prune); }
+  .stat-change {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 700; margin-top: 8px; padding: 3px 10px;
+    border-radius: 99px;
+  }
+  .stat-up { background: var(--sauge-light); color: var(--sauge); }
+  .stat-down { background: var(--erreur-light); color: var(--erreur); }
+  .stat-icon { position: absolute; top: 20px; right: 20px; font-size: 28px; opacity: 0.15; }
+
+  /* Dashboard grid */
+  .dash-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-bottom: 28px; }
+  .dash-card {
+    background: var(--bg); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gris-border); overflow: hidden;
+  }
+  .dash-card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px; border-bottom: 1px solid var(--gris-border);
+  }
+  .dash-card-header h3 { font-family: var(--font-titre); font-size: 16px; color: var(--prune); }
+  .dash-card-header .view-all { font-size: 13px; color: var(--rose); font-weight: 700; }
+  .dash-card-body { padding: 16px 24px; }
+
+  /* Upcoming shoots */
+  .shoot-item {
+    display: flex; align-items: center; gap: 16px; padding: 14px 0;
+    border-bottom: 1px solid rgba(74,46,61,0.04);
+  }
+  .shoot-item:last-child { border: none; }
+  .shoot-date {
+    width: 52px; height: 52px; border-radius: var(--radius);
+    background: var(--rose-light); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .shoot-date .day { font-family: var(--font-titre); font-size: 20px; font-weight: 700; color: var(--rose); line-height: 1; }
+  .shoot-date .month { font-size: 10px; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; }
+  .shoot-info { flex: 1; }
+  .shoot-info .shoot-name { font-weight: 700; color: var(--prune); font-size: 14px; }
+  .shoot-info .shoot-details { font-size: 12px; color: var(--gris); margin-top: 2px; }
+  .shoot-type-badge {
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px;
+  }
+  .badge-famille { background: var(--rose-light); color: var(--rose); }
+  .badge-equestre { background: var(--sauge-light); color: var(--sauge); }
+  .badge-maternite { background: #fce7f3; color: #be185d; }
+  .badge-event { background: var(--or-light); color: #92750c; }
+
+  /* Tasks */
+  .task-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(74,46,61,0.04);
+  }
+  .task-item:last-child { border: none; }
+  .task-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--gris-border); flex-shrink: 0;
+    cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .task-check:hover { border-color: var(--sauge); }
+  .task-check.done { background: var(--sauge); border-color: var(--sauge); }
+  .task-check.done::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--gris-light); }
+  .task-text { flex: 1; font-size: 13px; }
+  .task-tag { font-size: 11px; color: var(--gris); }
+
+  /* Alerts */
+  .alert-item {
+    display: flex; align-items: flex-start; gap: 12px; padding: 14px 0;
+    border-bottom: 1px solid rgba(74,46,61,0.04);
+  }
+  .alert-item:last-child { border: none; }
+  .alert-dot {
+    width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0;
+  }
+  .alert-dot.urgent { background: var(--erreur); }
+  .alert-dot.warning { background: var(--or); }
+  .alert-dot.info { background: var(--sauge); }
+  .alert-text { font-size: 13px; color: var(--texte); }
+  .alert-text .alert-time { display: block; font-size: 11px; color: var(--gris); margin-top: 2px; }
+
+  /* Revenue mini chart */
+  .chart-placeholder {
+    height: 180px; background: linear-gradient(to top, var(--rose-light), transparent);
+    border-radius: var(--radius); display: flex; align-items: flex-end;
+    justify-content: space-around; padding: 0 8px 16px; margin-top: 12px;
+  }
+  .chart-bar {
+    width: 24px; border-radius: 4px 4px 0 0; transition: var(--transition);
+    position: relative;
+  }
+  .chart-bar:hover { opacity: 0.8; }
+  .chart-bar::after {
+    content: attr(data-val); position: absolute; top: -20px; left: 50%;
+    transform: translateX(-50%); font-size: 10px; font-weight: 700;
+    color: var(--prune); white-space: nowrap; opacity: 0; transition: var(--transition);
+  }
+  .chart-bar:hover::after { opacity: 1; }
+  .chart-labels {
+    display: flex; justify-content: space-around; padding: 8px 8px 0;
+    font-size: 10px; color: var(--gris);
+  }
+
+  /* ===== CRM / CLIENTS ===== */
+  .crm-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+  }
+  .search-box {
+    display: flex; align-items: center; gap: 8px; background: var(--bg);
+    border: 1px solid var(--gris-border); border-radius: var(--radius);
+    padding: 10px 16px; flex: 1; max-width: 400px;
+  }
+  .search-box input {
+    border: none; outline: none; font-family: var(--font); font-size: 14px;
+    color: var(--texte); flex: 1; background: transparent;
+  }
+  .search-box input::placeholder { color: var(--gris-light); }
+  .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    padding: 6px 16px; border-radius: 99px; font-size: 12px; font-weight: 700;
+    border: 1px solid var(--gris-border); background: var(--bg);
+    color: var(--gris); cursor: pointer; transition: var(--transition);
+  }
+  .chip:hover { border-color: var(--rose); color: var(--rose); }
+  .chip.active { background: var(--rose); color: #fff; border-color: var(--rose); }
+
+  /* Client table */
+  .client-table {
+    background: var(--bg); border-radius: var(--radius-md); overflow: hidden;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gris-border);
+  }
+  .client-table table { width: 100%; border-collapse: collapse; }
+  .client-table th {
+    text-align: left; padding: 14px 20px; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--gris);
+    background: var(--bg-alt); border-bottom: 1px solid var(--gris-border);
+  }
+  .client-table td {
+    padding: 16px 20px; border-bottom: 1px solid rgba(74,46,61,0.04);
+    font-size: 14px; vertical-align: middle;
+  }
+  .client-table tr:last-child td { border: none; }
+  .client-table tr:hover td { background: var(--prune-light); }
+  .client-name-cell { display: flex; align-items: center; gap: 12px; }
+  .client-avatar {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; color: #fff;
+  }
+  .client-name { font-weight: 700; color: var(--prune); }
+  .client-email { font-size: 12px; color: var(--gris); }
+  .tag-sm {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 99px;
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px;
+  }
+  .status-active { background: var(--sauge); }
+  .status-pending { background: var(--or); }
+
+  /* Client detail panel */
+  .client-detail {
+    background: var(--bg); border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gris-border);
+    margin-top: 24px; padding: 28px; display: grid;
+    grid-template-columns: 280px 1fr; gap: 28px;
+  }
+  .client-profile { border-right: 1px solid var(--gris-border); padding-right: 28px; }
+  .client-profile-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose), #d4a0a8);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: var(--font-titre); font-size: 28px; font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .client-profile h3 { font-family: var(--font-titre); font-size: 20px; color: var(--prune); margin-bottom: 4px; }
+  .client-profile .client-since { font-size: 12px; color: var(--gris); margin-bottom: 20px; }
+  .profile-field { margin-bottom: 14px; }
+  .profile-field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--gris); margin-bottom: 3px; }
+  .profile-field .value { font-size: 14px; color: var(--texte); }
+  .profile-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+
+  .client-history h4 {
+    font-family: var(--font-titre); font-size: 16px; color: var(--prune); margin-bottom: 16px;
+  }
+  .history-tabs { display: flex; gap: 4px; margin-bottom: 20px; }
+  .history-tab {
+    padding: 8px 16px; border-radius: 99px; font-size: 12px; font-weight: 700;
+    border: 1px solid var(--gris-border); background: var(--bg);
+    color: var(--gris); cursor: pointer; transition: var(--transition);
+  }
+  .history-tab.active { background: var(--prune); color: #fff; border-color: var(--prune); }
+  .history-item {
+    display: flex; align-items: center; gap: 16px; padding: 14px 0;
+    border-bottom: 1px solid rgba(74,46,61,0.04);
+  }
+  .history-item:last-child { border: none; }
+  .history-icon {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .history-info { flex: 1; }
+  .history-info .h-title { font-weight: 700; font-size: 13px; color: var(--prune); }
+  .history-info .h-sub { font-size: 12px; color: var(--gris); }
+  .history-amount { font-family: var(--font-titre); font-weight: 700; color: var(--or); }
+
+  /* ===== PLANNING ===== */
+  .planning-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+  }
+  .planning-nav { display: flex; align-items: center; gap: 12px; }
+  .planning-nav button {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--gris-border);
+    background: var(--bg); font-size: 16px; cursor: pointer; transition: var(--transition);
+  }
+  .planning-nav button:hover { background: var(--prune-light); }
+  .planning-nav h2 { font-family: var(--font-titre); font-size: 20px; color: var(--prune); }
+  .planning-views { display: flex; gap: 4px; }
+  .planning-view-btn {
+    padding: 8px 16px; border-radius: 99px; font-size: 12px; font-weight: 700;
+    border: 1px solid var(--gris-border); background: var(--bg); color: var(--gris);
+    cursor: pointer; transition: var(--transition);
+  }
+  .planning-view-btn.active { background: var(--prune); color: #fff; border-color: var(--prune); }
+
+  /* Calendar grid */
+  .calendar {
+    background: var(--bg); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gris-border); overflow: hidden;
+  }
+  .cal-header {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    background: var(--bg-alt); border-bottom: 1px solid var(--gris-border);
+  }
+  .cal-header span {
+    padding: 12px; text-align: center; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; color: var(--gris);
+  }
+  .cal-body { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .cal-day {
+    min-height: 110px; padding: 8px; border-right: 1px solid var(--gris-border);
+    border-bottom: 1px solid var(--gris-border); position: relative;
+    transition: var(--transition);
+  }
+  .cal-day:nth-child(7n) { border-right: none; }
+  .cal-day:hover { background: var(--prune-light); }
+  .cal-day.other-month { opacity: 0.3; }
+  .cal-day.today { background: var(--rose-light); }
+  .cal-day .day-num {
+    font-size: 13px; font-weight: 700; color: var(--prune); margin-bottom: 6px;
+  }
+  .cal-day.today .day-num {
+    background: var(--rose); color: #fff; width: 24px; height: 24px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+  }
+  .cal-event {
+    font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+    margin-bottom: 3px; cursor: pointer; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .cal-event.ev-famille { background: var(--rose-light); color: var(--rose); }
+  .cal-event.ev-equestre { background: var(--sauge-light); color: var(--sauge); }
+  .cal-event.ev-maternite { background: #fce7f3; color: #be185d; }
+  .cal-event.ev-event { background: var(--or-light); color: #92750c; }
+  .cal-event.ev-blocked { background: var(--gris-border); color: var(--gris); }
+
+  /* ===== GALERIES ===== */
+  .galeries-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+  }
+  .galeries-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+  }
+  .galerie-card {
+    background: var(--bg); border-radius: var(--radius-md); overflow: hidden;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gris-border);
+    transition: var(--transition); cursor: pointer;
+  }
+  .galerie-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .galerie-cover {
+    height: 160px; position: relative; overflow: hidden;
+  }
+  .galerie-cover .photo-placeholder {
+    width: 100%; height: 100%;
+  }
+  .ph-g1 { background: linear-gradient(135deg, #e8d5c4 0%, #d0bba6 100%); }
+  .ph-g2 { background: linear-gradient(135deg, #d4cfc5 0%, #b8b0a0 100%); }
+  .ph-g3 { background: linear-gradient(135deg, #f2dfe0 0%, #dfc2c5 100%); }
+  .ph-g4 { background: linear-gradient(135deg, #f0d9a8 0%, #dfc080 100%); }
+  .ph-g5 { background: linear-gradient(135deg, #c8bfac 0%, #a69c85 100%); }
+  .ph-g6 { background: linear-gradient(135deg, #d5c8b8 0%, #bbad9a 100%); }
+  .galerie-cover-badge {
+    position: absolute; top: 12px; right: 12px;
+    font-size: 10px; font-weight: 700; padding: 4px 10px;
+    border-radius: 99px; backdrop-filter: blur(8px);
+  }
+  .gb-selection { background: rgba(212,160,60,0.9); color: var(--texte); }
+  .gb-livraison { background: rgba(107,127,90,0.9); color: #fff; }
+  .gb-expiree { background: rgba(220,38,38,0.85); color: #fff; }
+  .galerie-cover-count {
+    position: absolute; bottom: 12px; left: 12px;
+    font-size: 12px; font-weight: 700; color: #fff;
+    background: rgba(74,46,61,0.7); padding: 3px 10px; border-radius: 99px;
+    backdrop-filter: blur(4px);
+  }
+  .galerie-body { padding: 16px 18px; }
+  .galerie-body h4 { font-family: var(--font-titre); font-size: 15px; color: var(--prune); margin-bottom: 4px; }
+  .galerie-body .galerie-client { font-size: 12px; color: var(--gris); margin-bottom: 10px; }
+  .galerie-meta { display: flex; align-items: center; justify-content: space-between; }
+  .galerie-meta .meta-date { font-size: 12px; color: var(--gris); }
+  .galerie-meta .meta-status {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px;
+  }
+  .ms-active { background: var(--sauge-light); color: var(--sauge); }
+  .ms-pending { background: var(--or-light); color: #92750c; }
+  .ms-expired { background: var(--erreur-light); color: var(--erreur); }
+  .ms-selection { background: rgba(194,114,126,0.1); color: var(--rose); }
+
+  /* Progress bar */
+  .progress-bar {
+    height: 4px; background: var(--gris-border); border-radius: 2px;
+    margin-top: 12px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .pf-sauge { background: var(--sauge); }
+  .pf-or { background: var(--or); }
+  .pf-rose { background: var(--rose); }
+  .progress-label { display: flex; justify-content: space-between; margin-top: 4px; font-size: 10px; color: var(--gris); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1200px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .galeries-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 1024px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .client-detail { grid-template-columns: 1fr; }
+    .client-profile { border-right: none; border-bottom: 1px solid var(--gris-border); padding-right: 0; padding-bottom: 24px; }
+  }
+  @media (max-width: 768px) {
+    .admin-layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .stats-row { grid-template-columns: 1fr; }
+    .galeries-grid { grid-template-columns: 1fr; }
+    .page-content { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo">Fleur de <span>L</span>umière</div>
+      <div class="logo-sub">Administration</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Principal</div>
+      <button class="sidebar-link active" onclick="showView('dashboard', this)">
+        <span class="icon">📊</span> Tableau de bord
+      </button>
+      <button class="sidebar-link" onclick="showView('clients', this)">
+        <span class="icon">👥</span> Clients <span class="badge">47</span>
+      </button>
+      <button class="sidebar-link" onclick="showView('planning', this)">
+        <span class="icon">📅</span> Planning
+      </button>
+      <button class="sidebar-link" onclick="showView('galeries', this)">
+        <span class="icon">🖼️</span> Galeries <span class="badge badge-or">3</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Gestion</div>
+      <button class="sidebar-link">
+        <span class="icon">🛒</span> Commandes <span class="badge">5</span>
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">💰</span> Facturation
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">🎁</span> Cartes cadeaux
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">📣</span> Promotions
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">✅</span> Tâches <span class="badge">8</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Contenu</div>
+      <button class="sidebar-link">
+        <span class="icon">📝</span> Pages du site
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">💬</span> Témoignages
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">❓</span> FAQ
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">📬</span> Messagerie <span class="badge">2</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Analyse</div>
+      <button class="sidebar-link">
+        <span class="icon">📈</span> Statistiques
+      </button>
+      <button class="sidebar-link">
+        <span class="icon">⚙️</span> Paramètres
+      </button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">C</div>
+        <div class="sidebar-user-info">
+          <div class="user-name">Capucine</div>
+          <div class="user-role">Administratrice</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="page-title">Tableau de <em>bord</em></h1>
+        <div class="topbar-date">Vendredi 28 février 2026</div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn">🔔<span class="notif-dot"></span></button>
+        <button class="topbar-btn">💬</button>
+        <button class="btn-admin btn-admin-primary" onclick="showView('planning', document.querySelectorAll('.sidebar-link')[2])">+ Nouvelle réservation</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ -->
+    <!-- DASHBOARD -->
+    <!-- ═══════════════════════════════ -->
+    <div class="page-content">
+      <div class="page-view active" id="view-dashboard">
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Chiffre d'affaires — Février</div>
+            <div class="stat-value">3 240€</div>
+            <span class="stat-change stat-up">↑ +18% vs janv.</span>
+            <div class="stat-icon">💰</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Séances ce mois</div>
+            <div class="stat-value">12</div>
+            <span class="stat-change stat-up">↑ +3 vs janv.</span>
+            <div class="stat-icon">📷</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Galeries actives</div>
+            <div class="stat-value">8</div>
+            <span class="stat-change stat-down">⚠ 2 expirent bientôt</span>
+            <div class="stat-icon">🖼️</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Commandes en cours</div>
+            <div class="stat-value">5</div>
+            <span class="stat-change stat-up">3 à préparer</span>
+            <div class="stat-icon">📦</div>
+          </div>
+        </div>
+
+        <!-- Grid: Upcoming + Tasks -->
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Prochains shootings</h3>
+              <a href="#" class="view-all">Voir le planning →</a>
+            </div>
+            <div class="dash-card-body">
+              <div class="shoot-item">
+                <div class="shoot-date"><span class="day">01</span><span class="month">Mars</span></div>
+                <div class="shoot-info">
+                  <div class="shoot-name">Famille Martin</div>
+                  <div class="shoot-details">17h30 · Lac de Parisot · Signature</div>
+                </div>
+                <span class="shoot-type-badge badge-famille">Famille</span>
+              </div>
+              <div class="shoot-item">
+                <div class="shoot-date"><span class="day">03</span><span class="month">Mars</span></div>
+                <div class="shoot-info">
+                  <div class="shoot-name">Sophie & Éclair</div>
+                  <div class="shoot-details">18h00 · Écurie des Chênes · Signature</div>
+                </div>
+                <span class="shoot-type-badge badge-equestre">Équestre</span>
+              </div>
+              <div class="shoot-item">
+                <div class="shoot-date"><span class="day">05</span><span class="month">Mars</span></div>
+                <div class="shoot-info">
+                  <div class="shoot-name">Marie P. — Maternité</div>
+                  <div class="shoot-details">10h00 · CHU Toulouse · Première Lumière</div>
+                </div>
+                <span class="shoot-type-badge badge-maternite">Maternité</span>
+              </div>
+              <div class="shoot-item">
+                <div class="shoot-date"><span class="day">08</span><span class="month">Mars</span></div>
+                <div class="shoot-info">
+                  <div class="shoot-name">Mariage Dupont-Fabre</div>
+                  <div class="shoot-details">14h00 · Château de Mauriac · Journée complète</div>
+                </div>
+                <span class="shoot-type-badge badge-event">Événement</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Tâches du jour</h3>
+              <a href="#" class="view-all">Toutes les tâches →</a>
+            </div>
+            <div class="dash-card-body">
+              <div class="task-item done">
+                <div class="task-check done" onclick="this.classList.toggle('done'); this.closest('.task-item').classList.toggle('done')"></div>
+                <span class="task-text">Retoucher galerie Durand (15 photos)</span>
+                <span class="task-tag">Famille</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check" onclick="this.classList.toggle('done'); this.closest('.task-item').classList.toggle('done')"></div>
+                <span class="task-text">Envoyer galerie sélection Sophie M.</span>
+                <span class="task-tag">Équestre</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check" onclick="this.classList.toggle('done'); this.closest('.task-item').classList.toggle('done')"></div>
+                <span class="task-text">Préparer devis Mariage Dupont-Fabre</span>
+                <span class="task-tag">Événement</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check" onclick="this.classList.toggle('done'); this.closest('.task-item').classList.toggle('done')"></div>
+                <span class="task-text">Expédier tirages commande #127</span>
+                <span class="task-tag">Commande</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check" onclick="this.classList.toggle('done'); this.closest('.task-item').classList.toggle('done')"></div>
+                <span class="task-text">Vérifier météo shooting du 1er mars</span>
+                <span class="task-tag">Prépa</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid: Revenue + Alerts -->
+        <div class="dash-grid">
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Chiffre d'affaires — 6 derniers mois</h3>
+            </div>
+            <div class="dash-card-body">
+              <div class="chart-placeholder">
+                <div class="chart-bar" style="height: 45%; background: var(--rose);" data-val="1 850€"></div>
+                <div class="chart-bar" style="height: 62%; background: var(--rose);" data-val="2 420€"></div>
+                <div class="chart-bar" style="height: 80%; background: var(--rose);" data-val="3 100€"></div>
+                <div class="chart-bar" style="height: 55%; background: var(--rose);" data-val="2 180€"></div>
+                <div class="chart-bar" style="height: 70%; background: var(--rose);" data-val="2 750€"></div>
+                <div class="chart-bar" style="height: 85%; background: var(--or);" data-val="3 240€"></div>
+              </div>
+              <div class="chart-labels">
+                <span>Sept</span><span>Oct</span><span>Nov</span><span>Déc</span><span>Janv</span><span>Fév</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3>Alertes & notifications</h3>
+            </div>
+            <div class="dash-card-body">
+              <div class="alert-item">
+                <div class="alert-dot urgent"></div>
+                <div class="alert-text">Galerie famille Moreau expire dans <strong>3 jours</strong><span class="alert-time">Rappel envoyé au client</span></div>
+              </div>
+              <div class="alert-item">
+                <div class="alert-dot warning"></div>
+                <div class="alert-text">Carte cadeau #GC-042 expire le <strong>15 mars</strong><span class="alert-time">Non utilisée — relance à envoyer</span></div>
+              </div>
+              <div class="alert-item">
+                <div class="alert-dot info"></div>
+                <div class="alert-text">Nouveau témoignage de <strong>Laura & Thomas</strong> en attente<span class="alert-time">Il y a 2 heures</span></div>
+              </div>
+              <div class="alert-item">
+                <div class="alert-dot info"></div>
+                <div class="alert-text"><strong>Sophie M.</strong> a terminé sa sélection (25 photos)<span class="alert-time">Hier à 21h15</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLIENTS / CRM -->
+      <!-- ═══════════════════════════════ -->
+      <div class="page-view" id="view-clients">
+
+        <div class="crm-toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Rechercher un client (nom, email, tél)...">
+          </div>
+          <div class="filter-chips">
+            <span class="chip active">Tous</span>
+            <span class="chip">Famille</span>
+            <span class="chip">Équestre</span>
+            <span class="chip">Événement</span>
+            <span class="chip">Maternité</span>
+            <span class="chip">VIP</span>
+          </div>
+        </div>
+
+        <div class="client-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Catégorie</th>
+                <th>Dernière séance</th>
+                <th>CA total</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="client-name-cell"><div class="client-avatar" style="background: linear-gradient(135deg, var(--rose), #d4a0a8);">SM</div><div><div class="client-name">Sophie Mercier</div><div class="client-email">sophie.m@email.fr</div></div></div></td>
+                <td><span class="tag-sm badge-equestre">Équestre</span></td>
+                <td>22 fév. 2026</td>
+                <td style="font-weight: 700; color: var(--or);">560€</td>
+                <td><span class="status-dot status-active"></span>Active</td>
+              </tr>
+              <tr>
+                <td><div class="client-name-cell"><div class="client-avatar" style="background: linear-gradient(135deg, var(--or), #e8c56d);">LT</div><div><div class="client-name">Laura & Thomas Durand</div><div class="client-email">laura.durand@email.fr</div></div></div></td>
+                <td><span class="tag-sm badge-famille">Famille</span> <span class="tag-sm badge-equestre" style="margin-left: 4px;">4 Saisons</span></td>
+                <td>15 fév. 2026</td>
+                <td style="font-weight: 700; color: var(--or);">930€</td>
+                <td><span class="status-dot status-active"></span>Active</td>
+              </tr>
+              <tr>
+                <td><div class="client-name-cell"><div class="client-avatar" style="background: linear-gradient(135deg, var(--sauge), #8a9d76);">MP</div><div><div class="client-name">Marie Pellerin</div><div class="client-email">marie.p@email.fr</div></div></div></td>
+                <td><span class="tag-sm badge-maternite">Maternité</span></td>
+                <td>5 mars 2026 <span style="font-size:10px; color: var(--or);">(à venir)</span></td>
+                <td style="font-weight: 700; color: var(--or);">180€</td>
+                <td><span class="status-dot status-pending"></span>Acompte reçu</td>
+              </tr>
+              <tr>
+                <td><div class="client-name-cell"><div class="client-avatar" style="background: linear-gradient(135deg, var(--prune), #7a5a6d);">JD</div><div><div class="client-name">Julie Dupont-Fabre</div><div class="client-email">julie.df@email.fr</div></div></div></td>
+                <td><span class="tag-sm badge-event">Événement</span></td>
+                <td>8 mars 2026 <span style="font-size:10px; color: var(--or);">(à venir)</span></td>
+                <td style="font-weight: 700; color: var(--or);">450€</td>
+                <td><span class="status-dot status-pending"></span>Devis envoyé</td>
+              </tr>
+              <tr>
+                <td><div class="client-name-cell"><div class="client-avatar" style="background: linear-gradient(135deg, #b8a090, #a08878);">CM</div><div><div class="client-name">Claire Martin</div><div class="client-email">claire.martin@email.fr</div></div></div></td>
+                <td><span class="tag-sm badge-famille">Famille</span></td>
+                <td>1 mars 2026 <span style="font-size:10px; color: var(--or);">(à venir)</span></td>
+                <td style="font-weight: 700; color: var(--or);">280€</td>
+                <td><span class="status-dot status-active"></span>Confirmé</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Fiche client détaillée -->
+        <div class="client-detail">
+          <div class="client-profile">
+            <div class="client-profile-avatar">SM</div>
+            <h3>Sophie Mercier</h3>
+            <div class="client-since">Cliente depuis septembre 2025</div>
+            <div class="profile-field"><label>Email</label><div class="value">sophie.m@email.fr</div></div>
+            <div class="profile-field"><label>Téléphone</label><div class="value">06 12 34 56 78</div></div>
+            <div class="profile-field"><label>Adresse</label><div class="value">Gaillac (81)</div></div>
+            <div class="profile-field"><label>Source</label><div class="value">Instagram</div></div>
+            <div class="profile-field"><label>Notes</label><div class="value" style="font-style: italic; color: var(--gris);">Cheval : Éclair (alezan). Préfère les séances en liberté. Spot favori : champ de tournesols route de Cahuzac.</div></div>
+            <div class="profile-tags">
+              <span class="tag-sm badge-equestre">Équestre</span>
+              <span class="tag-sm" style="background: var(--or-light); color: #92750c;">Passeport 3/5</span>
+              <span class="tag-sm" style="background: var(--prune-light); color: var(--prune);">Parrain ×1</span>
+            </div>
+          </div>
+          <div class="client-history">
+            <h4>Historique</h4>
+            <div class="history-tabs">
+              <span class="history-tab active">Séances</span>
+              <span class="history-tab">Commandes</span>
+              <span class="history-tab">Emails</span>
+              <span class="history-tab">Fidélité</span>
+            </div>
+            <div class="history-item">
+              <div class="history-icon" style="background: var(--sauge-light);">📷</div>
+              <div class="history-info">
+                <div class="h-title">Séance Signature — Équestre</div>
+                <div class="h-sub">22 fév. 2026 · Écurie des Chênes · 25 photos</div>
+              </div>
+              <div class="history-amount">280€</div>
+            </div>
+            <div class="history-item">
+              <div class="history-icon" style="background: var(--or-light);">🖨️</div>
+              <div class="history-info">
+                <div class="h-title">Commande tirage 30×40 + Boîte Souvenir</div>
+                <div class="h-sub">25 fév. 2026 · Expédié</div>
+              </div>
+              <div class="history-amount">75€</div>
+            </div>
+            <div class="history-item">
+              <div class="history-icon" style="background: var(--sauge-light);">📷</div>
+              <div class="history-info">
+                <div class="h-title">Séance Essentiel — Équestre</div>
+                <div class="h-sub">10 oct. 2025 · Champ route de Cahuzac · 10 photos</div>
+              </div>
+              <div class="history-amount">150€</div>
+            </div>
+            <div class="history-item">
+              <div class="history-icon" style="background: var(--rose-light);">🎁</div>
+              <div class="history-info">
+                <div class="h-title">Parrainage — Julie D. (filleule)</div>
+                <div class="h-sub">Nov. 2025 · -15% appliqué sur séance suivante</div>
+              </div>
+              <div class="history-amount" style="color: var(--sauge);">-15%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- PLANNING -->
+      <!-- ═══════════════════════════════ -->
+      <div class="page-view" id="view-planning">
+
+        <div class="planning-toolbar">
+          <div class="planning-nav">
+            <button>‹</button>
+            <h2>Mars 2026</h2>
+            <button>›</button>
+          </div>
+          <div class="planning-views">
+            <span class="planning-view-btn">Jour</span>
+            <span class="planning-view-btn active">Semaine</span>
+            <span class="planning-view-btn">Mois</span>
+          </div>
+        </div>
+
+        <div class="calendar">
+          <div class="cal-header">
+            <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span><span>Dim</span>
+          </div>
+          <div class="cal-body">
+            <!-- Semaine 1 (23-1 mars) -->
+            <div class="cal-day other-month"><div class="day-num">23</div></div>
+            <div class="cal-day other-month"><div class="day-num">24</div></div>
+            <div class="cal-day other-month"><div class="day-num">25</div></div>
+            <div class="cal-day other-month"><div class="day-num">26</div></div>
+            <div class="cal-day other-month"><div class="day-num">27</div></div>
+            <div class="cal-day today"><div class="day-num">28</div><div class="cal-event ev-blocked">Indisponible</div></div>
+            <div class="cal-day"><div class="day-num">1</div><div class="cal-event ev-famille">17h30 Fam. Martin</div></div>
+
+            <!-- Semaine 2 -->
+            <div class="cal-day"><div class="day-num">2</div></div>
+            <div class="cal-day"><div class="day-num">3</div><div class="cal-event ev-equestre">18h Sophie & Éclair</div></div>
+            <div class="cal-day"><div class="day-num">4</div></div>
+            <div class="cal-day"><div class="day-num">5</div><div class="cal-event ev-maternite">10h Marie P.</div></div>
+            <div class="cal-day"><div class="day-num">6</div></div>
+            <div class="cal-day"><div class="day-num">7</div><div class="cal-event ev-famille">17h Mini-session ×3</div></div>
+            <div class="cal-day"><div class="day-num">8</div><div class="cal-event ev-event">14h Mariage Dupont</div></div>
+
+            <!-- Semaine 3 -->
+            <div class="cal-day"><div class="day-num">9</div></div>
+            <div class="cal-day"><div class="day-num">10</div></div>
+            <div class="cal-day"><div class="day-num">11</div><div class="cal-event ev-equestre">17h30 Julie D.</div></div>
+            <div class="cal-day"><div class="day-num">12</div></div>
+            <div class="cal-day"><div class="day-num">13</div></div>
+            <div class="cal-day"><div class="day-num">14</div><div class="cal-event ev-famille">17h Fam. Leblanc</div><div class="cal-event ev-equestre">18h30 Club Équestre</div></div>
+            <div class="cal-day"><div class="day-num">15</div></div>
+
+            <!-- Semaine 4 -->
+            <div class="cal-day"><div class="day-num">16</div></div>
+            <div class="cal-day"><div class="day-num">17</div><div class="cal-event ev-blocked">Indisponible</div></div>
+            <div class="cal-day"><div class="day-num">18</div></div>
+            <div class="cal-day"><div class="day-num">19</div></div>
+            <div class="cal-day"><div class="day-num">20</div><div class="cal-event ev-famille">17h 4 Saisons Durand</div></div>
+            <div class="cal-day"><div class="day-num">21</div><div class="cal-event ev-maternite">Nid Douillet (à conf.)</div></div>
+            <div class="cal-day"><div class="day-num">22</div></div>
+
+            <!-- Semaine 5 -->
+            <div class="cal-day"><div class="day-num">23</div></div>
+            <div class="cal-day"><div class="day-num">24</div></div>
+            <div class="cal-day"><div class="day-num">25</div><div class="cal-event ev-famille">École St-Joseph</div></div>
+            <div class="cal-day"><div class="day-num">26</div></div>
+            <div class="cal-day"><div class="day-num">27</div></div>
+            <div class="cal-day"><div class="day-num">28</div><div class="cal-event ev-equestre">17h30 Concours</div></div>
+            <div class="cal-day"><div class="day-num">29</div></div>
+
+            <div class="cal-day"><div class="day-num">30</div></div>
+            <div class="cal-day"><div class="day-num">31</div></div>
+            <div class="cal-day other-month"><div class="day-num">1</div></div>
+            <div class="cal-day other-month"><div class="day-num">2</div></div>
+            <div class="cal-day other-month"><div class="day-num">3</div></div>
+            <div class="cal-day other-month"><div class="day-num">4</div></div>
+            <div class="cal-day other-month"><div class="day-num">5</div></div>
+          </div>
+        </div>
+
+        <!-- Légende -->
+        <div style="display: flex; gap: 20px; margin-top: 16px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris);"><span style="width: 12px; height: 12px; border-radius: 3px; background: var(--rose-light); border: 1px solid var(--rose);"></span> Famille</div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris);"><span style="width: 12px; height: 12px; border-radius: 3px; background: var(--sauge-light); border: 1px solid var(--sauge);"></span> Équestre</div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris);"><span style="width: 12px; height: 12px; border-radius: 3px; background: #fce7f3; border: 1px solid #be185d;"></span> Maternité</div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris);"><span style="width: 12px; height: 12px; border-radius: 3px; background: var(--or-light); border: 1px solid var(--or);"></span> Événement</div>
+          <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gris);"><span style="width: 12px; height: 12px; border-radius: 3px; background: var(--gris-border);"></span> Indisponible</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- GALERIES -->
+      <!-- ═══════════════════════════════ -->
+      <div class="page-view" id="view-galeries">
+
+        <div class="galeries-toolbar">
+          <div class="filter-chips">
+            <span class="chip active">Toutes</span>
+            <span class="chip">Sélection</span>
+            <span class="chip">Livraison</span>
+            <span class="chip">Expirent bientôt</span>
+          </div>
+          <button class="btn-admin btn-admin-primary">+ Nouvelle galerie</button>
+        </div>
+
+        <div class="galeries-grid">
+
+          <div class="galerie-card">
+            <div class="galerie-cover">
+              <div class="photo-placeholder ph-g2"></div>
+              <span class="galerie-cover-badge gb-selection">Sélection en cours</span>
+              <span class="galerie-cover-count">📷 48 photos</span>
+            </div>
+            <div class="galerie-body">
+              <h4>Sophie & Éclair — Signature</h4>
+              <div class="galerie-client">Sophie Mercier · Équestre</div>
+              <div class="galerie-meta">
+                <span class="meta-date">Créée le 23 fév.</span>
+                <span class="meta-status ms-selection">Sélection</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-or" style="width: 52%;"></div></div>
+              <div class="progress-label"><span>25/48 sélectionnées</span><span>52%</span></div>
+            </div>
+          </div>
+
+          <div class="galerie-card">
+            <div class="galerie-cover">
+              <div class="photo-placeholder ph-g1"></div>
+              <span class="galerie-cover-badge gb-livraison">Livrée</span>
+              <span class="galerie-cover-count">📷 25 photos</span>
+            </div>
+            <div class="galerie-body">
+              <h4>Famille Durand — 4 Saisons Hiver</h4>
+              <div class="galerie-client">Laura & Thomas Durand · Famille</div>
+              <div class="galerie-meta">
+                <span class="meta-date">Expire le 16 mai</span>
+                <span class="meta-status ms-active">Active</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-sauge" style="width: 100%;"></div></div>
+              <div class="progress-label"><span>Téléchargée 3 fois</span><span>2 commandes</span></div>
+            </div>
+          </div>
+
+          <div class="galerie-card">
+            <div class="galerie-cover">
+              <div class="photo-placeholder ph-g3"></div>
+              <span class="galerie-cover-badge gb-livraison">Livrée</span>
+              <span class="galerie-cover-count">📷 15 photos</span>
+            </div>
+            <div class="galerie-body">
+              <h4>Naissance bébé Petit</h4>
+              <div class="galerie-client">Camille Petit · Première Lumière</div>
+              <div class="galerie-meta">
+                <span class="meta-date">Expire le 2 mars</span>
+                <span class="meta-status ms-pending">⚠ Expire dans 2j</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-rose" style="width: 95%;"></div></div>
+              <div class="progress-label"><span>Rappel envoyé</span><span>Vue 4 fois</span></div>
+            </div>
+          </div>
+
+          <div class="galerie-card">
+            <div class="galerie-cover">
+              <div class="photo-placeholder ph-g4"></div>
+              <span class="galerie-cover-badge gb-livraison">Livrée</span>
+              <span class="galerie-cover-count">📷 10 photos</span>
+            </div>
+            <div class="galerie-body">
+              <h4>Famille Martin — Essentiel</h4>
+              <div class="galerie-client">Claire Martin · Famille</div>
+              <div class="galerie-meta">
+                <span class="meta-date">Expire le 20 avril</span>
+                <span class="meta-status ms-active">Active</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill pf-sauge" style="width: 100%;"></div></div>
+              <div class="progress-label"><span>Téléchargée 1 fois</span><span>0 commande</span></div>
+            </div>
+          </div>
+
+          <div class="galerie-card">
+            <div class="galerie-cover">
+              <div class="photo-placeholder ph-g5"></div>
+              <span class="galerie-cover-badge gb-selection">En attente upload</span>
+              <span class="galerie-cover-count">📷 0 photos</span>
+            </div>
+            <div class="galerie-body">
+              <h4>Marie P. — Première Lumière</h4>
+              <div class="galerie-client">Marie Pellerin · Maternité</div>
+              <div class="galerie-meta">
+                <span class="meta-date">Séance le 5 mars</span>
+                <span class="meta-status ms-pending">En attente</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="galerie-card" style="opacity: 0.6;">
+            <div class="galerie-cover">
+              <div class="photo-placeholder ph-g6"></div>
+              <span class="galerie-cover-badge gb-expiree">Expirée</span>
+              <span class="galerie-cover-count">📷 20 photos</span>
+            </div>
+            <div class="galerie-body">
+              <h4>Famille Roux — Signature</h4>
+              <div class="galerie-client">Émilie Roux · Famille</div>
+              <div class="galerie-meta">
+                <span class="meta-date">Expirée le 10 fév.</span>
+                <span class="meta-status ms-expired">Archivée</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+
+  </main>
+
+</div>
+
+<script>
+  function showView(viewId, btn) {
+    // Hide all views
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + viewId).classList.add('active');
+
+    // Update sidebar
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    // Update title
+    const titles = {
+      dashboard: 'Tableau de <em>bord</em>',
+      clients: 'Gestion <em>clients</em>',
+      planning: '<em>Planning</em> & agenda',
+      galeries: 'Gestion des <em>galeries</em>'
+    };
+    document.getElementById('page-title').innerHTML = titles[viewId] || '';
+  }
+</script>
+
+</body>
+</html>

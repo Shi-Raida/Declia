@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelligence Métier & CRM — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sw-btn{padding:9px 20px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}
+.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}
+.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.page-header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:18px 24px}
+.ph-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.ai-logo{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
+.ph-info h1{font-size:20px;color:var(--prune)}.ph-info h1 em{color:var(--rose);font-style:italic}
+.ph-info p{font-size:12px;color:var(--gris)}
+.ph-badge{margin-left:auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--radius-full)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);overflow:hidden}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:14px;color:var(--prune);flex:1}
+.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+/* RECOS */
+.reco{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:18px;box-shadow:var(--shadow-sm);margin-bottom:18px}
+.reco-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.reco-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.rd-h{background:#DC2626}.rd-m{background:var(--or)}.rd-l{background:var(--sauge)}
+.reco-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gris-light)}
+.reco h4{font-size:15px;color:var(--prune);margin-bottom:6px}
+.reco p{font-size:13px;color:var(--gris);line-height:1.6;margin-bottom:12px}
+.reco-impact{display:flex;gap:10px;margin-bottom:14px}
+.ri{padding:8px 12px;background:var(--bg-alt);border-radius:var(--radius);text-align:center;flex:1}
+.ri-v{font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--or)}
+.ri-l{font-size:10px;color:var(--gris)}
+.reco-btns{display:flex;gap:6px}
+.rb-apply{padding:8px 16px;border-radius:var(--radius);background:var(--sauge);color:#fff;border:none;font-size:12px;font-weight:700;transition:var(--tr)}.rb-apply:hover{background:#5a6e4b}
+.rb-view{padding:8px 16px;border-radius:var(--radius);background:transparent;color:var(--prune);border:1px solid var(--gris-border);font-size:12px;font-weight:700}
+.rb-later{padding:8px 12px;border:none;background:none;color:var(--gris-light);font-size:12px;cursor:pointer}
+/* TABLE */
+.p-table{width:100%;border-collapse:collapse}
+.p-table th,.p-table td{padding:10px 12px;font-size:12px;text-align:left;border-bottom:1px solid var(--gris-border)}
+.p-table th{background:var(--bg-alt);font-weight:700;color:var(--prune);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.p-table td{color:var(--gris)}
+.pm-c{font-weight:700;color:var(--texte)}
+.pm-s{font-weight:700;color:var(--sauge);background:var(--sauge-light);padding:3px 10px;border-radius:var(--radius-full);font-size:11px}
+/* FORECAST */
+.forecast{display:flex;gap:4px;margin:12px 0}
+.fm{flex:1;text-align:center}
+.fm-v{font-size:10px;font-weight:700;color:var(--prune);margin-bottom:2px}
+.fm-bar{height:70px;display:flex;align-items:flex-end}
+.fm-fill{width:100%;border-radius:4px 4px 0 0}
+.fm-l{font-size:9px;color:var(--gris-light);margin-top:4px}
+/* CRM */
+.cs{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(74,46,61,.04)}
+.cs:last-child{border:none}
+.cs-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.cs-hot{background:var(--rose)}.cs-warm{background:var(--or)}.cs-cold{background:var(--gris-light)}
+.cs-info{flex:1}.cs-name{font-weight:700;font-size:13px;color:var(--prune)}.cs-detail{font-size:11px;color:var(--gris)}
+.cs-score{text-align:center}.cs-v{font-family:var(--font-titre);font-size:20px;font-weight:700}.cv-h{color:var(--rose)}.cv-w{color:var(--or)}.cv-c{color:var(--gris-light)}
+.cs-l{font-size:9px;color:var(--gris)}
+.cs-btn{padding:6px 12px;border-radius:var(--radius);background:var(--rose-light);color:var(--rose);font-size:11px;font-weight:700;border:none;cursor:pointer;white-space:nowrap;transition:var(--tr)}.cs-btn:hover{background:var(--rose);color:#fff}
+/* TRIGGERS */
+.tr{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid rgba(74,46,61,.04)}.tr:last-child{border:none}
+.tr-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.tri-exp{background:rgba(220,38,38,.1)}.tri-loy{background:var(--prune-light)}.tri-bday{background:var(--rose-light)}.tri-react{background:var(--sauge-light)}.tri-up{background:var(--or-light)}
+.tr-content{flex:1}.tr-title{font-weight:700;font-size:13px;color:var(--prune)}.tr-client{font-size:12px;color:var(--or);font-weight:700}
+.tr-msg{font-size:12px;color:var(--gris);font-style:italic;line-height:1.5;margin-top:4px;padding:8px 10px;background:var(--bg-alt);border-radius:var(--radius);border-left:3px solid var(--or)}
+.tr-btns{display:flex;gap:4px;margin-top:8px}
+.tb-send{padding:5px 12px;border-radius:var(--radius);background:var(--sauge);color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer}.tb-send:hover{background:#5a6e4b}
+.tb-edit{padding:5px 12px;border-radius:var(--radius);background:transparent;color:var(--prune);border:1px solid var(--gris-border);font-size:11px;font-weight:700;cursor:pointer}
+.tb-skip{padding:5px 8px;border:none;background:none;color:var(--gris-light);font-size:11px;cursor:pointer}
+/* PIPELINE */
+.pipeline{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.pipe-col{background:var(--bg-alt);border-radius:var(--radius-md);padding:12px;min-height:100px}
+.pipe-h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gris);margin-bottom:10px;display:flex;justify-content:space-between}
+.pipe-n{width:20px;height:20px;border-radius:50%;background:var(--gris-border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--gris)}
+.pipe-card{background:var(--bg);border-radius:var(--radius);padding:10px;margin-bottom:6px;border:1px solid var(--gris-border);font-size:12px;box-shadow:var(--shadow-sm)}
+.pc-name{font-weight:700;color:var(--prune)}.pc-d{font-size:10px;color:var(--gris);margin-top:2px}
+.pc-v{font-family:var(--font-titre);font-size:14px;font-weight:700;color:var(--or);margin-top:4px}
+@media(max-width:1024px){.grid-2{grid-template-columns:1fr}.pipeline{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.pipeline{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('intel',this)">🧠 Intelligence Métier</button>
+  <button class="sw-btn" onclick="switchView('crm',this)">🎯 CRM Prédictif</button>
+</div>
+
+<!-- INTELLIGENCE MÉTIER -->
+<div class="page-view active" id="view-intel">
+<div class="page-header"><div class="ph-inner"><div class="ai-logo" style="background:linear-gradient(135deg,var(--or),#e8c56d)">🧠</div><div class="ph-info"><h1>Intelligence <em>Métier</em></h1><p>Recommandations business basées sur vos données et le marché</p></div><span class="ph-badge" style="background:rgba(220,38,38,.08);color:#DC2626">3 recommandations</span></div></div>
+<div class="container">
+<div class="grid-2">
+  <div class="reco"><div class="reco-top"><div class="reco-dot rd-h"></div><span class="reco-type">Tarification · Haute priorité</span></div><h4>Augmenter le prix Signature Famille le samedi</h4><p>Vos créneaux samedi se remplissent en 48h en moyenne, contre 12 jours le dimanche. La demande dépasse l'offre — signal de sous-tarification week-end.</p><div class="reco-impact"><div class="ri"><div class="ri-v">+42€</div><div class="ri-l">Par séance</div></div><div class="ri"><div class="ri-v">+504€</div><div class="ri-l">/ mois estimé</div></div><div class="ri"><div class="ri-v">12</div><div class="ri-l">Séances impactées</div></div></div><div class="reco-btns"><button class="rb-apply">✅ Appliquer +15%</button><button class="rb-view">Voir le détail</button><button class="rb-later">Plus tard</button></div></div>
+
+  <div class="reco"><div class="reco-top"><div class="reco-dot rd-m"></div><span class="reco-type">Planning · Moyenne priorité</span></div><h4>Ouvrir des créneaux dimanche équestre</h4><p>L'équestre = 38% de votre CA, mais aucun créneau dimanche. 4 demandes refusées ce mois faute de dispo.</p><div class="reco-impact"><div class="ri"><div class="ri-v">4</div><div class="ri-l">Résas perdues</div></div><div class="ri"><div class="ri-v">+1 120€</div><div class="ri-l">Manque à gagner</div></div><div class="ri"><div class="ri-v">2</div><div class="ri-l">Dim./mois suggérés</div></div></div><div class="reco-btns"><button class="rb-apply">📅 Ouvrir 2 dimanches</button><button class="rb-view">Analyser</button><button class="rb-later">Plus tard</button></div></div>
+
+  <div class="reco"><div class="reco-top"><div class="reco-dot rd-m"></div><span class="reco-type">Saisonnalité · Anticipation</span></div><h4>Préparer la saison maternité (avril-juin)</h4><p>L'an dernier, 62% de vos réservations maternité sont arrivées entre avril et juin. C'est le moment de publier du contenu maternité et d'activer les partenariats.</p><div class="reco-impact"><div class="ri"><div class="ri-v">Avr-Jun</div><div class="ri-l">Fenêtre critique</div></div><div class="ri"><div class="ri-v">62%</div><div class="ri-l">Des résas annuelles</div></div><div class="ri"><div class="ri-v">3</div><div class="ri-l">Actions suggérées</div></div></div><div class="reco-btns"><button class="rb-apply">📝 Voir les actions</button><button class="rb-later">Plus tard</button></div></div>
+
+  <div class="reco"><div class="reco-top"><div class="reco-dot rd-l"></div><span class="reco-type">Benchmark · Info</span></div><h4>Comparatif tarifaire — votre marché</h4><p>Positionnement vs le marché photo Tarn/Toulouse (données anonymisées plateforme).</p><table class="p-table"><tr><th>Formule</th><th>Votre prix</th><th>Marché</th><th>Suggestion</th></tr><tr><td>Essentiel Famille</td><td class="pm-c">150€</td><td>145€</td><td>✅ Bien positionné</td></tr><tr><td>Signature Famille</td><td class="pm-c">280€</td><td>310€</td><td><span class="pm-s">→ 320€ sam.</span></td></tr><tr><td>Équestre Signature</td><td class="pm-c">280€</td><td>260€</td><td>✅ Premium justifié</td></tr><tr><td>Maternité 1ère Lumière</td><td class="pm-c">220€</td><td>240€</td><td><span class="pm-s">→ 240€</span></td></tr></table></div>
+</div>
+
+<!-- Forecast -->
+<div class="card"><div class="card-h"><h3>📈 Prévision saisonnière des réservations</h3><span class="card-badge">N-1 + tendances</span></div><div class="card-b">
+<div class="forecast">
+  <div class="fm"><div class="fm-v">8</div><div class="fm-bar"><div class="fm-fill" style="height:36%;background:var(--gris-border)"></div></div><div class="fm-l">Jan</div></div>
+  <div class="fm"><div class="fm-v">10</div><div class="fm-bar"><div class="fm-fill" style="height:45%;background:var(--gris-border)"></div></div><div class="fm-l">Fév</div></div>
+  <div class="fm"><div class="fm-v">12</div><div class="fm-bar"><div class="fm-fill" style="height:55%;background:var(--rose)"></div></div><div class="fm-l" style="font-weight:700;color:var(--rose)">Mars</div></div>
+  <div class="fm"><div class="fm-v">15</div><div class="fm-bar"><div class="fm-fill" style="height:68%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Avr</div></div>
+  <div class="fm"><div class="fm-v">18</div><div class="fm-bar"><div class="fm-fill" style="height:82%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Mai</div></div>
+  <div class="fm"><div class="fm-v">22</div><div class="fm-bar"><div class="fm-fill" style="height:100%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Jun</div></div>
+  <div class="fm"><div class="fm-v">14</div><div class="fm-bar"><div class="fm-fill" style="height:64%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Jul</div></div>
+  <div class="fm"><div class="fm-v">10</div><div class="fm-bar"><div class="fm-fill" style="height:45%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Aoû</div></div>
+  <div class="fm"><div class="fm-v">19</div><div class="fm-bar"><div class="fm-fill" style="height:86%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Sep</div></div>
+  <div class="fm"><div class="fm-v">16</div><div class="fm-bar"><div class="fm-fill" style="height:73%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Oct</div></div>
+  <div class="fm"><div class="fm-v">9</div><div class="fm-bar"><div class="fm-fill" style="height:41%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Nov</div></div>
+  <div class="fm"><div class="fm-v">6</div><div class="fm-bar"><div class="fm-fill" style="height:27%;background:var(--or-light);border:2px dashed var(--or)"></div></div><div class="fm-l">Déc</div></div>
+</div>
+<p style="font-size:12px;color:var(--gris);text-align:center;margin-top:8px">█ Réalisé · ┊ Prévision IA · Pics : <strong>Juin</strong> (22) et <strong>Septembre</strong> (19)</p>
+</div></div>
+</div></div>
+
+<!-- CRM PRÉDICTIF -->
+<div class="page-view" id="view-crm">
+<div class="page-header"><div class="ph-inner"><div class="ai-logo" style="background:linear-gradient(135deg,var(--rose),#d4728a)">🎯</div><div class="ph-info"><h1>CRM <em>Prédictif</em></h1><p>Anticipez les besoins, relancez au bon moment, fidélisez automatiquement</p></div><span class="ph-badge" style="background:var(--or-light);color:#92750c">5 actions à valider</span></div></div>
+<div class="container">
+<div class="grid-2">
+  <!-- Scoring -->
+  <div class="card"><div class="card-h"><h3>🔥 Scoring clients</h3><span class="card-badge">Temps réel</span></div><div class="card-b">
+    <div class="cs"><div class="cs-av cs-hot">JB</div><div class="cs-info"><div class="cs-name">Julie Bonnet</div><div class="cs-detail">Galerie expire J-5 · 3 visites hier</div></div><div class="cs-score"><div class="cs-v cv-h">92</div><div class="cs-l">Score</div></div><button class="cs-btn">Relancer</button></div>
+    <div class="cs"><div class="cs-av cs-hot">SM</div><div class="cs-info"><div class="cs-name">Sophie Mercier</div><div class="cs-detail">Séance J-12 · Passeport 4/5</div></div><div class="cs-score"><div class="cs-v cv-h">88</div><div class="cs-l">Score</div></div><button class="cs-btn">Upsell</button></div>
+    <div class="cs"><div class="cs-av cs-warm">MD</div><div class="cs-info"><div class="cs-name">Marie Delcourt</div><div class="cs-detail">Séance samedi · Parrainage actif</div></div><div class="cs-score"><div class="cs-v cv-w">74</div><div class="cs-l">Score</div></div><button class="cs-btn">Fidéliser</button></div>
+    <div class="cs"><div class="cs-av cs-warm">LF</div><div class="cs-info"><div class="cs-name">Léa Fournier</div><div class="cs-detail">Dernière séance il y a 8 mois</div></div><div class="cs-score"><div class="cs-v cv-w">61</div><div class="cs-l">Score</div></div><button class="cs-btn">Réactiver</button></div>
+    <div class="cs"><div class="cs-av cs-cold">ND</div><div class="cs-info"><div class="cs-name">Nathalie Durand</div><div class="cs-detail">4 Saisons terminé · Pas renouvelé</div></div><div class="cs-score"><div class="cs-v cv-c">35</div><div class="cs-l">Score</div></div><button class="cs-btn">Réactiver</button></div>
+  </div></div>
+
+  <!-- Triggers -->
+  <div class="card"><div class="card-h"><h3>⚡ Relances automatiques</h3><span class="card-badge">5 prêtes</span></div><div class="card-b">
+    <div class="tr"><div class="tr-icon tri-exp">⏰</div><div class="tr-content"><div class="tr-title">Galerie expire bientôt</div><div class="tr-client">Julie Bonnet · J-5</div><div class="tr-msg">« Julie, vos souvenirs vous attendent 🌸 Votre galerie est accessible encore 5 jours. Pensez à télécharger vos favoris ! »</div><div class="tr-btns"><button class="tb-send">📧 Envoyer</button><button class="tb-edit">✏️ Modifier</button><button class="tb-skip">Ignorer</button></div></div></div>
+    <div class="tr"><div class="tr-icon tri-loy">🏇</div><div class="tr-content"><div class="tr-title">Passeport Équestre — 1 tampon restant</div><div class="tr-client">Sophie Mercier · 4/5</div><div class="tr-msg">« Sophie, plus qu'une séance pour votre tirage grand format offert ! Réservez votre 5ème séance 🐴✨ »</div><div class="tr-btns"><button class="tb-send">📧 Envoyer</button><button class="tb-edit">✏️ Modifier</button><button class="tb-skip">Ignorer</button></div></div></div>
+    <div class="tr"><div class="tr-icon tri-bday">🎂</div><div class="tr-content"><div class="tr-title">Anniversaire séance — 1 an</div><div class="tr-client">Famille Rousseau · Mars 2025</div><div class="tr-msg">« Un an déjà ! Les enfants ont tellement grandi 🌱 Et si on capturait cette étape ? -10% avec FIDELE10 »</div><div class="tr-btns"><button class="tb-send">📧 Envoyer</button><button class="tb-edit">✏️ Modifier</button><button class="tb-skip">Ignorer</button></div></div></div>
+    <div class="tr"><div class="tr-icon tri-react">💤</div><div class="tr-content"><div class="tr-title">Réactivation client inactif — 8 mois</div><div class="tr-client">Léa Fournier · Dernière séance juil. 2025</div><div class="tr-msg">« Léa, l'Heure Dorée de printemps est magique 🌅 Mini-session dispo le 15 mars à 75€ ! »</div><div class="tr-btns"><button class="tb-send">📧 Envoyer</button><button class="tb-edit">✏️ Modifier</button><button class="tb-skip">Ignorer</button></div></div></div>
+    <div class="tr"><div class="tr-icon tri-up">🔄</div><div class="tr-content"><div class="tr-title">Renouvellement 4 Saisons</div><div class="tr-client">Nathalie Durand · Abonnement terminé</div><div class="tr-msg">« Nathalie, renouvelez votre abonnement 4 Saisons et recevez un album offert en cadeau de fidélité ! 📖🎁 »</div><div class="tr-btns"><button class="tb-send">📧 Envoyer</button><button class="tb-edit">✏️ Modifier</button><button class="tb-skip">Ignorer</button></div></div></div>
+  </div></div>
+</div>
+
+<!-- Pipeline -->
+<div class="card"><div class="card-h"><h3>📊 Pipeline client</h3><span class="card-badge">Vue cycle de vie</span></div><div class="card-b">
+<div class="pipeline">
+  <div class="pipe-col"><div class="pipe-h">Prospect <div class="pipe-n">8</div></div><div class="pipe-card"><div class="pc-name">Emma L.</div><div class="pc-d">Équestre · Score 87</div><div class="pc-v">280€</div></div><div class="pipe-card"><div class="pc-name">Lucas M.</div><div class="pc-d">Famille · Score 72</div><div class="pc-v">150€</div></div></div>
+  <div class="pipe-col"><div class="pipe-h">Réservé <div class="pipe-n">4</div></div><div class="pipe-card"><div class="pc-name">Sophie Mercier</div><div class="pc-d">Famille · 14 mars</div><div class="pc-v">315€</div></div><div class="pipe-card"><div class="pc-name">Marie Delcourt</div><div class="pc-d">Équestre · 7 mars</div><div class="pc-v">280€</div></div></div>
+  <div class="pipe-col"><div class="pipe-h">En cours <div class="pipe-n">3</div></div><div class="pipe-card"><div class="pc-name">Julie Bonnet</div><div class="pc-d">Galerie livrée · J-5</div><div class="pc-v">150€ + tirages</div></div></div>
+  <div class="pipe-col"><div class="pipe-h">Fidélisé <div class="pipe-n">12</div></div><div class="pipe-card"><div class="pc-name">Fam. Rousseau</div><div class="pc-d">2 séances · Parrain actif</div><div class="pc-v">560€ LTV</div></div><div class="pipe-card"><div class="pc-name">N. Durand</div><div class="pc-d">4 Saisons · À renouveler</div><div class="pc-v">650€ LTV</div></div></div>
+</div>
+</div></div>
+</div></div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

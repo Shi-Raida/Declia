@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramètres Avancés — Fleur de Lumière Admin</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+.param-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--fl-border); margin-bottom: var(--fl-space-xl); }
+.param-tab { padding: 10px 20px; font-size: 0.875rem; font-weight: 500; color: var(--fl-warm-gray); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all var(--fl-transition); text-decoration: none; display: inline-block; }
+.param-tab.active { color: var(--fl-rose); border-bottom-color: var(--fl-rose); }
+.settings-section { background: var(--fl-bg-card); border: 1px solid var(--fl-border); border-radius: var(--fl-radius); padding: var(--fl-space-lg); margin-bottom: var(--fl-space-lg); }
+.settings-section-title { font-family: var(--fl-font-heading); font-size: 1.1rem; font-weight: 600; color: var(--fl-charcoal); margin-bottom: var(--fl-space-lg); padding-bottom: var(--fl-space-sm); border-bottom: 1px solid var(--fl-border); display: flex; align-items: center; gap: 8px; }
+.notif-row { display: flex; align-items: center; gap: var(--fl-space-md); padding: 12px 0; border-bottom: 1px solid var(--fl-border); }
+.notif-row:last-child { border-bottom: none; }
+.notif-info { flex: 1; }
+.notif-name { font-size: 0.875rem; font-weight: 500; color: var(--fl-charcoal); }
+.notif-desc { font-size: 0.8125rem; color: var(--fl-warm-gray); }
+.notif-channels { display: flex; gap: var(--fl-space-sm); align-items: center; }
+.channel-toggle { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--fl-warm-gray); }
+.integration-row { display: flex; align-items: center; gap: var(--fl-space-md); padding: 14px; border: 1px solid var(--fl-border); border-radius: var(--fl-radius-sm); margin-bottom: var(--fl-space-sm); }
+.integration-icon { width: 40px; height: 40px; border-radius: var(--fl-radius-sm); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+.integration-info { flex: 1; }
+.integration-name { font-size: 0.875rem; font-weight: 600; color: var(--fl-charcoal); }
+.integration-desc { font-size: 0.75rem; color: var(--fl-warm-gray); }
+.device-row { display: flex; align-items: center; gap: var(--fl-space-md); padding: 10px 0; border-bottom: 1px solid var(--fl-border); }
+.device-row:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Paramètres — Avancés</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;cursor:pointer;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+
+      <div class="fl-page-header">
+        <h1 class="fl-page-title">Paramètres avancés</h1>
+        <p class="fl-page-subtitle">Notifications, intégrations et sécurité du compte</p>
+      </div>
+
+      <!-- Tab nav -->
+      <div class="param-tabs">
+        <a href="03-parametres-1.html" class="param-tab">Général</a>
+        <button class="param-tab active">Notifications</button>
+        <button class="param-tab" onclick="this.parentElement.querySelectorAll('.param-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Intégrations</button>
+        <button class="param-tab" onclick="this.parentElement.querySelectorAll('.param-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active')">Sécurité</button>
+      </div>
+
+      <!-- Notifications -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-rose)" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Notifications — Événements
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto auto;gap:var(--fl-space-sm);font-size:0.75rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;letter-spacing:0.8px;padding-bottom:8px;border-bottom:1px solid var(--fl-border);margin-bottom:4px;">
+          <span>Événement</span>
+          <span>Email</span>
+          <span>SMS</span>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Nouvelle réservation</div>
+            <div class="notif-desc">Quand un client réserve une séance en ligne</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle on"></div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Paiement reçu</div>
+            <div class="notif-desc">Acompte ou solde encaissé via Stripe</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle"></div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Message client</div>
+            <div class="notif-desc">Nouveau message via le formulaire ou le chatbot</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle on"></div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Rappel de séance (J-1)</div>
+            <div class="notif-desc">Rappel automatique la veille de chaque séance</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle on"></div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Galerie expire bientôt</div>
+            <div class="notif-desc">Alerte quand une galerie expire dans moins de 7 jours</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle"></div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Nouvel avis Google</div>
+            <div class="notif-desc">Alerte à chaque nouvel avis reçu</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle"></div>
+        </div>
+        <div class="notif-row">
+          <div class="notif-info">
+            <div class="notif-name">Rapport hebdomadaire</div>
+            <div class="notif-desc">Résumé des activités de la semaine chaque lundi</div>
+          </div>
+          <div class="fl-toggle on"></div>
+          <div class="fl-toggle"></div>
+        </div>
+      </div>
+
+      <!-- Integrations -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-rose)" stroke-width="1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Applications connectées
+        </div>
+        <div class="integration-row">
+          <div class="integration-icon" style="background:#fff;border:1px solid var(--fl-border);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4285F4" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="integration-info">
+            <div class="integration-name">Google Calendar</div>
+            <div class="integration-desc">Synchro bi-directionnelle des séances et rappels</div>
+          </div>
+          <span class="fl-badge fl-badge-success">Connecté</span>
+          <button class="fl-btn fl-btn-ghost fl-btn-sm">Configurer</button>
+        </div>
+        <div class="integration-row">
+          <div class="integration-icon" style="background:linear-gradient(135deg,#833AB4,#E1306C,#F77737);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </div>
+          <div class="integration-info">
+            <div class="integration-name">Instagram Business</div>
+            <div class="integration-desc">Publication IA directe · @fleurdelumiere.photo</div>
+          </div>
+          <span class="fl-badge fl-badge-success">Connecté</span>
+          <button class="fl-btn fl-btn-ghost fl-btn-sm">Configurer</button>
+        </div>
+        <div class="integration-row">
+          <div class="integration-icon" style="background:#635BFF;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div class="integration-info">
+            <div class="integration-name">Stripe</div>
+            <div class="integration-desc">Paiements CB — acomptes, soldes, boutique</div>
+          </div>
+          <span class="fl-badge fl-badge-success">Connecté</span>
+          <button class="fl-btn fl-btn-ghost fl-btn-sm">Configurer</button>
+        </div>
+        <div class="integration-row">
+          <div class="integration-icon" style="background:#FFE01B;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="integration-info">
+            <div class="integration-name">Mailchimp</div>
+            <div class="integration-desc">Email marketing et séquences automatisées</div>
+          </div>
+          <span class="fl-badge fl-badge-warning">Non connecté</span>
+          <button class="fl-btn fl-btn-primary fl-btn-sm">Connecter</button>
+        </div>
+        <div class="integration-row">
+          <div class="integration-icon" style="background:#1877F2;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </div>
+          <div class="integration-info">
+            <div class="integration-name">Facebook Page</div>
+            <div class="integration-desc">Publication auto, synchro avis, partage galeries</div>
+          </div>
+          <span class="fl-badge fl-badge-warning">Non connecté</span>
+          <button class="fl-btn fl-btn-primary fl-btn-sm">Connecter</button>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-rose)" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Sécurité du compte
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--fl-space-md);margin-bottom:var(--fl-space-lg);">
+          <div class="fl-form-group">
+            <label class="fl-label">Mot de passe actuel</label>
+            <input type="password" class="fl-input" placeholder="••••••••">
+          </div>
+          <div></div>
+          <div class="fl-form-group">
+            <label class="fl-label">Nouveau mot de passe</label>
+            <input type="password" class="fl-input" placeholder="••••••••">
+          </div>
+          <div class="fl-form-group">
+            <label class="fl-label">Confirmer le mot de passe</label>
+            <input type="password" class="fl-input" placeholder="••••••••">
+          </div>
+        </div>
+        <button class="fl-btn fl-btn-ghost fl-btn-sm fl-mb-lg">Changer le mot de passe</button>
+
+        <hr class="fl-divider">
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--fl-space-md);">
+          <div>
+            <div style="font-weight:600;font-size:0.875rem;">Authentification à deux facteurs (2FA)</div>
+            <div style="font-size:0.8125rem;color:var(--fl-warm-gray);">Sécurisez votre compte avec une vérification par SMS ou application</div>
+          </div>
+          <div class="fl-toggle"></div>
+        </div>
+
+        <hr class="fl-divider">
+
+        <h4 style="font-size:0.875rem;font-weight:600;margin-bottom:var(--fl-space-md);">Appareils connectés</h4>
+        <div class="device-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-warm-gray)" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <div style="flex:1;">
+            <div style="font-size:0.875rem;font-weight:500;">MacBook Pro — Chrome</div>
+            <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Parisot, France · Actif maintenant</div>
+          </div>
+          <span class="fl-badge fl-badge-success">Cet appareil</span>
+        </div>
+        <div class="device-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-warm-gray)" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <div style="flex:1;">
+            <div style="font-size:0.875rem;font-weight:500;">iPhone 15 — Safari</div>
+            <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Toulouse, France · Vu il y a 2h</div>
+          </div>
+          <button class="fl-btn fl-btn-ghost fl-btn-sm" style="color:var(--fl-error);">Déconnecter</button>
+        </div>
+        <div class="device-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-warm-gray)" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          <div style="flex:1;">
+            <div style="font-size:0.875rem;font-weight:500;">iPad — Safari</div>
+            <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Gaillac, France · Vu il y a 3 jours</div>
+          </div>
+          <button class="fl-btn fl-btn-ghost fl-btn-sm" style="color:var(--fl-error);">Déconnecter</button>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:var(--fl-space-sm);">
+        <button class="fl-btn fl-btn-ghost">Annuler</button>
+        <button class="fl-btn fl-btn-primary">Enregistrer</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

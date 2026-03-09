@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Album Proofing</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== SHELL E — Immersive Dark ===== */
+  body {
+    background: #1A1015;
+    color: rgba(255,255,255,0.85);
+    min-height: 100vh;
+  }
+
+  /* ===== TOP BAR ===== */
+  .alb-topbar {
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .alb-topbar-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+  }
+  .alb-topbar-logo span { color: var(--fl-rose); }
+  .alb-topbar-center {
+    text-align: center;
+  }
+  .alb-topbar-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+  .alb-topbar-sub {
+    font-size: 0.6875rem;
+    color: rgba(255,255,255,0.35);
+  }
+  .alb-topbar-right {
+    display: flex;
+    gap: 8px;
+  }
+  .alb-top-btn {
+    padding: 7px 16px;
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: var(--fl-font-body);
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.55);
+    transition: all var(--fl-transition);
+  }
+  .alb-top-btn:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+  .alb-top-btn.primary { background: var(--fl-rose); color: #fff; }
+  .alb-top-btn.primary:hover { background: var(--fl-rose-hover); }
+
+  /* ===== PROGRESS ===== */
+  .alb-progress {
+    max-width: 720px;
+    margin: 16px auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .alb-prog-text {
+    font-size: 0.6875rem;
+    color: rgba(255,255,255,0.35);
+    white-space: nowrap;
+  }
+  .alb-prog-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .alb-prog-fill {
+    height: 100%;
+    width: 25%;
+    background: linear-gradient(90deg, var(--fl-sauge), var(--fl-rose));
+    border-radius: 2px;
+  }
+
+  /* ===== ALBUM SPREAD ===== */
+  .alb-spread-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 24px;
+  }
+
+  /* Page counter */
+  .alb-page-nav-label {
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--fl-space-md);
+  }
+  .alb-nav-arrow {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: all var(--fl-transition);
+  }
+  .alb-nav-arrow:hover { background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.8); }
+
+  /* Double page spread */
+  .alb-spread {
+    display: flex;
+    gap: 3px;
+    margin-bottom: var(--fl-space-lg);
+    border-radius: var(--fl-radius);
+    overflow: hidden;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.55);
+    perspective: 1200px;
+  }
+
+  .alb-page {
+    flex: 1;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .alb-page.left {
+    border-radius: 3px 0 0 3px;
+    box-shadow: inset -2px 0 8px rgba(0,0,0,0.06);
+  }
+  .alb-page.right {
+    border-radius: 0 3px 3px 0;
+    box-shadow: inset 2px 0 8px rgba(0,0,0,0.06);
+  }
+
+  /* Page layout — left: full bleed */
+  .alb-page-full {
+    width: 100%;
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    color: rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, #C89878, #D4A888, #B88868);
+  }
+
+  /* Page layout — right: 2 photos + caption */
+  .alb-page-grid {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    min-height: 340px;
+  }
+  .alb-page-photo-top {
+    flex: 1.4;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    color: rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, #D4B8A0, #C0A088);
+  }
+  .alb-page-photo-bottom {
+    flex: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    color: rgba(255,255,255,0.2);
+    background: linear-gradient(135deg, #C8D0A8, #A8C090);
+  }
+  .alb-page-caption {
+    font-family: var(--fl-font-heading);
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #8A7A7E;
+    text-align: center;
+    padding: 4px 0;
+    line-height: 1.4;
+  }
+
+  /* Status badges on pages */
+  .alb-page-status {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+    backdrop-filter: blur(6px);
+    z-index: 2;
+  }
+  .status-validated { background: rgba(76,175,124,0.85); color: #fff; }
+  .status-pending { background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); }
+  .alb-page-num {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5625rem;
+    color: #B0A0A8;
+    background: rgba(253,251,252,0.9);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* ===== PAGE THUMBNAIL STRIP ===== */
+  .alb-strip-wrap {
+    max-width: 860px;
+    margin: 0 auto 32px;
+    padding: 0 24px;
+  }
+  .alb-strip-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 10px;
+  }
+  .alb-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .alb-strip::-webkit-scrollbar { height: 3px; }
+  .alb-strip::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+  .alb-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+  .alb-strip-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .alb-strip-pair {
+    display: flex;
+    gap: 2px;
+    cursor: pointer;
+  }
+  .alb-strip-page {
+    width: 30px;
+    height: 40px;
+    border-radius: 2px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: border-color var(--fl-transition);
+  }
+  .alb-strip-page.current { border-color: var(--fl-rose); }
+  .alb-strip-page-inner {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .alb-strip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .dot-ok { background: var(--fl-success); }
+  .dot-warn { background: var(--fl-warning); }
+  .dot-pend { background: rgba(255,255,255,0.15); }
+  .dot-curr { background: var(--fl-rose); }
+  .alb-strip-num {
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.25);
+  }
+
+  /* ===== EDIT REQUEST FORM ===== */
+  .alb-comment-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 32px;
+  }
+  .alb-comment-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--fl-radius-lg);
+    padding: 20px 24px;
+  }
+  .alb-comment-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: var(--fl-space-md);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alb-stats-row {
+    display: flex;
+    gap: var(--fl-space-xl);
+    margin-bottom: var(--fl-space-lg);
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: var(--fl-radius);
+  }
+  .alb-stat {
+    text-align: center;
+  }
+  .alb-stat-val {
+    font-family: var(--fl-font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fl-or);
+    line-height: 1;
+  }
+  .alb-stat-label {
+    font-size: 0.6875rem;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 3px;
+  }
+
+  .alb-textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--fl-radius-sm);
+    padding: 12px 14px;
+    font-family: var(--fl-font-body);
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.7);
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: var(--fl-space-md);
+    outline: none;
+    transition: border-color var(--fl-transition);
+  }
+  .alb-textarea:focus { border-color: var(--fl-rose); }
+  .alb-textarea::placeholder { color: rgba(255,255,255,0.2); }
+
+  /* ===== ACTION BAR ===== */
+  .alb-action-bar {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .alb-action-btn {
+    padding: 12px 32px;
+    border-radius: var(--fl-radius);
+    font-family: var(--fl-font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all var(--fl-transition);
+  }
+  .alb-action-btn.approve {
+    background: var(--fl-success);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(76,175,124,0.3);
+  }
+  .alb-action-btn.approve:hover {
+    background: #3D9966;
+    transform: translateY(-1px);
+  }
+  .alb-action-btn.request {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.10);
+  }
+  .alb-action-btn.request:hover {
+    background: rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.85);
+  }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="alb-topbar">
+  <div class="alb-topbar-logo">Fleur de <span>Lumière</span></div>
+  <div class="alb-topbar-center">
+    <div class="alb-topbar-title">Aperçu Album — Page 3/12</div>
+    <div class="alb-topbar-sub">Format 30×30 cm · 24 pages · Version 1</div>
+  </div>
+  <div class="alb-topbar-right">
+    <button class="alb-top-btn">Résumé</button>
+    <button class="alb-top-btn primary">Valider l'album</button>
+  </div>
+</header>
+
+<!-- Progress -->
+<div class="alb-progress">
+  <div class="alb-prog-text">3/12 pages validées</div>
+  <div class="alb-prog-bar"><div class="alb-prog-fill"></div></div>
+  <div class="alb-prog-text">25%</div>
+</div>
+
+<!-- Album Spread -->
+<div class="alb-spread-wrap">
+  <div class="alb-page-nav-label">
+    <div class="alb-nav-arrow">←</div>
+    Pages 3 — 4
+    <div class="alb-nav-arrow">→</div>
+  </div>
+
+  <div class="alb-spread">
+    <!-- Left page — full bleed photo -->
+    <div class="alb-page left">
+      <div class="alb-page-full">Photo pleine page — Portrait famille</div>
+      <div class="alb-page-status status-validated">✓ Validée</div>
+      <div class="alb-page-num">Page 3</div>
+    </div>
+
+    <!-- Right page — 2 photos + caption -->
+    <div class="alb-page right">
+      <div class="alb-page-grid">
+        <div class="alb-page-photo-top">Photo 1 — Léa dans les feuilles</div>
+        <div class="alb-page-photo-bottom">Photo 2 — Famille complète</div>
+        <div class="alb-page-caption">« Un moment de douceur au parc, en lumière d'automne »</div>
+      </div>
+      <div class="alb-page-status status-pending">En attente</div>
+      <div class="alb-page-num">Page 4</div>
+    </div>
+  </div>
+</div>
+
+<!-- Page thumbnail strip -->
+<div class="alb-strip-wrap">
+  <div class="alb-strip-label">12 planches double-page</div>
+  <div class="alb-strip">
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#C89878,#D4A888);"></div></div>
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-ok"></div>
+      <div class="alb-strip-num">P1-2</div>
+    </div>
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#D4B0A0,#C0A090);"></div></div>
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-ok"></div>
+      <div class="alb-strip-num">P2</div>
+    </div>
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page current"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#C0A888,#B09878);"></div></div>
+        <div class="alb-strip-page current"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-curr"></div>
+      <div class="alb-strip-num">P3-4</div>
+    </div>
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#D0C8A8,#C0B898);"></div></div>
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-pend"></div>
+      <div class="alb-strip-num">P5-6</div>
+    </div>
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#C8A090,#B89080);"></div></div>
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-pend"></div>
+      <div class="alb-strip-num">P7-8</div>
+    </div>
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#B8C8D0,#A0B8C8);"></div></div>
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-pend"></div>
+      <div class="alb-strip-num">P9-10</div>
+    </div>
+    <div class="alb-strip-item">
+      <div class="alb-strip-pair">
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:linear-gradient(135deg,#D4C0B0,#C4B0A0);"></div></div>
+        <div class="alb-strip-page"><div class="alb-strip-page-inner" style="background:#fff;"></div></div>
+      </div>
+      <div class="alb-strip-dot dot-pend"></div>
+      <div class="alb-strip-num">P11-12</div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit request + stats -->
+<div class="alb-comment-wrap">
+  <div class="alb-comment-card">
+    <div class="alb-comment-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Demander une modification sur ces pages
+    </div>
+
+    <div class="alb-stats-row">
+      <div class="alb-stat">
+        <div class="alb-stat-val">24</div>
+        <div class="alb-stat-label">Pages totales</div>
+      </div>
+      <div class="alb-stat">
+        <div class="alb-stat-val">45</div>
+        <div class="alb-stat-label">Photos incluses</div>
+      </div>
+      <div class="alb-stat">
+        <div class="alb-stat-val">3</div>
+        <div class="alb-stat-label">Validées</div>
+      </div>
+      <div class="alb-stat">
+        <div class="alb-stat-val">9</div>
+        <div class="alb-stat-label">En attente</div>
+      </div>
+    </div>
+
+    <textarea class="alb-textarea" placeholder="Décrivez la modification souhaitée pour ces pages… (ex : remplacer la photo en bas à droite par la n°42, agrandir la légende…)"></textarea>
+
+    <div style="display:flex;gap:8px;">
+      <button style="padding:9px 18px;border-radius:var(--fl-radius-sm);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.45);font-family:var(--fl-font-body);font-size:0.8125rem;cursor:pointer;">Annuler</button>
+      <button class="fl-btn fl-btn-primary fl-btn-sm" style="background:var(--fl-warning);box-shadow:none;">Envoyer la demande</button>
+    </div>
+  </div>
+</div>
+
+<!-- Action buttons -->
+<div class="alb-action-bar">
+  <button class="alb-action-btn request">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Demander des modifications
+  </button>
+  <button class="alb-action-btn approve">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    Approuver ces pages
+  </button>
+</div>
+
+</body>
+</html>

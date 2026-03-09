@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Avant / Après Retouche</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== SHELL E — Immersive Dark ===== */
+  body {
+    background: #1A1015;
+    color: rgba(255,255,255,0.85);
+    min-height: 100vh;
+  }
+
+  /* ===== TOP BAR ===== */
+  .ba-topbar {
+    background: rgba(26,16,21,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .ba-topbar-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+  }
+  .ba-topbar-logo span { color: var(--fl-rose); }
+  .ba-topbar-modes {
+    display: flex;
+    gap: 6px;
+  }
+  .ba-mode-btn {
+    padding: 7px 16px;
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    font-family: var(--fl-font-body);
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5);
+    transition: all var(--fl-transition);
+  }
+  .ba-mode-btn:hover { background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.8); }
+  .ba-mode-btn.active { background: var(--fl-rose); color: #fff; }
+
+  /* ===== MAIN CONTENT ===== */
+  .ba-main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* Header */
+  .ba-header {
+    text-align: center;
+    margin-bottom: var(--fl-space-2xl);
+  }
+  .ba-header-title {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+    margin-bottom: var(--fl-space-sm);
+  }
+  .ba-header-sub {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ===== MAIN COMPARISON SLIDER ===== */
+  .ba-slider-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/2;
+    border-radius: var(--fl-radius-lg);
+    overflow: hidden;
+    cursor: col-resize;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+    margin-bottom: var(--fl-space-xl);
+    user-select: none;
+  }
+
+  /* AFTER layer — full background */
+  .ba-after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #C89878, #D4A888, #B88868, #C89070, #D4A878);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.25);
+    font-size: 0.875rem;
+  }
+
+  /* BEFORE layer — clipped on right */
+  .ba-before {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #7A7060, #8A8070, #706858, #807868, #6A6050);
+    clip-path: inset(0 40% 0 0);
+    transition: clip-path 0.05s linear;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.2);
+    font-size: 0.875rem;
+  }
+
+  /* Labels */
+  .ba-label {
+    position: absolute;
+    top: 16px;
+    padding: 5px 14px;
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    z-index: 8;
+    backdrop-filter: blur(6px);
+  }
+  .ba-label.avant {
+    left: 16px;
+    background: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.75);
+  }
+  .ba-label.apres {
+    right: 16px;
+    background: rgba(194,114,126,0.85);
+    color: #fff;
+  }
+
+  /* Slider divider line */
+  .ba-divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 60%;
+    width: 2px;
+    background: rgba(255,255,255,0.9);
+    z-index: 10;
+    box-shadow: 0 0 16px rgba(0,0,0,0.4);
+    pointer-events: none;
+  }
+
+  /* Drag handle */
+  .ba-handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fl-prune);
+    font-size: 1rem;
+    font-weight: 700;
+    z-index: 11;
+    cursor: col-resize;
+    letter-spacing: -1px;
+  }
+
+  /* Range input overlay for interaction */
+  .ba-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: col-resize;
+    z-index: 20;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* ===== PHOTO INFO ===== */
+  .ba-photo-info {
+    text-align: center;
+    margin-bottom: var(--fl-space-xl);
+  }
+  .ba-photo-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 4px;
+  }
+  .ba-photo-sub {
+    font-size: 0.8125rem;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ===== RETOUCHING INFO ===== */
+  .ba-retouche {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--fl-radius-lg);
+    padding: 20px 24px;
+    margin-bottom: var(--fl-space-xl);
+  }
+  .ba-retouche-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ba-retouche-style {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    font-style: italic;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 12px;
+  }
+  .ba-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .ba-tag {
+    padding: 5px 12px;
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* ===== THUMBNAIL GRID ===== */
+  .ba-section-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: var(--fl-space-md);
+  }
+  .ba-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .ba-pair {
+    border-radius: var(--fl-radius);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.06);
+    transition: border-color var(--fl-transition);
+  }
+  .ba-pair:hover { border-color: rgba(194,114,126,0.4); }
+  .ba-pair.active { border-color: var(--fl-rose); }
+
+  .ba-pair-top {
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .ba-pair-label {
+    position: absolute;
+    bottom: 5px;
+    left: 6px;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.7);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .ba-pair-bottom {
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Pair photo colors */
+  .bp-before-1 { background: linear-gradient(135deg, #8A7A68, #7A6A58); }
+  .bp-after-1  { background: linear-gradient(135deg, #D4A888, #C89878); }
+  .bp-before-2 { background: linear-gradient(135deg, #888080, #787070); }
+  .bp-after-2  { background: linear-gradient(135deg, #C8A090, #B89080); }
+  .bp-before-3 { background: linear-gradient(135deg, #908880, #807870); }
+  .bp-after-3  { background: linear-gradient(135deg, #D0B8A0, #C0A890); }
+  .bp-before-4 { background: linear-gradient(135deg, #786870, #685860); }
+  .bp-after-4  { background: linear-gradient(135deg, #C0A0B0, #B090A0); }
+</style>
+</head>
+<body>
+
+<!-- Top navigation -->
+<header class="ba-topbar">
+  <div class="ba-topbar-logo">Fleur de <span>Lumière</span></div>
+  <div class="ba-topbar-modes">
+    <button class="ba-mode-btn">Galerie</button>
+    <button class="ba-mode-btn active">Avant / Après</button>
+    <button class="ba-mode-btn">Favoris (8)</button>
+  </div>
+</header>
+
+<main class="ba-main">
+
+  <!-- Header -->
+  <div class="ba-header">
+    <div class="ba-header-title">Avant / Après Retouche</div>
+    <div class="ba-header-sub">Faites glisser le curseur pour comparer l'original et la version retouchée</div>
+  </div>
+
+  <!-- Main slider comparison -->
+  <div class="ba-slider-wrap" id="sliderWrap">
+    <!-- After (warm processed — full background) -->
+    <div class="ba-after">Version retouchée — tons chauds Golden Hour</div>
+
+    <!-- Before (cool raw — clipped left portion) -->
+    <div class="ba-before" id="beforeLayer">Version originale — RAW développée</div>
+
+    <!-- Labels -->
+    <div class="ba-label avant">Avant</div>
+    <div class="ba-label apres">Après</div>
+
+    <!-- Divider + handle -->
+    <div class="ba-divider" id="dividerLine">
+      <div class="ba-handle">⟷</div>
+    </div>
+
+    <!-- Range input for drag interaction -->
+    <input type="range" class="ba-range" id="sliderInput" min="0" max="100" value="60">
+  </div>
+
+  <!-- Photo info -->
+  <div class="ba-photo-info">
+    <div class="ba-photo-title">Photo 12/30 — Portrait famille sous le grand chêne</div>
+    <div class="ba-photo-sub">Séance Famille — Parc de la Maourine · 22 février 2026</div>
+  </div>
+
+  <!-- Retouching description -->
+  <div class="ba-retouche">
+    <div class="ba-retouche-title">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Retouches appliquées
+    </div>
+    <div class="ba-retouche-style">Retouche douce, tons chauds, style naturel</div>
+    <div class="ba-tags">
+      <div class="ba-tag">Balance des blancs corrigée</div>
+      <div class="ba-tag">Tons chauds Golden Hour</div>
+      <div class="ba-tag">Contraste doux</div>
+      <div class="ba-tag">Lissage peau subtil</div>
+      <div class="ba-tag">Netteté renforcée</div>
+      <div class="ba-tag">Suppression éléments parasites</div>
+    </div>
+  </div>
+
+  <!-- Thumbnail grid of other before/after pairs -->
+  <div class="ba-section-label">4 autres comparaisons</div>
+  <div class="ba-grid">
+
+    <div class="ba-pair">
+      <div class="ba-pair-top bp-before-1">
+        <div class="ba-pair-label">Avant</div>
+      </div>
+      <div class="ba-pair-bottom bp-after-1">
+        <div class="ba-pair-label" style="background:rgba(194,114,126,0.7);color:#fff;">Après</div>
+      </div>
+    </div>
+
+    <div class="ba-pair active">
+      <div class="ba-pair-top bp-before-2">
+        <div class="ba-pair-label">Avant</div>
+      </div>
+      <div class="ba-pair-bottom bp-after-2">
+        <div class="ba-pair-label" style="background:rgba(194,114,126,0.7);color:#fff;">Après</div>
+      </div>
+    </div>
+
+    <div class="ba-pair">
+      <div class="ba-pair-top bp-before-3">
+        <div class="ba-pair-label">Avant</div>
+      </div>
+      <div class="ba-pair-bottom bp-after-3">
+        <div class="ba-pair-label" style="background:rgba(194,114,126,0.7);color:#fff;">Après</div>
+      </div>
+    </div>
+
+    <div class="ba-pair">
+      <div class="ba-pair-top bp-before-4">
+        <div class="ba-pair-label">Avant</div>
+      </div>
+      <div class="ba-pair-bottom bp-after-4">
+        <div class="ba-pair-label" style="background:rgba(194,114,126,0.7);color:#fff;">Après</div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  const slider = document.getElementById('sliderInput');
+  const beforeLayer = document.getElementById('beforeLayer');
+  const dividerLine = document.getElementById('dividerLine');
+
+  function updateSlider(value) {
+    const pct = 100 - value;
+    beforeLayer.style.clipPath = `inset(0 ${pct}% 0 0)`;
+    dividerLine.style.left = value + '%';
+  }
+
+  slider.addEventListener('input', () => {
+    updateSlider(slider.value);
+  });
+
+  // Initialize
+  updateSlider(60);
+</script>
+</body>
+</html>

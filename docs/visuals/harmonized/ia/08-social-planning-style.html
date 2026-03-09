@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planning Social &amp; Style — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .tabs { display: flex; gap: 4px; background: var(--fl-bg-alt); border-radius: var(--fl-radius); padding: 4px; margin-bottom: var(--fl-space-xl); width: fit-content; }
+  .tab { padding: 8px 20px; border-radius: var(--fl-radius-sm); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all var(--fl-transition); color: var(--fl-warm-gray); border: none; background: transparent; font-family: var(--fl-font-body); }
+  .tab.on { background: var(--fl-bg-card); color: var(--fl-prune); box-shadow: var(--fl-shadow-sm); font-weight: 600; }
+  .tab-panel { display: none; }
+  .tab-panel.on { display: block; }
+  .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 16px; }
+  .cal-header { font-size: 0.6875rem; font-weight: 600; color: var(--fl-warm-gray); text-align: center; padding: 6px 4px; }
+  .cal-day { border-radius: var(--fl-radius-sm); padding: 8px 6px; min-height: 80px; font-size: 0.6875rem; border: 1px solid var(--fl-border); background: var(--fl-bg-card); transition: all var(--fl-transition); cursor: pointer; }
+  .cal-day:hover { border-color: var(--fl-rose-light); box-shadow: var(--fl-shadow-sm); }
+  .cal-day.today { border-color: var(--fl-rose); background: var(--fl-rose-pale); }
+  .cal-day-num { font-weight: 600; color: var(--fl-charcoal); margin-bottom: 4px; font-size: 0.75rem; }
+  .cal-post { padding: 3px 5px; border-radius: 4px; font-size: 0.5625rem; margin-bottom: 2px; font-weight: 500; line-height: 1.2; display: flex; align-items: center; gap: 3px; }
+  .cal-post.scheduled { background: var(--fl-success-light); color: var(--fl-success); }
+  .cal-post.draft { background: var(--fl-warning-light); color: var(--fl-warning); }
+  .cal-post.suggested { background: rgba(91,143,168,0.1); color: var(--fl-info); }
+  .platform-icon { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .pi-insta { background: linear-gradient(135deg,#833AB4,#E1306C); }
+  .pi-fb { background: #1877F2; }
+  .pi-tiktok { background: #000; }
+  .caption-input-row { display: flex; gap: 12px; margin-bottom: 16px; }
+  .caption-options { display: flex; flex-direction: column; gap: 10px; }
+  .caption-opt { background: var(--fl-bg-alt); border: 1.5px solid var(--fl-border); border-radius: var(--fl-radius-sm); padding: 12px 14px; font-size: 0.8125rem; color: var(--fl-charcoal); line-height: 1.6; cursor: pointer; transition: border-color var(--fl-transition); }
+  .caption-opt:hover { border-color: var(--fl-rose); }
+  .caption-opt.selected { border-color: var(--fl-sauge); background: var(--fl-sauge-light); }
+  .best-times { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--fl-space-md); margin-bottom: var(--fl-space-xl); }
+  .time-card { background: var(--fl-bg-card); border: 1px solid var(--fl-border); border-radius: var(--fl-radius); padding: var(--fl-space-md); text-align: center; }
+  .time-platform { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .time-val { font-family: var(--fl-font-heading); font-size: 1.25rem; font-weight: 700; color: var(--fl-prune); }
+  .time-sub { font-size: 0.6875rem; color: var(--fl-warm-gray); margin-top: 2px; }
+  .feed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: var(--fl-space-lg); }
+  .feed-thumb { aspect-ratio: 1; border-radius: 4px; overflow: hidden; }
+  .consistency-row { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: var(--fl-bg-card); border: 1px solid var(--fl-border); border-radius: var(--fl-radius); margin-bottom: var(--fl-space-lg); }
+  .consist-score { width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--fl-success); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .consist-val { font-family: var(--fl-font-heading); font-size: 1.5rem; font-weight: 700; color: var(--fl-prune); }
+  .color-palette { display: flex; gap: 6px; margin-bottom: var(--fl-space-md); }
+  .palette-swatch { width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: var(--fl-shadow-sm); }
+  .anomaly-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--fl-bg-alt); border-radius: var(--fl-radius-sm); margin-bottom: 8px; }
+  .anomaly-thumb { width: 48px; height: 36px; border-radius: 6px; flex-shrink: 0; }
+  .schedule-form { display: flex; gap: 10px; align-items: flex-end; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+    <div class="fl-sidebar-section">Général</div>
+    <a href="../admin/01-dashboard.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="../admin/02-facturation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      Facturation
+    </a>
+    <a href="../admin/19-statistiques.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="01-hub-ia.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="02-intel-crm.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+    <a href="03-leads-social-tri.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      Leads &amp; Social
+    </a>
+    <a href="04-reconnaissance-faciale.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="17" y="1" width="6" height="6" rx="1"/></svg>
+      Recog. Faciale
+    </a>
+    <a href="05-lightroom.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Lightroom / C1
+    </a>
+    <a href="06-print-preview-ar.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+      Aperçu AR
+    </a>
+    <a href="07-smart-pricing-vault.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Smart Pricing
+    </a>
+    <a href="08-social-planning-style.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Planning Social
+    </a>
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="../admin/03-parametres-1.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="../admin/06-assistant-admin.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div><div class="fl-sidebar-footer-name">Capucine</div><div class="fl-sidebar-footer-role">Photographe · Admin</div></div>
+    </div>
+  </aside>
+
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>IA</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Planning Social &amp; Style</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header">
+        <h1 class="fl-page-title">Planning Social &amp; Style</h1>
+        <p class="fl-page-subtitle">Calendrier éditorial IA · Générateur de légendes · Cohérence de feed</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab on" onclick="switchTab('planning',this)">Planning Social</button>
+        <button class="tab" onclick="switchTab('style',this)">Style Consistency</button>
+      </div>
+
+      <!-- PLANNING SOCIAL -->
+      <div class="tab-panel on" id="tab-planning">
+
+        <!-- Calendar -->
+        <div class="fl-card" style="margin-bottom:var(--fl-space-xl);">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--fl-border);display:flex;align-items:center;justify-content:space-between;">
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Calendrier éditorial — Mars 2026</h3>
+            <div style="display:flex;gap:8px;">
+              <span class="fl-badge fl-badge-success" style="font-size:0.6875rem;">2 programmés</span>
+              <span class="fl-badge fl-badge-info" style="font-size:0.6875rem;">8 suggérés IA</span>
+              <button class="fl-btn fl-btn-primary fl-btn-sm">Générer le mois</button>
+            </div>
+          </div>
+          <div style="padding:14px 20px;">
+            <div class="calendar-grid">
+              <div class="cal-header">Lun</div><div class="cal-header">Mar</div><div class="cal-header">Mer</div><div class="cal-header">Jeu</div><div class="cal-header">Ven</div><div class="cal-header">Sam</div><div class="cal-header">Dim</div>
+              <div class="cal-day"><div class="cal-day-num">3</div></div>
+              <div class="cal-day"><div class="cal-day-num">4</div><div class="cal-post suggested"><span class="platform-icon pi-insta"></span>Carrousel B/A</div></div>
+              <div class="cal-day today"><div class="cal-day-num">5</div><div class="cal-post draft"><span class="platform-icon pi-insta"></span>Story coulisses</div></div>
+              <div class="cal-day"><div class="cal-day-num">6</div></div>
+              <div class="cal-day"><div class="cal-day-num">7</div><div class="cal-post suggested"><span class="platform-icon pi-insta"></span>Famille Dupont</div></div>
+              <div class="cal-day"><div class="cal-day-num">8</div><div class="cal-post scheduled"><span class="platform-icon pi-fb"></span>Mini-sessions</div></div>
+              <div class="cal-day"><div class="cal-day-num">9</div></div>
+              <div class="cal-day"><div class="cal-day-num">10</div><div class="cal-post suggested"><span class="platform-icon pi-insta"></span>Témoignage</div></div>
+              <div class="cal-day"><div class="cal-day-num">11</div></div>
+              <div class="cal-day"><div class="cal-day-num">12</div><div class="cal-post suggested"><span class="platform-icon pi-tiktok"></span>Équestre Reel</div></div>
+              <div class="cal-day"><div class="cal-day-num">13</div></div>
+              <div class="cal-day"><div class="cal-day-num">14</div><div class="cal-post scheduled"><span class="platform-icon pi-insta"></span>Mariage M&T</div></div>
+              <div class="cal-day"><div class="cal-day-num">15</div></div>
+              <div class="cal-day"><div class="cal-day-num">16</div></div>
+              <div class="cal-day"><div class="cal-day-num">17</div><div class="cal-post suggested"><span class="platform-icon pi-insta"></span>Reel retouche</div></div>
+              <div class="cal-day"><div class="cal-day-num">18</div></div>
+              <div class="cal-day"><div class="cal-day-num">19</div><div class="cal-post suggested"><span class="platform-icon pi-fb"></span>Guide tenues</div></div>
+              <div class="cal-day"><div class="cal-day-num">20</div></div>
+              <div class="cal-day"><div class="cal-day-num">21</div><div class="cal-post suggested"><span class="platform-icon pi-insta"></span>Maternité</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Caption generator -->
+        <div class="fl-card" style="margin-bottom:var(--fl-space-xl);">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--fl-border);">
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Générateur de légendes IA</h3>
+          </div>
+          <div style="padding:14px 20px;">
+            <div class="caption-input-row">
+              <select class="fl-select">
+                <option>Séance équestre golden hour</option>
+                <option>Famille avec enfants</option>
+                <option>Portrait maternité</option>
+                <option>Before/After retouche</option>
+              </select>
+              <button class="fl-btn fl-btn-primary">Générer 3 options</button>
+            </div>
+            <div style="font-size:0.75rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">3 options générées — choisissez votre préférée :</div>
+            <div class="caption-options">
+              <div class="caption-opt selected">
+                Il y a des liens qui ne s'expliquent pas. Celui entre Marie et son cheval, c'est de ceux-là — un regard, une main posée sur l'encolure, et toute l'émotion du monde dans la lumière dorée du soir.
+                <div style="margin-top:6px;font-size:0.75rem;color:var(--fl-rose);">#photographeequestre #heuredoree #chevaux #tarn #fleurdelumiere</div>
+              </div>
+              <div class="caption-opt">
+                La complicité entre une cavalière et son cheval, c'est quelque chose d'indicible. Ce soir-là, dans la lumière du Tarn, j'ai eu le privilège de le capturer. Ces moments sont précieux.
+                <div style="margin-top:6px;font-size:0.75rem;color:var(--fl-rose);">#equestre #lumierenaturelle #cavaliere #photographietarn</div>
+              </div>
+              <div class="caption-opt">
+                Golden Hour + cheval = magie assurée. Séance équestre dans le Tarn avec Marie et sa magnifique jument. Ces photos sont un trésor.
+                <div style="margin-top:6px;font-size:0.75rem;color:var(--fl-rose);">#goldenhour #horse #equestrian #tarn #photography</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+              <button class="fl-btn fl-btn-primary fl-btn-sm">Utiliser cette légende</button>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm">Programmer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Best posting times + Scheduler -->
+        <div class="fl-grid-2">
+          <div>
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);margin-bottom:14px;">Meilleurs horaires de publication</h3>
+            <div class="best-times">
+              <div class="time-card">
+                <div class="time-platform" style="color:#E1306C;">Instagram</div>
+                <div class="time-val">Mardi 19h</div>
+                <div class="time-sub">et Samedi 10h</div>
+              </div>
+              <div class="time-card">
+                <div class="time-platform" style="color:#1877F2;">Facebook</div>
+                <div class="time-val">Jeudi 13h</div>
+                <div class="time-sub">et Samedi 9h</div>
+              </div>
+              <div class="time-card">
+                <div class="time-platform" style="color:#333;">TikTok</div>
+                <div class="time-val">Vendredi 18h</div>
+                <div class="time-sub">et Dimanche 16h</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);margin-bottom:14px;">Planifier un post</h3>
+            <div class="fl-card" style="padding:16px;">
+              <div class="fl-form-group" style="margin-bottom:10px;">
+                <label class="fl-label">Plateforme</label>
+                <select class="fl-select">
+                  <option>Instagram</option><option>Facebook</option><option>TikTok</option>
+                </select>
+              </div>
+              <div class="schedule-form">
+                <div class="fl-form-group" style="flex:1;">
+                  <label class="fl-label">Date</label>
+                  <input type="date" class="fl-input" value="2026-03-11">
+                </div>
+                <div class="fl-form-group" style="width:100px;">
+                  <label class="fl-label">Heure</label>
+                  <input type="time" class="fl-input" value="19:00">
+                </div>
+              </div>
+              <button class="fl-btn fl-btn-primary" style="width:100%;justify-content:center;margin-top:10px;">Planifier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STYLE CONSISTENCY -->
+      <div class="tab-panel" id="tab-style">
+
+        <!-- Feed preview -->
+        <div class="fl-grid-2" style="gap:var(--fl-space-xl);">
+          <div>
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);margin-bottom:14px;">Aperçu Feed Instagram</h3>
+            <div class="feed-grid">
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#C89878,#D4A888);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#f0d9a8,#e0c580);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#D4B8A0,#C0A088);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#d8d2c8,#c0b8ac);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#C8B898,#B8A888);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#e8d5c4,#d0bba6);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#f2e0d4,#dcc0a8);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#B8A898,#A89888);border:2px solid var(--fl-warning);"></div>
+              <div class="feed-thumb" style="background:linear-gradient(135deg,#C89878,#B88868);border:2px solid var(--fl-warning);"></div>
+            </div>
+            <p style="font-size:0.75rem;color:var(--fl-warm-gray);">Les 2 photos avec bordure orange présentent une légère incohérence détectée par l'IA.</p>
+          </div>
+          <div>
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);margin-bottom:14px;">Analyse de cohérence</h3>
+            <div class="consistency-row">
+              <div class="consist-score"><div class="consist-val">87%</div></div>
+              <div>
+                <div style="font-size:0.9375rem;font-weight:600;color:var(--fl-charcoal);">Bonne cohérence (87%)</div>
+                <div style="font-size:0.8125rem;color:var(--fl-warm-gray);margin-top:2px;line-height:1.5;">2 photos trop froides détectées · Feed globalement harmonieux et warm-toned</div>
+              </div>
+            </div>
+
+            <div style="font-size:0.875rem;font-weight:600;color:var(--fl-prune);margin-bottom:10px;">Palette dominante détectée :</div>
+            <div class="color-palette">
+              <div class="palette-swatch" style="background:#C89878;" title="Warm Beige"></div>
+              <div class="palette-swatch" style="background:#D4A03C;" title="Golden Hour"></div>
+              <div class="palette-swatch" style="background:#C2727E;" title="Rose"></div>
+              <div class="palette-swatch" style="background:#D4B8A0;" title="Cream"></div>
+              <div class="palette-swatch" style="background:#8A7A7E;" title="Warm Gray"></div>
+            </div>
+            <p style="font-size:0.75rem;color:var(--fl-warm-gray);margin-bottom:16px;">Tons chauds dominants — cohérent avec votre identité Heure Dorée</p>
+
+            <div style="font-size:0.875rem;font-weight:600;color:var(--fl-prune);margin-bottom:10px;">Anomalies détectées :</div>
+            <div class="anomaly-item">
+              <div class="anomaly-thumb" style="background:linear-gradient(135deg,#8AB0C8,#6090B0);border:2px solid var(--fl-warning);border-radius:6px;"></div>
+              <div style="flex:1;">
+                <div style="font-size:0.8125rem;font-weight:600;color:var(--fl-charcoal);">Photo n°14 — balance des blancs froide</div>
+                <div style="font-size:0.75rem;color:var(--fl-warning);">+400K de la moyenne de la galerie</div>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm">Corriger</button>
+            </div>
+            <div class="anomaly-item">
+              <div class="anomaly-thumb" style="background:linear-gradient(135deg,#707870,#505850);border:2px solid var(--fl-warning);border-radius:6px;"></div>
+              <div style="flex:1;">
+                <div style="font-size:0.8125rem;font-weight:600;color:var(--fl-charcoal);">Photo n°22 — contraste élevé</div>
+                <div style="font-size:0.75rem;color:var(--fl-warning);">Contraste supérieur à la médiane</div>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm">Corriger</button>
+            </div>
+
+            <div style="margin-top:14px;background:var(--fl-info-light);border-radius:var(--fl-radius-sm);padding:10px 14px;font-size:0.8125rem;color:var(--fl-info);">
+              Presets recommandés pour maintenir la cohérence : <strong>Golden Heure Dorée</strong> · <strong>Lumière Crème</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.getElementById('tab-' + id).classList.add('on');
+  btn.classList.add('on');
+}
+</script>
+</body>
+</html>

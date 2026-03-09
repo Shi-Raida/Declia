@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aperçu AR — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* Dark immersive layout */
+  body { background: #1A1015; }
+  .ar-layout { display: flex; min-height: 100vh; }
+
+  /* Dark sidebar */
+  .fl-sidebar { background: #2D1A26; }
+  .fl-sidebar-logo { border-bottom-color: rgba(255,255,255,0.06); }
+  .fl-sidebar-section { color: rgba(255,255,255,0.25); }
+
+  /* Main area */
+  .ar-main { margin-left: var(--fl-sidebar-w); flex: 1; display: flex; flex-direction: column; background: #1A1015; }
+
+  /* Top bar dark */
+  .ar-topbar { height: 60px; background: rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+  .ar-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 0.875rem; color: rgba(255,255,255,0.4); }
+  .ar-breadcrumb-current { color: rgba(255,255,255,0.85); font-weight: 500; }
+
+  /* Content */
+  .ar-content { flex: 1; display: grid; grid-template-columns: 1fr 380px; gap: 0; }
+
+  /* Room visualization */
+  .room-panel { padding: 32px; position: relative; }
+  .room-title { font-family: var(--fl-font-heading); font-size: 1.5rem; font-weight: 600; color: rgba(255,255,255,0.85); margin-bottom: 8px; }
+  .room-sub { font-size: 0.875rem; color: rgba(255,255,255,0.4); margin-bottom: 24px; }
+  .room-view { border-radius: 20px; overflow: hidden; position: relative; aspect-ratio: 16/10; border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .room-wall { width: 100%; height: 65%; background: linear-gradient(180deg, #2A2420 0%, #242018 100%); position: relative; }
+  .room-floor { width: 100%; height: 35%; background: linear-gradient(180deg, #1E1A16 0%, #181410 100%); }
+  .frame-on-wall { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -55%); border: 6px solid rgba(255,255,255,0.9); box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1); }
+  .frame-inner { background: linear-gradient(135deg, #C89878, #D4A888); }
+  .sofa-hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 60%; height: 30px; background: rgba(255,255,255,0.04); border-radius: 8px 8px 4px 4px; border: 1px solid rgba(255,255,255,0.05); }
+  .ar-badge-room { position: absolute; top: 16px; left: 16px; background: rgba(194,114,126,0.85); color: white; font-size: 0.6875rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; backdrop-filter: blur(6px); display: flex; align-items: center; gap: 4px; }
+  .room-selector { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+  .room-chip { padding: 8px 14px; border-radius: 20px; font-size: 0.8125rem; font-weight: 500; background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.5); cursor: pointer; border: 1.5px solid rgba(255,255,255,0.06); transition: all 0.2s; }
+  .room-chip.on { background: rgba(194,114,126,0.15); color: var(--fl-rose); border-color: var(--fl-rose); }
+  .room-chip:hover:not(.on) { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.7); }
+
+  /* Controls panel */
+  .controls-panel { background: rgba(255,255,255,0.03); border-left: 1px solid rgba(255,255,255,0.06); padding: 32px 24px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
+  .ctrl-section-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+  .size-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .size-opt { padding: 10px 12px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.07); cursor: pointer; text-align: center; transition: all 0.2s; background: rgba(255,255,255,0.03); }
+  .size-opt.on { border-color: var(--fl-rose); background: rgba(194,114,126,0.12); }
+  .size-opt:hover:not(.on) { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); }
+  .size-opt-name { font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.8); }
+  .size-opt-dim { font-size: 0.6875rem; color: rgba(255,255,255,0.4); }
+  .size-opt-price { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 700; color: var(--fl-rose); margin-top: 4px; }
+  .frame-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .frame-opt { padding: 10px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,0.07); cursor: pointer; text-align: center; transition: all 0.2s; background: rgba(255,255,255,0.03); }
+  .frame-opt.on { border-color: var(--fl-or); background: rgba(212,160,60,0.1); }
+  .frame-opt:hover:not(.on) { border-color: rgba(255,255,255,0.15); }
+  .frame-swatch { width: 24px; height: 24px; border-radius: 50%; margin: 0 auto 4px; }
+  .frame-name { font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.7); }
+  .price-display { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 16px; }
+  .price-label { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+  .price-amount { font-family: var(--fl-font-heading); font-size: 2rem; font-weight: 700; color: white; margin: 4px 0; }
+  .price-detail { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+  .cta-order { width: 100%; padding: 14px; background: var(--fl-rose); color: white; border: none; border-radius: 12px; font-family: var(--fl-font-body); font-size: 0.9375rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 20px rgba(194,114,126,0.35); margin-bottom: 8px; }
+  .cta-share { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; font-family: var(--fl-font-body); font-size: 0.875rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .cta-share:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+</style>
+</head>
+<body>
+<div class="ar-layout">
+
+  <!-- SIDEBAR (dark tinted) -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+    <div class="fl-sidebar-section">Général</div>
+    <a href="../admin/01-dashboard.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="../admin/02-facturation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      Facturation
+    </a>
+    <a href="../admin/19-statistiques.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="01-hub-ia.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="02-intel-crm.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+    <a href="03-leads-social-tri.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      Leads &amp; Social
+    </a>
+    <a href="04-reconnaissance-faciale.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="17" y="1" width="6" height="6" rx="1"/></svg>
+      Recog. Faciale
+    </a>
+    <a href="05-lightroom.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Lightroom / C1
+    </a>
+    <a href="06-print-preview-ar.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+      Aperçu AR
+    </a>
+    <a href="07-smart-pricing-vault.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Smart Pricing
+    </a>
+    <a href="08-social-planning-style.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Planning Social
+    </a>
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="../admin/03-parametres-1.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="../admin/06-assistant-admin.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div><div class="fl-sidebar-footer-name">Capucine</div><div class="fl-sidebar-footer-role">Photographe · Admin</div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN (dark) -->
+  <div class="ar-main">
+    <div class="ar-topbar">
+      <div class="ar-breadcrumb">
+        <span>IA</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="ar-breadcrumb-current">Aperçu AR</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span style="font-size:0.75rem;font-weight:600;color:rgba(76,175,124,0.9);">● Aperçu en direct</span>
+        <span style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Photo 12 — Léa et les feuilles d'automne</span>
+      </div>
+    </div>
+
+    <div class="ar-content">
+
+      <!-- Room visualization -->
+      <div class="room-panel">
+        <div class="room-title">Visualisez chez vous</div>
+        <p class="room-sub">Prévisualisez votre photo encadrée dans votre intérieur avant de commander</p>
+
+        <div class="room-view">
+          <div class="room-wall">
+            <div class="ar-badge-room">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+              AR actif · 40×60 cm
+            </div>
+            <div class="frame-on-wall" style="width:180px;height:240px;">
+              <div class="frame-inner" style="width:100%;height:100%;"></div>
+            </div>
+          </div>
+          <div class="room-floor"></div>
+          <div class="sofa-hint"></div>
+        </div>
+
+        <div class="room-selector">
+          <div class="room-chip on">Salon</div>
+          <div class="room-chip">Chambre</div>
+          <div class="room-chip">Bureau</div>
+          <div class="room-chip">Couloir</div>
+        </div>
+      </div>
+
+      <!-- Controls panel -->
+      <div class="controls-panel">
+
+        <div>
+          <div class="ctrl-section-title">Format d'impression</div>
+          <div class="size-options">
+            <div class="size-opt">
+              <div class="size-opt-name">20×30</div>
+              <div class="size-opt-dim">cm</div>
+              <div class="size-opt-price">29€</div>
+            </div>
+            <div class="size-opt">
+              <div class="size-opt-name">30×45</div>
+              <div class="size-opt-dim">cm</div>
+              <div class="size-opt-price">45€</div>
+            </div>
+            <div class="size-opt on">
+              <div class="size-opt-name">40×60</div>
+              <div class="size-opt-dim">cm</div>
+              <div class="size-opt-price">69€</div>
+            </div>
+            <div class="size-opt">
+              <div class="size-opt-name">50×70</div>
+              <div class="size-opt-dim">cm</div>
+              <div class="size-opt-price">89€</div>
+            </div>
+            <div class="size-opt" style="grid-column:span 2;">
+              <div class="size-opt-name">60×90</div>
+              <div class="size-opt-dim">cm · Grand format</div>
+              <div class="size-opt-price">129€</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="ctrl-section-title">Style de cadre</div>
+          <div class="frame-options">
+            <div class="frame-opt">
+              <div class="frame-swatch" style="background:#FFFFFF;border:1px solid rgba(255,255,255,0.2);"></div>
+              <div class="frame-name">Blanc</div>
+            </div>
+            <div class="frame-opt on">
+              <div class="frame-swatch" style="background:#1A1A1A;"></div>
+              <div class="frame-name">Noir</div>
+            </div>
+            <div class="frame-opt">
+              <div class="frame-swatch" style="background:#8B6340;"></div>
+              <div class="frame-name">Bois</div>
+            </div>
+            <div class="frame-opt">
+              <div class="frame-swatch" style="background:linear-gradient(135deg,#B8B8B8,#808080);"></div>
+              <div class="frame-name">Métal</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-display">
+          <div class="price-label">Total commande</div>
+          <div class="price-amount">69 €</div>
+          <div class="price-detail">Tirage 40×60 cm · Cadre Noir · Livraison 5–7 jours</div>
+        </div>
+
+        <div>
+          <button class="cta-order">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Commander ce tirage
+          </button>
+          <button class="cta-share">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Partager l'aperçu
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

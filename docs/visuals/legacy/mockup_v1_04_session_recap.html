@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Session Recap — Post-Shooting</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --prune-light: #6B4A5C;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --bg: #FDFBFC;
+    --white: #FFFFFF;
+    --cream: #FDF9F7;
+    --success: #4CAF7C;
+    --success-bg: #E8F5EE;
+    --warning: #E8985E;
+    --warning-bg: #FFF3EB;
+    --info: #5B8FA8;
+    --info-bg: #E8F0F4;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: #F0ECED;
+    color: var(--charcoal);
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* ===== LABELS ===== */
+  .screen-label {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .screen-label-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .screen-label-sub {
+    font-size: 11px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  .mockup-tag {
+    display: inline-block;
+    background: #FFE066;
+    color: #5D4E00;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ===================================================================
+     MOBILE PHONE FRAME
+     =================================================================== */
+  .phone-frame {
+    width: 375px;
+    background: var(--charcoal);
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .phone-screen {
+    background: var(--bg);
+    border-radius: 34px;
+    overflow: hidden;
+    min-height: 780px;
+    position: relative;
+  }
+
+  /* Notch */
+  .phone-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 28px;
+    background: var(--charcoal);
+    border-radius: 0 0 20px 20px;
+    z-index: 10;
+  }
+
+  /* Status bar */
+  .phone-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 24px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .phone-status-right {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-size: 11px;
+  }
+
+  /* ===== MOBILE APP HEADER ===== */
+  .app-header {
+    padding: 40px 20px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .app-back {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--prune);
+    cursor: pointer;
+  }
+
+  .app-header-text {
+    flex: 1;
+  }
+
+  .app-header-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .app-header-sub {
+    font-size: 12px;
+    color: var(--warm-gray);
+  }
+
+  /* ===== SESSION INFO BAR ===== */
+  .session-bar {
+    margin: 0 20px 16px;
+    background: var(--white);
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .session-bar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+    background: var(--rose-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .session-bar-info { flex: 1; }
+
+  .session-bar-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .session-bar-detail {
+    font-size: 11.5px;
+    color: var(--warm-gray);
+  }
+
+  .session-bar-time {
+    font-size: 11px;
+    color: var(--rose);
+    font-weight: 500;
+    background: var(--rose-pale);
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  /* ===== FORM SECTIONS ===== */
+  .form-section {
+    margin: 0 20px 14px;
+  }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .form-label-icon {
+    font-size: 14px;
+  }
+
+  .form-required {
+    color: var(--rose);
+    font-size: 10px;
+  }
+
+  /* Mood selector */
+  .mood-selector {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mood-option {
+    flex: 1;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mood-option.selected {
+    border-color: var(--rose);
+    background: var(--rose-pale);
+  }
+
+  .mood-option-emoji {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .mood-option-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--warm-gray);
+  }
+
+  .mood-option.selected .mood-option-label {
+    color: var(--rose);
+    font-weight: 600;
+  }
+
+  /* Number input compact */
+  .number-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+
+  .number-row-icon {
+    font-size: 18px;
+  }
+
+  .number-row-label {
+    flex: 1;
+    font-size: 13px;
+    color: var(--charcoal);
+  }
+
+  .number-stepper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .number-stepper-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--prune);
+    cursor: pointer;
+  }
+
+  .number-stepper-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--prune);
+    min-width: 36px;
+    text-align: center;
+  }
+
+  /* Quick tags */
+  .tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--warm-gray);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tag.selected {
+    border-color: var(--rose);
+    background: var(--rose-pale);
+    color: var(--rose);
+  }
+
+  /* Text input */
+  .text-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    background: var(--white);
+    resize: none;
+    min-height: 56px;
+  }
+
+  .text-input:focus {
+    outline: none;
+    border-color: var(--rose);
+  }
+
+  .text-input::placeholder {
+    color: #C8BFC2;
+  }
+
+  /* Delivery estimate */
+  .delivery-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+
+  .delivery-row-icon {
+    font-size: 18px;
+  }
+
+  .delivery-row-label {
+    flex: 1;
+    font-size: 13px;
+    color: var(--charcoal);
+  }
+
+  .delivery-date-picker {
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: var(--prune);
+    background: var(--cream);
+    font-weight: 500;
+  }
+
+  /* CTA */
+  .form-cta {
+    margin: 20px 20px 24px;
+  }
+
+  .btn-send {
+    width: 100%;
+    padding: 15px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(194,114,126,0.3);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-send:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(194,114,126,0.4);
+  }
+
+  .btn-later {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--warm-gray);
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .btn-later:hover { color: var(--prune); }
+
+  /* Info banner */
+  .info-banner {
+    margin: 0 20px 14px;
+    background: var(--info-bg);
+    border: 1px solid #C8DDE6;
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--info);
+  }
+
+  .info-banner-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* ===================================================================
+     SCREEN 2: CONFIRMATION + PREVIEW
+     =================================================================== */
+  .confirm-screen .phone-screen {
+    background: var(--white);
+  }
+
+  .confirm-hero {
+    background: linear-gradient(135deg, var(--success-bg) 0%, #D4EBD8 100%);
+    padding: 56px 24px 32px;
+    text-align: center;
+  }
+
+  .confirm-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--success);
+    color: var(--white);
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 4px 16px rgba(76,175,124,0.25);
+  }
+
+  .confirm-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+
+  .confirm-sub {
+    font-size: 13px;
+    color: var(--warm-gray);
+  }
+
+  /* What happened summary */
+  .confirm-actions {
+    padding: 24px 20px;
+  }
+
+  .confirm-action-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .confirm-action-item:last-child { border-bottom: none; }
+
+  .confirm-action-check {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--success-bg);
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .confirm-action-text {
+    flex: 1;
+  }
+
+  .confirm-action-title {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  .confirm-action-detail {
+    font-size: 11.5px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  /* Email preview compact */
+  .email-mini {
+    margin: 0 20px 20px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .email-mini-header {
+    background: var(--cream);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--warm-gray);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .email-mini-header strong {
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+
+  .email-mini-body {
+    padding: 16px;
+    background: var(--white);
+  }
+
+  .email-mini-from {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .email-mini-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--rose);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .email-mini-from-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .email-mini-text {
+    font-size: 12.5px;
+    color: var(--charcoal);
+    line-height: 1.6;
+  }
+
+  .email-mini-text .highlight {
+    background: var(--rose-pale);
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: var(--rose);
+    font-weight: 500;
+  }
+
+  /* ===================================================================
+     SCREEN 3: DESKTOP ADMIN — NOTIFICATION VIEW
+     =================================================================== */
+  .desktop-panel {
+    width: 480px;
+  }
+
+  .desktop-card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .desktop-card-header {
+    background: var(--rose-pale);
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .desktop-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .desktop-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  .desktop-card-body {
+    padding: 24px;
+  }
+
+  /* Notification in admin dashboard */
+  .admin-notif {
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--success);
+  }
+
+  .admin-notif-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .admin-notif-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .admin-notif-time {
+    font-size: 11px;
+    color: var(--warm-gray);
+  }
+
+  .admin-notif-text {
+    font-size: 13px;
+    color: var(--warm-gray);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .admin-notif-meta {
+    display: flex;
+    gap: 16px;
+  }
+
+  .admin-notif-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--prune);
+    font-weight: 500;
+  }
+
+  .admin-notif-meta-item span {
+    font-size: 14px;
+  }
+
+  /* Workflow update preview */
+  .workflow-update {
+    background: var(--white);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+
+  .workflow-update-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .workflow-step-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .workflow-step-mini:last-child { margin-bottom: 0; }
+
+  .workflow-step-mini-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+
+  .workflow-step-mini-dot.done { background: var(--success-bg); color: var(--success); }
+  .workflow-step-mini-dot.active { background: var(--rose-pale); color: var(--rose); border: 2px solid var(--rose); }
+  .workflow-step-mini-dot.pending { background: var(--cream); color: var(--border); border: 1.5px solid var(--border); }
+
+  .workflow-step-mini-label {
+    font-size: 12px;
+  }
+
+  .workflow-step-mini-label.done { color: var(--success); }
+  .workflow-step-mini-label.active { color: var(--rose); font-weight: 600; }
+  .workflow-step-mini-label.pending { color: var(--border); }
+
+  .workflow-step-line {
+    width: 1.5px;
+    height: 8px;
+    background: var(--border);
+    margin-left: 9px;
+    margin-bottom: 6px;
+  }
+
+  .workflow-step-line.done { background: var(--success); }
+
+  /* Client journey update */
+  .journey-update {
+    background: var(--rose-pale);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .journey-update-icon {
+    font-size: 20px;
+  }
+
+  .journey-update-text {
+    font-size: 12.5px;
+    color: var(--charcoal);
+    line-height: 1.4;
+  }
+
+  .journey-update-text strong {
+    color: var(--prune);
+  }
+
+  /* Template selector for admin */
+  .template-section {
+    margin-top: 20px;
+  }
+
+  .template-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 10px;
+  }
+
+  .template-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .template-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--warm-gray);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .template-chip.active {
+    border-color: var(--rose);
+    background: var(--rose-pale);
+    color: var(--rose);
+  }
+
+  .template-chip:hover { border-color: var(--rose-light); }
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     SCREEN 1: MOBILE — Formulaire post-shooting (photographe)
+     ===================================================== -->
+<div>
+  <div class="screen-label">
+    <div class="screen-label-title">Formulaire Post-Shooting <span class="mockup-tag">Mobile</span></div>
+    <div class="screen-label-sub">Ce que le photographe remplit juste après la séance</div>
+  </div>
+
+  <div class="phone-frame">
+    <div class="phone-screen">
+      <div class="phone-notch"></div>
+      <div class="phone-status">
+        <span>18:47</span>
+        <span class="phone-status-right">📶 🔋 92%</span>
+      </div>
+
+      <!-- App header -->
+      <div class="app-header">
+        <div class="app-back">←</div>
+        <div class="app-header-text">
+          <div class="app-header-title">Récap de séance</div>
+          <div class="app-header-sub">Remplissez en 2 minutes</div>
+        </div>
+      </div>
+
+      <!-- Session info -->
+      <div class="session-bar">
+        <div class="session-bar-icon">👨‍👩‍👧</div>
+        <div class="session-bar-info">
+          <div class="session-bar-name">Sophie Dupont — Famille</div>
+          <div class="session-bar-detail">Parc de la Maourine, Toulouse</div>
+        </div>
+        <div class="session-bar-time">Aujourd'hui</div>
+      </div>
+
+      <!-- Info banner -->
+      <div class="info-banner">
+        <span class="info-banner-icon">💡</span>
+        <span>Ce récap sera envoyé à votre client et mettra à jour son parcours automatiquement.</span>
+      </div>
+
+      <!-- Ambiance -->
+      <div class="form-section">
+        <div class="form-label">
+          <span class="form-label-icon">✨</span>
+          Ambiance du shooting
+          <span class="form-required">*</span>
+        </div>
+        <div class="mood-selector">
+          <div class="mood-option">
+            <div class="mood-option-emoji">😐</div>
+            <div class="mood-option-label">Correct</div>
+          </div>
+          <div class="mood-option">
+            <div class="mood-option-emoji">😊</div>
+            <div class="mood-option-label">Bien</div>
+          </div>
+          <div class="mood-option selected">
+            <div class="mood-option-emoji">🤩</div>
+            <div class="mood-option-label">Génial</div>
+          </div>
+          <div class="mood-option">
+            <div class="mood-option-emoji">🔥</div>
+            <div class="mood-option-label">Magique</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nombre de photos -->
+      <div class="form-section">
+        <div class="form-label">
+          <span class="form-label-icon">📸</span>
+          Nombre de photos prises (environ)
+          <span class="form-required">*</span>
+        </div>
+        <div class="number-row">
+          <span class="number-row-icon">🖼</span>
+          <span class="number-row-label">Photos capturées</span>
+          <div class="number-stepper">
+            <div class="number-stepper-btn">−</div>
+            <div class="number-stepper-value">~350</div>
+            <div class="number-stepper-btn">+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lumière / Conditions -->
+      <div class="form-section">
+        <div class="form-label">
+          <span class="form-label-icon">🌅</span>
+          Conditions de lumière
+        </div>
+        <div class="tags-wrap">
+          <div class="tag selected">Golden Hour</div>
+          <div class="tag">Plein soleil</div>
+          <div class="tag">Nuageux doux</div>
+          <div class="tag selected">Lumière chaude</div>
+          <div class="tag">Contre-jour</div>
+          <div class="tag">Ombre douce</div>
+          <div class="tag">Intérieur</div>
+          <div class="tag">Blue Hour</div>
+        </div>
+      </div>
+
+      <!-- Moment fort -->
+      <div class="form-section">
+        <div class="form-label">
+          <span class="form-label-icon">💫</span>
+          Moment fort / note personnelle
+          <span style="font-size: 10px; color: var(--warm-gray); font-weight: 400;">(visible par le client)</span>
+        </div>
+        <textarea class="text-input" placeholder="Ex: La petite Léa a éclaté de rire avec les feuilles dorées...">La petite Léa a éclaté de rire en lançant les feuilles dorées, un moment magique capturé en série. La lumière de fin d'après-midi était parfaite.</textarea>
+      </div>
+
+      <!-- Livraison estimée -->
+      <div class="form-section">
+        <div class="form-label">
+          <span class="form-label-icon">📅</span>
+          Livraison estimée
+        </div>
+        <div class="delivery-row">
+          <span class="delivery-row-icon">🗓</span>
+          <span class="delivery-row-label">Date de livraison galerie</span>
+          <input type="text" class="delivery-date-picker" value="8 mars 2026">
+        </div>
+      </div>
+
+      <!-- Note interne -->
+      <div class="form-section">
+        <div class="form-label">
+          <span class="form-label-icon">🔒</span>
+          Note interne
+          <span style="font-size: 10px; color: var(--warm-gray); font-weight: 400;">(non visible par le client)</span>
+        </div>
+        <textarea class="text-input" placeholder="Notes pour vous-même (retouche, détails...)">Penser à retoucher particulièrement la série sous le grand chêne, légère surexposition à corriger. La mère a demandé un noir & blanc sur le portrait du père avec les enfants.</textarea>
+      </div>
+
+      <!-- CTA -->
+      <div class="form-cta">
+        <button class="btn-send">
+          ✓ Envoyer le récap à Sophie
+        </button>
+        <button class="btn-later">Enregistrer en brouillon</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     SCREEN 2: MOBILE — Confirmation après envoi
+     ===================================================== -->
+<div>
+  <div class="screen-label">
+    <div class="screen-label-title">Confirmation <span class="mockup-tag">Mobile</span></div>
+    <div class="screen-label-sub">Ce que le photographe voit après l'envoi</div>
+  </div>
+
+  <div class="phone-frame confirm-screen">
+    <div class="phone-screen">
+      <div class="phone-notch"></div>
+      <div class="phone-status" style="color: var(--charcoal);">
+        <span>18:49</span>
+        <span class="phone-status-right">📶 🔋 91%</span>
+      </div>
+
+      <!-- Success -->
+      <div class="confirm-hero">
+        <div class="confirm-icon">✓</div>
+        <div class="confirm-title">Récap envoyé !</div>
+        <div class="confirm-sub">Sophie a été notifiée par email et SMS</div>
+      </div>
+
+      <!-- What happened -->
+      <div class="confirm-actions">
+        <div class="confirm-action-item">
+          <div class="confirm-action-check">✓</div>
+          <div class="confirm-action-text">
+            <div class="confirm-action-title">Email envoyé à Sophie</div>
+            <div class="confirm-action-detail">Récap personnalisé avec votre note et la date de livraison</div>
+          </div>
+        </div>
+        <div class="confirm-action-item">
+          <div class="confirm-action-check">✓</div>
+          <div class="confirm-action-text">
+            <div class="confirm-action-title">SMS envoyé</div>
+            <div class="confirm-action-detail">"Merci pour cette magnifique séance ! Vos photos seront prêtes le 8 mars."</div>
+          </div>
+        </div>
+        <div class="confirm-action-item">
+          <div class="confirm-action-check">✓</div>
+          <div class="confirm-action-text">
+            <div class="confirm-action-title">Parcours client mis à jour</div>
+            <div class="confirm-action-detail">Étape "Retouche en cours" activée avec livraison le 8 mars</div>
+          </div>
+        </div>
+        <div class="confirm-action-item">
+          <div class="confirm-action-check">✓</div>
+          <div class="confirm-action-text">
+            <div class="confirm-action-title">Tâche créée dans votre workflow</div>
+            <div class="confirm-action-detail">"Trier et retoucher — Dupont Famille" ajoutée pour cette semaine</div>
+          </div>
+        </div>
+        <div class="confirm-action-item">
+          <div class="confirm-action-check">✓</div>
+          <div class="confirm-action-text">
+            <div class="confirm-action-title">Note interne sauvegardée</div>
+            <div class="confirm-action-detail">Visible dans la fiche client et le workflow de retouche</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email preview -->
+      <div class="email-mini">
+        <div class="email-mini-header">
+          <span>📧</span>
+          <strong>Aperçu de l'email envoyé</strong>
+        </div>
+        <div class="email-mini-body">
+          <div class="email-mini-from">
+            <div class="email-mini-avatar">C</div>
+            <div class="email-mini-from-name">Capucine — Fleur de Lumière</div>
+          </div>
+          <div class="email-mini-text">
+            Bonjour Sophie,<br><br>
+            Merci pour cette <span class="highlight">magnifique séance</span> en famille ! L'ambiance était géniale et la lumière de Golden Hour absolument parfaite.<br><br>
+            J'ai capturé environ <span class="highlight">350 photos</span> dont de très beaux moments. La petite Léa a éclaté de rire en lançant les feuilles dorées, un moment magique capturé en série.<br><br>
+            Votre galerie sera prête pour le <span class="highlight">8 mars 2026</span>. J'ai hâte de vous montrer le résultat !<br><br>
+            À très vite,<br>
+            Capucine 🌸
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     SCREEN 3: DESKTOP — Ce qui se passe côté admin
+     ===================================================== -->
+<div class="desktop-panel">
+  <div class="screen-label">
+    <div class="screen-label-title">Impact côté Admin <span class="mockup-tag">Desktop</span></div>
+    <div class="screen-label-sub">Ce qui se met à jour automatiquement dans le back-office</div>
+  </div>
+
+  <div class="desktop-card">
+    <div class="desktop-card-header">
+      <div class="desktop-card-title">⚡ Actions automatiques</div>
+      <div class="desktop-badge">5 actions effectuées</div>
+    </div>
+    <div class="desktop-card-body">
+
+      <!-- Admin notification -->
+      <div class="admin-notif">
+        <div class="admin-notif-header">
+          <div class="admin-notif-title">📋 Récap envoyé — Sophie Dupont</div>
+          <div class="admin-notif-time">il y a 2 min</div>
+        </div>
+        <div class="admin-notif-text">Le récap de la séance Famille au Parc de la Maourine a été envoyé avec succès. Le parcours client et le workflow ont été mis à jour.</div>
+        <div class="admin-notif-meta">
+          <div class="admin-notif-meta-item"><span>📸</span> ~350 photos</div>
+          <div class="admin-notif-meta-item"><span>🌅</span> Golden Hour</div>
+          <div class="admin-notif-meta-item"><span>📅</span> Livraison 8 mars</div>
+        </div>
+      </div>
+
+      <!-- Workflow update -->
+      <div class="workflow-update">
+        <div class="workflow-update-title">🔄 Mise à jour du workflow — Dupont</div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot done">✓</div>
+          <div class="workflow-step-mini-label done">Réservation confirmée</div>
+        </div>
+        <div class="workflow-step-line done"></div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot done">✓</div>
+          <div class="workflow-step-mini-label done">Questionnaire rempli</div>
+        </div>
+        <div class="workflow-step-line done"></div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot done">✓</div>
+          <div class="workflow-step-mini-label done">Shooting réalisé</div>
+        </div>
+        <div class="workflow-step-line done"></div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot done">✓</div>
+          <div class="workflow-step-mini-label done">Récap envoyé au client</div>
+        </div>
+        <div class="workflow-step-line"></div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot active">✎</div>
+          <div class="workflow-step-mini-label active">Trier & retoucher — Échéance 6 mars</div>
+        </div>
+        <div class="workflow-step-line"></div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot pending">○</div>
+          <div class="workflow-step-mini-label pending">Uploader la galerie</div>
+        </div>
+        <div class="workflow-step-line"></div>
+        <div class="workflow-step-mini">
+          <div class="workflow-step-mini-dot pending">○</div>
+          <div class="workflow-step-mini-label pending">Préparer le coffret numérique</div>
+        </div>
+      </div>
+
+      <!-- Client Journey auto-update -->
+      <div class="journey-update">
+        <div class="journey-update-icon">👤</div>
+        <div class="journey-update-text">
+          <strong>Parcours client mis à jour</strong><br>
+          Sophie voit maintenant « Retouche en cours » avec la date estimée du 8 mars dans son espace client.
+        </div>
+      </div>
+
+      <!-- Template settings -->
+      <div class="template-section">
+        <div class="template-title">📝 Template d'email utilisé</div>
+        <div class="template-chips">
+          <div class="template-chip active">Séance famille</div>
+          <div class="template-chip">Mariage</div>
+          <div class="template-chip">Équestre</div>
+          <div class="template-chip">Maternité</div>
+          <div class="template-chip">Mini-session</div>
+          <div class="template-chip">Scolaire</div>
+        </div>
+        <div style="margin-top: 10px; font-size: 11.5px; color: var(--warm-gray);">
+          Chaque type de séance a son propre template personnalisable dans Paramètres → Emails automatiques
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

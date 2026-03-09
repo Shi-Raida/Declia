@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Votre Coffret Numérique</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== SHELL E — Immersive Dark ===== */
+  body {
+    background: #1A1015;
+    color: rgba(255,255,255,0.85);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient glow layers */
+  .ambient-top {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(212,160,60,0.06) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .ambient-bottom-left {
+    position: fixed;
+    bottom: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(194,114,126,0.05) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== TOP NAV ===== */
+  .coffret-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(26,16,21,0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .coffret-nav-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.5px;
+  }
+  .coffret-nav-logo span { color: var(--fl-rose); }
+  .coffret-nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-md);
+    font-size: 0.8125rem;
+    color: rgba(255,255,255,0.4);
+  }
+  .coffret-nav-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--fl-prune);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.12);
+  }
+
+  /* ===== HERO SECTION ===== */
+  .coffret-hero {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 80px 24px 56px;
+  }
+  .coffret-hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fl-or);
+    margin-bottom: var(--fl-space-lg);
+    animation: fadeInUp 0.8s ease-out both;
+  }
+  .coffret-hero-title {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    font-style: italic;
+    color: rgba(255,255,255,0.95);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--fl-space-lg);
+    animation: fadeInUp 0.8s ease-out 0.15s both;
+  }
+  .coffret-hero-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: var(--fl-space-2xl);
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+  }
+
+  /* Stats bar */
+  .coffret-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--fl-radius-full);
+    padding: 0;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out 0.45s both;
+    margin-bottom: var(--fl-space-2xl);
+  }
+  .coffret-stat {
+    padding: 14px 28px;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .coffret-stat:last-child { border-right: none; }
+  .coffret-stat-value {
+    font-family: var(--fl-font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fl-or);
+    line-height: 1;
+  }
+  .coffret-stat-label {
+    font-size: 0.6875rem;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* ===== DOWNLOAD PROGRESS ===== */
+  .coffret-download-bar {
+    max-width: 540px;
+    margin: 0 auto var(--fl-space-2xl);
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+  }
+  .download-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .download-label span:last-child { color: var(--fl-or); font-weight: 500; }
+  .download-track {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .download-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--fl-or), var(--fl-rose));
+    border-radius: 2px;
+    width: 72%;
+    animation: progressLoad 1.5s ease-out 1s both;
+  }
+  @keyframes progressLoad {
+    from { width: 0%; }
+    to { width: 72%; }
+  }
+
+  /* ===== ACTIONS ===== */
+  .coffret-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--fl-space-md);
+    animation: fadeInUp 0.8s ease-out 0.75s both;
+    margin-bottom: 64px;
+  }
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    padding: 14px 32px;
+    border-radius: var(--fl-radius-full);
+    background: transparent;
+    border: 1.5px solid var(--fl-or);
+    color: var(--fl-or);
+    font-family: var(--fl-font-body);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--fl-transition);
+  }
+  .btn-gold:hover {
+    background: var(--fl-or);
+    color: #1A1015;
+    box-shadow: 0 4px 24px rgba(212,160,60,0.3);
+    transform: translateY(-1px);
+  }
+  .btn-dark-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    padding: 14px 28px;
+    border-radius: var(--fl-radius-full);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.6);
+    font-family: var(--fl-font-body);
+    font-size: 0.9rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all var(--fl-transition);
+  }
+  .btn-dark-ghost:hover {
+    background: rgba(255,255,255,0.09);
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ===== PHOTO GRID — Unboxing ===== */
+  .coffret-section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+  .coffret-section-label {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .photo-grid-dark {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .photo-thumb {
+    aspect-ratio: 3/4;
+    border-radius: var(--fl-radius);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  .photo-thumb.revealed {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .photo-thumb-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.4s ease;
+  }
+  .photo-thumb:hover .photo-thumb-inner {
+    transform: scale(1.04);
+  }
+  .photo-thumb-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(26,16,21,0.6) 100%);
+    opacity: 0;
+    transition: opacity var(--fl-transition);
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+    gap: 6px;
+  }
+  .photo-thumb:hover .photo-thumb-overlay { opacity: 1; }
+  .photo-action-mini {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--fl-radius-sm);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+    transition: background var(--fl-transition);
+  }
+  .photo-action-mini:hover { background: rgba(255,255,255,0.3); }
+
+  /* Photo gradient placeholders */
+  .p1 { background: linear-gradient(135deg, #C89878, #D4A888, #B88868); }
+  .p2 { background: linear-gradient(145deg, #D4B8A0, #C0A088, #E8D0C8); }
+  .p3 { background: linear-gradient(130deg, #C8A888, #B89878, #D0B898); }
+  .p4 { background: linear-gradient(150deg, #E0C8A8, #D4B898, #C8A888); }
+  .p5 { background: linear-gradient(135deg, #D4C0B0, #C4B0A0, #E0D0C0); }
+  .p6 { background: linear-gradient(140deg, #B8A898, #C8B8A8, #D8C8B8); }
+  .p7 { background: linear-gradient(135deg, #C0B0A0, #D0C0B0, #B8A898); }
+  .p8 { background: linear-gradient(130deg, #D8C0A8, #C8B098, #E0C8B0); }
+  .p9 { background: linear-gradient(145deg, #C8A890, #D8B8A0, #B89880); }
+  .p10 { background: linear-gradient(150deg, #E0C8B0, #D0B8A0, #C0A890); }
+  .p11 { background: linear-gradient(135deg, #B8A890, #C8B8A0, #D8C8B0); }
+  .p12 { background: linear-gradient(140deg, #D0B8A8, #C0A898, #E0C8B8); }
+
+  /* ===== ELEGANT DARK FOOTER ===== */
+  .coffret-footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .coffret-footer-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: var(--fl-space-sm);
+  }
+  .coffret-footer-logo span { color: var(--fl-rose); opacity: 0.6; }
+  .coffret-footer-sub {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 1px;
+  }
+  .coffret-footer-line {
+    width: 40px;
+    height: 1px;
+    background: rgba(212,160,60,0.3);
+    margin: var(--fl-space-md) auto;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient glows -->
+<div class="ambient-top"></div>
+<div class="ambient-bottom-left"></div>
+
+<!-- Navigation -->
+<nav class="coffret-nav">
+  <div class="coffret-nav-logo">Fleur de <span>Lumière</span></div>
+  <div class="coffret-nav-right">
+    <span>Sophie Dupont</span>
+    <div class="coffret-nav-avatar">S</div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="coffret-hero">
+  <div class="coffret-hero-eyebrow">Votre livraison premium</div>
+  <h1 class="coffret-hero-title">Votre Coffret Numérique</h1>
+  <p class="coffret-hero-sub">Séance Famille — Parc de la Maourine · 22 février 2026</p>
+
+  <!-- Stats -->
+  <div class="coffret-stats">
+    <div class="coffret-stat">
+      <div class="coffret-stat-value">25</div>
+      <div class="coffret-stat-label">Photos HD</div>
+    </div>
+    <div class="coffret-stat">
+      <div class="coffret-stat-value">15</div>
+      <div class="coffret-stat-label">Jours d'accès</div>
+    </div>
+    <div class="coffret-stat">
+      <div class="coffret-stat-value">HD</div>
+      <div class="coffret-stat-label">Résolution</div>
+    </div>
+  </div>
+
+  <!-- Download progress -->
+  <div class="coffret-download-bar">
+    <div class="download-label">
+      <span>Préparation de votre archive ZIP…</span>
+      <span>72%</span>
+    </div>
+    <div class="download-track">
+      <div class="download-fill"></div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="coffret-actions">
+    <button class="btn-gold">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Tout télécharger (ZIP)
+    </button>
+    <button class="btn-dark-ghost">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Voir le diaporama
+    </button>
+    <button class="btn-dark-ghost">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      Partager la galerie
+    </button>
+    <button class="btn-dark-ghost">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Commander des tirages
+    </button>
+  </div>
+</section>
+
+<!-- Photo Gallery -->
+<section class="coffret-section">
+  <div class="coffret-section-label">Vos 25 photos retouchées</div>
+
+  <div class="photo-grid-dark">
+    <div class="photo-thumb" id="ph1">
+      <div class="photo-thumb-inner p1"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini" title="Télécharger">↓</button>
+        <button class="photo-action-mini" title="Favori">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph2">
+      <div class="photo-thumb-inner p2"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph3">
+      <div class="photo-thumb-inner p3"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph4">
+      <div class="photo-thumb-inner p4"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph5">
+      <div class="photo-thumb-inner p5"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph6">
+      <div class="photo-thumb-inner p6"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph7">
+      <div class="photo-thumb-inner p7"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph8">
+      <div class="photo-thumb-inner p8"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph9">
+      <div class="photo-thumb-inner p9"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph10">
+      <div class="photo-thumb-inner p10"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph11">
+      <div class="photo-thumb-inner p11"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+    <div class="photo-thumb" id="ph12">
+      <div class="photo-thumb-inner p12"></div>
+      <div class="photo-thumb-overlay">
+        <button class="photo-action-mini">↓</button>
+        <button class="photo-action-mini">♡</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Elegant Dark Footer -->
+<footer class="coffret-footer">
+  <div class="coffret-footer-logo">Fleur de <span>Lumière</span></div>
+  <div class="coffret-footer-line"></div>
+  <div class="coffret-footer-sub">Photographie en lumière naturelle · Tarn & Toulouse</div>
+</footer>
+
+<script>
+  // Staggered unboxing reveal animation
+  const thumbs = document.querySelectorAll('.photo-thumb');
+  thumbs.forEach((thumb, i) => {
+    setTimeout(() => {
+      thumb.classList.add('revealed');
+    }, 800 + i * 120);
+  });
+</script>
+</body>
+</html>

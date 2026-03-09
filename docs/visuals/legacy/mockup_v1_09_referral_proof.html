@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Referral Proof — Preuve Sociale</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --bg: #FDFBFC;
+    --white: #FFFFFF;
+    --cream: #FDF9F7;
+    --success: #4CAF7C;
+    --success-bg: #E8F5EE;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+    --gold: #C9A96E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--charcoal); }
+
+  .mockup-tag { display: inline-block; background: #FFE066; color: #5D4E00; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 8px; }
+
+  .screen-divider { background: var(--prune); padding: 20px; text-align: center; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; }
+  .screen-divider span { background: rgba(255,255,255,0.08); padding: 6px 20px; border-radius: 20px; }
+
+  /* ===== PUBLIC SITE SECTION ===== */
+  .public-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+  }
+
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--rose);
+    background: var(--rose-pale);
+    padding: 5px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    color: var(--warm-gray);
+    line-height: 1.5;
+    max-width: 540px;
+    margin-bottom: 36px;
+  }
+
+  /* Trust stats */
+  .trust-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .trust-stat {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 24px 16px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: all 0.25s;
+  }
+
+  .trust-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .trust-stat-icon { font-size: 28px; margin-bottom: 8px; }
+
+  .trust-stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--prune);
+    line-height: 1;
+  }
+
+  .trust-stat-label {
+    font-size: 12.5px;
+    color: var(--warm-gray);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  /* Activity map */
+  .map-card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+
+  .map-area {
+    height: 280px;
+    background: linear-gradient(135deg, #E8E4E0, #DCD4D0, #D4CCC8);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Simulated map with dots */
+  .map-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 35% 45%, rgba(194,114,126,0.12) 0%, transparent 25%),
+      radial-gradient(circle at 65% 35%, rgba(194,114,126,0.08) 0%, transparent 20%),
+      radial-gradient(circle at 50% 60%, rgba(194,114,126,0.06) 0%, transparent 30%);
+  }
+
+  .map-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--rose);
+    box-shadow: 0 0 0 3px rgba(194,114,126,0.2);
+  }
+
+  .map-dot::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: rgba(194,114,126,0.1);
+    animation: map-pulse 2s infinite;
+  }
+
+  @keyframes map-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.8); opacity: 0; }
+  }
+
+  .map-dot.large { width: 14px; height: 14px; }
+  .map-dot.small { width: 7px; height: 7px; opacity: 0.7; }
+
+  .map-label {
+    position: absolute;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--prune);
+    background: rgba(255,255,255,0.9);
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .map-zone-label {
+    position: absolute;
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(74,46,61,0.15);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .map-footer {
+    padding: 16px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .map-footer-text { font-size: 13px; color: var(--warm-gray); }
+  .map-footer-text strong { color: var(--prune); }
+
+  .map-footer-legend {
+    display: flex;
+    gap: 14px;
+    font-size: 11px;
+    color: var(--warm-gray);
+  }
+
+  .map-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .map-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Recent activity feed */
+  .activity-card {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 36px;
+  }
+
+  .activity-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 20px;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .activity-avatar.rose { background: linear-gradient(135deg, var(--rose-light), var(--rose)); }
+  .activity-avatar.green { background: linear-gradient(135deg, #A8D4A0, var(--success)); }
+  .activity-avatar.purple { background: linear-gradient(135deg, #D4C0E4, #8E6BAA); }
+  .activity-avatar.blue { background: linear-gradient(135deg, #A0C4D4, #5B8FA8); }
+
+  .activity-content { flex: 1; }
+
+  .activity-text {
+    font-size: 13.5px;
+    color: var(--charcoal);
+    line-height: 1.4;
+  }
+
+  .activity-text strong { font-weight: 600; }
+
+  .activity-time {
+    font-size: 11px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  .activity-stars {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+
+  /* Testimonial highlight */
+  .testimonial-highlight {
+    background: linear-gradient(135deg, var(--prune), #5A3A4D);
+    border-radius: 20px;
+    padding: 36px 32px;
+    margin-bottom: 36px;
+    position: relative;
+    overflow: hidden;
+    color: var(--white);
+  }
+
+  .testimonial-highlight::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 120px;
+    color: rgba(194,114,126,0.15);
+    line-height: 1;
+  }
+
+  .testimonial-highlight::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 150px;
+    height: 150px;
+    background: rgba(194,114,126,0.08);
+    border-radius: 50%;
+  }
+
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonial-author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--rose-light), var(--rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .testimonial-author-name { font-size: 14px; font-weight: 600; }
+  .testimonial-author-detail { font-size: 12px; opacity: 0.6; }
+  .testimonial-author-stars { margin-left: auto; font-size: 16px; letter-spacing: 2px; color: var(--gold); }
+
+  /* Google badge */
+  .google-badge {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .google-logo {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .google-info { flex: 1; }
+  .google-rating { font-size: 24px; font-weight: 700; color: var(--prune); display: flex; align-items: center; gap: 8px; }
+  .google-rating-stars { color: var(--gold); font-size: 18px; letter-spacing: 1px; }
+  .google-count { font-size: 12px; color: var(--warm-gray); margin-top: 2px; }
+
+  .google-cta {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--prune);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* CTA final */
+  .proof-cta {
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .proof-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 16px 40px;
+    border-radius: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(194,114,126,0.3);
+    transition: all 0.25s;
+  }
+
+  .proof-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(194,114,126,0.4); }
+
+  .proof-cta-sub { font-size: 13px; color: var(--warm-gray); margin-top: 10px; }
+
+  /* ===== ADMIN CONFIG ===== */
+  .admin-screen { background: var(--bg); padding: 40px; }
+  .admin-container { max-width: 700px; margin: 0 auto; }
+  .admin-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--prune); margin-bottom: 6px; }
+  .admin-sub { font-size: 13px; color: var(--warm-gray); margin-bottom: 24px; }
+  .admin-card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+  .admin-card-header { padding: 14px 20px; background: var(--rose-pale); border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; color: var(--prune); display: flex; align-items: center; gap: 8px; }
+  .admin-card-body { padding: 20px; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-row-label { font-size: 13px; font-weight: 500; color: var(--charcoal); }
+  .toggle-row-hint { font-size: 11px; color: var(--warm-gray); margin-top: 2px; }
+  .toggle-row-left { flex: 1; }
+  .toggle { width: 40px; height: 22px; background: #E0D6D9; border-radius: 11px; cursor: pointer; position: relative; flex-shrink: 0; }
+  .toggle.on { background: var(--success); }
+  .toggle::after { content: ''; position: absolute; top: 2.5px; left: 2.5px; width: 17px; height: 17px; background: white; border-radius: 50%; transition: all 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .toggle.on::after { left: 20.5px; }
+</style>
+</head>
+<body>
+
+<!-- ===== PUBLIC WEBSITE — Preuve Sociale ===== -->
+<div class="public-section">
+  <div class="section-badge">✦ La confiance se partage</div>
+  <div class="section-title">Pourquoi les familles<br>du Tarn me choisissent <span class="mockup-tag">V1</span></div>
+  <div class="section-sub">Chaque séance est une rencontre unique. Voici ce que disent les familles qui m'ont fait confiance.</div>
+
+  <!-- Trust stats -->
+  <div class="trust-stats">
+    <div class="trust-stat">
+      <div class="trust-stat-icon">👨‍👩‍👧‍👦</div>
+      <div class="trust-stat-value">147</div>
+      <div class="trust-stat-label">familles<br>photographiées</div>
+    </div>
+    <div class="trust-stat">
+      <div class="trust-stat-icon">⭐</div>
+      <div class="trust-stat-value">4.9</div>
+      <div class="trust-stat-label">note moyenne<br>sur 5</div>
+    </div>
+    <div class="trust-stat">
+      <div class="trust-stat-icon">💬</div>
+      <div class="trust-stat-value">98%</div>
+      <div class="trust-stat-label">recommandent<br>à leurs proches</div>
+    </div>
+    <div class="trust-stat">
+      <div class="trust-stat-icon">🔄</div>
+      <div class="trust-stat-value">42%</div>
+      <div class="trust-stat-label">reviennent pour<br>une nouvelle séance</div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div class="map-card">
+    <div class="map-area">
+      <div class="map-zone-label" style="top: 30%; left: 15%;">TARN</div>
+      <div class="map-zone-label" style="top: 50%; right: 20%;">TOULOUSE</div>
+
+      <!-- Dots -->
+      <div class="map-dot large" style="top: 40%; left: 55%;"></div>
+      <div class="map-dot" style="top: 35%; left: 52%;"></div>
+      <div class="map-dot" style="top: 45%; left: 58%;"></div>
+      <div class="map-dot" style="top: 38%; left: 60%;"></div>
+      <div class="map-dot large" style="top: 30%; left: 30%;"></div>
+      <div class="map-dot" style="top: 33%; left: 27%;"></div>
+      <div class="map-dot small" style="top: 28%; left: 33%;"></div>
+      <div class="map-dot" style="top: 50%; left: 45%;"></div>
+      <div class="map-dot small" style="top: 55%; left: 50%;"></div>
+      <div class="map-dot" style="top: 60%; left: 40%;"></div>
+      <div class="map-dot small" style="top: 25%; left: 42%;"></div>
+      <div class="map-dot small" style="top: 65%; left: 55%;"></div>
+      <div class="map-dot" style="top: 42%; left: 38%;"></div>
+
+      <div class="map-label" style="top: 37%; left: 63%;">Toulouse · 68 séances</div>
+      <div class="map-label" style="top: 27%; left: 17%;">Parisot · 32 séances</div>
+      <div class="map-label" style="top: 58%; left: 32%;">Lavaur · 14 séances</div>
+    </div>
+    <div class="map-footer">
+      <div class="map-footer-text"><strong>23 séances</strong> réalisées ce mois-ci dans le Tarn & Toulouse</div>
+      <div class="map-footer-legend">
+        <div class="map-legend-item"><div class="map-legend-dot" style="background: var(--rose);"></div> Séances récentes</div>
+        <div class="map-legend-item"><div class="map-legend-dot" style="background: var(--rose); opacity: 0.3;"></div> Zone d'activité</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonial highlight -->
+  <div class="testimonial-highlight">
+    <div class="testimonial-text">
+      Capucine a su capturer l'essence même de notre famille. Les enfants étaient à l'aise, les photos sont naturelles et pleines de vie. On a ri, on a joué, et le résultat est au-delà de nos espérances. Une artiste passionnée qui met tout son cœur dans son travail.
+    </div>
+    <div class="testimonial-author">
+      <div class="testimonial-author-avatar">S</div>
+      <div>
+        <div class="testimonial-author-name">Sophie Dupont</div>
+        <div class="testimonial-author-detail">Séance Famille — Février 2026</div>
+      </div>
+      <div class="testimonial-author-stars">★★★★★</div>
+    </div>
+  </div>
+
+  <!-- Recent activity feed -->
+  <div class="activity-card">
+    <div class="activity-title">Ce qui se passe en ce moment</div>
+
+    <div class="activity-item">
+      <div class="activity-avatar rose">M</div>
+      <div class="activity-content">
+        <div class="activity-text"><strong>Marie F.</strong> a laissé un avis 5 étoiles après sa séance maternité</div>
+        <div class="activity-time">il y a 2 heures</div>
+      </div>
+      <div class="activity-stars">★★★★★</div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-avatar green">L</div>
+      <div class="activity-content">
+        <div class="activity-text"><strong>Lucas G.</strong> a réservé une séance équestre pour avril</div>
+        <div class="activity-time">il y a 5 heures</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-avatar purple">A</div>
+      <div class="activity-content">
+        <div class="activity-text"><strong>Famille B.</strong> a commandé un album et 5 tirages depuis sa galerie</div>
+        <div class="activity-time">hier</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-avatar blue">C</div>
+      <div class="activity-content">
+        <div class="activity-text"><strong>Claire M.</strong> a recommandé Fleur de Lumière à 3 amies via le parrainage</div>
+        <div class="activity-time">il y a 2 jours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google badge -->
+  <div class="google-badge">
+    <div class="google-logo">🔍</div>
+    <div class="google-info">
+      <div class="google-rating">4.9 <span class="google-rating-stars">★★★★★</span></div>
+      <div class="google-count">Basé sur 43 avis Google vérifiés</div>
+    </div>
+    <button class="google-cta">Voir tous les avis →</button>
+  </div>
+
+  <!-- CTA -->
+  <div class="proof-cta">
+    <button class="proof-cta-btn">Réserver ma séance photo →</button>
+    <div class="proof-cta-sub">Rejoignez les 147 familles qui font confiance à Fleur de Lumière</div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Configuration admin — Preuve sociale ↓</span></div>
+
+<!-- ===== ADMIN CONFIG ===== -->
+<div class="admin-screen">
+  <div class="admin-container">
+    <div class="admin-title">Preuve Sociale <span class="mockup-tag">Admin</span></div>
+    <div class="admin-sub">Configurez les éléments de preuve sociale affichés sur votre site vitrine — les données sont calculées automatiquement</div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">📊 Statistiques publiques</div>
+      <div class="admin-card-body">
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher le compteur de familles / clients</div><div class="toggle-row-hint">Calculé automatiquement depuis votre CRM</div></div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher la note moyenne</div><div class="toggle-row-hint">Agrège les notes de vos témoignages et avis Google</div></div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher le taux de recommandation</div><div class="toggle-row-hint">Basé sur la question "Recommanderiez-vous ?" des questionnaires satisfaction</div></div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher le taux de clients récurrents</div></div>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">🗺️ Carte d'activité</div>
+      <div class="admin-card-body">
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher la carte avec les zones d'intervention</div><div class="toggle-row-hint">Points anonymisés — aucune adresse client n'est visible</div></div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher le compteur mensuel de séances</div></div>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">🔔 Fil d'activité en temps réel</div>
+      <div class="admin-card-body">
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher les activités récentes (anonymisées)</div><div class="toggle-row-hint">Réservations, avis, commandes — prénoms + initiale uniquement</div></div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left"><div class="toggle-row-label">Afficher les avis Google intégrés</div><div class="toggle-row-hint">Nécessite la connexion à votre fiche Google Business</div></div>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

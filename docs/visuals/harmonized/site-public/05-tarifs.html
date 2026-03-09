@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formules &amp; Tarifs — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border);
+    transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto; padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+
+  /* ===== HERO ===== */
+  .tarifs-hero { padding: 96px 0 64px; text-align: center; background: var(--fl-bg); position: relative; overflow: hidden; }
+  .tarifs-hero::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.06) 0%, transparent 65%);
+  }
+  .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .tarifs-hero h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); color: var(--fl-prune); margin-bottom: 16px; }
+  .tarifs-hero h1 em { font-style: italic; color: var(--fl-rose); }
+  .tarifs-hero p { font-size: 1.0625rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px auto; border-radius: 1px; }
+
+  /* ===== PRICING GRID ===== */
+  .pricing-section { padding: 80px 0; background: var(--fl-bg-alt); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head h2 em { font-style: italic; color: var(--fl-or); }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .tarifs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; max-width: 1000px; margin: 0 auto; }
+  .tarif-card {
+    background: white; border-radius: var(--fl-radius); padding: 40px 32px;
+    text-align: center; box-shadow: var(--fl-shadow-sm);
+    border: 1.5px solid var(--fl-border); position: relative;
+    transition: transform var(--fl-transition), box-shadow var(--fl-transition);
+  }
+  .tarif-card:hover { transform: translateY(-4px); box-shadow: var(--fl-shadow-md); }
+  .tarif-card.featured { border-color: var(--fl-rose); box-shadow: var(--fl-shadow-md); transform: scale(1.04); }
+  .tarif-card.featured:hover { transform: scale(1.04) translateY(-4px); }
+  .tarif-featured-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--fl-rose); color: white; font-size: 0.6875rem; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; padding: 5px 18px;
+    border-radius: var(--fl-radius-full); white-space: nowrap;
+  }
+  .tarif-name { font-family: var(--fl-font-heading); font-size: 1.5rem; font-weight: 600; color: var(--fl-prune); margin-bottom: 6px; }
+  .tarif-desc { font-size: 0.875rem; color: var(--fl-warm-gray); margin-bottom: 24px; }
+  .tarif-price { font-family: var(--fl-font-heading); font-size: 3rem; font-weight: 700; color: var(--fl-or); line-height: 1; margin-bottom: 4px; }
+  .tarif-price-note { font-size: 0.8125rem; color: var(--fl-warm-gray); margin-bottom: 28px; }
+  .tarif-list { text-align: left; margin-bottom: 32px; }
+  .tarif-list li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; font-size: 0.9rem; color: var(--fl-charcoal); border-bottom: 1px solid var(--fl-border); }
+  .tarif-list li:last-child { border: none; }
+  .tarif-check { color: var(--fl-sauge); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* ===== OPTIONS ADD-ONS ===== */
+  .addons-section { padding: 80px 0; background: var(--fl-bg); }
+  .addons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .addon-card {
+    background: var(--fl-bg-alt); border-radius: var(--fl-radius); padding: 24px 20px;
+    border: 1px solid var(--fl-border); transition: border-color var(--fl-transition), transform var(--fl-transition);
+    text-align: center;
+  }
+  .addon-card:hover { border-color: var(--fl-or); transform: translateY(-2px); }
+  .addon-icon { font-size: 1.75rem; margin-bottom: 12px; }
+  .addon-name { font-family: var(--fl-font-heading); font-size: 1rem; color: var(--fl-prune); margin-bottom: 6px; }
+  .addon-price { font-family: var(--fl-font-heading); font-size: 1.25rem; font-weight: 700; color: var(--fl-or); margin-bottom: 8px; }
+  .addon-desc { font-size: 0.8125rem; color: var(--fl-warm-gray); line-height: 1.55; }
+
+  /* ===== COMPARISON TABLE ===== */
+  .comparison-section { padding: 80px 0; background: var(--fl-bg-alt); }
+  .comparison-wrap { overflow-x: auto; }
+  .comparison-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  .comparison-table thead th { padding: 16px 20px; font-family: var(--fl-font-heading); font-size: 1.0625rem; color: var(--fl-prune); background: white; border-bottom: 2px solid var(--fl-border); text-align: center; }
+  .comparison-table thead th:first-child { text-align: left; }
+  .comparison-table thead th.featured-col { background: var(--fl-prune); color: white; }
+  .comparison-table tbody td { padding: 14px 20px; border-bottom: 1px solid var(--fl-border); color: var(--fl-charcoal); background: white; text-align: center; }
+  .comparison-table tbody td:first-child { text-align: left; font-weight: 500; color: var(--fl-prune); background: var(--fl-bg-alt); }
+  .comparison-table tbody td.featured-col { background: rgba(74,46,61,0.03); font-weight: 600; }
+  .comparison-table tbody tr:last-child td { border: none; }
+  .check-yes { color: var(--fl-sauge); font-weight: 700; font-size: 1.1rem; }
+  .check-no { color: var(--fl-warm-gray); }
+  .comparison-table tbody tr:hover td { background: rgba(212,160,60,0.03); }
+  .comparison-table tbody tr:hover td:first-child { background: rgba(212,160,60,0.06); }
+
+  /* ===== TRUST SIGNALS ===== */
+  .trust-section { padding: 64px 0; background: var(--fl-bg); }
+  .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+  .trust-item { padding: 24px 16px; }
+  .trust-icon { font-size: 2rem; margin-bottom: 12px; }
+  .trust-item h4 { font-family: var(--fl-font-heading); font-size: 1rem; color: var(--fl-prune); margin-bottom: 6px; }
+  .trust-item p { font-size: 0.875rem; color: var(--fl-warm-gray); line-height: 1.55; }
+
+  /* ===== FAQ ===== */
+  .faq-section { padding: 96px 0; background: var(--fl-bg-alt); }
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--fl-border); }
+  .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 20px 0; font-family: var(--fl-font-body); font-size: 1rem; font-weight: 600; color: var(--fl-prune); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: color var(--fl-transition); }
+  .faq-q:hover { color: var(--fl-rose); }
+  .faq-chevron { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.3s; color: var(--fl-or); }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p { padding-bottom: 20px; font-size: 0.9375rem; color: var(--fl-warm-gray); line-height: 1.75; }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-rose); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+  .reveal-delay-4 { transition-delay: 0.32s; }
+
+  @media (max-width: 1024px) {
+    .tarifs-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+    .tarif-card.featured { transform: none; }
+    .tarif-card.featured:hover { transform: translateY(-4px); }
+    .addons-grid { grid-template-columns: repeat(2, 1fr); }
+    .trust-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .addons-grid { grid-template-columns: 1fr 1fr; }
+    .trust-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="03-portfolio-temoignages.html#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="tarifs-hero">
+  <div class="fl-container">
+    <div class="section-label">Tarifs</div>
+    <h1>Formules &amp; <em>Tarifs</em></h1>
+    <div class="gold-rule"></div>
+    <p>Des formules pensées pour chaque histoire, chaque budget. Options personnalisables à la réservation. Acompte de 30% à la réservation, solde avant livraison.</p>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <div class="fl-container">
+    <div class="tarifs-grid">
+      <div class="tarif-card reveal reveal-delay-1">
+        <div class="tarif-name">Essentiel</div>
+        <div class="tarif-desc">30 min · 10 photos retouchées</div>
+        <div class="tarif-price">150€</div>
+        <div class="tarif-price-note">séance + galerie en ligne</div>
+        <ul class="tarif-list">
+          <li><span class="tarif-check">✓</span>Séance 30 min en extérieur</li>
+          <li><span class="tarif-check">✓</span>10 photos retouchées à la main</li>
+          <li><span class="tarif-check">✓</span>Galerie privée en ligne (90 jours)</li>
+          <li><span class="tarif-check">✓</span>Photos HD téléchargeables</li>
+          <li><span class="tarif-check">✓</span>Questionnaire pré-shooting</li>
+          <li><span class="tarif-check">✓</span>Guide conseils tenues</li>
+        </ul>
+        <a href="#reserver" class="fl-btn fl-btn-outline-prune" style="width:100%;justify-content:center;">Choisir Essentiel</a>
+      </div>
+
+      <div class="tarif-card featured reveal reveal-delay-2">
+        <div class="tarif-featured-badge">★ Populaire</div>
+        <div class="tarif-name">Signature</div>
+        <div class="tarif-desc">1h · 25 photos retouchées</div>
+        <div class="tarif-price">280€</div>
+        <div class="tarif-price-note">séance + sélection interactive</div>
+        <ul class="tarif-list">
+          <li><span class="tarif-check">✓</span>Tout Essentiel inclus</li>
+          <li><span class="tarif-check">✓</span>Séance 1h · plus de variété</li>
+          <li><span class="tarif-check">✓</span>25 photos retouchées à la main</li>
+          <li><span class="tarif-check">✓</span>Galerie de sélection interactive</li>
+          <li><span class="tarif-check">✓</span>Changement de tenue possible</li>
+          <li><span class="tarif-check">✓</span>3 tirages 20×30 offerts</li>
+          <li><span class="tarif-check">✓</span>Passeport fidélité Équestre</li>
+        </ul>
+        <a href="#reserver" class="fl-btn fl-btn-primary" style="width:100%;justify-content:center;">Choisir Signature</a>
+      </div>
+
+      <div class="tarif-card reveal reveal-delay-3">
+        <div class="tarif-name">Sur-Mesure</div>
+        <div class="tarif-desc">Personnalisé selon vos envies</div>
+        <div class="tarif-price" style="font-size: 2rem; font-style: italic;">Sur devis</div>
+        <div class="tarif-price-note">réponse sous 48h</div>
+        <ul class="tarif-list">
+          <li><span class="tarif-check">✓</span>Durée et photos à définir</li>
+          <li><span class="tarif-check">✓</span>Multi-lieux possibles</li>
+          <li><span class="tarif-check">✓</span>Équestres, mariages, événements</li>
+          <li><span class="tarif-check">✓</span>Idéal événements uniques</li>
+          <li><span class="tarif-check">✓</span>Devis gratuit sous 48h</li>
+          <li><span class="tarif-check">✓</span>Accompagnement personnalisé</li>
+        </ul>
+        <a href="#reserver" class="fl-btn fl-btn-ghost" style="width:100%;justify-content:center;">Demander un devis</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADD-ONS -->
+<section class="addons-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Options</div>
+      <h2>Options &amp; <em>suppléments</em></h2>
+      <div class="gold-rule"></div>
+      <p>Personnalisez votre formule avec des options à la carte, disponibles à la réservation ou depuis votre galerie.</p>
+    </div>
+    <div class="addons-grid">
+      <div class="addon-card reveal reveal-delay-1">
+        <div class="addon-icon">🖨️</div>
+        <div class="addon-name">Tirages Fine Art</div>
+        <div class="addon-price">À partir de 25€</div>
+        <div class="addon-desc">Papier Hahnemühle 308g qualité musée. Formats 20×30, 30×45, 40×60.</div>
+      </div>
+      <div class="addon-card reveal reveal-delay-2">
+        <div class="addon-icon">📖</div>
+        <div class="addon-name">Album relié</div>
+        <div class="addon-price">À partir de 120€</div>
+        <div class="addon-desc">Album lay-flat couverture cuir. 20, 30 ou 40 pages. Un souvenir pour la vie.</div>
+      </div>
+      <div class="addon-card reveal reveal-delay-3">
+        <div class="addon-icon">✨</div>
+        <div class="addon-name">Photos supplémentaires</div>
+        <div class="addon-price">10€ / photo</div>
+        <div class="addon-desc">Ajoutez des photos retouchées à votre sélection initiale. Sans limite.</div>
+      </div>
+      <div class="addon-card reveal reveal-delay-4">
+        <div class="addon-icon">⚡</div>
+        <div class="addon-name">Livraison express</div>
+        <div class="addon-price">+40€</div>
+        <div class="addon-desc">Galerie livrée sous 5 jours au lieu de 2-3 semaines. Idéal pour les cadeaux urgents.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON TABLE -->
+<section class="comparison-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Comparatif</div>
+      <h2>Tableau <em>comparatif</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="comparison-wrap reveal">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Caractéristique</th>
+            <th>Essentiel</th>
+            <th class="featured-col">Signature</th>
+            <th>Sur-Mesure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prix</td>
+            <td>150€</td>
+            <td class="featured-col">280€</td>
+            <td>Sur devis</td>
+          </tr>
+          <tr>
+            <td>Durée de séance</td>
+            <td>30 min</td>
+            <td class="featured-col">1 heure</td>
+            <td>À définir</td>
+          </tr>
+          <tr>
+            <td>Photos retouchées</td>
+            <td>10 photos</td>
+            <td class="featured-col">25 photos</td>
+            <td>Illimitées</td>
+          </tr>
+          <tr>
+            <td>Galerie privée en ligne</td>
+            <td><span class="check-yes">✓</span></td>
+            <td class="featured-col"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Questionnaire pré-shooting</td>
+            <td><span class="check-yes">✓</span></td>
+            <td class="featured-col"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Galerie de sélection interactive</td>
+            <td><span class="check-no">—</span></td>
+            <td class="featured-col"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Changement de tenue</td>
+            <td><span class="check-no">—</span></td>
+            <td class="featured-col"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>3 tirages 20×30 offerts</td>
+            <td><span class="check-no">—</span></td>
+            <td class="featured-col"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Multi-lieux possible</td>
+            <td><span class="check-no">—</span></td>
+            <td class="featured-col"><span class="check-no">—</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Report gratuit si météo</td>
+            <td><span class="check-yes">✓</span></td>
+            <td class="featured-col"><span class="check-yes">✓</span></td>
+            <td><span class="check-yes">✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST SIGNALS -->
+<section class="trust-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Paiement</div>
+      <h2>Moyens de paiement &amp; <em>garanties</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item reveal reveal-delay-1">
+        <div class="trust-icon">💳</div>
+        <h4>Paiement sécurisé</h4>
+        <p>Carte bancaire (Visa, Mastercard), Apple Pay, Google Pay via Stripe. Chiffrement SSL.</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-2">
+        <div class="trust-icon">🏦</div>
+        <h4>Virement bancaire</h4>
+        <p>Sur demande, paiement par virement. Coordonnées communiquées à la réservation.</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-3">
+        <div class="trust-icon">↩️</div>
+        <h4>Satisfait ou remboursé</h4>
+        <p>Annulation plus de 7 jours avant : remboursement intégral. Garantie météo : report gratuit.</p>
+      </div>
+      <div class="trust-item reveal reveal-delay-4">
+        <div class="trust-icon">🌅</div>
+        <h4>Heure Dorée garantie</h4>
+        <p>Chaque séance est programmée à la meilleure lumière. Si ce n'est pas possible, on reporte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Questions</div>
+      <h2>Questions sur les <em>tarifs</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="faq-list reveal">
+
+      <div class="faq-item open">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quel acompte est demandé à la réservation ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Un acompte de 30% du montant total est demandé à la réservation pour confirmer votre créneau. Le solde est à régler avant la livraison de votre galerie en ligne.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Peut-on payer en plusieurs fois ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Non, nous n'acceptons pas le paiement en plusieurs fois pour le moment. L'acompte (30%) est versé à la réservation et le solde (70%) avant la livraison de la galerie, ce qui vous laisse 2-3 semaines entre les deux paiements.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Que se passe-t-il si j'annule ma séance ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Plus de 7 jours avant : report gratuit (1 fois) ou remboursement intégral. Moins de 7 jours : report uniquement. Moins de 48h : ni report ni remboursement, sauf force majeure. En cas de météo défavorable, report gratuit systématiquement.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Les séances équestres sont-elles plus chères ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Non, les mêmes formules s'appliquent à toutes les spécialités, y compris l'équestre. Les frais de déplacement peuvent s'ajouter si vous êtes à plus de 30km de Parisot (81) — comptez 0,30€/km au-delà.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          La carte cadeau est-elle utilisable sur toutes les formules ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Oui ! Les cartes cadeau sont utilisables sur toutes les formules de séance et sur la boutique en ligne (tirages, albums, objets). Valable 12 mois à compter de la date d'achat.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Y a-t-il des frais de déplacement ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Les déplacements dans un rayon de 30km autour de Parisot (81) sont offerts. Au-delà, un forfait kilométrique de 0,30€/km est ajouté. Pour Toulouse et Aveyron, un forfait fixe est établi à la demande.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Peut-on utiliser un code promo ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Oui ! Saisissez votre code promo lors de la réservation en ligne. Les codes ne sont pas cumulables entre eux. Vérifiez la date de validité avant utilisation.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Peut-on personaliser la formule Sur-Mesure ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Absolument ! La formule Sur-Mesure est entièrement personnalisable : durée, nombre de photos, lieux multiples, spécialités combinées. Envoyez-moi un message et je vous prépare un devis sous 48h, sans engagement.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="reserver">
+  <div class="fl-container">
+    <h2>Prête à capturer vos<br>plus beaux <em>moments</em> ?</h2>
+    <p>Choisissez votre formule et réservez votre séance à l'Heure Dorée. Acompte de 30% seulement à la réservation.</p>
+    <div class="cta-actions">
+      <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance →</a>
+      <a href="07-cartes-cadeau-faq.html" class="fl-btn fl-btn-ghost fl-btn-lg">Offrir une carte cadeau</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

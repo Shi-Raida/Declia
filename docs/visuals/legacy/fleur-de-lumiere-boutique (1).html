@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--shadow-cta:0 4px 12px rgba(194,114,126,.3);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{font-family:var(--font);cursor:pointer}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.or-line{width:60px;height:2px;background:var(--or);margin:12px auto;border-radius:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);font-size:14px;font-weight:700;padding:12px 28px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:2px solid transparent}
+.btn-primary{background:var(--rose);color:#fff;border-color:var(--rose);box-shadow:var(--shadow-cta)}
+.btn-primary:hover{background:var(--rose-hover);border-color:var(--rose-hover);transform:translateY(-1px)}
+.btn-sm{padding:10px 18px;font-size:13px}
+.btn-full{width:100%}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,46,61,.06)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 24px}
+.logo{font-family:var(--font-titre);font-size:22px;font-weight:700;color:var(--prune)}
+.logo span{color:var(--or)}
+.nav{display:flex;align-items:center;gap:28px}
+.nav a{font-size:15px;color:var(--prune);transition:var(--tr)}
+.nav a:hover{color:var(--rose)}
+.nav a.active{color:var(--rose)}
+.cart-btn{position:relative;width:40px;height:40px;border-radius:50%;border:1px solid var(--gris-border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:var(--tr)}
+.cart-btn:hover{background:var(--prune-light);border-color:var(--rose)}
+.cart-count{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--rose);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
+
+/* PROMO */
+.promo{background:linear-gradient(135deg,var(--or),#e8c56d);padding:10px 24px;text-align:center;font-size:13px;font-weight:700;color:var(--prune)}
+
+/* HERO */
+.shop-hero{padding:72px 0 48px;text-align:center}
+.shop-hero h1{font-size:clamp(30px,5vw,44px);color:var(--prune)}
+.shop-hero h1 em{color:var(--rose);font-style:italic}
+.shop-hero p{font-size:16px;color:var(--gris);max-width:500px;margin:0 auto;line-height:1.7}
+
+/* CATEGORIES */
+.cat-bar{padding:20px 0;border-bottom:1px solid var(--gris-border)}
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.cat-tab{padding:9px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--tr)}
+.cat-tab:hover{border-color:var(--rose);color:var(--rose)}
+.cat-tab.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+
+/* PRODUCTS */
+.products{padding:40px 0 80px;background:var(--bg-alt)}
+.products-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.products-top h2{font-size:18px;color:var(--prune)}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.product-card{background:var(--bg);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);border:1px solid var(--gris-border);transition:var(--tr);position:relative}
+.product-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.product-img{position:relative;overflow:hidden;aspect-ratio:1}
+.product-img .ph{width:100%;height:100%;transition:transform .5s ease}
+.product-card:hover .ph{transform:scale(1.05)}
+.product-badge{position:absolute;top:10px;left:10px;font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--radius-full);z-index:2}
+.pb-best{background:var(--rose);color:#fff}
+.pb-new{background:var(--sauge);color:#fff}
+.pb-promo{background:var(--or);color:var(--texte)}
+.product-fav{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.85);border:none;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;backdrop-filter:blur(4px);transition:var(--tr)}
+.product-fav:hover{background:#fff;transform:scale(1.1)}
+.product-fav.liked{background:var(--rose);color:#fff}
+.quick-add{position:absolute;bottom:10px;left:10px;right:10px;z-index:2;opacity:0;transform:translateY(6px);transition:var(--tr)}
+.product-card:hover .quick-add{opacity:1;transform:translateY(0)}
+.product-body{padding:14px 16px}
+.product-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gris-light);margin-bottom:3px}
+.product-name{font-family:var(--font-titre);font-size:15px;color:var(--prune);margin-bottom:4px;line-height:1.3}
+.product-desc{font-size:12px;color:var(--gris);line-height:1.5;margin-bottom:8px}
+.product-pricing{display:flex;align-items:baseline;gap:8px}
+.product-price{font-family:var(--font-titre);font-size:18px;font-weight:700;color:var(--or)}
+.product-old{font-size:13px;color:var(--gris-light);text-decoration:line-through}
+.product-unit{font-size:12px;color:var(--gris)}
+.product-sizes{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.sz{padding:4px 10px;border-radius:var(--radius-full);font-size:10px;font-weight:700;border:1px solid var(--gris-border);color:var(--gris);cursor:pointer;transition:var(--tr)}
+.sz:hover{border-color:var(--or);color:var(--or)}
+.sz.active{background:var(--or);color:var(--texte);border-color:var(--or)}
+
+/* Placeholder colors */
+.ph-1{background:linear-gradient(135deg,#f5ede6,#e8ddd2)}
+.ph-2{background:linear-gradient(135deg,#e2d5c8,#d0c0ae)}
+.ph-3{background:linear-gradient(135deg,#d8ccb8,#c5b8a2)}
+.ph-4{background:linear-gradient(140deg,#f0e4d4,#ddd0bc)}
+.ph-5{background:linear-gradient(130deg,#e8ddd2,#d5c8b8)}
+.ph-6{background:linear-gradient(145deg,#f2e6d8,#e5d8c8)}
+.ph-7{background:linear-gradient(135deg,#ebe0d2,#ddd0be)}
+.ph-8{background:linear-gradient(135deg,#cec5b8,#bfb5a5)}
+
+/* INFO BAR */
+.info-bar{padding:48px 0;background:var(--bg);border-top:1px solid var(--gris-border)}
+.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;text-align:center}
+.info-item .ii-icon{font-size:26px;margin-bottom:10px}
+.info-item h4{font-size:13px;color:var(--prune);margin-bottom:3px}
+.info-item p{font-size:12px;color:var(--gris)}
+
+/* HOW */
+.how{padding:64px 0;background:var(--bg-alt);border-top:1px solid var(--gris-border)}
+.how-header{text-align:center;margin-bottom:40px}
+.how-header h2{font-size:clamp(22px,3vw,30px);color:var(--prune)}
+.how-header h2 em{color:var(--rose);font-style:italic}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:800px;margin:0 auto}
+.how-step{text-align:center}
+.how-num{width:44px;height:44px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:var(--font-titre);font-size:18px;font-weight:700}
+.hn1{background:var(--rose-light);color:var(--rose)}
+.hn2{background:var(--or-light);color:var(--or)}
+.hn3{background:var(--sauge-light);color:var(--sauge)}
+.how-step h4{font-size:15px;color:var(--prune);margin-bottom:6px}
+.how-step p{font-size:13px;color:var(--gris);line-height:1.6}
+
+/* CTA */
+.cta{padding:72px 0;background:var(--prune);text-align:center;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(194,114,126,.08) 0%,transparent 70%)}
+.cta h2{color:#fff;font-size:clamp(22px,3vw,32px);margin-bottom:10px;position:relative;z-index:1}
+.cta h2 em{color:var(--or);font-style:italic}
+.cta p{color:rgba(255,255,255,.6);font-size:15px;margin-bottom:24px;position:relative;z-index:1}
+.cta .btn{position:relative;z-index:1}
+
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(74,46,61,.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-drawer{position:fixed;top:0;right:-400px;width:380px;max-width:90vw;height:100vh;background:var(--bg);z-index:210;transition:right .35s ease;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(74,46,61,.15)}
+.cart-drawer.open{right:0}
+.cd-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--gris-border)}
+.cd-header h3{font-family:var(--font-titre);font-size:17px;color:var(--prune)}
+.cd-close{width:34px;height:34px;border-radius:50%;border:1px solid var(--gris-border);background:var(--bg);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.cd-close:hover{background:var(--prune-light)}
+.cd-items{flex:1;overflow-y:auto;padding:14px 20px}
+.cd-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid rgba(74,46,61,.04)}
+.cd-item:last-child{border:none}
+.cd-item-img{width:56px;height:56px;border-radius:var(--radius);overflow:hidden;flex-shrink:0}
+.cd-item-info{flex:1}
+.cd-item-info h4{font-size:13px;color:var(--prune);margin-bottom:2px}
+.cd-item-info .ci-sub{font-size:11px;color:var(--gris)}
+.cd-item-info .ci-price{font-family:var(--font-titre);font-size:15px;font-weight:700;color:var(--or);margin-top:4px}
+.cd-qty{display:flex;align-items:center;gap:6px;margin-top:6px}
+.cd-qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--gris-border);background:var(--bg);font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cd-qty button:hover{background:var(--prune-light)}
+.cd-qty .qv{font-size:13px;font-weight:700;color:var(--prune);min-width:16px;text-align:center}
+.cd-remove{font-size:11px;color:var(--gris-light);cursor:pointer;border:none;background:none;align-self:flex-start}
+.cd-remove:hover{color:var(--rose)}
+.cd-footer{padding:18px 20px;border-top:1px solid var(--gris-border);background:var(--bg-alt)}
+.cd-total{display:flex;justify-content:space-between;margin-bottom:14px}
+.cd-total .ct-l{font-weight:700;color:var(--prune);font-size:14px}
+.cd-total .ct-v{font-family:var(--font-titre);font-size:20px;font-weight:700;color:var(--or)}
+.cd-note{font-size:11px;color:var(--gris);text-align:center;margin-top:10px}
+
+/* FOOTER */
+.footer{background:var(--prune);color:#fff;padding:48px 0 28px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:36px}
+.footer-brand .logo{color:#fff;font-size:20px;margin-bottom:10px;display:block}
+.footer-brand .logo span{color:var(--or)}
+.footer-brand p{color:rgba(255,255,255,.5);font-size:13px;line-height:1.6}
+.footer h4{font-family:var(--font-titre);font-size:14px;color:#fff;margin-bottom:14px}
+.footer-links{list-style:none}
+.footer-links li{margin-bottom:7px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.5);transition:var(--tr)}
+.footer-links a:hover{color:var(--or)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:16px;display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.3)}
+
+@media(max-width:1024px){.products-grid{grid-template-columns:repeat(3,1fr)}.info-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.nav{display:none}.products-grid{grid-template-columns:repeat(2,1fr)}.how-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:8px;text-align:center}}
+@media(max-width:480px){.products-grid{grid-template-columns:1fr;max-width:340px;margin:0 auto}}
+</style>
+</head>
+<body>
+
+<header class="header"><div class="header-inner">
+  <a class="logo">Fleur de <span>L</span>umière</a>
+  <nav class="nav"><a href="#">Spécialités</a><a href="#">Formules</a><a href="#">Portfolio</a><a href="#" class="active">Boutique</a><a href="#" class="btn btn-primary btn-sm">Réserver</a></nav>
+  <button class="cart-btn" onclick="toggleCart()">🛒<span class="cart-count">2</span></button>
+</div></header>
+
+<div class="promo">🎁 Livraison offerte dès 80€ avec le code <strong>LUMIERE</strong></div>
+
+<section class="shop-hero"><div class="container">
+  <h1>La <em>Boutique</em></h1><div class="or-line"></div>
+  <p>Tirages Fine Art, albums, toiles, objets personnalisés… Transformez vos photos en souvenirs à toucher.</p>
+</div></section>
+
+<div class="cat-bar"><div class="container">
+  <div class="cat-tabs">
+    <span class="cat-tab active" onclick="filterCat(this,'all')">Tout</span>
+    <span class="cat-tab" onclick="filterCat(this,'tirages')">🖨️ Tirages</span>
+    <span class="cat-tab" onclick="filterCat(this,'albums')">📖 Albums</span>
+    <span class="cat-tab" onclick="filterCat(this,'toiles')">🖼️ Toiles & Cadres</span>
+    <span class="cat-tab" onclick="filterCat(this,'objets')">🎁 Objets</span>
+    <span class="cat-tab" onclick="filterCat(this,'coffrets')">✨ Coffrets</span>
+  </div>
+</div></div>
+
+<section class="products"><div class="container">
+  <div class="products-top"><h2>Nos produits</h2><span style="font-size:13px;color:var(--gris)">8 produits</span></div>
+  <div class="products-grid">
+
+    <div class="product-card" data-cat="tirages">
+      <div class="product-img"><div class="ph ph-1"></div><span class="product-badge pb-best">★ Best-seller</span><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Tirages</div><div class="product-name">Tirage Fine Art 20×30</div><div class="product-desc">Papier Hahnemühle Photo Rag 308g. Rendu musée.</div><div class="product-pricing"><span class="product-price">25€</span><span class="product-unit">/ tirage</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="tirages">
+      <div class="product-img"><div class="ph ph-3"></div><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Tirages</div><div class="product-name">Tirage Fine Art 30×40</div><div class="product-desc">Grand format idéal pour encadrer. Papier premium.</div><div class="product-pricing"><span class="product-price">40€</span><span class="product-unit">/ tirage</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="albums">
+      <div class="product-img"><div class="ph ph-2"></div><span class="product-badge pb-best">★ Best-seller</span><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Albums</div><div class="product-name">Album relié cuir 20 pages</div><div class="product-desc">Couverture cuir souple, pages lay-flat 25×25 cm.</div><div class="product-pricing"><span class="product-price">120€</span></div><div class="product-sizes"><span class="sz active">20 pages</span><span class="sz">30p +40€</span><span class="sz">40p +70€</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="toiles">
+      <div class="product-img"><div class="ph ph-5"></div><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Toiles & Cadres</div><div class="product-name">Toile canvas 40×60</div><div class="product-desc">Impression HD sur canvas tendu, châssis bois 2 cm.</div><div class="product-pricing"><span class="product-price">85€</span></div><div class="product-sizes"><span class="sz">30×40 55€</span><span class="sz active">40×60 85€</span><span class="sz">60×90 130€</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="coffrets">
+      <div class="product-img"><div class="ph ph-4"></div><span class="product-badge pb-new">✦ Nouveau</span><button class="product-fav liked" onclick="event.stopPropagation();this.classList.toggle('liked')">❤</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Coffrets</div><div class="product-name">Boîte Souvenir « L'Écrin »</div><div class="product-desc">Coffret kraft : clé USB, 3 tirages, mot manuscrit, graines.</div><div class="product-pricing"><span class="product-price">35€</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="toiles">
+      <div class="product-img"><div class="ph ph-7"></div><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Toiles & Cadres</div><div class="product-name">Cadre chêne + tirage</div><div class="product-desc">Cadre bois naturel avec passe-partout blanc, tirage inclus.</div><div class="product-pricing"><span class="product-price">65€</span></div><div class="product-sizes"><span class="sz active">20×30</span><span class="sz">30×40 90€</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="objets">
+      <div class="product-img"><div class="ph ph-6"></div><span class="product-badge pb-promo">-15%</span><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Objets</div><div class="product-name">Lot de 6 magnets photo</div><div class="product-desc">Magnets 7×7 cm, coins arrondis. Parfaits pour le frigo !</div><div class="product-pricing"><span class="product-price">17€</span><span class="product-old">20€</span></div></div>
+    </div>
+
+    <div class="product-card" data-cat="coffrets">
+      <div class="product-img"><div class="ph ph-8"></div><button class="product-fav" onclick="event.stopPropagation();this.classList.toggle('liked')">🤍</button><div class="quick-add"><button class="btn btn-primary btn-full btn-sm" onclick="addToCart(event)">+ Ajouter</button></div></div>
+      <div class="product-body"><div class="product-cat">Coffrets</div><div class="product-name">Clé USB gravée en bois</div><div class="product-desc">Clé 32 Go dans coffret bois gravé. Toutes vos photos HD.</div><div class="product-pricing"><span class="product-price">28€</span></div></div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- INFO -->
+<section class="info-bar"><div class="container"><div class="info-grid">
+  <div class="info-item"><div class="ii-icon">🖨️</div><h4>Qualité musée</h4><p>Papier Hahnemühle Fine Art, standard galerie.</p></div>
+  <div class="info-item"><div class="ii-icon">📦</div><h4>Livraison soignée</h4><p>Emballage protecteur, suivi. Offerte dès 80€.</p></div>
+  <div class="info-item"><div class="ii-icon">🎨</div><h4>Vérifié par Capucine</h4><p>Chaque produit contrôlé avant envoi.</p></div>
+  <div class="info-item"><div class="ii-icon">↩️</div><h4>Satisfait ou refait</h4><p>Un souci ? On refait gratuitement.</p></div>
+</div></div></section>
+
+<!-- HOW -->
+<section class="how"><div class="container">
+  <div class="how-header"><h2>Comment <em>commander</em> ?</h2><div class="or-line"></div></div>
+  <div class="how-grid">
+    <div class="how-step"><div class="how-num hn1">1</div><h4>Choisissez vos photos</h4><p>Depuis votre galerie privée, sélectionnez les photos à imprimer.</p></div>
+    <div class="how-step"><div class="how-num hn2">2</div><h4>Choisissez le support</h4><p>Tirage, toile, album, objet… le format et les options.</p></div>
+    <div class="how-step"><div class="how-num hn3">3</div><h4>Recevez chez vous</h4><p>Contrôlé par Capucine, livré sous 7-10 jours ouvrés.</p></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="cta"><div class="container">
+  <h2>Pas encore de <em>galerie</em> ?</h2>
+  <p>Réservez une séance et vos photos deviendront des souvenirs à toucher.</p>
+  <a href="#" class="btn btn-primary" style="font-size:15px;padding:14px 36px;">Réserver ma séance →</a>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="footer"><div class="container">
+  <div class="footer-grid">
+    <div class="footer-brand"><span class="logo">Fleur de <span>L</span>umière</span><p>Photographie en lumière naturelle · Tarn & Toulouse</p></div>
+    <div><h4>Spécialités</h4><ul class="footer-links"><li><a href="#">Famille</a></li><li><a href="#">Équestre</a></li><li><a href="#">Événementiel</a></li><li><a href="#">Maternité</a></li></ul></div>
+    <div><h4>Informations</h4><ul class="footer-links"><li><a href="#">Formules</a></li><li><a href="#">Boutique</a></li><li><a href="#">Portfolio</a></li><li><a href="#">FAQ</a></li></ul></div>
+    <div><h4>Contact</h4><ul class="footer-links"><li><a href="#">contact@fleurdelumiere.fr</a></li><li><a href="#">Parisot (81)</a></li><li><a href="#">Carte cadeau</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Fleur de Lumière</p><div style="display:flex;gap:16px"><a href="#">Mentions légales</a><a href="#">CGV</a></div></div>
+</div></footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cd-header"><h3>🛒 Mon panier (2)</h3><button class="cd-close" onclick="toggleCart()">✕</button></div>
+  <div class="cd-items">
+    <div class="cd-item">
+      <div class="cd-item-img"><div class="ph ph-4" style="border-radius:var(--radius)"></div></div>
+      <div class="cd-item-info"><h4>Boîte Souvenir « L'Écrin »</h4><div class="ci-sub">Coffret kraft complet</div><div class="ci-price">35€</div><div class="cd-qty"><button>−</button><span class="qv">1</span><button>+</button></div></div>
+      <button class="cd-remove">✕</button>
+    </div>
+    <div class="cd-item">
+      <div class="cd-item-img"><div class="ph ph-1" style="border-radius:var(--radius)"></div></div>
+      <div class="cd-item-info"><h4>Tirage Fine Art 20×30</h4><div class="ci-sub">Photo #7 — Séance Équestre</div><div class="ci-price">25€</div><div class="cd-qty"><button>−</button><span class="qv">2</span><button>+</button></div></div>
+      <button class="cd-remove">✕</button>
+    </div>
+  </div>
+  <div class="cd-footer">
+    <div class="cd-total"><span class="ct-l">Total</span><span class="ct-v">85€</span></div>
+    <button class="btn btn-primary btn-full">Valider mon panier →</button>
+    <div class="cd-note">🚚 Livraison offerte — code LUMIERE appliqué</div>
+  </div>
+</div>
+
+<script>
+function toggleCart(){document.getElementById('cart-overlay').classList.toggle('open');document.getElementById('cart-drawer').classList.toggle('open')}
+function filterCat(el,cat){document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.product-card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none'})}
+function addToCart(e){if(e)e.stopPropagation();const c=document.querySelector('.cart-count');c.textContent=parseInt(c.textContent)+1;toggleCart()}
+</script>
+</body>
+</html>

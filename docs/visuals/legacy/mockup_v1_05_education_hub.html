@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Client Education Hub — Guides Pré-Shooting</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --prune-light: #6B4A5C;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --bg: #FDFBFC;
+    --white: #FFFFFF;
+    --cream: #FDF9F7;
+    --success: #4CAF7C;
+    --success-bg: #E8F5EE;
+    --warning: #E8985E;
+    --warning-bg: #FFF3EB;
+    --info: #5B8FA8;
+    --info-bg: #E8F0F4;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: #EDEAEB; color: var(--charcoal); }
+
+  .mockup-tag {
+    display: inline-block;
+    background: #FFE066;
+    color: #5D4E00;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .screen-divider {
+    background: var(--prune);
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .screen-divider span {
+    background: rgba(255,255,255,0.08);
+    padding: 6px 20px;
+    border-radius: 20px;
+  }
+
+  /* ===================================================================
+     SCREEN 1: ADMIN — Bibliothèque de guides
+     =================================================================== */
+  .admin-screen {
+    background: var(--bg);
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .admin-container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--warm-gray);
+    margin-top: 4px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(194,114,126,0.25);
+  }
+
+  /* Info banner */
+  .info-banner {
+    background: var(--info-bg);
+    border: 1px solid #C8DDE6;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--info);
+    margin-bottom: 28px;
+  }
+
+  /* Templates grid */
+  .templates-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+
+  .template-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .template-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+  }
+
+  .template-cover {
+    height: 120px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .template-cover-icon {
+    font-size: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .template-cover.famille { background: linear-gradient(135deg, #F5E1E4, #E8D0D4, #F0E0E8); }
+  .template-cover.equestre { background: linear-gradient(135deg, #E0EADD, #C8D8C0, #D4E4CC); }
+  .template-cover.mariage { background: linear-gradient(135deg, #E8E0F0, #D4C8E4, #E0D8EC); }
+  .template-cover.maternite { background: linear-gradient(135deg, #FCE8E8, #F0D0D4, #F8E0E0); }
+  .template-cover.naissance { background: linear-gradient(135deg, #E0ECF4, #C8DCE8, #D8E8F0); }
+  .template-cover.scolaire { background: linear-gradient(135deg, #FFF3EB, #F0E0D0, #F8EDE0); }
+  .template-cover.lifestyle { background: linear-gradient(135deg, #F0E8E0, #E0D4C8, #E8DCD0); }
+  .template-cover.corporate { background: linear-gradient(135deg, #E0E4E8, #C8CCD4, #D4D8E0); }
+  .template-cover.mini { background: linear-gradient(135deg, #FCF0E0, #F0E0C8, #F8ECD4); }
+
+  .template-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+  }
+
+  .template-badge.included { background: rgba(76,175,124,0.15); color: var(--success); }
+  .template-badge.custom { background: rgba(194,114,126,0.15); color: var(--rose); }
+
+  .template-body {
+    padding: 16px 18px;
+  }
+
+  .template-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 4px;
+  }
+
+  .template-desc {
+    font-size: 12px;
+    color: var(--warm-gray);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .template-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .template-sections {
+    font-size: 11px;
+    color: var(--warm-gray);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .template-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+  }
+
+  .template-status.active { background: var(--success-bg); color: var(--success); }
+  .template-status.draft { background: #F0EAEB; color: var(--warm-gray); }
+
+  /* Automation settings */
+  .auto-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .auto-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .auto-rule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--cream);
+    border-radius: 12px;
+    margin-bottom: 8px;
+  }
+
+  .auto-rule:last-child { margin-bottom: 0; }
+
+  .auto-rule-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .auto-rule-icon.famille { background: var(--rose-light); }
+  .auto-rule-icon.equestre { background: #D8EAD4; }
+  .auto-rule-icon.mariage { background: #E4D8EC; }
+  .auto-rule-icon.maternite { background: #FCE8E8; }
+
+  .auto-rule-content { flex: 1; }
+
+  .auto-rule-title {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  .auto-rule-detail {
+    font-size: 11.5px;
+    color: var(--warm-gray);
+  }
+
+  .auto-rule-arrow {
+    font-size: 14px;
+    color: var(--rose);
+  }
+
+  .auto-rule-guide {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--prune);
+    background: var(--white);
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .toggle {
+    width: 40px;
+    height: 22px;
+    background: #E0D6D9;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--success); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+    width: 17px;
+    height: 17px;
+    background: var(--white);
+    border-radius: 50%;
+    transition: all 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .toggle.on::after { left: 20.5px; }
+
+  /* ===================================================================
+     SCREEN 2: CLIENT VIEW — Le guide reçu (mobile-first)
+     =================================================================== */
+  .client-screen {
+    background: var(--cream);
+    min-height: 100vh;
+  }
+
+  .client-guide-nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .client-guide-nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .client-guide-nav-logo span { color: var(--rose); }
+
+  .client-guide-nav-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--warm-gray);
+    background: var(--cream);
+    padding: 5px 12px;
+    border-radius: 8px;
+  }
+
+  .guide-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 36px 24px;
+  }
+
+  /* Guide header */
+  .guide-hero {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .guide-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--rose);
+    background: var(--rose-pale);
+    padding: 5px 14px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 16px;
+  }
+
+  .guide-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--prune);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .guide-hero-sub {
+    font-size: 14px;
+    color: var(--warm-gray);
+    line-height: 1.5;
+  }
+
+  .guide-hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .guide-hero-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: var(--warm-gray);
+  }
+
+  /* Guide sections */
+  .guide-section {
+    background: var(--white);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .guide-section-header {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+
+  .guide-section-number {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--rose-pale);
+    color: var(--rose);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .guide-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .guide-section-subtitle {
+    font-size: 12px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  .guide-section-body {
+    padding: 0 24px 24px;
+  }
+
+  .guide-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .guide-tip:last-child { border-bottom: none; }
+
+  .guide-tip-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .guide-tip-icon.do { background: var(--success-bg); }
+  .guide-tip-icon.avoid { background: #FDECEA; }
+  .guide-tip-icon.info { background: var(--info-bg); }
+  .guide-tip-icon.idea { background: var(--warning-bg); }
+
+  .guide-tip-content { flex: 1; }
+
+  .guide-tip-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 2px;
+  }
+
+  .guide-tip-text {
+    font-size: 12.5px;
+    color: var(--warm-gray);
+    line-height: 1.5;
+  }
+
+  /* Visual tip card */
+  .guide-visual-card {
+    background: linear-gradient(135deg, var(--rose-pale) 0%, var(--cream) 100%);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 12px;
+  }
+
+  .guide-visual-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .color-palette {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .color-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .color-dot {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--white);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .color-name {
+    font-size: 10px;
+    color: var(--warm-gray);
+  }
+
+  /* Checklist */
+  .guide-checklist {
+    padding: 16px 0 0;
+  }
+
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .checklist-item:last-child { border-bottom: none; }
+
+  .checklist-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .checklist-box.checked {
+    background: var(--success);
+    border-color: var(--success);
+    color: var(--white);
+  }
+
+  .checklist-label {
+    font-size: 13px;
+    color: var(--charcoal);
+  }
+
+  .checklist-label.checked {
+    text-decoration: line-through;
+    color: var(--warm-gray);
+  }
+
+  /* Photographer note */
+  .photographer-note {
+    background: var(--white);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .photographer-note::before {
+    content: '💌';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 20px;
+    background: var(--cream);
+    padding: 0 6px;
+  }
+
+  .photographer-note-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 8px;
+  }
+
+  .photographer-note-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: var(--charcoal);
+    line-height: 1.6;
+  }
+
+  .photographer-note-author {
+    font-size: 12px;
+    color: var(--rose);
+    margin-top: 10px;
+    font-weight: 500;
+  }
+
+  /* CTA bottom */
+  .guide-cta {
+    text-align: center;
+    padding: 12px 0 24px;
+  }
+
+  .guide-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(194,114,126,0.3);
+    transition: all 0.2s;
+  }
+
+  .guide-cta-sub {
+    font-size: 12px;
+    color: var(--warm-gray);
+    margin-top: 8px;
+  }
+
+  /* Progress bar for guide completion */
+  .guide-progress {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .guide-progress-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+    flex-shrink: 0;
+  }
+
+  .guide-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .guide-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--rose));
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+
+  .guide-progress-pct {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--prune);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     SCREEN 1: ADMIN — Bibliothèque de guides
+     ===================================================== -->
+<div class="admin-screen">
+  <div class="admin-container">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Guides Pré-Shooting <span class="mockup-tag">V1 — Admin</span></div>
+        <div class="page-subtitle">Préparez vos clients pour des séances réussies grâce à des guides personnalisés envoyés automatiquement</div>
+      </div>
+      <button class="btn-primary">+ Créer un guide</button>
+    </div>
+
+    <div class="info-banner">
+      <span>💡</span>
+      <span>Les guides sont envoyés <strong>automatiquement</strong> après chaque réservation selon le type de séance. Vous pouvez personnaliser chaque template ou en créer de nouveaux.</span>
+    </div>
+
+    <!-- Template library -->
+    <div class="templates-grid">
+      <div class="template-card">
+        <div class="template-cover famille">
+          <div class="template-cover-icon">👨‍👩‍👧‍👦</div>
+          <span class="template-badge included">Inclus</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Séance Famille</div>
+          <div class="template-desc">Tenues coordonnées, gestion des enfants, horaires idéaux et checklist de préparation.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 5 sections · 12 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover equestre">
+          <div class="template-cover-icon">🐴</div>
+          <span class="template-badge included">Inclus</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Séance Équestre</div>
+          <div class="template-desc">Préparation du cheval, matériel propre, tenues adaptées et conseils de sécurité.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 6 sections · 15 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover mariage">
+          <div class="template-cover-icon">💒</div>
+          <span class="template-badge included">Inclus</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Mariage — Jour J</div>
+          <div class="template-desc">Timeline, moments clés, coordination prestataires et comment profiter de votre photographe.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 8 sections · 20 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover maternite">
+          <div class="template-cover-icon">🤰</div>
+          <span class="template-badge included">Inclus</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Séance Maternité</div>
+          <div class="template-desc">Moment idéal (7ème mois), tenues flatteuses, poses confortables et ambiance.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 4 sections · 10 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover naissance">
+          <div class="template-cover-icon">👶</div>
+          <span class="template-badge included">Inclus</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Séance Nouveau-né</div>
+          <div class="template-desc">Préparation du domicile, température idéale, timing avec les siestes et accessoires.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 5 sections · 11 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover scolaire">
+          <div class="template-cover-icon">🎒</div>
+          <span class="template-badge included">Inclus</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Photo Scolaire</div>
+          <div class="template-desc">Guide envoyé aux parents : tenues conseillées, coiffure, sourire naturel.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 3 sections · 6 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover lifestyle">
+          <div class="template-cover-icon">🌆</div>
+          <span class="template-badge custom">Personnalisé</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Séance Lifestyle</div>
+          <div class="template-desc">Ambiance urbaine, looks mode, lieux photogéniques et attitude naturelle.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 4 sections · 8 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover corporate">
+          <div class="template-cover-icon">🏢</div>
+          <span class="template-badge custom">Personnalisé</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Photo Corporate</div>
+          <div class="template-desc">Dress code professionnel, détails à soigner, posture et expression confiante.</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 3 sections · 7 conseils</div>
+            <div class="template-status draft">Brouillon</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-cover mini">
+          <div class="template-cover-icon">⚡</div>
+          <span class="template-badge custom">Personnalisé</span>
+        </div>
+        <div class="template-body">
+          <div class="template-name">Mini-Session</div>
+          <div class="template-desc">Guide express : arrivez prêts, 20 min chrono, tenues simples et souriez !</div>
+          <div class="template-meta">
+            <div class="template-sections">📄 2 sections · 5 conseils</div>
+            <div class="template-status active">● Actif</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Automation rules -->
+    <div class="auto-card">
+      <div class="auto-card-title">⚡ Envoi automatique par type de séance</div>
+
+      <div class="auto-rule">
+        <div class="auto-rule-icon famille">👨‍👩‍👧</div>
+        <div class="auto-rule-content">
+          <div class="auto-rule-title">Réservation Famille / Portrait</div>
+          <div class="auto-rule-detail">Envoyé immédiatement après confirmation de réservation</div>
+        </div>
+        <div class="auto-rule-arrow">→</div>
+        <div class="auto-rule-guide">Guide Famille</div>
+        <div class="toggle on"></div>
+      </div>
+
+      <div class="auto-rule">
+        <div class="auto-rule-icon equestre">🐴</div>
+        <div class="auto-rule-content">
+          <div class="auto-rule-title">Réservation Équestre</div>
+          <div class="auto-rule-detail">Envoyé immédiatement + rappel J-3</div>
+        </div>
+        <div class="auto-rule-arrow">→</div>
+        <div class="auto-rule-guide">Guide Équestre</div>
+        <div class="toggle on"></div>
+      </div>
+
+      <div class="auto-rule">
+        <div class="auto-rule-icon mariage">💒</div>
+        <div class="auto-rule-content">
+          <div class="auto-rule-title">Réservation Mariage</div>
+          <div class="auto-rule-detail">Envoyé J-14 avant le mariage</div>
+        </div>
+        <div class="auto-rule-arrow">→</div>
+        <div class="auto-rule-guide">Guide Mariage</div>
+        <div class="toggle on"></div>
+      </div>
+
+      <div class="auto-rule">
+        <div class="auto-rule-icon maternite">🤰</div>
+        <div class="auto-rule-content">
+          <div class="auto-rule-title">Réservation Maternité</div>
+          <div class="auto-rule-detail">Envoyé immédiatement après confirmation</div>
+        </div>
+        <div class="auto-rule-arrow">→</div>
+        <div class="auto-rule-guide">Guide Maternité</div>
+        <div class="toggle on"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Ce que le client reçoit — Exemple : Guide Séance Famille ↓</span></div>
+
+<!-- =====================================================
+     SCREEN 2: CLIENT — Le guide reçu
+     ===================================================== -->
+<div class="client-screen">
+  <nav class="client-guide-nav">
+    <div class="client-guide-nav-logo">Fleur de <span>Lumière</span></div>
+    <div class="client-guide-nav-badge">📖 Guide de préparation</div>
+  </nav>
+
+  <div class="guide-container">
+
+    <!-- Hero -->
+    <div class="guide-hero">
+      <div class="guide-hero-badge">✨ Votre guide personnalisé</div>
+      <div class="guide-hero-title">Comment préparer<br>votre séance famille</div>
+      <div class="guide-hero-sub">Quelques conseils pour que votre séance soit un moment magique, détendu et plein de beaux souvenirs.</div>
+      <div class="guide-hero-meta">
+        <div class="guide-hero-meta-item">📅 Séance le 22 février</div>
+        <div class="guide-hero-meta-item">📍 Parc de la Maourine</div>
+        <div class="guide-hero-meta-item">🕐 17h30</div>
+      </div>
+    </div>
+
+    <!-- Reading progress -->
+    <div class="guide-progress">
+      <div class="guide-progress-text">Lecture</div>
+      <div class="guide-progress-bar">
+        <div class="guide-progress-fill" style="width: 40%;"></div>
+      </div>
+      <div class="guide-progress-pct">40%</div>
+    </div>
+
+    <!-- Photographer personal note -->
+    <div class="photographer-note">
+      <div class="photographer-note-title">Un mot de votre photographe</div>
+      <div class="photographer-note-text">
+        Sophie, j'ai tellement hâte de cette séance ! Le parc de la Maourine est l'un de mes endroits préférés pour les familles — la lumière y est sublime en fin d'après-midi. Ne stressez pas pour les tenues, le plus important c'est que vous soyez à l'aise et vous-mêmes. Les plus belles photos naissent dans la spontanéité !
+      </div>
+      <div class="photographer-note-author">— Capucine, Fleur de Lumière 🌸</div>
+    </div>
+
+    <!-- Section 1: Tenues -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <div class="guide-section-number">1</div>
+        <div>
+          <div class="guide-section-title">Choisir vos tenues</div>
+          <div class="guide-section-subtitle">Coordonnées mais pas identiques</div>
+        </div>
+      </div>
+      <div class="guide-section-body">
+        <div class="guide-tip">
+          <div class="guide-tip-icon do">✓</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Harmonisez les couleurs</div>
+            <div class="guide-tip-text">Choisissez 2-3 couleurs complémentaires pour la famille. Pas besoin d'être assortis à l'identique, l'harmonie suffit.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon do">✓</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Privilégiez les tons neutres et doux</div>
+            <div class="guide-tip-text">Beige, terracotta, vert sauge, blanc cassé, bleu doux — ces tons se marient parfaitement avec la lumière dorée.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon avoid">✗</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Évitez les gros logos et motifs chargés</div>
+            <div class="guide-tip-text">Les logos, rayures fines et motifs très contrastés attirent l'œil et distraient du visage. Préférez les vêtements unis.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon idea">💡</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Accessoires : oui, mais subtils</div>
+            <div class="guide-tip-text">Un chapeau, un foulard, un bandeau pour les petites — les accessoires ajoutent du charme sans surcharger.</div>
+          </div>
+        </div>
+
+        <!-- Color palette suggestion -->
+        <div class="guide-visual-card">
+          <div class="guide-visual-title">🎨 Palette suggérée pour votre séance au parc</div>
+          <div class="color-palette">
+            <div class="color-swatch">
+              <div class="color-dot" style="background: #C8A882;"></div>
+              <div class="color-name">Caramel</div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-dot" style="background: #F5F0E8;"></div>
+              <div class="color-name">Crème</div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-dot" style="background: #8B9E7E;"></div>
+              <div class="color-name">Sauge</div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-dot" style="background: #C4856A;"></div>
+              <div class="color-name">Terracotta</div>
+            </div>
+            <div class="color-swatch">
+              <div class="color-dot" style="background: #4A3728;"></div>
+              <div class="color-name">Chocolat</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Le jour J -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <div class="guide-section-number">2</div>
+        <div>
+          <div class="guide-section-title">Le jour de la séance</div>
+          <div class="guide-section-subtitle">Arrivez détendus, le reste suit</div>
+        </div>
+      </div>
+      <div class="guide-section-body">
+        <div class="guide-tip">
+          <div class="guide-tip-icon do">✓</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Faites manger et reposer les enfants avant</div>
+            <div class="guide-tip-text">Un enfant fatigué ou affamé = une séance compliquée. Prévoyez un goûter et une sieste dans l'après-midi.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon do">✓</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Arrivez 10 minutes en avance</div>
+            <div class="guide-tip-text">Ça vous laisse le temps de vous installer, de laisser les enfants explorer, et de commencer en douceur.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon info">ℹ</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Ne vous inquiétez pas du "naturel"</div>
+            <div class="guide-tip-text">Je vous guiderai tout au long de la séance. Il n'y a pas de pose parfaite — les meilleurs moments naissent de l'interaction.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon idea">💡</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Apportez un jouet ou doudou préféré</div>
+            <div class="guide-tip-text">Pour les tout-petits, un objet familier aide à les rassurer et crée de jolies photos naturelles.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Maquillage -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <div class="guide-section-number">3</div>
+        <div>
+          <div class="guide-section-title">Maquillage & beauté</div>
+          <div class="guide-section-subtitle">Sublimez-vous en restant naturels</div>
+        </div>
+      </div>
+      <div class="guide-section-body">
+        <div class="guide-tip">
+          <div class="guide-tip-icon do">✓</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Maquillage naturel légèrement appuyé</div>
+            <div class="guide-tip-text">La lumière naturelle adoucit les traits. Un maquillage un tout petit peu plus marqué qu'au quotidien sera parfait en photo.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon do">✓</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Hydratez bien votre peau la veille</div>
+            <div class="guide-tip-text">Une peau bien hydratée capte magnifiquement la lumière dorée. Pensez-y pour toute la famille.</div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <div class="guide-tip-icon avoid">✗</div>
+          <div class="guide-tip-content">
+            <div class="guide-tip-title">Évitez les nouvelles coupes le jour même</div>
+            <div class="guide-tip-text">Pas de nouvelle coiffure la veille — gardez un look que vous aimez et dans lequel vous êtes à l'aise.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <div class="guide-section">
+      <div class="guide-section-header">
+        <div class="guide-section-number">✓</div>
+        <div>
+          <div class="guide-section-title">Checklist de dernière minute</div>
+          <div class="guide-section-subtitle">Cochez au fur et à mesure</div>
+        </div>
+      </div>
+      <div class="guide-section-body">
+        <div class="guide-checklist">
+          <div class="checklist-item">
+            <div class="checklist-box checked">✓</div>
+            <div class="checklist-label checked">Tenues choisies et repassées</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-box checked">✓</div>
+            <div class="checklist-label checked">Questionnaire pré-shooting rempli</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-box"></div>
+            <div class="checklist-label">Goûter et sieste prévus pour les enfants</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-box"></div>
+            <div class="checklist-label">Accessoires et doudous dans le sac</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-box"></div>
+            <div class="checklist-label">Vérifier la météo (en cas de pluie, me contacter)</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-box"></div>
+            <div class="checklist-label">Prévoir 10 min d'avance au point de RDV</div>
+          </div>
+          <div class="checklist-item">
+            <div class="checklist-box"></div>
+            <div class="checklist-label">Téléphones en mode silencieux pendant la séance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="guide-cta">
+      <button class="guide-cta-btn">🎨 Compléter mon Mood Board →</button>
+      <div class="guide-cta-sub">Partagez vos inspirations pour que je prépare votre séance au mieux</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

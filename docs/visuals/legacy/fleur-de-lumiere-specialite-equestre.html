@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photographie Équestre — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-rose: #C2727E;
+    --color-prune-nuit: #4A2E3D;
+    --color-or-chaud: #D4A03C;
+    --color-sauge: #6B7F5A;
+    --color-bg: #FFFFFF;
+    --color-bg-alt: #FFF9F7;
+    --color-texte: #2D2226;
+    --color-gris: #6B7280;
+    --color-rose-hover: #A85965;
+    --color-or-hover: #B8882F;
+    --font-titre: 'Playfair Display', Georgia, serif;
+    --font-texte: 'Lato', -apple-system, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-full: 9999px;
+    --shadow-sm: 0 2px 8px rgba(74,46,61,0.08);
+    --shadow-md: 0 4px 16px rgba(74,46,61,0.15);
+    --shadow-lg: 0 12px 40px rgba(74,46,61,0.18);
+    --shadow-cta: 0 4px 12px rgba(194,114,126,0.3);
+    --transition: 0.3s ease;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-texte); color: var(--color-texte);
+    background: var(--color-bg); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  h1, h2, h3, h4 { font-family: var(--font-titre); line-height: 1.25; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-texte); font-size: 15px; font-weight: 700;
+    padding: 13px 32px; border-radius: var(--radius-sm);
+    cursor: pointer; transition: var(--transition);
+    border: 2px solid transparent; gap: 8px;
+  }
+  .btn-primary {
+    background: var(--color-rose); color: #fff; border-color: var(--color-rose);
+    box-shadow: var(--shadow-cta);
+  }
+  .btn-primary:hover {
+    background: var(--color-rose-hover); border-color: var(--color-rose-hover);
+    transform: translateY(-2px); box-shadow: 0 6px 20px rgba(194,114,126,0.4);
+  }
+  .btn-secondary {
+    background: transparent; color: var(--color-prune-nuit);
+    border: 2px solid var(--color-prune-nuit);
+  }
+  .btn-secondary:hover {
+    background: var(--color-prune-nuit); color: #fff; transform: translateY(-2px);
+  }
+  .btn-full { width: 100%; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .or-line { width: 60px; height: 2px; background: var(--color-or-chaud); margin: 16px auto; border-radius: 1px; }
+
+  /* Photo placeholders */
+  .photo-placeholder { width: 100%; height: 100%; position: relative; }
+  .ph-eq1 { background: linear-gradient(145deg, #c8bfac 0%, #b5ab96 35%, #a69c85 65%, #968c75 100%); }
+  .ph-eq2 { background: linear-gradient(135deg, #d4c8b0 0%, #c5b89e 40%, #baa98a 100%); }
+  .ph-eq3 { background: linear-gradient(155deg, #e0d5c0 0%, #d0c4ae 50%, #c0b49c 100%); }
+  .ph-eq4 { background: linear-gradient(130deg, #cec3ad 0%, #bfb49e 40%, #b0a58f 100%); }
+  .ph-eq5 { background: linear-gradient(140deg, #d8ccb8 0%, #c8bca6 50%, #b8ac96 100%); }
+  .ph-eq6 { background: linear-gradient(150deg, #c2b8a4 0%, #b8ae9a 40%, #aea490 100%); }
+  .ph-golden { background: linear-gradient(135deg, #f0d9a8 0%, #e8cc94 40%, #dfc080 100%); }
+  .photo-placeholder::after {
+    content: attr(data-label);
+    position: absolute; bottom: 16px; left: 16px;
+    font-family: var(--font-titre); font-size: 13px; font-style: italic;
+    color: rgba(255,255,255,0.6); pointer-events: none;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74,46,61,0.06);
+  }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1200px; margin: 0 auto; padding: 16px 24px;
+  }
+  .logo { font-family: var(--font-titre); font-size: 22px; font-weight: 700; color: var(--color-prune-nuit); }
+  .logo span { color: var(--color-or-chaud); }
+  .nav { display: flex; align-items: center; gap: 32px; }
+  .nav a { font-size: 15px; color: var(--color-prune-nuit); position: relative; transition: var(--transition); }
+  .nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--color-rose); transition: var(--transition); }
+  .nav a:hover::after { width: 100%; }
+  .nav a:hover { color: var(--color-rose); }
+  .nav a.active { color: var(--color-rose); }
+  .nav a.active::after { width: 100%; }
+  .nav .btn { padding: 10px 28px; font-size: 14px; }
+  .menu-toggle { display: none; background: none; border: none; cursor: pointer; width: 32px; height: 24px; position: relative; }
+  .menu-toggle span { display: block; width: 100%; height: 2px; background: var(--color-prune-nuit); position: absolute; left: 0; transition: var(--transition); }
+  .menu-toggle span:nth-child(1) { top: 0; }
+  .menu-toggle span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+  .menu-toggle span:nth-child(3) { bottom: 0; }
+
+  /* ===== BREADCRUMB ===== */
+  .breadcrumb {
+    padding: 100px 0 0;
+  }
+  .breadcrumb-inner {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--color-gris);
+  }
+  .breadcrumb-inner a { color: var(--color-gris); transition: var(--transition); }
+  .breadcrumb-inner a:hover { color: var(--color-rose); }
+  .breadcrumb-inner .sep { color: var(--color-or-chaud); }
+  .breadcrumb-inner .current { color: var(--color-prune-nuit); font-weight: 700; }
+
+  /* ===== HERO SPÉCIALITÉ ===== */
+  .spec-hero {
+    padding: 32px 0 0; position: relative; overflow: hidden;
+  }
+  .spec-hero-inner {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center;
+  }
+  .spec-hero-text { padding: 40px 0; animation: fadeInUp 0.8s ease both; }
+  .spec-hero-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: var(--color-sauge); margin-bottom: 20px;
+  }
+  .spec-hero-label::before { content: ''; width: 32px; height: 1px; background: var(--color-sauge); }
+  .spec-hero-text h1 {
+    font-size: clamp(34px, 5vw, 50px); color: var(--color-prune-nuit);
+    margin-bottom: 20px; line-height: 1.15;
+  }
+  .spec-hero-text h1 em { font-style: italic; color: var(--color-rose); }
+  .spec-hero-text .hero-desc {
+    font-size: 18px; color: var(--color-gris); line-height: 1.8;
+    max-width: 500px; margin-bottom: 32px;
+  }
+  .spec-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* Hero mosaic */
+  .spec-hero-mosaic {
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 12px; animation: fadeInUp 0.8s ease 0.15s both;
+  }
+  .mosaic-img {
+    border-radius: var(--radius-md); overflow: hidden; position: relative;
+  }
+  .mosaic-img .photo-placeholder { transition: transform 0.6s ease; }
+  .mosaic-img:hover .photo-placeholder { transform: scale(1.04); }
+  .mosaic-img:nth-child(1) {
+    grid-row: span 2;
+  }
+  .mosaic-img:nth-child(1) .photo-placeholder { aspect-ratio: auto; height: 100%; }
+  .mosaic-img:nth-child(2) .photo-placeholder { aspect-ratio: 16/10; }
+  .mosaic-img:nth-child(3) .photo-placeholder { aspect-ratio: 16/10; }
+
+  /* ===== SECTION APPROCHE ===== */
+  .approach-section {
+    padding: 100px 0; background: var(--color-bg-alt);
+  }
+  .approach-inner {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 72px; align-items: center;
+  }
+  .approach-photo {
+    border-radius: var(--radius-md); overflow: hidden;
+    box-shadow: var(--shadow-lg); position: relative;
+  }
+  .approach-photo .photo-placeholder { aspect-ratio: 4/5; }
+  .approach-photo-accent {
+    position: absolute; bottom: -20px; right: -20px;
+    width: 140px; height: 140px; border: 2px solid var(--color-or-chaud);
+    border-radius: var(--radius-md); opacity: 0.2; z-index: -1;
+  }
+  .approach-text h2 {
+    font-size: clamp(26px, 3.5vw, 36px); color: var(--color-prune-nuit); margin-bottom: 20px;
+  }
+  .approach-text h2 em { color: var(--color-rose); font-style: italic; }
+  .approach-text > p {
+    font-size: 17px; color: var(--color-gris); line-height: 1.8; margin-bottom: 20px;
+  }
+  .approach-highlights {
+    list-style: none; margin: 28px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .approach-highlights li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 15px; color: var(--color-texte);
+    background: var(--color-bg); border-radius: var(--radius-sm);
+    padding: 16px; box-shadow: var(--shadow-sm);
+  }
+  .approach-highlights li .hl-icon {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; background: rgba(212,160,60,0.1);
+  }
+  .approach-highlights li .hl-text .hl-title {
+    font-weight: 700; color: var(--color-prune-nuit); margin-bottom: 2px;
+  }
+  .approach-highlights li .hl-text .hl-desc {
+    font-size: 13px; color: var(--color-gris);
+  }
+
+  /* ===== PORTFOLIO PREVIEW ===== */
+  .portfolio-preview {
+    padding: 100px 0; background: var(--color-bg);
+  }
+  .portfolio-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .portfolio-header h2 {
+    font-size: clamp(26px, 3.5vw, 36px); color: var(--color-prune-nuit); margin-bottom: 8px;
+  }
+  .portfolio-header h2 em { color: var(--color-rose); font-style: italic; }
+  .portfolio-header p { font-size: 16px; color: var(--color-gris); }
+
+  .gallery-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto; gap: 12px;
+  }
+  .g-item {
+    border-radius: var(--radius-sm); overflow: hidden; position: relative;
+    cursor: pointer;
+  }
+  .g-item .photo-placeholder { transition: transform 0.5s ease; }
+  .g-item:hover .photo-placeholder { transform: scale(1.05); }
+  .g-item::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(74,46,61,0); transition: var(--transition);
+  }
+  .g-item:hover::after { background: rgba(74,46,61,0.1); }
+
+  .g1 { grid-column: span 5; }
+  .g1 .photo-placeholder { aspect-ratio: 5/4; }
+  .g2 { grid-column: span 4; }
+  .g2 .photo-placeholder { aspect-ratio: 4/5; }
+  .g3 { grid-column: span 3; }
+  .g3 .photo-placeholder { aspect-ratio: 3/4; }
+  .g4 { grid-column: span 3; }
+  .g4 .photo-placeholder { aspect-ratio: 3/4; }
+  .g5 { grid-column: span 5; }
+  .g5 .photo-placeholder { aspect-ratio: 5/3; }
+  .g6 { grid-column: span 4; }
+  .g6 .photo-placeholder { aspect-ratio: 4/3; }
+
+  .gallery-cta {
+    text-align: center; margin-top: 40px;
+  }
+  .gallery-cta a {
+    font-family: var(--font-texte); font-size: 15px; font-weight: 700;
+    color: var(--color-rose); display: inline-flex; align-items: center; gap: 8px;
+    transition: var(--transition);
+  }
+  .gallery-cta a:hover { color: var(--color-rose-hover); gap: 12px; }
+
+  /* ===== SECTION FORMULES ===== */
+  .formules-section {
+    padding: 100px 0; background: var(--color-bg-alt);
+  }
+  .formules-header {
+    text-align: center; margin-bottom: 56px;
+  }
+  .formules-header h2 {
+    font-size: clamp(26px, 3.5vw, 36px); color: var(--color-prune-nuit); margin-bottom: 8px;
+  }
+  .formules-header h2 em { color: var(--color-or-chaud); font-style: italic; }
+  .formules-header p { font-size: 16px; color: var(--color-gris); max-width: 480px; margin: 0 auto; }
+
+  .formules-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .formule-card {
+    background: var(--color-bg); border-radius: var(--radius-md);
+    padding: 36px 28px; text-align: center;
+    box-shadow: var(--shadow-sm); transition: var(--transition);
+    position: relative; border: 2px solid transparent;
+    display: flex; flex-direction: column;
+  }
+  .formule-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .formule-card.highlight { border-color: var(--color-rose); box-shadow: var(--shadow-md); transform: scale(1.02); }
+  .formule-card.highlight:hover { transform: scale(1.02) translateY(-4px); }
+  .formule-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--color-rose); color: #fff;
+    font-size: 12px; font-weight: 700; padding: 5px 18px;
+    border-radius: var(--radius-full); display: flex; align-items: center; gap: 5px;
+  }
+  .formule-badge::before { content: '★'; }
+  .formule-card h3 { font-size: 22px; color: var(--color-prune-nuit); margin-bottom: 4px; }
+  .formule-tagline { font-size: 13px; color: var(--color-gris); font-style: italic; margin-bottom: 16px; }
+  .formule-price {
+    font-family: var(--font-titre); font-size: 38px; font-weight: 700;
+    color: var(--color-or-chaud); margin: 8px 0; line-height: 1.1;
+  }
+  .formule-price small {
+    display: block; font-family: var(--font-texte); font-size: 14px;
+    font-weight: 400; color: var(--color-gris); margin-top: 4px;
+  }
+  .formule-devis {
+    font-family: var(--font-titre); font-size: 28px; font-weight: 700;
+    color: var(--color-or-chaud); font-style: italic; margin: 8px 0;
+  }
+  .formule-details {
+    list-style: none; margin: 20px 0; text-align: left; flex-grow: 1;
+  }
+  .formule-details li {
+    padding: 7px 0; font-size: 14px; color: var(--color-texte);
+    display: flex; align-items: flex-start; gap: 10px;
+    border-bottom: 1px solid rgba(74,46,61,0.05);
+  }
+  .formule-details li:last-child { border: none; }
+  .formule-details li::before { content: '✓'; color: var(--color-sauge); font-weight: 700; flex-shrink: 0; }
+  .formule-details li.bonus::before { content: '🎁'; }
+  .formule-card .btn { margin-top: 8px; }
+
+  /* ===== DÉROULEMENT / TIMELINE ===== */
+  .process-section {
+    padding: 100px 0; background: var(--color-bg);
+    position: relative;
+  }
+  .process-header {
+    text-align: center; margin-bottom: 64px;
+  }
+  .process-header h2 {
+    font-size: clamp(26px, 3.5vw, 36px); color: var(--color-prune-nuit); margin-bottom: 8px;
+  }
+  .process-header h2 em { color: var(--color-rose); font-style: italic; }
+  .process-header p { font-size: 16px; color: var(--color-gris); max-width: 460px; margin: 0 auto; }
+
+  .timeline {
+    max-width: 700px; margin: 0 auto; position: relative;
+    padding-left: 48px;
+  }
+  .timeline::before {
+    content: ''; position: absolute; left: 18px; top: 8px; bottom: 8px;
+    width: 2px; background: linear-gradient(to bottom, var(--color-or-chaud), var(--color-rose), var(--color-sauge));
+    border-radius: 1px;
+  }
+  .timeline-step {
+    position: relative; padding-bottom: 48px;
+  }
+  .timeline-step:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    position: absolute; left: -48px; top: 2px;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--color-bg); border: 2px solid var(--color-or-chaud);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-titre); font-size: 14px; font-weight: 700;
+    color: var(--color-or-chaud); z-index: 1;
+  }
+  .timeline-step:nth-child(3) .timeline-dot { border-color: var(--color-rose); color: var(--color-rose); }
+  .timeline-step:nth-child(4) .timeline-dot,
+  .timeline-step:nth-child(5) .timeline-dot { border-color: var(--color-sauge); color: var(--color-sauge); }
+  .timeline-content {
+    background: var(--color-bg-alt); border-radius: var(--radius-md);
+    padding: 24px 28px; transition: var(--transition);
+  }
+  .timeline-content:hover { box-shadow: var(--shadow-sm); transform: translateX(4px); }
+  .timeline-content h3 {
+    font-size: 18px; color: var(--color-prune-nuit); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .timeline-content h3 .step-emoji { font-size: 20px; }
+  .timeline-content p {
+    font-size: 15px; color: var(--color-gris); line-height: 1.7;
+  }
+
+  /* ===== TÉMOIGNAGES SPÉCIALITÉ ===== */
+  .spec-temoignages {
+    padding: 100px 0; background: var(--color-bg-alt);
+  }
+  .spec-temoignages .section-header {
+    text-align: center; margin-bottom: 48px;
+  }
+  .spec-temoignages .section-header h2 {
+    font-size: clamp(26px, 3.5vw, 36px); color: var(--color-prune-nuit); margin-bottom: 8px;
+  }
+  .spec-temoignages .section-header h2 em { color: var(--color-rose); font-style: italic; }
+
+  .temoignages-row {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px;
+    max-width: 860px; margin: 0 auto;
+  }
+  .temoignage-card {
+    background: var(--color-bg); border-radius: var(--radius-md);
+    padding: 32px 28px; box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+  }
+  .temoignage-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .temoignage-quote-mark {
+    font-family: var(--font-titre); font-size: 48px; line-height: 1;
+    color: var(--color-or-chaud); opacity: 0.4;
+  }
+  .temoignage-stars {
+    color: var(--color-or-chaud); font-size: 15px; letter-spacing: 2px; margin-bottom: 12px;
+  }
+  .temoignage-text {
+    font-size: 15px; color: var(--color-texte); line-height: 1.7;
+    font-style: italic; margin-bottom: 20px;
+  }
+  .temoignage-author { display: flex; align-items: center; gap: 12px; }
+  .temoignage-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-sauge), #8a9d76);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: var(--font-titre); font-size: 16px; font-weight: 700;
+  }
+  .temoignage-name { font-family: var(--font-titre); font-size: 15px; font-style: italic; color: var(--color-prune-nuit); }
+  .temoignage-detail { font-size: 13px; color: var(--color-gris); }
+
+  /* ===== FAQ SPÉCIALITÉ ===== */
+  .spec-faq {
+    padding: 80px 0; background: var(--color-bg);
+  }
+  .spec-faq .faq-header { text-align: center; margin-bottom: 40px; }
+  .spec-faq .faq-header h2 { font-size: clamp(24px, 3vw, 32px); color: var(--color-prune-nuit); margin-bottom: 8px; }
+  .faq-grid { max-width: 760px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid rgba(74,46,61,0.08); }
+  .faq-question {
+    width: 100%; text-align: left; background: none; border: none;
+    padding: 20px 0; font-family: var(--font-texte); font-size: 16px;
+    font-weight: 700; color: var(--color-prune-nuit); cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: var(--transition);
+  }
+  .faq-question:hover { color: var(--color-rose); }
+  .faq-chevron {
+    width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.3s ease;
+    color: var(--color-or-chaud);
+  }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .faq-item.open .faq-answer { max-height: 300px; }
+  .faq-answer p { padding-bottom: 20px; font-size: 15px; color: var(--color-gris); line-height: 1.7; }
+
+  /* ===== AUTRES SPÉCIALITÉS ===== */
+  .other-specs {
+    padding: 80px 0; background: var(--color-bg-alt);
+    border-top: 1px solid rgba(74,46,61,0.06);
+  }
+  .other-specs-header { text-align: center; margin-bottom: 40px; }
+  .other-specs-header h2 { font-size: clamp(24px, 3vw, 30px); color: var(--color-prune-nuit); }
+  .other-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    max-width: 960px; margin: 0 auto;
+  }
+  .other-card {
+    border-radius: var(--radius-md); overflow: hidden; position: relative;
+    cursor: pointer; transition: var(--transition);
+  }
+  .other-card:hover { transform: translateY(-4px); }
+  .other-card .photo-placeholder { aspect-ratio: 3/4; transition: transform 0.5s ease; }
+  .other-card:hover .photo-placeholder { transform: scale(1.05); }
+  .other-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(74,46,61,0.7) 0%, rgba(74,46,61,0.1) 50%, transparent);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 20px 16px;
+  }
+  .other-card-overlay h3 {
+    font-size: 17px; color: #fff; margin-bottom: 4px;
+  }
+  .other-card-overlay span {
+    font-size: 13px; color: rgba(255,255,255,0.7);
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  /* ===== CTA ===== */
+  .cta-section {
+    padding: 100px 0; background: var(--color-prune-nuit);
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(194,114,126,0.08) 0%, transparent 70%);
+  }
+  .cta-section h2 { color: #fff; font-size: clamp(28px, 4vw, 40px); margin-bottom: 16px; position: relative; z-index: 1; }
+  .cta-section h2 em { color: var(--color-or-chaud); font-style: italic; }
+  .cta-section p {
+    color: rgba(255,255,255,0.65); font-size: 17px; max-width: 500px;
+    margin: 0 auto 32px; position: relative; z-index: 1; line-height: 1.7;
+  }
+  .cta-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .cta-section .btn-primary { background: var(--color-rose); font-size: 17px; padding: 16px 44px; }
+  .cta-section .btn-ghost {
+    background: transparent; color: rgba(255,255,255,0.8); border: 2px solid rgba(255,255,255,0.25);
+    padding: 14px 32px; border-radius: var(--radius-sm); font-family: var(--font-texte);
+    font-size: 15px; font-weight: 700; cursor: pointer; transition: var(--transition);
+  }
+  .cta-section .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); }
+
+  /* ===== PASSEPORT BANNER ===== */
+  .passeport-banner {
+    padding: 48px 0; background: var(--color-bg);
+    border-top: 1px solid rgba(74,46,61,0.06);
+    border-bottom: 1px solid rgba(74,46,61,0.06);
+  }
+  .passeport-inner {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
+    flex-wrap: wrap; text-align: center;
+  }
+  .passeport-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(107,127,90,0.1); display: flex; align-items: center;
+    justify-content: center; font-size: 24px; flex-shrink: 0;
+  }
+  .passeport-text h3 {
+    font-size: 18px; color: var(--color-prune-nuit); margin-bottom: 4px;
+  }
+  .passeport-text h3 em { color: var(--color-sauge); font-style: italic; }
+  .passeport-text p { font-size: 14px; color: var(--color-gris); }
+
+  /* ===== FOOTER ===== */
+  .footer { background: var(--color-prune-nuit); color: #fff; padding: 80px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 60px; }
+  .footer-brand .logo { color: #fff; font-size: 24px; margin-bottom: 16px; display: block; }
+  .footer-brand .logo span { color: var(--color-or-chaud); }
+  .footer-brand p { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+  .footer-social { display: flex; gap: 16px; }
+  .footer-social a {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; color: #fff; transition: var(--transition);
+  }
+  .footer-social a:hover { background: var(--color-or-chaud); border-color: var(--color-or-chaud); color: var(--color-prune-nuit); }
+  .footer h4 { font-family: var(--font-titre); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: var(--transition); }
+  .footer-links a:hover { color: var(--color-or-chaud); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom p { font-size: 13px; color: rgba(255,255,255,0.4); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.4); transition: var(--transition); }
+  .footer-legal a:hover { color: var(--color-or-chaud); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .spec-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .spec-hero-text { text-align: center; padding: 20px 0; }
+    .spec-hero-text .hero-desc { margin: 0 auto 32px; }
+    .spec-hero-actions { justify-content: center; }
+    .spec-hero-mosaic { max-width: 520px; margin: 0 auto; }
+    .approach-inner { grid-template-columns: 1fr; gap: 48px; }
+    .approach-photo { max-width: 420px; margin: 0 auto; }
+    .approach-highlights { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .nav { display: none; }
+    .menu-toggle { display: block; }
+    .formules-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+    .formule-card.highlight { transform: none; }
+    .temoignages-row { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
+    .gallery-grid { grid-template-columns: repeat(6, 1fr); }
+    .g1 { grid-column: span 6; } .g2 { grid-column: span 3; } .g3 { grid-column: span 3; }
+    .g4 { grid-column: span 3; } .g5 { grid-column: span 3; } .g6 { grid-column: span 6; }
+    .other-grid { grid-template-columns: 1fr 1fr; }
+    .timeline { padding-left: 40px; }
+    .timeline-dot { left: -40px; width: 32px; height: 32px; font-size: 13px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .spec-hero-mosaic { grid-template-columns: 1fr; }
+    .mosaic-img:nth-child(1) { grid-row: span 1; }
+    .mosaic-img:nth-child(1) .photo-placeholder { aspect-ratio: 16/10; }
+    .other-grid { grid-template-columns: 1fr; max-width: 300px; margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">Fleur de <span>L</span>umière</a>
+    <nav class="nav">
+      <a href="#" class="active">Spécialités</a>
+      <a href="#">Formules</a>
+      <a href="#">Portfolio</a>
+      <a href="#">À propos</a>
+      <a href="#">Avis</a>
+      <a href="#">Contact</a>
+      <a href="#" class="btn btn-primary">Réserver</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="#">Accueil</a>
+      <span class="sep">›</span>
+      <a href="#">Spécialités</a>
+      <span class="sep">›</span>
+      <span class="current">Équestre</span>
+    </div>
+  </div>
+</div>
+
+<!-- HERO SPÉCIALITÉ -->
+<section class="spec-hero">
+  <div class="container">
+    <div class="spec-hero-inner">
+      <div class="spec-hero-text">
+        <div class="spec-hero-label">Spécialité</div>
+        <h1>Photographie<br><em>Équestre</em></h1>
+        <p class="hero-desc">La complicité entre un cavalier et son cheval est unique. Je la capture dans la lumière dorée des champs du Tarn — en liberté, en selle, au galop ou dans un moment de tendresse.</p>
+        <div class="spec-hero-actions">
+          <a href="#formules" class="btn btn-primary">Voir les formules</a>
+          <a href="#galerie" class="btn btn-secondary">Voir le portfolio</a>
+        </div>
+      </div>
+      <div class="spec-hero-mosaic">
+        <div class="mosaic-img">
+          <div class="photo-placeholder ph-eq1" data-label="Cavalière en liberté — Golden Hour"></div>
+        </div>
+        <div class="mosaic-img">
+          <div class="photo-placeholder ph-eq2" data-label="Complicité au pré"></div>
+        </div>
+        <div class="mosaic-img">
+          <div class="photo-placeholder ph-eq3" data-label="Galop au coucher du soleil"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MON APPROCHE -->
+<section class="approach-section">
+  <div class="container">
+    <div class="approach-inner">
+      <div class="approach-photo reveal" style="position: relative;">
+        <div class="photo-placeholder ph-golden" style="aspect-ratio: 4/5; border-radius: var(--radius-md);"></div>
+        <div class="approach-photo-accent"></div>
+      </div>
+      <div class="approach-text reveal reveal-d2">
+        <h2>Mon approche de la photo <em>équestre</em></h2>
+        <p>Cavalière moi-même, je connais ce lien unique qui vous unit à votre cheval. Je sais comment me positionner, comment anticiper un mouvement, comment capter ce regard complice qui dit tout.</p>
+        <p>Mes séances se font en extérieur — dans votre écurie, un champ, en forêt ou au bord de l'eau. Toujours à l'Heure Dorée, quand la lumière transforme chaque crinière en or.</p>
+        <ul class="approach-highlights">
+          <li>
+            <div class="hl-icon">🐴</div>
+            <div class="hl-text">
+              <div class="hl-title">Cavalière & photographe</div>
+              <div class="hl-desc">Je comprends les chevaux et sais m'adapter à leur rythme</div>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">🌅</div>
+            <div class="hl-text">
+              <div class="hl-title">Heure Dorée garantie</div>
+              <div class="hl-desc">Chaque séance programmée au lever ou coucher du soleil</div>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">🎭</div>
+            <div class="hl-text">
+              <div class="hl-title">Multi-configurations</div>
+              <div class="hl-desc">En selle, en liberté, au galop, au repos, avec ou sans tenue</div>
+            </div>
+          </li>
+          <li>
+            <div class="hl-icon">📷</div>
+            <div class="hl-text">
+              <div class="hl-title">Tamron 70-180mm f/2.8</div>
+              <div class="hl-desc">L'objectif idéal pour sublimer le mouvement et le bokeh</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO PREVIEW -->
+<section class="portfolio-preview" id="galerie">
+  <div class="container">
+    <div class="portfolio-header reveal">
+      <h2>Portfolio <em>Équestre</em></h2>
+      <div class="or-line"></div>
+      <p>Un aperçu de mes séances avec chevaux et cavaliers dans le Tarn.</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <div class="g-item g1"><div class="photo-placeholder ph-eq1"></div></div>
+      <div class="g-item g2"><div class="photo-placeholder ph-eq4"></div></div>
+      <div class="g-item g3"><div class="photo-placeholder ph-eq2"></div></div>
+      <div class="g-item g4"><div class="photo-placeholder ph-eq5"></div></div>
+      <div class="g-item g5"><div class="photo-placeholder ph-eq3"></div></div>
+      <div class="g-item g6"><div class="photo-placeholder ph-eq6"></div></div>
+    </div>
+    <div class="gallery-cta reveal">
+      <a href="#">Voir toute la galerie Équestre →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULES -->
+<section class="formules-section" id="formules">
+  <div class="container">
+    <div class="formules-header reveal">
+      <h2>Formules <em>Équestres</em></h2>
+      <div class="or-line"></div>
+      <p>Choisissez la formule qui vous ressemble. Options personnalisables à la réservation.</p>
+    </div>
+    <div class="formules-grid">
+      <div class="formule-card reveal reveal-d1">
+        <h3>Essentiel</h3>
+        <p class="formule-tagline">Vous et votre cheval, un premier souvenir</p>
+        <div class="formule-price">150€ <small>30 min · 10 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>En extérieur (écurie, champ, forêt)</li>
+          <li>Galerie privée en ligne (90 jours)</li>
+          <li>Photos HD téléchargeables</li>
+          <li>1 configuration (selle ou liberté)</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-full">Réserver</a>
+      </div>
+      <div class="formule-card highlight reveal reveal-d2">
+        <div class="formule-badge">Populaire</div>
+        <h3>Signature</h3>
+        <p class="formule-tagline">En selle et en liberté, toute la complicité</p>
+        <div class="formule-price">280€ <small>1h · 25 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>Tout Essentiel inclus</li>
+          <li>Multi-configurations (selle + liberté)</li>
+          <li>Galerie de sélection interactive</li>
+          <li>Changement de tenue possible</li>
+          <li class="bonus">3 tirages 20×30 offerts</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-full">Réserver</a>
+      </div>
+      <div class="formule-card reveal reveal-d3">
+        <h3>Sur-Mesure</h3>
+        <p class="formule-tagline">Plusieurs chevaux, concours, reportage…</p>
+        <div class="formule-devis">Sur devis</div>
+        <div style="font-size:14px; color: var(--color-gris);">Personnalisé selon votre projet</div>
+        <ul class="formule-details">
+          <li>Durée et nombre de photos à définir</li>
+          <li>Plusieurs chevaux possibles</li>
+          <li>Concours et reportages</li>
+          <li>Devis gratuit sous 48h</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-full">Demander un devis</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PASSEPORT ÉQUESTRE -->
+<section class="passeport-banner">
+  <div class="container">
+    <div class="passeport-inner reveal">
+      <div class="passeport-icon">🏇</div>
+      <div class="passeport-text">
+        <h3>Passeport <em>Équestre</em></h3>
+        <p>Programme fidélité cavaliers — 1 séance = 1 tampon · Au 5ème tampon, un tirage grand format offert !</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DÉROULEMENT -->
+<section class="process-section">
+  <div class="container">
+    <div class="process-header reveal">
+      <h2>Comment se déroule une <em>séance</em> ?</h2>
+      <div class="or-line"></div>
+      <p>De la réservation à la livraison, chaque étape est pensée pour vous offrir une expérience simple et agréable.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-step reveal">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-content">
+          <h3><span class="step-emoji">📋</span> Réservation & questionnaire</h3>
+          <p>Choisissez votre formule, un créneau à l'Heure Dorée et remplissez le questionnaire : nom de votre cheval, lieu souhaité, type de poses (liberté, selle, galop…), tenues prévues. Acompte de 30% pour confirmer.</p>
+        </div>
+      </div>
+      <div class="timeline-step reveal reveal-d1">
+        <div class="timeline-dot">2</div>
+        <div class="timeline-content">
+          <h3><span class="step-emoji">🌅</span> Le jour J — la séance</h3>
+          <p>On se retrouve sur le lieu choisi au moment parfait. Je m'adapte au rythme du cheval, je vous guide sans vous brusquer. Rires, câlins, galops… on capture tout ce qui vous rend uniques.</p>
+        </div>
+      </div>
+      <div class="timeline-step reveal reveal-d2">
+        <div class="timeline-dot">3</div>
+        <div class="timeline-content">
+          <h3><span class="step-emoji">🎨</span> Tri & retouche</h3>
+          <p>Je sélectionne les meilleures images et les retouche avec douceur — tons chauds, lumière dorée sublimée, contraste naturel. Si vous avez la formule Signature, vous recevez d'abord une galerie de sélection.</p>
+        </div>
+      </div>
+      <div class="timeline-step reveal reveal-d3">
+        <div class="timeline-dot">4</div>
+        <div class="timeline-content">
+          <h3><span class="step-emoji">✨</span> Votre galerie en ligne</h3>
+          <p>Vous recevez un email avec le lien vers votre galerie privée. Toutes vos photos en HD, téléchargeables, avec la possibilité de commander des tirages et objets directement depuis la galerie. Accès pendant 90 jours.</p>
+        </div>
+      </div>
+      <div class="timeline-step reveal">
+        <div class="timeline-dot">5</div>
+        <div class="timeline-content">
+          <h3><span class="step-emoji">🎁</span> Tirages & souvenirs</h3>
+          <p>Envie d'un tirage grand format au-dessus de la cheminée ? D'un album souvenir ? D'une Boîte Souvenir « L'Écrin » ? Commandez directement depuis votre galerie, je m'occupe de tout.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES SPÉCIALITÉ -->
+<section class="spec-temoignages">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Ils ont fait une séance <em>Équestre</em></h2>
+      <div class="or-line"></div>
+    </div>
+    <div class="temoignages-row">
+      <div class="temoignage-card reveal reveal-d1">
+        <div class="temoignage-quote-mark">"</div>
+        <div class="temoignage-stars">★★★★★</div>
+        <p class="temoignage-text">Capucine a su capter cette complicité si particulière entre mon cheval et moi. Les photos sont absolument magiques, la lumière dorée rend chaque image irréelle. Je recommande les yeux fermés !</p>
+        <div class="temoignage-author">
+          <div class="temoignage-avatar">S</div>
+          <div>
+            <div class="temoignage-name">Sophie M.</div>
+            <div class="temoignage-detail">Séance Signature — avec Éclair</div>
+          </div>
+        </div>
+      </div>
+      <div class="temoignage-card reveal reveal-d2">
+        <div class="temoignage-quote-mark">"</div>
+        <div class="temoignage-stars">★★★★★</div>
+        <p class="temoignage-text">En tant que cavalière elle-même, Capucine savait exactement comment se positionner et mettre mon cheval en confiance. Les photos au galop dans le champ de blé au coucher du soleil… un rêve.</p>
+        <div class="temoignage-author">
+          <div class="temoignage-avatar">J</div>
+          <div>
+            <div class="temoignage-name">Julie D.</div>
+            <div class="temoignage-detail">Séance Sur-Mesure — 2 chevaux</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ SPÉCIALITÉ -->
+<section class="spec-faq">
+  <div class="container">
+    <div class="faq-header reveal">
+      <h2>Questions fréquentes — Équestre</h2>
+      <div class="or-line"></div>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item open">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Mon cheval est nerveux, est-ce un problème ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Pas du tout ! Cavalière moi-même, j'ai l'habitude de travailler avec tous types de chevaux. Je prends le temps de me faire accepter et j'adapte mon positionnement. Un cheval nerveux donne souvent les photos les plus vivantes et expressives.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Où se déroulent les séances équestres ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Sur le lieu de votre choix — votre écurie, un champ, une forêt, un bord de rivière. Je me déplace dans tout le Tarn et jusqu'à Toulouse. Je peux aussi vous suggérer des spots magnifiques que je connais pour la lumière.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Puis-je faire des photos en selle ET en liberté ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Oui ! Avec la formule Signature ou Sur-Mesure, on peut alterner entre plusieurs configurations : en selle, en liberté, au galop, au repos, portraits rapprochés… C'est justement ce qui rend ces séances si riches.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Puis-je venir avec plusieurs chevaux ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Bien sûr ! Pour les séances multi-chevaux, je vous propose la formule Sur-Mesure avec un devis adapté au nombre de chevaux et à la durée souhaitée. C'est aussi idéal pour les associations et les écuries.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Que se passe-t-il si la météo est mauvaise ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Si les conditions ne permettent pas d'avoir la belle lumière promise, je vous propose un report gratuit à une date qui vous convient. La lumière est ma signature — je ne fais pas de compromis dessus.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTRES SPÉCIALITÉS -->
+<section class="other-specs">
+  <div class="container">
+    <div class="other-specs-header reveal">
+      <h2>Découvrir mes autres spécialités</h2>
+      <div class="or-line"></div>
+    </div>
+    <div class="other-grid reveal">
+      <div class="other-card">
+        <div class="photo-placeholder" style="background: linear-gradient(135deg, #f5e6d3, #dcc8b5);"></div>
+        <div class="other-card-overlay">
+          <h3>Famille & Portraits</h3>
+          <span>Découvrir →</span>
+        </div>
+      </div>
+      <div class="other-card">
+        <div class="photo-placeholder" style="background: linear-gradient(135deg, #e0d5c8, #cbbda8);"></div>
+        <div class="other-card-overlay">
+          <h3>Événementiel</h3>
+          <span>Découvrir →</span>
+        </div>
+      </div>
+      <div class="other-card">
+        <div class="photo-placeholder" style="background: linear-gradient(135deg, #f2dfe0, #dfc2c5);"></div>
+        <div class="other-card-overlay">
+          <h3>Maternité & Naissance</h3>
+          <span>Découvrir →</span>
+        </div>
+      </div>
+      <div class="other-card">
+        <div class="photo-placeholder" style="background: linear-gradient(135deg, #f0d9a8, #dfc080);"></div>
+        <div class="other-card-overlay">
+          <h3>Scolaire</h3>
+          <span>Découvrir →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Prête à immortaliser votre <em>complicité</em> ?</h2>
+    <p>Réservez votre séance équestre à l'Heure Dorée. Votre cheval et vous méritez la plus belle lumière.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-primary">Réserver ma séance →</a>
+      <a href="#" class="btn-ghost">Me contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo">Fleur de <span>L</span>umière</span>
+        <p>Photographie en lumière naturelle<br>Tarn & Toulouse</p>
+        <div class="footer-social">
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille & Portraits</a></li>
+          <li><a href="#">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité & Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="#">Tarifs & Formules</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Carte cadeau</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="#">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse & environs</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+        <a href="#">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>

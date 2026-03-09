@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paramètres (2/2) — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--bleu:#3B82F6;--bleu-light:rgba(59,130,246,.08);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.sw-btn{padding:8px 16px;border-radius:var(--radius-full);font-size:11px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.page-header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:18px 24px}
+.ph-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ph-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ph-info h1{font-size:20px;color:var(--prune)}.ph-info h1 em{color:var(--rose);font-style:italic}.ph-info p{font-size:12px;color:var(--gris)}
+.container{max-width:1000px;margin:0 auto;padding:24px}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);margin-bottom:18px;overflow:hidden}
+.card-h{padding:13px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:13px;color:var(--prune);flex:1}.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full)}
+.cb-ok{background:var(--sauge-light);color:var(--sauge)}.cb-warn{background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:none}
+.btn-primary{background:var(--rose);color:#fff}.btn-primary:hover{background:#A85965}
+.btn-secondary{background:transparent;color:var(--prune);border:1.5px solid var(--gris-border)}.btn-secondary:hover{background:var(--prune-light)}
+.btn-sauge{background:var(--sauge);color:#fff}.btn-sauge:hover{background:#5a6e4b}
+.btn-sm{padding:6px 12px;font-size:11px}
+.btn-danger{background:transparent;color:#DC2626;border:1.5px solid rgba(220,38,38,.2)}.btn-danger:hover{background:rgba(220,38,38,.05)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-group{margin-bottom:14px}
+.form-group.full{grid-column:span 2}
+.form-label{display:block;font-size:11px;font-weight:700;color:var(--prune);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.form-hint{font-size:10px;color:var(--gris-light);margin-top:3px}
+.form-input{width:100%;padding:9px 12px;border:2px solid var(--gris-border);border-radius:var(--radius);font-size:13px;font-family:var(--font);outline:none;transition:var(--tr);background:var(--bg)}
+.form-input:focus{border-color:var(--rose)}.form-input::placeholder{color:var(--gris-light)}
+textarea.form-input{min-height:70px;resize:vertical}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+.switch{width:42px;height:22px;background:var(--gris-border);border-radius:11px;position:relative;cursor:pointer;transition:var(--tr);flex-shrink:0}
+.switch.on{background:var(--sauge)}.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:var(--tr);box-shadow:0 1px 3px rgba(0,0,0,.15)}.switch.on::after{left:22px}
+.sr{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(74,46,61,.04)}.sr:last-child{border:none}
+.sr-i{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+.sr-c{flex:1}.sr-n{font-weight:700;font-size:12px;color:var(--prune)}.sr-d{font-size:11px;color:var(--gris)}
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0}
+.day-cell{text-align:center;padding:8px 4px;border-radius:var(--radius);border:1.5px solid var(--gris-border);cursor:pointer;transition:var(--tr);font-size:11px}
+.day-cell:hover{border-color:var(--or)}
+.day-cell.active{background:var(--sauge-light);border-color:var(--sauge);font-weight:700;color:var(--sauge)}
+.day-cell.off{background:var(--bg-alt);color:var(--gris-light)}
+.day-label{font-size:9px;font-weight:700;display:block;margin-bottom:2px}
+.tag-list{display:flex;gap:6px;flex-wrap:wrap}
+.tag{padding:5px 12px;border-radius:var(--radius-full);font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.tag-active{background:var(--sauge-light);color:var(--sauge);border:1.5px solid rgba(107,127,90,.3)}
+.tag-add{background:var(--bg);color:var(--gris);border:1.5px dashed var(--gris-border)}.tag-add:hover{border-color:var(--rose);color:var(--rose)}
+/* Plan cards */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.plan{background:var(--bg);border-radius:var(--radius-md);border:2px solid var(--gris-border);padding:20px;text-align:center;transition:var(--tr)}
+.plan:hover{border-color:var(--or);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.plan.current{border-color:var(--or);background:var(--or-light)}
+.plan-icon{font-size:28px;margin-bottom:8px}
+.plan h4{font-size:16px;color:var(--prune);margin-bottom:4px}
+.plan-price{font-family:var(--font-titre);font-size:28px;font-weight:700;color:var(--or)}.plan-price span{font-size:14px;color:var(--gris);font-weight:400}
+.plan-features{list-style:none;text-align:left;margin:14px 0;font-size:11px;color:var(--gris);line-height:2}
+.plan-features li::before{content:'✅ ';font-size:10px}
+.plan-features li.no::before{content:'— ';color:var(--gris-light)}
+.plan-features li.no{color:var(--gris-light)}
+@media(max-width:768px){.grid-2,.grid-3,.plan-grid{grid-template-columns:1fr}.form-group.full{grid-column:span 1}.day-grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="sw('resa',this)">📅 Réservation</button>
+  <button class="sw-btn" onclick="sw('galeries',this)">🖼️ Galeries</button>
+  <button class="sw-btn" onclick="sw('facturation',this)">🧾 Facturation</button>
+  <button class="sw-btn" onclick="sw('scolaire',this)">🎓 Scolaire</button>
+  <button class="sw-btn" onclick="sw('ia',this)">🤖 IA</button>
+  <button class="sw-btn" onclick="sw('zone',this)">📍 Zone</button>
+  <button class="sw-btn" onclick="sw('securite',this)">🔒 Sécurité</button>
+  <button class="sw-btn" onclick="sw('abo',this)">💎 Abonnement</button>
+</div>
+
+<!-- ================================ -->
+<!-- RÉSERVATION                      -->
+<!-- ================================ -->
+<div class="page-view active" id="view-resa">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--sauge-light)">📅</div><div class="ph-info"><h1>Réservation & <em>Planning</em></h1><p>Créneaux, durées, paiements, annulations et questionnaire pré-séance</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>📅 Jours & Horaires de travail</h3></div><div class="card-b">
+  <p style="font-size:11px;color:var(--gris);margin-bottom:6px">Cliquez pour activer/désactiver un jour. Ces créneaux s'affichent dans le module de réservation.</p>
+  <div class="day-grid">
+    <div class="day-cell off"><span class="day-label">LUN</span>Fermé</div>
+    <div class="day-cell off"><span class="day-label">MAR</span>Fermé</div>
+    <div class="day-cell active"><span class="day-label">MER</span>14h-19h</div>
+    <div class="day-cell active"><span class="day-label">JEU</span>14h-19h</div>
+    <div class="day-cell active"><span class="day-label">VEN</span>14h-19h</div>
+    <div class="day-cell active"><span class="day-label">SAM</span>9h-19h</div>
+    <div class="day-cell active"><span class="day-label">DIM</span>9h-13h</div>
+  </div>
+  <div class="sr"><div class="sr-i">🌅</div><div class="sr-c"><div class="sr-n">Mode Golden Hour automatique</div><div class="sr-d">Ajuster automatiquement les créneaux selon le coucher de soleil (géolocalisation)</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">⏱️</div><div class="sr-c"><div class="sr-n">Buffer entre séances</div><div class="sr-d">Temps de battement entre deux séances consécutives</div></div><select class="form-input" style="width:120px"><option>15 min</option><option selected>30 min</option><option>45 min</option><option>1h</option></select></div>
+  <div class="sr"><div class="sr-i">📷</div><div class="sr-c"><div class="sr-n">Nombre max de séances par jour</div><div class="sr-d">Limite pour éviter la surcharge</div></div><select class="form-input" style="width:100px"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>Illimité</option></select></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Délai minimum de réservation</div><div class="sr-d">Nombre de jours entre la réservation et la séance</div></div><select class="form-input" style="width:120px"><option>24h</option><option>48h</option><option selected>72h</option><option>1 semaine</option><option>2 semaines</option></select></div>
+  <div class="sr"><div class="sr-i">📆</div><div class="sr-c"><div class="sr-n">Fenêtre de réservation maximale</div><div class="sr-d">Jusqu'à combien de mois à l'avance on peut réserver</div></div><select class="form-input" style="width:100px"><option>1 mois</option><option>2 mois</option><option selected>3 mois</option><option>6 mois</option></select></div>
+  <div class="sr"><div class="sr-i">🏖️</div><div class="sr-c"><div class="sr-n">Périodes de fermeture</div><div class="sr-d">Vacances, jours fériés, indisponibilités</div></div><button class="btn btn-sm btn-secondary">📅 Gérer les fermetures</button></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>⏱️ Durées par défaut par formule</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📸</div><div class="sr-c"><div class="sr-n">Essentiel</div><div class="sr-d">Séance courte — 10 photos retouchées</div></div><select class="form-input" style="width:100px"><option>20 min</option><option selected>30 min</option><option>45 min</option></select></div>
+  <div class="sr"><div class="sr-i">⭐</div><div class="sr-c"><div class="sr-n">Signature</div><div class="sr-d">Séance standard — 25 photos retouchées</div></div><select class="form-input" style="width:100px"><option>45 min</option><option selected>1h</option><option>1h15</option></select></div>
+  <div class="sr"><div class="sr-i">💎</div><div class="sr-c"><div class="sr-n">Sur-Mesure</div><div class="sr-d">Séance premium — 50+ photos retouchées</div></div><select class="form-input" style="width:100px"><option>1h</option><option>1h30</option><option selected>2h</option><option>3h</option></select></div>
+  <div class="sr"><div class="sr-i">⚡</div><div class="sr-c"><div class="sr-n">Mini-session</div><div class="sr-d">Séance flash promo — 5 photos retouchées</div></div><select class="form-input" style="width:100px"><option selected>20 min</option><option>15 min</option><option>30 min</option></select></div>
+  <div class="sr"><div class="sr-i">🐴</div><div class="sr-c"><div class="sr-n">Équestre Essentiel</div><div class="sr-d">Séance équestre courte</div></div><select class="form-input" style="width:100px"><option selected>45 min</option><option>30 min</option><option>1h</option></select></div>
+  <div class="sr"><div class="sr-i">🐴</div><div class="sr-c"><div class="sr-n">Équestre Signature</div><div class="sr-d">Séance équestre complète</div></div><select class="form-input" style="width:100px"><option>1h</option><option selected>1h30</option><option>2h</option></select></div>
+  <div class="sr"><div class="sr-i">🤰</div><div class="sr-c"><div class="sr-n">Maternité</div><div class="sr-d">Séance grossesse</div></div><select class="form-input" style="width:100px"><option>45 min</option><option selected>1h</option><option>1h15</option></select></div>
+  <div class="sr"><div class="sr-i">🎉</div><div class="sr-c"><div class="sr-n">Événementiel</div><div class="sr-d">Mariages, baptêmes, etc.</div></div><select class="form-input" style="width:100px"><option>2h</option><option>4h</option><option selected>Journée</option></select></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>💳 Politique de paiement</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">💰</div><div class="sr-c"><div class="sr-n">Pourcentage d'acompte</div><div class="sr-d">Montant demandé à la réservation</div></div><select class="form-input" style="width:100px"><option>20%</option><option selected>30%</option><option>40%</option><option>50%</option><option>100%</option></select></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Solde dû avant livraison galerie</div><div class="sr-d">Bloquer l'accès galerie tant que le solde n'est pas payé</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🔄</div><div class="sr-c"><div class="sr-n">Paiement en 2 ou 3 fois</div><div class="sr-d">Autoriser le fractionnement via Stripe</div></div><div class="switch"></div></div>
+  <div class="sr"><div class="sr-i">💵</div><div class="sr-c"><div class="sr-n">Moyens de paiement acceptés</div></div></div>
+  <div class="tag-list" style="margin-top:6px">
+    <span class="tag tag-active">💳 Carte bancaire</span>
+    <span class="tag tag-active">🏦 Virement</span>
+    <span class="tag tag-active">💶 Espèces</span>
+    <span class="tag" style="background:var(--bg-alt);color:var(--gris);border:1.5px solid var(--gris-border)">🔵 PayPal</span>
+    <span class="tag" style="background:var(--bg-alt);color:var(--gris);border:1.5px solid var(--gris-border)">📝 Chèque</span>
+  </div>
+  <div class="sr" style="margin-top:8px"><div class="sr-i">📄</div><div class="sr-c"><div class="sr-n">CGV acceptées avant paiement</div><div class="sr-d">Le client doit cocher une case d'acceptation des CGV</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🚫 Annulation & Report</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🚫</div><div class="sr-c"><div class="sr-n">Annulation gratuite</div><div class="sr-d">Délai pendant lequel le client peut annuler sans frais</div></div><select class="form-input" style="width:120px"><option>24h</option><option>48h</option><option selected>7 jours</option><option>14 jours</option></select></div>
+  <div class="sr"><div class="sr-i">💸</div><div class="sr-c"><div class="sr-n">Annulation tardive — pénalité</div><div class="sr-d">Montant retenu en cas d'annulation hors délai</div></div><select class="form-input" style="width:180px"><option selected>Acompte non remboursé</option><option>50% du montant total</option><option>100% du montant total</option></select></div>
+  <div class="sr"><div class="sr-i">🔄</div><div class="sr-c"><div class="sr-n">Nombre de reports gratuits</div><div class="sr-d">Par réservation</div></div><select class="form-input" style="width:100px"><option selected>1</option><option>2</option><option>Illimité</option><option>Aucun</option></select></div>
+  <div class="sr"><div class="sr-i">🌧️</div><div class="sr-c"><div class="sr-n">Report météo automatique</div><div class="sr-d">Proposer un report si prévision pluie > 70%</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Délai max pour reporter</div><div class="sr-d">Le client doit choisir une nouvelle date sous X jours</div></div><select class="form-input" style="width:100px"><option>7 jours</option><option selected>14 jours</option><option>30 jours</option></select></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">Confirmation de report par email</div><div class="sr-d">Envoyer un email automatique au client lors du report</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📋 Questionnaire pré-séance</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📋</div><div class="sr-c"><div class="sr-n">Activer le questionnaire pré-séance</div><div class="sr-d">Envoyé automatiquement dans l'email de confirmation</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">1️⃣</div><div class="sr-c"><div class="sr-n">Nombre de personnes et prénoms</div><div class="sr-d">"Qui sera présent à la séance ?"</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">2️⃣</div><div class="sr-c"><div class="sr-n">Âges des enfants</div><div class="sr-d">"Quels sont les âges des enfants ?"</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">3️⃣</div><div class="sr-c"><div class="sr-n">Animaux présents</div><div class="sr-d">"Un animal de compagnie sera-t-il présent ?"</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">4️⃣</div><div class="sr-c"><div class="sr-n">Préférence de lieu</div><div class="sr-d">"Avez-vous un lieu en tête ou souhaitez-vous une suggestion ?"</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">5️⃣</div><div class="sr-c"><div class="sr-n">Style souhaité</div><div class="sr-d">"Naturel/spontané, posé/classique, ou mélange des deux ?"</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">6️⃣</div><div class="sr-c"><div class="sr-n">Attentes particulières</div><div class="sr-d">"Y a-t-il quelque chose de spécial que vous aimeriez capturer ?"</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">7️⃣</div><div class="sr-c"><div class="sr-n">Comment nous avez-vous connu ?</div><div class="sr-d">Source d'acquisition — alimente les statistiques CRM</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">8️⃣</div><div class="sr-c"><div class="sr-n">Allergies / Contraintes</div><div class="sr-d">"Y a-t-il des allergies ou contraintes à signaler ?"</div></div><div class="switch"></div></div>
+  <div style="margin-top:8px"><button class="btn btn-sm btn-secondary">+ Ajouter une question personnalisée</button></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🌅 Golden Hour & Météo</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🌅</div><div class="sr-c"><div class="sr-n">Afficher l'heure Golden Hour dans les confirmations</div><div class="sr-d">Inclure l'heure exacte du coucher de soleil dans les emails clients</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🌤️</div><div class="sr-c"><div class="sr-n">Inclure la météo dans le rappel J-1</div><div class="sr-d">Prévisions météo automatiques dans le rappel</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🌧️</div><div class="sr-c"><div class="sr-n">Seuil d'alerte pluie</div><div class="sr-d">Probabilité de pluie à partir de laquelle l'IA propose un report</div></div><select class="form-input" style="width:100px"><option>50%</option><option>60%</option><option selected>70%</option><option>80%</option></select></div>
+  <div class="sr"><div class="sr-i">📍</div><div class="sr-c"><div class="sr-n">Source météo géolocalisée</div><div class="sr-d">Position utilisée pour les prévisions</div></div><select class="form-input" style="width:200px"><option selected>Automatique (lieu de la séance)</option><option>Ville de base fixe</option></select></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- GALERIES                         -->
+<!-- ================================ -->
+<div class="page-view" id="view-galeries">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--bleu-light)">🖼️</div><div class="ph-info"><h1>Paramètres <em>Galeries</em></h1><p>Accès, durée, formats, compression, téléchargement et tri IA</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>⏳ Accès & Expiration</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">⏳</div><div class="sr-c"><div class="sr-n">Durée d'accès galerie</div><div class="sr-d">Nombre de jours après publication</div></div><select class="form-input" style="width:120px"><option>30 jours</option><option>60 jours</option><option selected>90 jours</option><option>180 jours</option><option>1 an</option><option>Illimité</option></select></div>
+  <div class="sr"><div class="sr-i">🔒</div><div class="sr-c"><div class="sr-n">Protection par mot de passe</div><div class="sr-d">Chaque galerie nécessite un mot de passe pour y accéder</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🔑</div><div class="sr-c"><div class="sr-n">Format du mot de passe</div><div class="sr-d">Auto-généré ou personnalisé par galerie</div></div><select class="form-input" style="width:200px"><option selected>Auto (Prénom-Code aléatoire)</option><option>Manuel (vous choisissez)</option><option>Code à 6 chiffres</option></select></div>
+  <div class="sr"><div class="sr-i">🔗</div><div class="sr-c"><div class="sr-n">Format URL galerie</div><div class="sr-d">Structure du lien partagé</div></div><select class="form-input" style="width:280px"><option selected>fleurdelumiere.fr/galerie/rousseau-mars2026</option><option>fleurdelumiere.fr/galerie/abc123</option></select></div>
+  <div class="sr"><div class="sr-i">🔔</div><div class="sr-c"><div class="sr-n">Notification à l'ouverture de galerie</div><div class="sr-d">Recevoir une alerte quand le client ouvre sa galerie pour la 1ère fois</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📊</div><div class="sr-c"><div class="sr-n">Tracking des visites galerie</div><div class="sr-d">Compter les visites, temps passé et photos vues</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📸 Photos & Formats de livraison</h3></div><div class="card-b">
+  <p style="font-size:11px;color:var(--gris);margin-bottom:8px">Nombre de photos incluses par formule :</p>
+  <div class="grid-2" style="margin-bottom:10px">
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Essentiel</div></div><input class="form-input" value="10 photos" style="width:100px;text-align:center"></div>
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Signature</div></div><input class="form-input" value="25 photos" style="width:100px;text-align:center"></div>
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Sur-Mesure</div></div><input class="form-input" value="50 photos" style="width:100px;text-align:center"></div>
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Mini-session</div></div><input class="form-input" value="5 photos" style="width:100px;text-align:center"></div>
+  </div>
+  <div class="sr"><div class="sr-i">📐</div><div class="sr-c"><div class="sr-n">Résolution de livraison</div><div class="sr-d">Résolution maximale des photos livrées</div></div><select class="form-input" style="width:200px"><option>Web (2048px long côté)</option><option selected>HD (4000px long côté)</option><option>Full résolution originale</option></select></div>
+  <div class="sr"><div class="sr-i">🗜️</div><div class="sr-c"><div class="sr-n">Qualité JPEG</div><div class="sr-d">Compression des photos livrées</div></div><select class="form-input" style="width:140px"><option>80% (léger)</option><option selected>90% (optimal)</option><option>95% (maximum)</option><option>100% (sans perte)</option></select></div>
+  <div class="sr"><div class="sr-i">📁</div><div class="sr-c"><div class="sr-n">Format de nommage des fichiers</div><div class="sr-d">Convention de nom pour les photos téléchargées</div></div><select class="form-input" style="width:300px"><option selected>FDL_Rousseau_Famille_001.jpg</option><option>FleurDeLumiere_2026-03-01_001.jpg</option><option>IMG_001.jpg (simple)</option><option>Personnalisé</option></select></div>
+  <div class="sr"><div class="sr-i">🎨</div><div class="sr-c"><div class="sr-n">Espace colorimétrique</div><div class="sr-d">Profil ICC des photos livrées</div></div><select class="form-input" style="width:160px"><option selected>sRGB (écrans)</option><option>Adobe RGB</option><option>ProPhoto RGB</option></select></div>
+  <div class="sr"><div class="sr-i">📥</div><div class="sr-c"><div class="sr-n">Autoriser le téléchargement HD</div><div class="sr-d">Le client peut télécharger les photos en haute résolution</div></div><div class="switch"></div></div>
+  <div class="sr"><div class="sr-i">📦</div><div class="sr-c"><div class="sr-n">Téléchargement en ZIP</div><div class="sr-d">Proposer un bouton "Tout télécharger" en archive ZIP</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📱</div><div class="sr-c"><div class="sr-n">Version mobile optimisée</div><div class="sr-d">Générer des versions allégées pour consultation mobile</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🤖 Tri assisté IA (côté client)</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🤖</div><div class="sr-c"><div class="sr-n">Activer le tri assisté IA</div><div class="sr-d">Coups de cœur, catégories auto et aide à la sélection</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">❤️</div><div class="sr-c"><div class="sr-n">Coups de cœur IA</div><div class="sr-d">L'IA pré-sélectionne les meilleures photos</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📂</div><div class="sr-c"><div class="sr-n">Catégories automatiques</div><div class="sr-d">Classement auto par personne, type de plan, lieu</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">⚖️</div><div class="sr-c"><div class="sr-n">Détection d'équilibre</div><div class="sr-d">Alerter le client si un membre de la famille est sous-représenté</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🔄</div><div class="sr-c"><div class="sr-n">Comparaison de photos similaires</div><div class="sr-d">L'IA aide à choisir entre deux photos proches</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🖼️</div><div class="sr-c"><div class="sr-n">Suggestions de tirage</div><div class="sr-d">L'IA suggère les meilleurs formats pour chaque photo</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>💬 Interactions client</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">❤️</div><div class="sr-c"><div class="sr-n">Favoris client</div><div class="sr-d">Le client peut marquer des photos en favoris</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">💬</div><div class="sr-c"><div class="sr-n">Commentaires sur les photos</div><div class="sr-d">Le client peut laisser un commentaire par photo</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🔗</div><div class="sr-c"><div class="sr-n">Partage social depuis la galerie</div><div class="sr-d">Boutons de partage Instagram, Facebook, WhatsApp</div></div><div class="switch on"></div></div>
+  <div class="form-group" style="margin-top:10px"><label class="form-label">Message d'accueil galerie personnalisé</label><textarea class="form-input" rows="2">Bonjour [prénom] ! 🌸 Voici vos photos — prenez le temps de les savourer. Vous avez [nombre] jours pour faire votre sélection et vos commandes.</textarea><div class="form-hint">Variables : [prénom], [formule], [nombre], [date_expiration]</div></div>
+  <div class="form-group"><label class="form-label">Message de fin de galerie</label><textarea class="form-input" rows="2">Merci d'avoir parcouru votre galerie ! 🌸 N'hésitez pas à commander vos tirages et à partager votre code parrainage avec vos proches.</textarea></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- FACTURATION                      -->
+<!-- ================================ -->
+<div class="page-view" id="view-facturation">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--or-light)">🧾</div><div class="ph-info"><h1>Paramètres <em>Facturation</em></h1><p>Numérotation, mentions légales, devise et automatisations</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>🔢 Numérotation des factures</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🔢</div><div class="sr-c"><div class="sr-n">Format de numérotation</div><div class="sr-d">Préfixe + année + numéro séquentiel</div></div><input class="form-input" value="FDL-{ANNEE}-{NUM}" style="width:220px;font-family:monospace"></div>
+  <div class="sr"><div class="sr-i">#️⃣</div><div class="sr-c"><div class="sr-n">Prochain numéro</div><div class="sr-d">Numéro de la prochaine facture émise</div></div><input class="form-input" value="035" style="width:80px;text-align:center;font-family:monospace"></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Réinitialiser chaque année</div><div class="sr-d">Recommencer à 001 au 1er janvier</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📝</div><div class="sr-c"><div class="sr-n">Préfixe facture d'acompte</div><div class="sr-d">Préfixe différent pour les acomptes</div></div><input class="form-input" value="FDL-AC-{ANNEE}-{NUM}" style="width:240px;font-family:monospace"></div>
+  <div class="sr"><div class="sr-i">📝</div><div class="sr-c"><div class="sr-n">Préfixe avoir / remboursement</div></div><input class="form-input" value="FDL-AV-{ANNEE}-{NUM}" style="width:240px;font-family:monospace"></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>💶 Devise & TVA</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">💶</div><div class="sr-c"><div class="sr-n">Devise</div></div><select class="form-input" style="width:120px"><option selected>EUR (€)</option><option>CHF (CHF)</option><option>USD ($)</option><option>GBP (£)</option></select></div>
+  <div class="sr"><div class="sr-i">📝</div><div class="sr-c"><div class="sr-n">Mention TVA sur les factures</div></div><input class="form-input" value="TVA non applicable, art. 293 B du CGI" style="width:320px"></div>
+  <div class="sr"><div class="sr-i">🔄</div><div class="sr-c"><div class="sr-n">Appliquer la TVA (si assujetti)</div><div class="sr-d">Activer si vous dépassez le seuil de franchise</div></div><div class="switch"></div></div>
+  <div class="sr"><div class="sr-i">📊</div><div class="sr-c"><div class="sr-n">Taux de TVA par défaut</div><div class="sr-d">Appliqué si TVA activée</div></div><select class="form-input" style="width:100px"><option selected>20%</option><option>10%</option><option>5.5%</option></select></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📄 Mentions sur les factures</h3></div><div class="card-b">
+  <div class="form-group"><label class="form-label">Conditions de paiement</label><textarea class="form-input" rows="2">Paiement à réception. Acompte de 30% à la réservation, solde avant livraison de la galerie. En cas de retard, pénalités au taux légal en vigueur. Indemnité forfaitaire de recouvrement : 40€.</textarea></div>
+  <div class="form-group"><label class="form-label">Pied de facture (mentions légales)</label><textarea class="form-input" rows="2">Fleur de Lumière — Capucine [Nom] · Auto-entrepreneur · SIRET : [À compléter]
+Dispensé d'immatriculation au RCS · TVA non applicable, art. 293 B du CGI</textarea></div>
+  <div class="form-group"><label class="form-label">Note personnalisée (optionnelle)</label><input class="form-input" value="Merci pour votre confiance ! À bientôt dans la lumière dorée 🌸"></div>
+  <div class="sr"><div class="sr-i">💳</div><div class="sr-c"><div class="sr-n">Afficher les coordonnées bancaires</div><div class="sr-d">Inclure l'IBAN sur les factures</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🖼️</div><div class="sr-c"><div class="sr-n">Inclure le logo sur les factures</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>⚙️ Automatisations facturation</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🤖</div><div class="sr-c"><div class="sr-n">Génération automatique des factures</div><div class="sr-d">Créer la facture automatiquement après chaque paiement</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">Envoi automatique au client</div><div class="sr-d">Envoyer la facture PDF par email après génération</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📋</div><div class="sr-c"><div class="sr-n">Facture d'acompte séparée</div><div class="sr-d">Générer une facture d'acompte au moment de la réservation</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">⚠️</div><div class="sr-c"><div class="sr-n">Relance impayés automatique</div><div class="sr-d">Envoyer un rappel après X jours de retard</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Délai 1ère relance</div></div><select class="form-input" style="width:100px"><option>3 jours</option><option selected>7 jours</option><option>14 jours</option></select></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Délai 2ème relance</div></div><select class="form-input" style="width:100px"><option>14 jours</option><option selected>21 jours</option><option>30 jours</option></select></div>
+  <div class="sr"><div class="sr-i">📥</div><div class="sr-c"><div class="sr-n">Export comptable automatique mensuel</div><div class="sr-d">Envoyer un récap CSV par email le 1er de chaque mois</div></div><div class="switch"></div></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- SCOLAIRE                         -->
+<!-- ================================ -->
+<div class="page-view" id="view-scolaire">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--bleu-light)">🎓</div><div class="ph-info"><h1>Paramètres <em>Scolaire</em></h1><p>Packs, tarifs, autorisations, codes d'accès et délais parents</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>📦 Packs & Tarification par défaut</h3></div><div class="card-b">
+  <p style="font-size:11px;color:var(--gris);margin-bottom:8px">Tarifs de base — personnalisables par établissement.</p>
+  <div class="sr"><div class="sr-i">📸</div><div class="sr-c"><div class="sr-n">Pack Essentiel</div><div class="sr-d">1 individuelle 13×18 + 1 classe 20×30</div></div><input class="form-input" value="12€" style="width:80px;text-align:center"></div>
+  <div class="sr"><div class="sr-i">⭐</div><div class="sr-c"><div class="sr-n">Pack Famille</div><div class="sr-d">2 individuelles + 1 classe + 4 identités</div></div><input class="form-input" value="22€" style="width:80px;text-align:center"></div>
+  <div class="sr"><div class="sr-i">💎</div><div class="sr-c"><div class="sr-n">Pack Premium</div><div class="sr-d">3 individuelles + 1 classe + 8 identités + 1 magnet</div></div><input class="form-input" value="35€" style="width:80px;text-align:center"></div>
+  <div class="sr"><div class="sr-i">👨‍👩‍👧</div><div class="sr-c"><div class="sr-n">Option Fratrie</div><div class="sr-d">1 photo fratrie 20×30</div></div><input class="form-input" value="+8€" style="width:80px;text-align:center"></div>
+  <div class="sr"><div class="sr-i">💾</div><div class="sr-c"><div class="sr-n">Option numérique</div><div class="sr-d">Toutes les photos en HD téléchargeables</div></div><input class="form-input" value="+10€" style="width:80px;text-align:center"></div>
+  <div class="sr"><div class="sr-i">🖼️</div><div class="sr-c"><div class="sr-n">Photo de classe seule</div><div class="sr-d">1 photo de classe 20×30</div></div><input class="form-input" value="8€" style="width:80px;text-align:center"></div>
+  <div style="margin-top:8px"><button class="btn btn-sm btn-secondary">+ Ajouter un pack personnalisé</button></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📋 Autorisation parentale</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📄</div><div class="sr-c"><div class="sr-n">Mode de signature</div></div><select class="form-input" style="width:220px"><option selected>Signature électronique (email)</option><option>PDF imprimable uniquement</option><option>Les deux</option></select></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">Relance automatique non-signataires</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Délai de relance avant shooting</div></div><select class="form-input" style="width:100px"><option>J-3</option><option selected>J-5</option><option>J-7</option><option>J-10</option></select></div>
+  <div class="sr"><div class="sr-i">🔄</div><div class="sr-c"><div class="sr-n">2ème relance automatique</div></div><select class="form-input" style="width:120px"><option selected>J-2</option><option>Non</option></select></div>
+  <div class="sr"><div class="sr-i">📝</div><div class="sr-c"><div class="sr-n">Texte d'autorisation</div></div><button class="btn btn-sm btn-secondary">✏️ Modifier le modèle</button></div>
+  <div class="sr"><div class="sr-i">🖼️</div><div class="sr-c"><div class="sr-n">Inclure le logo de l'école sur l'autorisation</div><div class="sr-d">Si fourni par l'établissement</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🔑 Codes d'accès parents</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🔑</div><div class="sr-c"><div class="sr-n">Format des codes</div></div><select class="form-input" style="width:300px"><option selected>ECOLE-CLASSE-PRENOM (ex: JJAURES-CE2-LUCAS)</option><option>CODE-6-CHIFFRES (ex: 482917)</option><option>PRENOM-CODE (ex: LUCAS-A3F8)</option></select></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">Envoi du code par</div></div><select class="form-input" style="width:160px"><option selected>Email aux parents</option><option>Via l'école (papier)</option><option>Les deux</option></select></div>
+  <div class="sr"><div class="sr-i">🔒</div><div class="sr-c"><div class="sr-n">Accès limité par IP/appareil</div><div class="sr-d">Limiter le nombre d'appareils qui peuvent utiliser un code</div></div><div class="switch"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>⏰ Délais & Commandes</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">⏳</div><div class="sr-c"><div class="sr-n">Durée d'accès épreuves parents</div></div><select class="form-input" style="width:120px"><option>7 jours</option><option selected>14 jours</option><option>21 jours</option><option>30 jours</option></select></div>
+  <div class="sr"><div class="sr-i">🔔</div><div class="sr-c"><div class="sr-n">Rappel commande aux parents</div><div class="sr-d">Relance avant la clôture des commandes</div></div><select class="form-input" style="width:120px"><option>J-2</option><option selected>J-3</option><option>J-5</option></select></div>
+  <div class="sr"><div class="sr-i">📦</div><div class="sr-c"><div class="sr-n">Délai de production pochettes</div><div class="sr-d">Jours ouvrés après clôture des commandes</div></div><select class="form-input" style="width:120px"><option>5 jours</option><option selected>10 jours</option><option>15 jours</option></select></div>
+  <div class="sr"><div class="sr-i">🚚</div><div class="sr-c"><div class="sr-n">Mode de livraison</div></div><select class="form-input" style="width:200px"><option selected>Livré à l'école (gratuit)</option><option>Expédié au domicile (+frais)</option><option>Les deux</option></select></div>
+  <div class="sr"><div class="sr-i">🏫</div><div class="sr-c"><div class="sr-n">Commission école</div><div class="sr-d">Part reversée à l'établissement</div></div><select class="form-input" style="width:100px"><option selected>0%</option><option>5%</option><option>10%</option><option>15%</option></select></div>
+  <div class="sr"><div class="sr-i">✅</div><div class="sr-c"><div class="sr-n">Validation épreuves par l'école</div><div class="sr-d">Le directeur doit valider avant mise en ligne parents</div></div><div class="switch on"></div></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- IA                               -->
+<!-- ================================ -->
+<div class="page-view" id="view-ia">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:linear-gradient(135deg,var(--or-light),var(--rose-light))">🤖</div><div class="ph-info"><h1>Paramètres <em>IA</em></h1><p>Ton, style, hashtags, fréquence et comportement de l'assistant</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>🗣️ Ton & Personnalité</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🗣️</div><div class="sr-c"><div class="sr-n">Ton de voix général</div><div class="sr-d">Style de communication dans les posts et emails générés</div></div><select class="form-input" style="width:200px"><option selected>Chaleureux & poétique</option><option>Professionnel & sobre</option><option>Fun & dynamique</option><option>Élégant & raffiné</option><option>Personnalisé</option></select></div>
+  <div class="sr"><div class="sr-i">👤</div><div class="sr-c"><div class="sr-n">Tutoiement / Vouvoiement</div></div><select class="form-input" style="width:140px"><option selected>Vouvoiement</option><option>Tutoiement</option><option>Selon le contexte</option></select></div>
+  <div class="sr"><div class="sr-i">😊</div><div class="sr-c"><div class="sr-n">Utilisation des emojis</div></div><select class="form-input" style="width:120px"><option>Jamais</option><option>Rare</option><option selected>Modéré</option><option>Fréquent</option></select></div>
+  <div class="sr"><div class="sr-i">🌐</div><div class="sr-c"><div class="sr-n">Langue principale</div></div><select class="form-input" style="width:120px"><option selected>Français</option><option>Anglais</option><option>Espagnol</option></select></div>
+  <div class="sr"><div class="sr-i">✍️</div><div class="sr-c"><div class="sr-n">Longueur des textes générés</div><div class="sr-d">Préférence de longueur pour les posts et descriptions</div></div><select class="form-input" style="width:140px"><option>Court (2-3 lignes)</option><option selected>Moyen (5-8 lignes)</option><option>Long (10+ lignes)</option></select></div>
+  <div class="form-group" style="margin-top:10px"><label class="form-label">Instructions personnalisées pour l'IA</label><textarea class="form-input" rows="4">Je suis photographe en lumière naturelle. Mon style est doux, authentique, poétique. J'aime parler de l'Heure Dorée, de la complicité, de l'émotion. Je ne suis jamais commerciale ou agressive. Utilise des métaphores liées à la lumière et à la nature. Évite les superlatifs excessifs. Mets en avant l'émotion plutôt que la technique.</textarea><div class="form-hint">L'IA s'appuie sur ces instructions pour tous les contenus générés (posts, emails, relances, descriptions)</div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📝 Réseaux sociaux — Préférences</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Fréquence de publication suggérée</div></div><select class="form-input" style="width:160px"><option>1-2 / semaine</option><option selected>3-4 / semaine</option><option>5+ / semaine</option><option>Quotidien</option></select></div>
+  <div class="sr"><div class="sr-i">⏰</div><div class="sr-c"><div class="sr-n">Meilleurs horaires de publication</div></div><select class="form-input" style="width:220px"><option selected>Automatique (selon audience)</option><option>Matin (8h-10h)</option><option>Midi (12h-13h)</option><option>Soir (18h-20h)</option></select></div>
+  <div class="sr"><div class="sr-i">#️⃣</div><div class="sr-c"><div class="sr-n">Nombre max de hashtags</div></div><select class="form-input" style="width:80px"><option>5</option><option selected>10</option><option>15</option><option>20</option><option>30</option></select></div>
+  <div class="sr"><div class="sr-i">📊</div><div class="sr-c"><div class="sr-n">Mix éditorial suggéré par semaine</div></div></div>
+  <div class="grid-2" style="margin-top:6px;margin-bottom:10px;font-size:12px">
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Posts portfolio / séances</div></div><input class="form-input" value="2" style="width:60px;text-align:center"></div>
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Témoignages</div></div><input class="form-input" value="1" style="width:60px;text-align:center"></div>
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Behind the scenes</div></div><input class="form-input" value="1" style="width:60px;text-align:center"></div>
+    <div class="sr" style="padding:6px 0"><div class="sr-c"><div class="sr-n">Promos / Offres</div></div><input class="form-input" value="0-1" style="width:60px;text-align:center"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Hashtags favoris (toujours inclus)</label><textarea class="form-input" rows="2">#fleurdelumiere #photographetarn #lumierenaturelle #heuredoree #tarn #toulouse #photographefamille</textarea></div>
+  <div class="form-group"><label class="form-label">Hashtags par spécialité</label>
+    <div class="grid-2">
+      <div><label class="form-label" style="font-size:10px;color:var(--gris)">Famille</label><input class="form-input" value="#famille #seancefamille #souvenirsdefamille" style="font-size:11px"></div>
+      <div><label class="form-label" style="font-size:10px;color:var(--gris)">Équestre</label><input class="form-input" value="#photographeequestre #chevaux #cavaliere #equitation" style="font-size:11px"></div>
+      <div><label class="form-label" style="font-size:10px;color:var(--gris)">Maternité</label><input class="form-input" value="#maternite #grossesse #futuraoman #enceinte" style="font-size:11px"></div>
+      <div><label class="form-label" style="font-size:10px;color:var(--gris)">Scolaire</label><input class="form-input" value="#photoscolaire #photodeclasse #ecole" style="font-size:11px"></div>
+    </div>
+  </div>
+  <div class="form-group"><label class="form-label">Hashtags interdits (jamais utilisés)</label><input class="form-input" placeholder="Ex: #photo #love #instagood (trop génériques)"></div>
+  <div class="form-group"><label class="form-label">Sujets à éviter dans les textes</label><textarea class="form-input" rows="2">Ne jamais mentionner les prix dans les posts. Ne pas utiliser "promotion", "pas cher", "discount". Ne pas comparer avec d'autres photographes. Éviter le mot "prestation".</textarea></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🧠 Intelligence Métier</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📊</div><div class="sr-c"><div class="sr-n">Recommandations tarifaires</div><div class="sr-d">L'IA analyse la demande et suggère des ajustements de prix</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Suggestions d'ouverture de créneaux</div><div class="sr-d">L'IA propose d'ouvrir ou fermer des créneaux selon la demande</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🔔</div><div class="sr-c"><div class="sr-n">Alertes saisonnières</div><div class="sr-d">Rappels automatiques basés sur les tendances N-1 (ex: préparer la saison maternité)</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📈</div><div class="sr-c"><div class="sr-n">Benchmark marché anonymisé</div><div class="sr-d">Comparaison avec les autres photographes de la plateforme</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">💡</div><div class="sr-c"><div class="sr-n">Fréquence des recommandations</div><div class="sr-d">À quelle fréquence l'IA génère de nouvelles suggestions</div></div><select class="form-input" style="width:140px"><option>Quotidien</option><option selected>Hebdomadaire</option><option>Bimensuel</option><option>Mensuel</option></select></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🎯 CRM Prédictif & Leads</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🔥</div><div class="sr-c"><div class="sr-n">Scoring leads minimum pour alerte</div><div class="sr-d">Seuil à partir duquel l'IA vous notifie d'un lead chaud</div></div><select class="form-input" style="width:100px"><option>60</option><option selected>70</option><option>80</option><option>90</option></select></div>
+  <div class="sr"><div class="sr-i">🎂</div><div class="sr-c"><div class="sr-n">Relance anniversaire de séance</div><div class="sr-d">Suggérer une relance 1 an après chaque séance</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">⏳</div><div class="sr-c"><div class="sr-n">Alerte galerie expirante</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">💤</div><div class="sr-c"><div class="sr-n">Seuil client inactif</div><div class="sr-d">Après combien de mois l'IA propose une réactivation</div></div><select class="form-input" style="width:120px"><option>3 mois</option><option selected>6 mois</option><option>9 mois</option><option>12 mois</option></select></div>
+  <div class="sr"><div class="sr-i">🏇</div><div class="sr-c"><div class="sr-n">Rappel fidélité (Passeport, 4 Saisons)</div><div class="sr-d">Alerter quand un client approche d'un seuil de fidélité</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">Pré-rédiger les relances automatiquement</div><div class="sr-d">L'IA prépare le texte de relance, vous n'avez qu'à valider</div></div><div class="switch on"></div></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- ZONE D'INTERVENTION              -->
+<!-- ================================ -->
+<div class="page-view" id="view-zone">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--sauge-light)">📍</div><div class="ph-info"><h1>Zone <em>d'intervention</em></h1><p>Périmètre géographique, frais de déplacement et lieux favoris</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>📍 Zone principale</h3></div><div class="card-b">
+  <div class="grid-2">
+    <div class="form-group"><label class="form-label">Ville de base</label><input class="form-input" value="Saint-Sulpice-la-Pointe (81370)"></div>
+    <div class="form-group"><label class="form-label">Rayon sans frais</label><select class="form-input"><option>10 km</option><option>20 km</option><option selected>30 km</option><option>50 km</option></select></div>
+  </div>
+  <div style="height:180px;background:linear-gradient(135deg,#e8e4df,#d5cfc5);border-radius:var(--radius);margin:10px 0;display:flex;align-items:center;justify-content:center;color:var(--gris)">🗺️ Carte interactive — Rayon 30 km autour de Saint-Sulpice</div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🚗 Frais de déplacement</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🚗</div><div class="sr-c"><div class="sr-n">Tarif au km (au-delà du rayon)</div></div><input class="form-input" value="0,50€/km" style="width:100px;text-align:center"></div>
+  <div class="sr"><div class="sr-i">📏</div><div class="sr-c"><div class="sr-n">Distance max d'intervention</div></div><select class="form-input" style="width:100px"><option>50 km</option><option selected>80 km</option><option>100 km</option><option>150 km</option><option>Illimité</option></select></div>
+  <div class="sr"><div class="sr-i">🧮</div><div class="sr-c"><div class="sr-n">Calcul automatique dans les devis</div><div class="sr-d">Ajouter les frais de déplacement automatiquement</div></div><div class="switch on"></div></div>
+  <div class="sr"><div class="sr-i">🆓</div><div class="sr-c"><div class="sr-n">Frais offerts à partir de X€ de commande</div><div class="sr-d">Seuil pour offrir le déplacement</div></div><select class="form-input" style="width:120px"><option selected>Jamais</option><option>300€</option><option>500€</option><option>800€</option></select></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🗺️ Départements couverts</h3></div><div class="card-b">
+  <p style="font-size:11px;color:var(--gris);margin-bottom:8px">Zones affichées dans le chatbot, la réservation et les pages Google.</p>
+  <div class="tag-list">
+    <span class="tag tag-active">81 · Tarn ✓</span>
+    <span class="tag tag-active">31 · Haute-Garonne ✓</span>
+    <span class="tag" style="background:var(--or-light);color:#92750c;border:1.5px solid rgba(212,160,60,.3)">82 · Tarn-et-Garonne +frais</span>
+    <span class="tag" style="background:var(--or-light);color:#92750c;border:1.5px solid rgba(212,160,60,.3)">12 · Aveyron +frais</span>
+    <span class="tag tag-add">+ Ajouter un département</span>
+  </div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📍 Lieux de shooting favoris</h3></div><div class="card-b">
+  <p style="font-size:11px;color:var(--gris);margin-bottom:8px">Lieux pré-enregistrés proposés aux clients lors de la réservation et dans le chatbot.</p>
+  <div class="sr"><div class="sr-i">🌳</div><div class="sr-c"><div class="sr-n">Parc Rochegude — Albi</div><div class="sr-d">Jardins, allées ombragées, kiosque · Famille, Maternité</div></div><button class="btn btn-sm btn-secondary">✏️</button></div>
+  <div class="sr"><div class="sr-i">🌲</div><div class="sr-c"><div class="sr-n">Forêt de Grésigne</div><div class="sr-d">Sous-bois, lumière filtrée, ambiance enchantée · Famille, Maternité</div></div><button class="btn btn-sm btn-secondary">✏️</button></div>
+  <div class="sr"><div class="sr-i">🐴</div><div class="sr-c"><div class="sr-n">Écurie des Chênes — Parisot</div><div class="sr-d">Manège, paddock, campagne · Équestre</div></div><button class="btn btn-sm btn-secondary">✏️</button></div>
+  <div class="sr"><div class="sr-i">🌾</div><div class="sr-c"><div class="sr-n">Champs de blé — Route de Gaillac</div><div class="sr-d">Champs ouverts, coucher de soleil dégagé · Famille, Couple</div></div><button class="btn btn-sm btn-secondary">✏️</button></div>
+  <div class="sr"><div class="sr-i">🏰</div><div class="sr-c"><div class="sr-n">Château de Mauriac — Senouillac</div><div class="sr-d">Architecture, vignoble, cadre élégant · Événement, Couple</div></div><button class="btn btn-sm btn-secondary">✏️</button></div>
+  <div style="margin-top:8px"><button class="btn btn-sm btn-secondary">+ Ajouter un lieu favori</button></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- SÉCURITÉ                         -->
+<!-- ================================ -->
+<div class="page-view" id="view-securite">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:rgba(220,38,38,.06)">🔒</div><div class="ph-info"><h1>Sécurité & <em>Compte</em></h1><p>Mot de passe, authentification, sessions et données personnelles</p></div></div></div>
+<div class="container">
+
+<div class="card"><div class="card-h"><h3>🔑 Mot de passe</h3></div><div class="card-b">
+  <div class="grid-2">
+    <div class="form-group"><label class="form-label">Mot de passe actuel</label><input class="form-input" type="password" value="••••••••"></div>
+    <div class="form-group"><label class="form-label">Nouveau mot de passe</label><input class="form-input" type="password" placeholder="Min. 12 caractères, 1 majuscule, 1 chiffre"></div>
+  </div>
+  <button class="btn btn-secondary" style="margin-top:6px">🔑 Changer le mot de passe</button>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🛡️ Authentification à deux facteurs</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📱</div><div class="sr-c"><div class="sr-n">2FA par SMS</div><div class="sr-d">Code envoyé par SMS à chaque connexion</div></div><div class="switch"></div></div>
+  <div class="sr"><div class="sr-i">🔐</div><div class="sr-c"><div class="sr-n">2FA par application (TOTP)</div><div class="sr-d">Google Authenticator, Authy ou similaire</div></div><div class="switch"></div></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">2FA par email</div><div class="sr-d">Code envoyé par email à chaque connexion</div></div><div class="switch"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📱 Sessions actives</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">💻</div><div class="sr-c"><div class="sr-n">MacBook Pro — Chrome · Saint-Sulpice</div><div class="sr-d">Dernière activité : Aujourd'hui 14:32 · <strong style="color:var(--sauge)">Session active</strong></div></div><span style="font-size:10px;color:var(--sauge);font-weight:700">● Actuelle</span></div>
+  <div class="sr"><div class="sr-i">📱</div><div class="sr-c"><div class="sr-n">iPhone 15 — Safari · Saint-Sulpice</div><div class="sr-d">Dernière activité : Hier 22:15</div></div><button class="btn btn-sm btn-danger">Déconnecter</button></div>
+  <div class="sr"><div class="sr-i">🖥️</div><div class="sr-c"><div class="sr-n">iPad — Safari · Parisot</div><div class="sr-d">Dernière activité : 28 fév. 10:00</div></div><button class="btn btn-sm btn-danger">Déconnecter</button></div>
+  <div style="margin-top:8px"><button class="btn btn-danger btn-sm">🚪 Déconnecter toutes les autres sessions</button></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📋 Journal d'activité</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📋</div><div class="sr-c"><div class="sr-n">Historique des connexions</div><div class="sr-d">Voir les 30 dernières connexions avec IP et appareil</div></div><button class="btn btn-sm btn-secondary">📋 Voir l'historique</button></div>
+  <div class="sr"><div class="sr-i">⚠️</div><div class="sr-c"><div class="sr-n">Alerte connexion inhabituelle</div><div class="sr-d">Recevoir un email si connexion depuis un nouvel appareil/lieu</div></div><div class="switch on"></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>📥 Données personnelles (RGPD)</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">📥</div><div class="sr-c"><div class="sr-n">Exporter toutes mes données</div><div class="sr-d">Télécharger un export complet (clients, factures, galeries, stats)</div></div><button class="btn btn-sm btn-secondary">📥 Exporter</button></div>
+  <div class="sr"><div class="sr-i">📋</div><div class="sr-c"><div class="sr-n">Registre des traitements</div><div class="sr-d">Document RGPD des données que vous traitez</div></div><button class="btn btn-sm btn-secondary">📄 Télécharger</button></div>
+  <div class="sr"><div class="sr-i">🗑️</div><div class="sr-c"><div class="sr-n">Supprimer mon compte</div><div class="sr-d">Suppression définitive de toutes vos données. Irréversible.</div></div><button class="btn btn-sm btn-danger">🗑️ Supprimer mon compte</button></div>
+</div></div>
+
+<button class="btn btn-sauge">💾 Enregistrer</button>
+</div></div>
+
+<!-- ================================ -->
+<!-- ABONNEMENT SAAS                  -->
+<!-- ================================ -->
+<div class="page-view" id="view-abo">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--or-light)">💎</div><div class="ph-info"><h1>Abonnement <em>SaaS</em></h1><p>Votre formule, utilisation et gestion de l'abonnement</p></div></div></div>
+<div class="container">
+
+<div class="plan-grid">
+  <div class="plan"><div class="plan-icon">🌱</div><h4>Starter</h4><div class="plan-price">9€<span>/mois</span></div><ul class="plan-features"><li>Site vitrine</li><li>Réservation (10/mois)</li><li>3 galeries actives</li><li>Boutique en ligne</li><li>Facturation auto</li><li class="no">Module scolaire</li><li class="no">CRM & Leads</li><li class="no">IA Assistant</li><li class="no">Support prioritaire</li></ul><button class="btn btn-secondary btn-sm" style="width:100%">Downgrader</button></div>
+  <div class="plan current"><div class="plan-icon">⭐</div><h4>Pro</h4><div class="plan-price">29€<span>/mois</span></div><ul class="plan-features"><li>Site vitrine illimité</li><li>Réservation illimitée</li><li>Galeries illimitées (90j)</li><li>Boutique en ligne</li><li>Facturation auto</li><li>Module scolaire (10 établ.)</li><li>CRM & Leads</li><li>IA Assistant (500 req/mois)</li><li>Support prioritaire</li></ul><button class="btn btn-sauge btn-sm" style="width:100%">Plan actuel ✓</button></div>
+  <div class="plan"><div class="plan-icon">💎</div><h4>Business</h4><div class="plan-price">59€<span>/mois</span></div><ul class="plan-features"><li>Tout Pro +</li><li>Scolaire illimité</li><li>IA illimité</li><li>Multi-photographe (3)</li><li>API & Webhooks</li><li>White label</li><li>Stockage 200 Go</li><li>Support dédié</li><li>Formation onboarding</li></ul><button class="btn btn-primary btn-sm" style="width:100%">Upgrader</button></div>
+</div>
+
+<div class="card" style="margin-top:18px"><div class="card-h"><h3>📊 Utilisation du plan actuel</h3><span class="card-badge" style="background:var(--or);color:var(--texte)">Pro</span></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🖼️</div><div class="sr-c"><div class="sr-n">Stockage galeries</div><div class="sr-d">12,4 Go / 50 Go utilisés (25%)</div></div><div style="width:150px"><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:25%;background:var(--sauge);border-radius:3px"></div></div></div></div>
+  <div class="sr"><div class="sr-i">🏫</div><div class="sr-c"><div class="sr-n">Établissements scolaires</div><div class="sr-d">6 / 10 actifs (60%)</div></div><div style="width:150px"><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:60%;background:var(--or);border-radius:3px"></div></div></div></div>
+  <div class="sr"><div class="sr-i">🤖</div><div class="sr-c"><div class="sr-n">Crédits IA ce mois</div><div class="sr-d">142 / 500 requêtes (28%)</div></div><div style="width:150px"><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:28%;background:var(--sauge);border-radius:3px"></div></div></div></div>
+  <div class="sr"><div class="sr-i">📧</div><div class="sr-c"><div class="sr-n">Emails envoyés ce mois</div><div class="sr-d">87 / 1 000 (9%)</div></div><div style="width:150px"><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:9%;background:var(--sauge);border-radius:3px"></div></div></div></div>
+  <div class="sr"><div class="sr-i">👥</div><div class="sr-c"><div class="sr-n">Clients CRM</div><div class="sr-d">87 / 500 (17%)</div></div><div style="width:150px"><div style="height:6px;background:var(--gris-border);border-radius:3px"><div style="height:100%;width:17%;background:var(--sauge);border-radius:3px"></div></div></div></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>💳 Facturation de l'abonnement</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">💳</div><div class="sr-c"><div class="sr-n">Moyen de paiement</div><div class="sr-d">Visa •••• 4242 — Exp. 12/2027</div></div><button class="btn btn-sm btn-secondary">✏️ Modifier</button></div>
+  <div class="sr"><div class="sr-i">📅</div><div class="sr-c"><div class="sr-n">Cycle de facturation</div><div class="sr-d">Mensuel · Prochaine facture le 1er avril 2026</div></div><select class="form-input" style="width:160px"><option>Mensuel (29€)</option><option selected>Annuel (290€ · -17%)</option></select></div>
+  <div class="sr"><div class="sr-i">🧾</div><div class="sr-c"><div class="sr-n">Dernière facture SaaS</div><div class="sr-d">1er mars 2026 — 29€</div></div><button class="btn btn-sm btn-secondary">📥 Télécharger</button></div>
+  <div class="sr"><div class="sr-i">📋</div><div class="sr-c"><div class="sr-n">Historique des factures</div></div><button class="btn btn-sm btn-secondary">📋 Voir tout</button></div>
+</div></div>
+
+<div class="card"><div class="card-h"><h3>🎁 Parrainage photographes</h3></div><div class="card-b">
+  <div class="sr"><div class="sr-i">🎁</div><div class="sr-c"><div class="sr-n">Votre code parrainage</div><div class="sr-d">Partagez-le avec d'autres photographes — 1 mois offert pour chaque filleul</div></div><input class="form-input" value="CAPUCINE-FDL" style="width:180px;text-align:center;font-family:monospace;font-weight:700" readonly></div>
+  <div class="sr"><div class="sr-i">👥</div><div class="sr-c"><div class="sr-n">Filleuls actifs</div><div class="sr-d">0 photographe parrainé</div></div><span style="font-size:12px;font-weight:700;color:var(--gris)">0</span></div>
+</div></div>
+
+</div></div>
+
+<script>
+function sw(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

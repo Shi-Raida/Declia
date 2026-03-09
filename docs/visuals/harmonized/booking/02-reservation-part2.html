@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver ma séance — Étapes 5 à 7 — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== BOOKING SHELL D ===== */
+  .bk-header {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 0 var(--fl-space-xl);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .bk-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+  }
+
+  .bk-logo em {
+    color: var(--fl-rose);
+    font-style: normal;
+  }
+
+  .bk-step-count {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    font-weight: 500;
+  }
+
+  /* ===== STEPPER ===== */
+  .bk-stepper-wrap {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 22px var(--fl-space-xl) 28px;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+  }
+
+  .bk-stepper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .bk-step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+
+  .bk-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 2px solid var(--fl-border-dark);
+    color: var(--fl-warm-gray);
+    background: var(--fl-bg-card);
+    transition: all var(--fl-transition);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .bk-dot.active {
+    border-color: var(--fl-rose);
+    color: var(--fl-rose);
+    background: var(--fl-rose-pale);
+    box-shadow: 0 0 0 4px rgba(194,114,126,0.12);
+  }
+
+  .bk-dot.done {
+    border-color: var(--fl-sauge);
+    background: var(--fl-sauge);
+    color: #fff;
+  }
+
+  .bk-step-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--fl-warm-gray);
+    margin-top: 6px;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .bk-step-item.s-done .bk-step-label { color: var(--fl-sauge); font-weight: 600; }
+  .bk-step-item.s-active .bk-step-label { color: var(--fl-prune); font-weight: 600; }
+
+  .bk-line {
+    flex: 1;
+    height: 2px;
+    background: var(--fl-border-dark);
+    margin: 0 4px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bk-line.done { background: var(--fl-sauge); }
+
+  /* ===== LAYOUT ===== */
+  .bk-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    min-height: calc(100vh - 130px);
+    align-items: start;
+  }
+
+  .bk-main {
+    padding: var(--fl-space-2xl) 40px;
+    max-width: 720px;
+  }
+
+  .bk-sidebar {
+    background: var(--fl-bg-card);
+    border-left: 1px solid var(--fl-border);
+    padding: var(--fl-space-xl) var(--fl-space-lg);
+    position: sticky;
+    top: 130px;
+    align-self: start;
+    min-height: calc(100vh - 130px);
+  }
+
+  /* ===== STEP VIEWS ===== */
+  .step-view { display: none; }
+  .step-view.active {
+    display: block;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-heading {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--fl-prune);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .step-heading em { color: var(--fl-rose); font-style: italic; }
+
+  .step-desc {
+    font-size: 0.9375rem;
+    color: var(--fl-warm-gray);
+    margin-bottom: var(--fl-space-xl);
+    line-height: 1.7;
+  }
+
+  .step-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--fl-space-2xl);
+    padding-top: var(--fl-space-lg);
+    border-top: 1px solid var(--fl-border);
+  }
+
+  /* ===== CGV ===== */
+  .cgv-block {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-lg);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .cgv-block-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+  }
+
+  .cgv-text {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    line-height: 1.8;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius-sm);
+    padding: var(--fl-space-md);
+    background: var(--fl-bg);
+    margin-bottom: var(--fl-space-md);
+  }
+
+  .cgv-text strong { color: var(--fl-charcoal); }
+
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    padding: var(--fl-space-md) 0;
+    cursor: pointer;
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .checkbox-row:last-child { border-bottom: none; }
+
+  .cb-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 2px solid var(--fl-border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all var(--fl-transition);
+    margin-top: 1px;
+  }
+
+  .checkbox-row.checked .cb-box {
+    background: var(--fl-sauge);
+    border-color: var(--fl-sauge);
+    color: #fff;
+  }
+
+  .cb-label {
+    font-size: 0.875rem;
+    color: var(--fl-charcoal);
+    line-height: 1.5;
+  }
+
+  .cb-label a { color: var(--fl-rose); font-weight: 600; text-decoration: underline; }
+
+  /* ===== PAYMENT ===== */
+  .pay-summary {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-lg);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .pay-summary-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-md);
+    font-weight: 600;
+  }
+
+  .ps-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .ps-row:last-child { border-bottom: none; }
+  .ps-l { color: var(--fl-warm-gray); }
+  .ps-v { font-weight: 600; color: var(--fl-prune); }
+
+  .ps-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--fl-space-md) 0 0;
+    margin-top: var(--fl-space-sm);
+    border-top: 2px solid var(--fl-border-dark);
+  }
+
+  .ps-total-l { font-weight: 700; color: var(--fl-prune); font-size: 0.9375rem; }
+  .ps-total-v {
+    font-family: var(--fl-font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fl-or);
+  }
+
+  .ps-deposit {
+    text-align: center;
+    margin-top: var(--fl-space-md);
+    padding: var(--fl-space-md);
+    background: var(--fl-or-light);
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.875rem;
+    color: var(--fl-charcoal);
+  }
+
+  .ps-deposit strong {
+    display: block;
+    font-family: var(--fl-font-heading);
+    font-size: 1.5rem;
+    color: var(--fl-or);
+    font-weight: 700;
+    margin: 4px 0;
+  }
+
+  .stripe-card {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-xl);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .stripe-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    margin-bottom: 4px;
+  }
+
+  .stripe-badge {
+    font-size: 0.6875rem;
+    background: var(--fl-sauge-light);
+    color: var(--fl-sauge);
+    padding: 3px 10px;
+    border-radius: var(--fl-radius-full);
+    font-weight: 700;
+  }
+
+  .stripe-sub {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .payment-methods {
+    display: flex;
+    gap: var(--fl-space-sm);
+    margin-bottom: var(--fl-space-lg);
+    flex-wrap: wrap;
+  }
+
+  .pm-btn {
+    padding: 8px 16px;
+    border: 1.5px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius-sm);
+    background: var(--fl-bg-card);
+    font-family: var(--fl-font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--fl-warm-gray);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--fl-transition);
+  }
+
+  .pm-btn:hover { border-color: var(--fl-prune); color: var(--fl-prune); }
+
+  .pm-btn.active {
+    border-color: var(--fl-prune);
+    color: var(--fl-prune);
+    background: rgba(74,46,61,0.04);
+  }
+
+  .card-mock {
+    background: var(--fl-bg);
+    border: 1.5px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius-sm);
+    padding: var(--fl-space-lg);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .card-field-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--fl-space-md);
+    margin-bottom: var(--fl-space-md);
+  }
+
+  .card-field-row:last-child { margin-bottom: 0; }
+  .card-field-row.two { grid-template-columns: 1fr 1fr; }
+
+  .card-field {
+    padding: 11px 14px;
+    border: 1.5px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.9rem;
+    color: var(--fl-warm-gray);
+    background: var(--fl-bg-card);
+    font-family: var(--fl-font-body);
+  }
+
+  .secure-note {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+    margin-top: var(--fl-space-md);
+  }
+
+  .payment-logos {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-md);
+    justify-content: center;
+    margin-top: var(--fl-space-lg);
+    flex-wrap: wrap;
+  }
+
+  .payment-logo-badge {
+    padding: 4px 12px;
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--fl-warm-gray);
+    background: var(--fl-bg-card);
+  }
+
+  /* ===== CONFIRMATION ===== */
+  .confirmation {
+    text-align: center;
+    padding: var(--fl-space-xl) 0;
+  }
+
+  .conf-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--fl-success-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto var(--fl-space-xl);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes popIn {
+    0%   { transform: scale(0); opacity: 0; }
+    70%  { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .conf-title {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    color: var(--fl-prune);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .conf-title em { color: var(--fl-rose); font-style: italic; }
+
+  .conf-subtitle {
+    font-size: 1rem;
+    color: var(--fl-warm-gray);
+    max-width: 480px;
+    margin: 0 auto var(--fl-space-xl);
+    line-height: 1.7;
+  }
+
+  .conf-email-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    background: var(--fl-success-light);
+    color: var(--fl-success);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: var(--fl-space-md) var(--fl-space-xl);
+    border-radius: var(--fl-radius);
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .conf-details {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-xl);
+    text-align: left;
+    max-width: 520px;
+    margin: 0 auto var(--fl-space-xl);
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .conf-details-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-md);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .conf-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .conf-row:last-child { border-bottom: none; }
+  .conf-row-l { color: var(--fl-warm-gray); }
+  .conf-row-v { font-weight: 600; color: var(--fl-prune); }
+
+  .next-steps {
+    max-width: 520px;
+    margin: 0 auto var(--fl-space-xl);
+    text-align: left;
+  }
+
+  .next-steps-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-lg);
+    font-weight: 600;
+  }
+
+  .next-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    padding: var(--fl-space-md) 0;
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .next-step:last-child { border-bottom: none; }
+
+  .next-step-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  .ns-1 { background: var(--fl-rose-light); color: var(--fl-rose-hover); }
+  .ns-2 { background: var(--fl-or-light); color: var(--fl-or-hover); }
+  .ns-3 { background: var(--fl-sauge-light); color: var(--fl-sauge); }
+  .ns-4 { background: rgba(74,46,61,0.08); color: var(--fl-prune); }
+
+  .nst-title { font-weight: 600; color: var(--fl-prune); font-size: 0.9rem; margin-bottom: 2px; }
+  .nst-desc  { font-size: 0.8125rem; color: var(--fl-warm-gray); line-height: 1.5; }
+
+  .conf-actions {
+    display: flex;
+    gap: var(--fl-space-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-lg);
+    font-weight: 600;
+  }
+
+  .recap-section {
+    margin-bottom: var(--fl-space-md);
+    padding-bottom: var(--fl-space-md);
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .recap-section:last-of-type { border-bottom: none; }
+
+  .recap-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--fl-warm-gray);
+    margin-bottom: 4px;
+  }
+
+  .recap-value { font-size: 0.9rem; font-weight: 600; color: var(--fl-prune); }
+  .recap-value.light { font-weight: 400; color: var(--fl-charcoal); font-size: 0.8125rem; }
+
+  .recap-price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.8125rem;
+  }
+
+  .rp-l { color: var(--fl-warm-gray); }
+  .rp-v { font-weight: 600; color: var(--fl-prune); }
+
+  .recap-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--fl-space-md) 0 0;
+    margin-top: var(--fl-space-sm);
+    border-top: 2px solid var(--fl-border-dark);
+  }
+
+  .rp-total-l { font-weight: 700; color: var(--fl-prune); font-size: 0.9375rem; }
+  .rp-total-v {
+    font-family: var(--fl-font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fl-or);
+  }
+
+  .recap-deposit {
+    background: var(--fl-or-light);
+    border-radius: var(--fl-radius-sm);
+    padding: var(--fl-space-md);
+    text-align: center;
+    margin-top: var(--fl-space-md);
+    font-size: 0.8125rem;
+    color: var(--fl-charcoal);
+  }
+
+  .recap-deposit strong {
+    display: block;
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    color: var(--fl-or);
+    margin: 4px 0;
+  }
+
+  .sidebar-trust {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+    margin-top: var(--fl-space-sm);
+  }
+
+  /* ===== FOOTER ===== */
+  .bk-footer {
+    background: var(--fl-bg-card);
+    border-top: 1px solid var(--fl-border);
+    padding: var(--fl-space-lg) var(--fl-space-xl);
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .bk-layout { grid-template-columns: 1fr; }
+    .bk-sidebar { position: static; border-left: none; border-top: 1px solid var(--fl-border); min-height: auto; }
+  }
+
+  @media (max-width: 768px) {
+    .bk-main { padding: var(--fl-space-lg); }
+    .card-field-row.two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="bk-header">
+  <div class="bk-logo">Fleur de <em>Lumière</em></div>
+  <div class="bk-step-count" id="step-count">Étape 5 sur 7</div>
+</header>
+
+<!-- STEPPER -->
+<div class="bk-stepper-wrap">
+  <div class="bk-stepper">
+
+    <div class="bk-step-item">
+      <div class="bk-dot done" id="dot-1">&#10003;</div>
+      <div class="bk-step-label">Spécialité</div>
+    </div>
+    <div class="bk-line done" id="line-1"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot done" id="dot-2">&#10003;</div>
+      <div class="bk-step-label">Options</div>
+    </div>
+    <div class="bk-line done" id="line-2"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot done" id="dot-3">&#10003;</div>
+      <div class="bk-step-label">Calendrier</div>
+    </div>
+    <div class="bk-line done" id="line-3"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot done" id="dot-4">&#10003;</div>
+      <div class="bk-step-label">Vos infos</div>
+    </div>
+    <div class="bk-line done" id="line-4"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot active" id="dot-5">5</div>
+      <div class="bk-step-label">CGV</div>
+    </div>
+    <div class="bk-line" id="line-5"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-6">6</div>
+      <div class="bk-step-label">Paiement</div>
+    </div>
+    <div class="bk-line" id="line-6"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-7">7</div>
+      <div class="bk-step-label">Confirmé</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOOKING LAYOUT -->
+<div class="bk-layout">
+
+  <main class="bk-main">
+
+    <!-- ===== STEP 5 : CGV ===== -->
+    <div class="step-view active" id="step-5">
+      <h2 class="step-heading">Conditions <em>générales</em></h2>
+      <p class="step-desc">Avant de procéder au paiement, veuillez prendre connaissance et accepter les conditions générales de vente.</p>
+
+      <div class="cgv-block">
+        <div class="cgv-block-title">
+          <span>&#128203;</span>
+          Conditions Générales de Vente — Fleur de Lumière
+        </div>
+        <div class="cgv-text">
+          <strong>Article 1 — Objet</strong><br>
+          Les présentes conditions régissent les relations entre Fleur de Lumière (auto-entreprise enregistrée sous le SIRET 12345678900012) et le Client pour toute prestation de photographie.<br><br>
+          <strong>Article 2 — Réservation et acompte</strong><br>
+          Toute réservation est confirmée par le versement d'un acompte de 30% du montant total. L'acompte n'est pas remboursable en cas d'annulation moins de 48h avant la séance, sauf cas de force majeure dûment justifié.<br><br>
+          <strong>Article 3 — Report et annulation</strong><br>
+          • Plus de 7 jours avant la séance : report gratuit (1 fois) ou remboursement intégral.<br>
+          • Entre 7 jours et 48h avant : report uniquement, une seule fois, sous réserve de disponibilité.<br>
+          • Moins de 48h avant : ni report, ni remboursement de l'acompte.<br>
+          • Météo défavorable : report gratuit proposé par la photographe, sans limitation.<br><br>
+          <strong>Article 4 — Solde et livraison</strong><br>
+          Le solde de la prestation est dû avant la livraison de la galerie en ligne. La galerie privée est accessible pendant 90 jours à compter de sa mise en ligne. Passé ce délai, les photos pourront être récupérées contre facturation de frais d'archivage.<br><br>
+          <strong>Article 5 — Droit à l'image</strong><br>
+          Sauf mention contraire écrite, le Client autorise Fleur de Lumière à utiliser les photographies à des fins de promotion (portfolio, réseaux sociaux, site web). Le Client peut s'y opposer expressément lors de la réservation ou par écrit dans les 30 jours suivant la séance.<br><br>
+          <strong>Article 6 — Propriété intellectuelle</strong><br>
+          Les photographies restent la propriété intellectuelle de Fleur de Lumière, au sens du Code de la propriété intellectuelle. Le Client dispose d'un droit d'usage personnel et non commercial des photos livrées.<br><br>
+          <strong>Article 7 — Responsabilité</strong><br>
+          Fleur de Lumière s'engage à mettre en œuvre tous les moyens nécessaires pour réaliser les prestations commandées, mais ne peut être tenu responsable de circonstances indépendantes de sa volonté (conditions climatiques exceptionnelles, force majeure).
+        </div>
+
+        <div class="checkbox-row" onclick="toggleCb(this)">
+          <div class="cb-box"></div>
+          <div class="cb-label">
+            J'ai lu et j'accepte les <a href="#">Conditions Générales de Vente</a> de Fleur de Lumière. <span style="color: var(--fl-rose);">*</span>
+          </div>
+        </div>
+        <div class="checkbox-row" onclick="toggleCb(this)">
+          <div class="cb-box"></div>
+          <div class="cb-label">
+            J'autorise Fleur de Lumière à utiliser les photos de ma séance à des fins de portfolio et réseaux sociaux. <em style="color: var(--fl-warm-gray); font-size: 0.8125rem;">(Optionnel)</em>
+          </div>
+        </div>
+        <div class="checkbox-row" onclick="toggleCb(this)">
+          <div class="cb-box"></div>
+          <div class="cb-label">
+            J'accepte la <a href="#">politique de confidentialité</a> et le traitement de mes données personnelles conformément au RGPD. <span style="color: var(--fl-rose);">*</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <a class="fl-btn fl-btn-ghost" href="01-reservation-part1.html">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour (étape 4)
+        </a>
+        <button class="fl-btn fl-btn-primary fl-btn-lg" onclick="goStep(6)">
+          Procéder au paiement
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 6 : PAIEMENT ===== -->
+    <div class="step-view" id="step-6">
+      <h2 class="step-heading">Paiement de <em>l'acompte</em></h2>
+      <p class="step-desc">Réglez votre acompte de 30% pour confirmer votre réservation. Le solde sera demandé avant la livraison de votre galerie privée.</p>
+
+      <div class="pay-summary">
+        <div class="pay-summary-title">Résumé de votre commande</div>
+        <div class="ps-row">
+          <span class="ps-l">Formule Signature — Famille</span>
+          <span class="ps-v">280€</span>
+        </div>
+        <div class="ps-row">
+          <span class="ps-l">Tirages Fine Art (3×20×30)</span>
+          <span class="ps-v">+29€</span>
+        </div>
+        <div class="ps-total">
+          <span class="ps-total-l">Total prestation</span>
+          <span class="ps-total-v">309€</span>
+        </div>
+        <div class="ps-deposit">
+          Acompte à régler maintenant (30%)
+          <strong>92,70€</strong>
+          <span style="font-size: 0.75rem; color: var(--fl-warm-gray);">Solde : 216,30€ dû avant livraison galerie</span>
+        </div>
+      </div>
+
+      <div class="stripe-card">
+        <div class="stripe-card-title">
+          <span>&#128179;</span>
+          Paiement sécurisé
+          <span class="stripe-badge">&#128274; Stripe</span>
+        </div>
+        <p class="stripe-sub">Vos données bancaires sont chiffrées et sécurisées. Nous ne conservons aucune information de paiement.</p>
+
+        <div class="payment-methods">
+          <button class="pm-btn active" onclick="selectPm(this)">&#128179; Carte bancaire</button>
+          <button class="pm-btn" onclick="selectPm(this)">&#128260; Virement</button>
+          <button class="pm-btn" onclick="selectPm(this)">&#128288; PayPal</button>
+        </div>
+
+        <div class="card-mock">
+          <div class="card-field-row">
+            <div class="card-field">1234  5678  9012  3456</div>
+          </div>
+          <div class="card-field-row two">
+            <div class="card-field">MM / AA</div>
+            <div class="card-field">CVV</div>
+          </div>
+        </div>
+
+        <button class="fl-btn fl-btn-primary fl-btn-lg fl-w-full" style="justify-content: center; font-size: 1rem; padding: 16px;" onclick="goStep(7)">
+          &#128274; Payer 92,70€ en toute sécurité
+        </button>
+
+        <div class="secure-note">
+          <span>&#128274;</span>
+          <span>Paiement chiffré SSL 256-bit · Données non conservées · Conforme PCI DSS</span>
+        </div>
+      </div>
+
+      <div class="payment-logos">
+        <span class="payment-logo-badge">Visa</span>
+        <span class="payment-logo-badge">Mastercard</span>
+        <span class="payment-logo-badge">Apple Pay</span>
+        <span class="payment-logo-badge">Google Pay</span>
+        <span class="payment-logo-badge">PayPal</span>
+      </div>
+
+      <div class="step-nav">
+        <button class="fl-btn fl-btn-ghost" onclick="goStep(5)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour
+        </button>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- ===== STEP 7 : CONFIRMATION ===== -->
+    <div class="step-view" id="step-7">
+      <div class="confirmation">
+
+        <div class="conf-icon">&#10024;</div>
+
+        <h2 class="conf-title">Réservation <em>confirmée</em> !</h2>
+        <p class="conf-subtitle">Merci Sophie ! Votre séance est réservée. Vous allez recevoir un email de confirmation avec tous les détails et la facture d'acompte.</p>
+
+        <div class="conf-email-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Confirmation envoyée à sophie@email.fr
+        </div>
+
+        <div class="conf-details">
+          <div class="conf-details-title">Votre réservation</div>
+          <div class="conf-row">
+            <span class="conf-row-l">Référence</span>
+            <span class="conf-row-v">#FL2026-0847</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Formule</span>
+            <span class="conf-row-v">Signature — Famille</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Date</span>
+            <span class="conf-row-v">Dimanche 15 mars 2026</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Heure</span>
+            <span class="conf-row-v">19h45 — Heure Dorée &#127749;</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Lieu</span>
+            <span class="conf-row-v">Forêt de Grésigne, Tarn</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Options</span>
+            <span class="conf-row-v">Tirages Fine Art (3 pcs)</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Total</span>
+            <span class="conf-row-v" style="color: var(--fl-or);">309€</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Acompte réglé</span>
+            <span class="conf-row-v" style="color: var(--fl-success);">92,70€ &#10003;</span>
+          </div>
+          <div class="conf-row">
+            <span class="conf-row-l">Solde restant</span>
+            <span class="conf-row-v">216,30€</span>
+          </div>
+        </div>
+
+        <div class="next-steps">
+          <div class="next-steps-title">Et maintenant ?</div>
+
+          <div class="next-step">
+            <div class="next-step-num ns-1">1</div>
+            <div>
+              <div class="nst-title">Email de confirmation</div>
+              <div class="nst-desc">Vous recevez un email avec votre récapitulatif complet, la facture d'acompte et un rappel automatique J-3.</div>
+            </div>
+          </div>
+          <div class="next-step">
+            <div class="next-step-num ns-2">2</div>
+            <div>
+              <div class="nst-title">Questionnaire de préparation</div>
+              <div class="nst-desc">Dans quelques jours, je vous envoie un court questionnaire pour personnaliser encore davantage votre séance.</div>
+            </div>
+          </div>
+          <div class="next-step">
+            <div class="next-step-num ns-3">3</div>
+            <div>
+              <div class="nst-title">Rappel J-3 + guide de préparation</div>
+              <div class="nst-desc">3 jours avant, je vous envoie les prévisions météo, des conseils tenues et toutes les infos pratiques.</div>
+            </div>
+          </div>
+          <div class="next-step">
+            <div class="next-step-num ns-4">4</div>
+            <div>
+              <div class="nst-title">Votre galerie sous 2-3 semaines</div>
+              <div class="nst-desc">Après la séance, vous recevez un lien vers votre galerie privée. Le solde est à régler avant la livraison.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="conf-actions">
+          <a href="#" class="fl-btn fl-btn-secondary fl-btn-lg">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Ajouter à mon calendrier
+          </a>
+          <a href="../espace-client/01-client-journey.html" class="fl-btn fl-btn-primary fl-btn-lg">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Accéder à mon espace client
+          </a>
+        </div>
+
+        <p style="font-size: 0.8125rem; color: var(--fl-warm-gray);">
+          Des questions ? <a href="#" style="color: var(--fl-rose); font-weight: 600;">Contactez-moi</a> — je réponds sous 24h.
+        </p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR RÉCAP -->
+  <aside class="bk-sidebar">
+    <h3 class="sidebar-title">Récapitulatif</h3>
+
+    <div class="recap-section">
+      <div class="recap-label">Spécialité</div>
+      <div class="recap-value">&#128106;&#8205;&#128105;&#8205;&#128103;&#8205;&#128102; Famille &amp; Portraits</div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Formule</div>
+      <div class="recap-value">Signature</div>
+      <div class="recap-value light">1h · 25 photos retouchées</div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Options</div>
+      <div class="recap-price-row">
+        <span class="rp-l">Tirages Fine Art</span>
+        <span class="rp-v">+29€</span>
+      </div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Créneau</div>
+      <div class="recap-value">Dim. 15 mars 2026</div>
+      <div class="recap-value light">19h45 — Heure Dorée &#127749;</div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Client</div>
+      <div class="recap-value">Sophie Mercier</div>
+      <div class="recap-value light">sophie@email.fr</div>
+    </div>
+
+    <div class="recap-price-row">
+      <span class="rp-l">Formule Signature</span>
+      <span class="rp-v">280€</span>
+    </div>
+    <div class="recap-price-row">
+      <span class="rp-l">Tirages Fine Art</span>
+      <span class="rp-v">+29€</span>
+    </div>
+
+    <div class="recap-total">
+      <span class="rp-total-l">Total</span>
+      <span class="rp-total-v">309€</span>
+    </div>
+
+    <div class="recap-deposit">
+      Acompte (30%)
+      <strong>92,70€</strong>
+      <span style="font-size: 0.75rem; color: var(--fl-warm-gray); display: block;">Solde : 216,30€ avant livraison</span>
+    </div>
+
+    <hr class="fl-divider">
+
+    <div class="sidebar-trust">
+      <span>&#128274;</span>
+      <span>Paiement sécurisé Stripe</span>
+    </div>
+    <div class="sidebar-trust">
+      <span>&#8617;&#65039;</span>
+      <span>Report gratuit si météo</span>
+    </div>
+    <div class="sidebar-trust">
+      <span>&#10003;</span>
+      <span>Annulation gratuite &gt; 7 jours</span>
+    </div>
+    <div class="sidebar-trust">
+      <span>&#128231;</span>
+      <span>Facture conforme TVA</span>
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bk-footer">
+  &copy; 2026 Fleur de Lumière — Tous droits réservés
+</footer>
+
+<script>
+  function goStep(n) {
+    document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
+    const el = document.getElementById('step-' + n);
+    if (el) el.classList.add('active');
+
+    for (let i = 1; i <= 7; i++) {
+      const dot = document.getElementById('dot-' + i);
+      if (!dot) continue;
+      dot.className = 'bk-dot';
+      if (i < n) {
+        dot.classList.add('done');
+        dot.innerHTML = '&#10003;';
+      } else if (i === n) {
+        dot.classList.add('active');
+        dot.textContent = i;
+      } else {
+        dot.textContent = i;
+      }
+    }
+    for (let i = 1; i <= 6; i++) {
+      const line = document.getElementById('line-' + i);
+      if (line) line.className = 'bk-line' + (i < n ? ' done' : '');
+    }
+
+    document.getElementById('step-count').textContent = 'Étape ' + n + ' sur 7';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCb(row) {
+    row.classList.toggle('checked');
+    const box = row.querySelector('.cb-box');
+    box.textContent = row.classList.contains('checked') ? '✓' : '';
+  }
+
+  function selectPm(el) {
+    document.querySelectorAll('.pm-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
+</script>
+</body>
+</html>

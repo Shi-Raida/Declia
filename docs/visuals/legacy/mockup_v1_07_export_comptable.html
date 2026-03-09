@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Export Comptable & Finances</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --bg: #FDFBFC;
+    --white: #FFFFFF;
+    --cream: #FDF9F7;
+    --success: #4CAF7C;
+    --success-bg: #E8F5EE;
+    --warning: #E8985E;
+    --warning-bg: #FFF3EB;
+    --info: #5B8FA8;
+    --info-bg: #E8F0F4;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--charcoal); }
+
+  .mockup-tag { display: inline-block; background: #FFE066; color: #5D4E00; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 8px; }
+
+  .layout { display: flex; min-height: 100vh; }
+
+  /* Sidebar simplified */
+  .sidebar {
+    width: 220px;
+    background: var(--prune);
+    padding: 24px 0;
+    flex-shrink: 0;
+  }
+  .sidebar-logo { font-family: 'Cormorant Garamond', serif; color: #fff; font-size: 18px; font-weight: 600; padding: 0 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .sidebar-logo span { color: var(--rose); }
+  .sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 20px; color: rgba(255,255,255,0.45); font-size: 13px; cursor: pointer; border-left: 3px solid transparent; }
+  .sidebar-item.active { color: #fff; background: rgba(194,114,126,0.15); border-left-color: var(--rose); font-weight: 500; }
+  .sidebar-section { padding: 16px 16px 6px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.25); }
+
+  /* Main */
+  .main { flex: 1; padding: 32px 36px; overflow-y: auto; }
+
+  .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; }
+  .page-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--prune); }
+  .page-subtitle { font-size: 13px; color: var(--warm-gray); margin-top: 4px; }
+
+  .btn-group { display: flex; gap: 8px; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 6px; background: var(--rose); color: #fff; border: none; padding: 9px 18px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; box-shadow: 0 2px 8px rgba(194,114,126,0.2); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--prune); border: 1.5px solid var(--border); padding: 9px 18px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; }
+
+  /* Alert banner */
+  .alert-banner { border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 24px; font-size: 13px; }
+  .alert-banner.warning { background: var(--warning-bg); border: 1px solid #F0D4B8; color: var(--warning); }
+  .alert-banner.info { background: var(--info-bg); border: 1px solid #C8DDE6; color: var(--info); }
+  .alert-banner strong { font-weight: 600; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat-card { background: #fff; border-radius: 14px; padding: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  .stat-label { font-size: 11px; font-weight: 500; color: var(--warm-gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: var(--prune); }
+  .stat-sub { font-size: 11px; margin-top: 4px; }
+  .stat-sub.up { color: var(--success); }
+  .stat-sub.warn { color: var(--warning); }
+
+  /* URSSAF card */
+  .urssaf-card { background: #fff; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 24px; overflow: hidden; }
+  .urssaf-header { padding: 16px 22px; background: var(--info-bg); border-bottom: 1px solid #C8DDE6; display: flex; align-items: center; justify-content: space-between; }
+  .urssaf-header-left { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--info); }
+  .urssaf-body { padding: 22px; }
+
+  .urssaf-progress { margin-bottom: 16px; }
+  .urssaf-progress-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; }
+  .urssaf-progress-label span:first-child { font-weight: 500; color: var(--charcoal); }
+  .urssaf-progress-label span:last-child { font-weight: 600; color: var(--prune); }
+  .urssaf-bar { height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+  .urssaf-bar-fill { height: 100%; border-radius: 5px; transition: width 0.5s; }
+  .urssaf-bar-fill.safe { background: linear-gradient(90deg, var(--success), #6BC99A); }
+  .urssaf-bar-fill.caution { background: linear-gradient(90deg, var(--warning), #F0B488); }
+
+  .urssaf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .urssaf-item { background: var(--cream); border-radius: 10px; padding: 14px; text-align: center; }
+  .urssaf-item-value { font-size: 18px; font-weight: 700; color: var(--prune); }
+  .urssaf-item-label { font-size: 11px; color: var(--warm-gray); margin-top: 2px; }
+  .urssaf-item-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-top: 4px; }
+  .urssaf-item-badge.ok { background: var(--success-bg); color: var(--success); }
+  .urssaf-item-badge.warn { background: var(--warning-bg); color: var(--warning); }
+
+  /* Revenue by type */
+  .revenue-card { background: #fff; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 24px; overflow: hidden; }
+  .revenue-header { padding: 16px 22px; background: var(--rose-pale); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .revenue-header-title { font-size: 14px; font-weight: 600; color: var(--prune); display: flex; align-items: center; gap: 8px; }
+  .revenue-body { padding: 22px; }
+
+  .revenue-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .revenue-row:last-child { border-bottom: none; }
+  .revenue-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .revenue-icon.famille { background: var(--rose-light); }
+  .revenue-icon.equestre { background: #D8EAD4; }
+  .revenue-icon.mariage { background: #E4D8EC; }
+  .revenue-icon.tirages { background: var(--warning-bg); }
+  .revenue-icon.mini { background: #FCF0E0; }
+  .revenue-icon.scolaire { background: #FFF3EB; }
+  .revenue-info { flex: 1; }
+  .revenue-name { font-size: 13.5px; font-weight: 500; color: var(--charcoal); }
+  .revenue-detail { font-size: 11px; color: var(--warm-gray); }
+  .revenue-amount { font-size: 16px; font-weight: 700; color: var(--prune); text-align: right; }
+  .revenue-pct { font-size: 11px; color: var(--warm-gray); text-align: right; }
+  .revenue-bar-wrap { width: 100px; flex-shrink: 0; }
+  .revenue-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .revenue-bar-fill { height: 100%; border-radius: 3px; }
+
+  /* Export panel */
+  .export-card { background: #fff; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); padding: 24px; margin-bottom: 24px; }
+  .export-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--prune); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+  .export-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .export-option { border: 1.5px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; }
+  .export-option:hover { border-color: var(--rose); background: var(--rose-pale); }
+  .export-option-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .export-option-icon.csv { background: var(--success-bg); }
+  .export-option-icon.pdf { background: #FDECEA; }
+  .export-option-icon.accounting { background: var(--info-bg); }
+  .export-option-icon.urssaf { background: var(--warning-bg); }
+  .export-option-title { font-size: 13.5px; font-weight: 600; color: var(--charcoal); }
+  .export-option-desc { font-size: 11.5px; color: var(--warm-gray); line-height: 1.4; margin-top: 2px; }
+
+  /* Livre des recettes */
+  .recettes-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); margin-top: 16px; }
+  .recettes-table th { background: var(--cream); padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--prune); text-align: left; text-transform: uppercase; letter-spacing: 0.3px; }
+  .recettes-table td { padding: 10px 14px; font-size: 12.5px; border-bottom: 1px solid var(--border); }
+  .recettes-table tr:last-child td { border-bottom: none; }
+  .recettes-table tr:hover td { background: var(--rose-pale); }
+  .recettes-total td { font-weight: 700; background: var(--cream) !important; color: var(--prune); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-logo">Fleur de <span>Lumière</span></div>
+    <div class="sidebar-section">Général</div>
+    <div class="sidebar-item">📊 Tableau de bord</div>
+    <div class="sidebar-item">👥 Clients</div>
+    <div class="sidebar-item">📅 Planning</div>
+    <div class="sidebar-section">Ventes</div>
+    <div class="sidebar-item">🛒 Commandes</div>
+    <div class="sidebar-item">📈 Marketing</div>
+    <div class="sidebar-section">Admin</div>
+    <div class="sidebar-item active">💰 Finances & Export</div>
+    <div class="sidebar-item">📄 Facturation</div>
+    <div class="sidebar-item">⚙️ Paramètres</div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Finances & Export Comptable <span class="mockup-tag">V1</span></div>
+        <div class="page-subtitle">Suivez vos revenus, préparez vos déclarations et exportez pour votre comptable</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn-secondary">📅 Mars 2026 ▾</button>
+        <button class="btn-primary">📥 Exporter</button>
+      </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert-banner warning">
+      <span>⚠️</span>
+      <span><strong>Déclaration URSSAF :</strong> Votre déclaration trimestrielle est due avant le 30 avril 2026. CA à déclarer : 4 280 €</span>
+      <button class="btn-secondary" style="margin-left: auto; padding: 6px 14px; font-size: 12px;">Voir le détail</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">CA du mois</div>
+        <div class="stat-value">2 340 €</div>
+        <div class="stat-sub up">↑ +18% vs février</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CA trimestriel</div>
+        <div class="stat-value">6 120 €</div>
+        <div class="stat-sub up">↑ T1 2026 en cours</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CA annuel</div>
+        <div class="stat-value">6 120 €</div>
+        <div class="stat-sub warn">/ 77 700 € plafond AE</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Factures émises</div>
+        <div class="stat-value">14</div>
+        <div class="stat-sub up">Toutes encaissées</div>
+      </div>
+    </div>
+
+    <!-- URSSAF -->
+    <div class="urssaf-card">
+      <div class="urssaf-header">
+        <div class="urssaf-header-left">🏛️ Suivi Auto-Entrepreneur</div>
+        <button class="btn-secondary" style="padding: 6px 14px; font-size: 12px;">📥 Export déclaration</button>
+      </div>
+      <div class="urssaf-body">
+        <div class="urssaf-progress">
+          <div class="urssaf-progress-label">
+            <span>Progression vers le plafond micro-entreprise (prestations de services)</span>
+            <span>6 120 € / 77 700 €</span>
+          </div>
+          <div class="urssaf-bar">
+            <div class="urssaf-bar-fill safe" style="width: 7.9%;"></div>
+          </div>
+        </div>
+        <div class="urssaf-grid">
+          <div class="urssaf-item">
+            <div class="urssaf-item-value">6 120 €</div>
+            <div class="urssaf-item-label">CA T1 2026 à déclarer</div>
+            <div class="urssaf-item-badge ok">✓ En règle</div>
+          </div>
+          <div class="urssaf-item">
+            <div class="urssaf-item-value">1 340 €</div>
+            <div class="urssaf-item-label">Cotisations estimées (21.2%)</div>
+            <div class="urssaf-item-badge warn">À provisionner</div>
+          </div>
+          <div class="urssaf-item">
+            <div class="urssaf-item-value">30 avril</div>
+            <div class="urssaf-item-label">Prochaine échéance</div>
+            <div class="urssaf-item-badge warn">Dans 56 jours</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revenue by type -->
+    <div class="revenue-card">
+      <div class="revenue-header">
+        <div class="revenue-header-title">📊 Revenus par type de prestation — Mars 2026</div>
+      </div>
+      <div class="revenue-body">
+        <div class="revenue-row">
+          <div class="revenue-icon famille">👨‍👩‍👧</div>
+          <div class="revenue-info"><div class="revenue-name">Séances Famille</div><div class="revenue-detail">4 séances · Panier moyen 290€</div></div>
+          <div class="revenue-bar-wrap"><div class="revenue-bar"><div class="revenue-bar-fill" style="width: 50%; background: var(--rose);"></div></div></div>
+          <div><div class="revenue-amount">1 160 €</div><div class="revenue-pct">49.6%</div></div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-icon equestre">🐴</div>
+          <div class="revenue-info"><div class="revenue-name">Séances Équestres</div><div class="revenue-detail">2 séances · Panier moyen 260€</div></div>
+          <div class="revenue-bar-wrap"><div class="revenue-bar"><div class="revenue-bar-fill" style="width: 22%; background: #6BAF7C;"></div></div></div>
+          <div><div class="revenue-amount">520 €</div><div class="revenue-pct">22.2%</div></div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-icon tirages">🖼</div>
+          <div class="revenue-info"><div class="revenue-name">Tirages & Produits</div><div class="revenue-detail">12 commandes · Panier moyen 35€</div></div>
+          <div class="revenue-bar-wrap"><div class="revenue-bar"><div class="revenue-bar-fill" style="width: 18%; background: var(--warning);"></div></div></div>
+          <div><div class="revenue-amount">420 €</div><div class="revenue-pct">17.9%</div></div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-icon mini">⚡</div>
+          <div class="revenue-info"><div class="revenue-name">Mini-Sessions</div><div class="revenue-detail">0 événement ce mois</div></div>
+          <div class="revenue-bar-wrap"><div class="revenue-bar"><div class="revenue-bar-fill" style="width: 0%;"></div></div></div>
+          <div><div class="revenue-amount">0 €</div><div class="revenue-pct">0%</div></div>
+        </div>
+        <div class="revenue-row">
+          <div class="revenue-icon scolaire">🎒</div>
+          <div class="revenue-info"><div class="revenue-name">Scolaire</div><div class="revenue-detail">1 école · 48 élèves</div></div>
+          <div class="revenue-bar-wrap"><div class="revenue-bar"><div class="revenue-bar-fill" style="width: 10%; background: var(--info);"></div></div></div>
+          <div><div class="revenue-amount">240 €</div><div class="revenue-pct">10.3%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export options -->
+    <div class="export-card">
+      <div class="export-title">📥 Exporter mes données</div>
+      <div class="export-options">
+        <div class="export-option">
+          <div class="export-option-icon csv">📊</div>
+          <div><div class="export-option-title">Livre des recettes (CSV)</div><div class="export-option-desc">Format réglementaire auto-entrepreneur. Date, n° facture, client, montant.</div></div>
+        </div>
+        <div class="export-option">
+          <div class="export-option-icon pdf">📄</div>
+          <div><div class="export-option-title">Livre des recettes (PDF)</div><div class="export-option-desc">Version imprimable mise en page avec votre logo et la période sélectionnée.</div></div>
+        </div>
+        <div class="export-option">
+          <div class="export-option-icon accounting">🔗</div>
+          <div><div class="export-option-title">Export comptable (Pennylane / Indy)</div><div class="export-option-desc">Format compatible avec les logiciels comptables français. Ventilation par catégorie.</div></div>
+        </div>
+        <div class="export-option">
+          <div class="export-option-icon urssaf">🏛️</div>
+          <div><div class="export-option-title">Récapitulatif URSSAF</div><div class="export-option-desc">CA trimestriel prêt à reporter sur autoentrepreneur.urssaf.fr</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Livre des recettes preview -->
+    <div class="export-card">
+      <div class="export-title">📒 Aperçu — Livre des recettes (Mars 2026)</div>
+      <table class="recettes-table">
+        <thead>
+          <tr><th>Date</th><th>N° Facture</th><th>Client</th><th>Nature</th><th>Mode</th><th>Montant</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>02/03</td><td>FL-2026-0042</td><td>Marie Fontaine</td><td>Séance Famille Signature</td><td>CB (Stripe)</td><td>290 €</td></tr>
+          <tr><td>05/03</td><td>FL-2026-0043</td><td>Sophie Dupont</td><td>Tirages 20x30 (x3)</td><td>CB (Stripe)</td><td>45 €</td></tr>
+          <tr><td>08/03</td><td>FL-2026-0044</td><td>Lucas Girard</td><td>Séance Équestre Complète</td><td>CB (Stripe)</td><td>320 €</td></tr>
+          <tr><td>12/03</td><td>FL-2026-0045</td><td>École Maternelle Parisot</td><td>Photos scolaires (48 élèves)</td><td>Virement</td><td>240 €</td></tr>
+          <tr><td>15/03</td><td>FL-2026-0046</td><td>Famille Bernard</td><td>Séance Famille Essentiel</td><td>CB (Stripe)</td><td>180 €</td></tr>
+          <tr class="recettes-total"><td colspan="5" style="text-align: right;">Total Mars 2026</td><td>2 340 €</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+</body>
+</html>

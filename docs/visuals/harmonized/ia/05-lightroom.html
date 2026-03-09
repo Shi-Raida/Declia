@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightroom &amp; Capture One — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .integrations-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--fl-space-md); margin-bottom: var(--fl-space-xl); }
+  .integ-card { background: var(--fl-bg-card); border: 2px solid var(--fl-border); border-radius: var(--fl-radius); padding: var(--fl-space-lg); text-align: center; transition: border-color var(--fl-transition); }
+  .integ-card.connected { border-color: var(--fl-success); }
+  .integ-icon { font-size: 2rem; margin-bottom: 8px; }
+  .integ-name { font-family: var(--fl-font-heading); font-size: 1.125rem; font-weight: 600; color: var(--fl-prune); }
+  .integ-status { font-size: 0.8125rem; margin-top: 4px; }
+  .integ-status.on { color: var(--fl-success); font-weight: 500; }
+  .integ-status.available { color: var(--fl-info); }
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--fl-space-lg); margin-bottom: var(--fl-space-xl); }
+  .preset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--fl-space-md); margin-bottom: var(--fl-space-xl); }
+  .preset-card { background: var(--fl-bg-card); border: 1px solid var(--fl-border); border-radius: var(--fl-radius); overflow: hidden; box-shadow: var(--fl-shadow-sm); transition: transform var(--fl-transition), box-shadow var(--fl-transition); }
+  .preset-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .preset-thumb { height: 90px; }
+  .preset-info { padding: 10px 12px; }
+  .preset-name { font-size: 0.8125rem; font-weight: 600; color: var(--fl-charcoal); }
+  .preset-apply { width: 100%; padding: 6px; font-size: 0.75rem; font-weight: 500; background: var(--fl-prune); color: white; border: none; border-radius: 0 0 var(--fl-radius-sm) var(--fl-radius-sm); cursor: pointer; font-family: var(--fl-font-body); transition: background var(--fl-transition); }
+  .preset-apply:hover { background: var(--fl-prune-light); }
+  .queue-item { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--fl-border); }
+  .queue-item:last-child { border-bottom: none; }
+  .queue-info { flex: 1; }
+  .queue-name { font-size: 0.875rem; font-weight: 600; color: var(--fl-charcoal); }
+  .queue-detail { font-size: 0.75rem; color: var(--fl-warm-gray); }
+  .queue-progress { flex: 1; max-width: 120px; }
+  .ai-suggestion { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: var(--fl-radius-sm); margin-bottom: 8px; }
+  .ai-suggestion-text { flex: 1; font-size: 0.8125rem; color: var(--fl-charcoal); }
+  .export-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .quality-slider { width: 100%; accent-color: var(--fl-rose); }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+    <div class="fl-sidebar-section">Général</div>
+    <a href="../admin/01-dashboard.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="../admin/02-facturation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      Facturation
+    </a>
+    <a href="../admin/19-statistiques.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="01-hub-ia.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="02-intel-crm.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+    <a href="03-leads-social-tri.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      Leads &amp; Social
+    </a>
+    <a href="04-reconnaissance-faciale.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="17" y="1" width="6" height="6" rx="1"/></svg>
+      Recog. Faciale
+    </a>
+    <a href="05-lightroom.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Lightroom / C1
+    </a>
+    <a href="06-print-preview-ar.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+      Aperçu AR
+    </a>
+    <a href="07-smart-pricing-vault.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Smart Pricing
+    </a>
+    <a href="08-social-planning-style.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Planning Social
+    </a>
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="../admin/03-parametres-1.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="../admin/06-assistant-admin.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div><div class="fl-sidebar-footer-name">Capucine</div><div class="fl-sidebar-footer-role">Photographe · Admin</div></div>
+    </div>
+  </aside>
+
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>IA</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Lightroom &amp; Capture One</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header">
+        <h1 class="fl-page-title">Lightroom &amp; Capture One</h1>
+        <p class="fl-page-subtitle">Intégrations logiciels · Presets IA · Pipeline d'export automatisé</p>
+      </div>
+
+      <!-- Integration status -->
+      <div class="integrations-row">
+        <div class="integ-card connected">
+          <div class="integ-icon">📷</div>
+          <div class="integ-name">Lightroom Classic</div>
+          <div class="integ-status on">● Connecté · Plugin v1.0</div>
+          <div style="margin-top:8px;font-size:0.75rem;color:var(--fl-warm-gray);">Dernière sync : il y a 3 min</div>
+        </div>
+        <div class="integ-card connected">
+          <div class="integ-icon">🎨</div>
+          <div class="integ-name">Capture One</div>
+          <div class="integ-status on">● Connecté · v24.1</div>
+          <div style="margin-top:8px;font-size:0.75rem;color:var(--fl-warm-gray);">Dernière sync : il y a 12 min</div>
+        </div>
+        <div class="integ-card">
+          <div class="integ-icon">✨</div>
+          <div class="integ-name">Luminar AI</div>
+          <div class="integ-status available">Disponible · Configurer</div>
+          <div style="margin-top:8px;"><button class="fl-btn fl-btn-ghost fl-btn-sm">Connecter</button></div>
+        </div>
+      </div>
+
+      <!-- AI retouching suggestions -->
+      <div class="fl-card" style="margin-bottom:var(--fl-space-lg);">
+        <div style="padding:14px 20px;border-bottom:1px solid var(--fl-border);display:flex;align-items:center;justify-content:space-between;">
+          <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Suggestions de retouche IA</h3>
+          <span class="fl-badge fl-badge-warning">8 suggestions</span>
+        </div>
+        <div style="padding:14px 20px;">
+          <div class="ai-suggestion" style="background:var(--fl-warning-light);border:1px solid rgba(232,152,94,0.2);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-warning)" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span class="ai-suggestion-text"><strong>5 photos à recadrer</strong> — Composition améliorable selon la règle des tiers</span>
+            <button class="fl-btn fl-btn-ghost fl-btn-sm">Voir dans LR</button>
+          </div>
+          <div class="ai-suggestion" style="background:var(--fl-error-light);border:1px solid rgba(220,38,38,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-error)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span class="ai-suggestion-text"><strong>3 photos surexposées détectées</strong> — Exposition &gt;+1.5 EV</span>
+            <button class="fl-btn fl-btn-ghost fl-btn-sm">Corriger</button>
+          </div>
+          <div class="ai-suggestion" style="background:var(--fl-success-light);border:1px solid rgba(76,175,124,0.2);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--fl-success)" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="ai-suggestion-text"><strong>28 photos parfaites</strong> — Aucun ajustement nécessaire</span>
+            <span class="fl-badge fl-badge-success" style="font-size:0.6875rem;">OK</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preset library + Export pipeline -->
+      <div class="content-grid">
+
+        <!-- Preset library -->
+        <div class="fl-card">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--fl-border);">
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Bibliothèque de presets</h3>
+          </div>
+          <div style="padding:14px 20px;">
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#f0d9a8,#d4a03c);"></div>
+                <div class="preset-info"><div class="preset-name">Golden Heure Dorée</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#f5e1e4,#c2727e);"></div>
+                <div class="preset-info"><div class="preset-name">Soft Rose</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#e8efe4,#6b7f5a);"></div>
+                <div class="preset-info"><div class="preset-name">Nature Sauge</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#d8d2c8,#6b5a5a);"></div>
+                <div class="preset-info"><div class="preset-name">Moody Portrait</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#f2e8f0,#9b6aaa);"></div>
+                <div class="preset-info"><div class="preset-name">Lavande Doux</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#e0dac0,#9a8c50);"></div>
+                <div class="preset-info"><div class="preset-name">Film Vintage</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#c8e8f0,#5b8fa8);"></div>
+                <div class="preset-info"><div class="preset-name">Ciel d'Été</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+              <div class="preset-card">
+                <div class="preset-thumb" style="background:linear-gradient(135deg,#f5f0e8,#c8a870);"></div>
+                <div class="preset-info"><div class="preset-name">Lumière Crème</div></div>
+                <button class="preset-apply">Appliquer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export pipeline + Queue -->
+        <div style="display:flex;flex-direction:column;gap:var(--fl-space-lg);">
+          <div class="fl-card">
+            <div style="padding:14px 20px;border-bottom:1px solid var(--fl-border);">
+              <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Pipeline d'export automatisé</h3>
+            </div>
+            <div style="padding:14px 20px;">
+              <div class="export-form">
+                <div class="fl-form-group">
+                  <label class="fl-label">Dossier de destination</label>
+                  <input type="text" class="fl-input" value="/Galeries/2026/" placeholder="/chemin/dossier">
+                </div>
+                <div class="fl-form-group">
+                  <label class="fl-label">Nommage fichiers</label>
+                  <select class="fl-select"><option>Client_Date_Seq</option><option>Date_Seq</option><option>Personnalisé</option></select>
+                </div>
+                <div class="fl-form-group" style="grid-column:span 2;">
+                  <label class="fl-label">Qualité JPEG — <strong>92%</strong></label>
+                  <input type="range" class="quality-slider" min="60" max="100" value="92">
+                </div>
+                <div class="fl-form-group" style="grid-column:span 2;display:flex;align-items:center;justify-content:space-between;">
+                  <label class="fl-label" style="margin:0;">Watermark automatique</label>
+                  <div class="fl-toggle on"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fl-card">
+            <div style="padding:14px 20px;border-bottom:1px solid var(--fl-border);">
+              <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">File de traitement</h3>
+            </div>
+            <div style="padding:0 20px;">
+              <div class="queue-item">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--fl-success);flex-shrink:0;"></div>
+                <div class="queue-info">
+                  <div class="queue-name">Sophie Dupont — Famille</div>
+                  <div class="queue-detail">30 photos · Export en cours 60%</div>
+                </div>
+                <div class="queue-progress"><div class="fl-progress"><div class="fl-progress-bar" style="width:60%;"></div></div></div>
+              </div>
+              <div class="queue-item">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--fl-warning);flex-shrink:0;"></div>
+                <div class="queue-info">
+                  <div class="queue-name">Lucas Girard — Équestre</div>
+                  <div class="queue-detail">45 photos · En attente de retouche</div>
+                </div>
+                <div class="queue-progress"><div class="fl-progress"><div class="fl-progress-bar" style="width:0%;"></div></div></div>
+              </div>
+              <div class="queue-item">
+                <div style="width:8px;height:8px;border-radius:50%;background:var(--fl-border-dark);flex-shrink:0;"></div>
+                <div class="queue-info">
+                  <div class="queue-name">Famille Bernard — Maternité</div>
+                  <div class="queue-detail">22 photos · Dans la file</div>
+                </div>
+                <div class="queue-progress"><div class="fl-progress"><div class="fl-progress-bar" style="width:0%;"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

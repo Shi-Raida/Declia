@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistant IA — Fleur de Lumière Admin</title>
+  <link rel="stylesheet" href="../design-system.css" />
+  <style>
+    /* ── Chat layout ── */
+    .chat-layout {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 60px); /* topbar */
+      overflow: hidden;
+    }
+    .chat-history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    /* ── Messages ── */
+    .msg-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .msg-row.user { flex-direction: row-reverse; }
+    .msg-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .msg-avatar.ai {
+      background: linear-gradient(135deg, var(--fl-prune), var(--fl-rose));
+      color: #fff;
+    }
+    .msg-avatar.user-avatar {
+      background: var(--fl-or);
+      color: #fff;
+    }
+    .msg-bubble {
+      max-width: 680px;
+      padding: 0.9rem 1.1rem;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .msg-bubble.ai {
+      background: var(--fl-bg-card);
+      border: 1px solid var(--fl-border);
+      border-top-left-radius: 4px;
+    }
+    .msg-bubble.user {
+      background: var(--fl-prune);
+      color: #fff;
+      border-top-right-radius: 4px;
+    }
+    .msg-bubble h4 {
+      font-family: var(--fl-font-heading);
+      font-size: 1rem;
+      color: var(--fl-prune);
+      margin-bottom: 0.5rem;
+    }
+    .msg-bubble ul {
+      margin: 0.5rem 0 0.5rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .msg-bubble ul li { color: var(--fl-charcoal); }
+    .msg-bubble table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.75rem;
+      font-size: 0.83rem;
+    }
+    .msg-bubble table th {
+      background: var(--fl-bg);
+      padding: 0.45rem 0.6rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--fl-prune);
+      border-bottom: 2px solid var(--fl-border);
+    }
+    .msg-bubble table td {
+      padding: 0.45rem 0.6rem;
+      border-bottom: 1px solid var(--fl-border);
+      color: var(--fl-charcoal);
+    }
+    .msg-bubble table tr:last-child td { border-bottom: none; }
+    .msg-meta {
+      font-size: 0.73rem;
+      color: var(--fl-warm-gray);
+      margin-top: 0.35rem;
+      padding: 0 0.25rem;
+    }
+    .msg-row.user .msg-meta { text-align: right; }
+    /* ── Typing indicator ── */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 0.5rem 0.25rem;
+    }
+    .typing-indicator span {
+      width: 7px;
+      height: 7px;
+      background: var(--fl-warm-gray);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
+    }
+    /* ── Quick chips ── */
+    .chips-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 0.75rem 2rem;
+      border-top: 1px solid var(--fl-border);
+      background: var(--fl-bg);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 99px;
+      border: 1px solid var(--fl-border);
+      background: var(--fl-bg-card);
+      font-size: 0.8rem;
+      color: var(--fl-prune);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .chip:hover { background: var(--fl-prune); color: #fff; border-color: var(--fl-prune); }
+    /* ── Input bar ── */
+    .chat-input-bar {
+      padding: 1rem 2rem 1.25rem;
+      background: var(--fl-bg-card);
+      border-top: 1px solid var(--fl-border);
+    }
+    .chat-input-wrap {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-end;
+      border: 1.5px solid var(--fl-border);
+      border-radius: 16px;
+      padding: 0.65rem 0.75rem 0.65rem 1.1rem;
+      background: var(--fl-bg);
+      transition: border-color 0.2s;
+    }
+    .chat-input-wrap:focus-within { border-color: var(--fl-rose); }
+    .chat-input-wrap textarea {
+      flex: 1;
+      border: none;
+      background: transparent;
+      resize: none;
+      font-family: var(--fl-font-body);
+      font-size: 0.9rem;
+      color: var(--fl-charcoal);
+      outline: none;
+      min-height: 24px;
+      max-height: 140px;
+    }
+    .chat-input-wrap textarea::placeholder { color: var(--fl-warm-gray); }
+    .send-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--fl-prune);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .send-btn:hover { background: var(--fl-rose); }
+    .model-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--fl-warm-gray);
+      margin-top: 0.5rem;
+      justify-content: center;
+    }
+    .model-badge svg { color: var(--fl-prune); }
+    /* ── Inline note box ── */
+    .note-box {
+      background: #FEF9F0;
+      border-left: 3px solid var(--fl-or);
+      border-radius: 0 8px 8px 0;
+      padding: 0.65rem 0.9rem;
+      margin-top: 0.75rem;
+      font-size: 0.84rem;
+      color: var(--fl-charcoal);
+    }
+    /* ── Suggested email block ── */
+    .email-preview {
+      background: var(--fl-bg);
+      border: 1px solid var(--fl-border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-top: 0.75rem;
+      font-size: 0.84rem;
+      line-height: 1.7;
+    }
+    .email-preview strong { color: var(--fl-prune); }
+    .email-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ LAYOUT ═══════════════════════ -->
+<div class="fl-admin-layout">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-brand">
+      <div class="fl-sidebar-logo">FL</div>
+      <div>
+        <div class="fl-sidebar-name">Fleur de Lumière</div>
+        <div class="fl-sidebar-role">Administration</div>
+      </div>
+    </div>
+
+    <nav class="fl-sidebar-nav">
+      <div class="fl-sidebar-section">Général</div>
+
+      <a href="01-dashboard.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Tableau de bord
+      </a>
+
+      <a href="02-facturation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        Facturation
+      </a>
+
+      <div class="fl-sidebar-section">Outils</div>
+
+      <a href="06-assistant-admin.html" class="fl-sidebar-item active">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Assistant Admin
+      </a>
+
+      <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Automatisation
+      </a>
+
+      <a href="10-export-comptable.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Comptable
+      </a>
+
+      <div class="fl-sidebar-section">Scolaire</div>
+
+      <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Scolaire Admin
+      </a>
+
+      <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        École &amp; Parents
+      </a>
+
+      <div class="fl-sidebar-section">Configuration</div>
+
+      <a href="03-parametres-1.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </a>
+
+      <a href="05-personnalisation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        Personnalisation
+      </a>
+    </nav>
+
+    <div class="fl-sidebar-footer">
+      <div class="fl-sidebar-user">
+        <div class="fl-sidebar-avatar">M</div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal)">Marie Lefèvre</div>
+          <div style="font-size:0.72rem;color:var(--fl-warm-gray)">Administratrice</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main class="fl-admin-main">
+
+    <!-- Topbar -->
+    <div class="fl-topbar">
+      <nav class="fl-breadcrumb">
+        <span>Admin</span>
+        <span>›</span>
+        <span class="current">Assistant IA</span>
+      </nav>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <span style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.3rem 0.8rem;background:linear-gradient(135deg,rgba(74,46,61,0.08),rgba(194,114,126,0.08));border:1px solid rgba(194,114,126,0.25);border-radius:99px;font-size:0.78rem;color:var(--fl-prune);font-weight:600">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Claude 3.5 Sonnet
+        </span>
+        <button class="fl-btn fl-btn-outline" style="font-size:0.8rem;padding:0.35rem 0.8rem">
+          Nouvelle conversation
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Chat layout fills remaining viewport height ── -->
+    <div class="chat-layout">
+
+      <!-- ── Conversation history ── -->
+      <div class="chat-history">
+
+        <!-- Welcome -->
+        <div style="text-align:center;padding:1.5rem 0 0.5rem">
+          <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,var(--fl-prune),var(--fl-rose));display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem">
+            <svg width="24" height="24" fill="none" stroke="#fff" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div style="font-family:var(--fl-font-heading);font-size:1.3rem;color:var(--fl-prune);margin-bottom:0.3rem">Bonjour Marie !</div>
+          <div style="font-size:0.87rem;color:var(--fl-warm-gray);max-width:460px;margin:0 auto">Je suis votre assistante IA dédiée à Fleur de Lumière. Posez-moi une question sur votre activité, demandez-moi de rédiger un contenu ou analysez vos performances.</div>
+        </div>
+
+        <!-- MSG 1 — utilisateur -->
+        <div class="msg-row user">
+          <div class="msg-avatar user-avatar">M</div>
+          <div>
+            <div class="msg-bubble user">
+              Quels tarifs devrais-je appliquer pour mes séances photo portrait en 2026 ? J'hésite entre 150 € et 180 € pour une heure.
+            </div>
+            <div class="msg-meta">Marie · 09:14</div>
+          </div>
+        </div>
+
+        <!-- MSG 2 — IA -->
+        <div class="msg-row">
+          <div class="msg-avatar ai">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div>
+            <div class="msg-bubble ai">
+              <h4>Analyse tarifaire — Portrait 1 heure</h4>
+              <p>D'après vos données de facturation 2025 et les tendances du marché, voici mon analyse :</p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scénario</th>
+                    <th>Tarif / séance</th>
+                    <th>Séances / mois</th>
+                    <th>CA mensuel estimé</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Conservateur</td><td>150 €</td><td>18</td><td>2 700 €</td></tr>
+                  <tr><td>Recommandé</td><td>170 €</td><td>16</td><td>2 720 €</td></tr>
+                  <tr><td>Premium</td><td>180 €</td><td>14</td><td>2 520 €</td></tr>
+                </tbody>
+              </table>
+              <div class="note-box">
+                <strong>Recommandation :</strong> 170 € offre le meilleur équilibre — vous maximisez le CA sans réduire significativement le volume. Votre taux de satisfaction à 4,9 ★ vous positionne clairement en haut de gamme.
+              </div>
+              <ul>
+                <li>Communiquez la revalorisation 4 semaines avant (email + stories Instagram)</li>
+                <li>Maintenez 150 € pour les clients fidèles avec un code promo "FIDELITE2026"</li>
+                <li>Proposez un pack 3 séances à 450 € pour fidéliser sur l'année</li>
+              </ul>
+            </div>
+            <div class="msg-meta">Assistant IA · 09:14</div>
+          </div>
+        </div>
+
+        <!-- MSG 3 — utilisateur -->
+        <div class="msg-row user">
+          <div class="msg-avatar user-avatar">M</div>
+          <div>
+            <div class="msg-bubble user">
+              Super ! Peux-tu rédiger un email pour annoncer cette hausse à ma liste de clients ?
+            </div>
+            <div class="msg-meta">Marie · 09:17</div>
+          </div>
+        </div>
+
+        <!-- MSG 4 — IA avec email -->
+        <div class="msg-row">
+          <div class="msg-avatar ai">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div>
+            <div class="msg-bubble ai">
+              <h4>Email de communication — Nouvelle grille tarifaire</h4>
+              <p>Voici un email chaleureux qui valorise la qualité plutôt que de s'excuser d'augmenter :</p>
+              <div class="email-preview">
+                <strong>Objet :</strong> Une nouvelle étape pour Fleur de Lumière ✨<br><br>
+                Chère [Prénom],<br><br>
+                Merci de faire partie de l'aventure Fleur de Lumière depuis si longtemps. Votre confiance est ce qui me permet de grandir et d'investir toujours davantage dans la qualité de nos séances.<br><br>
+                À partir du <strong>1er avril 2026</strong>, mes tarifs évolueront à <strong>170 € pour une séance portrait d'une heure</strong>. Cette revalorisation me permet de continuer à vous offrir un accompagnement personnalisé, du matériel de pointe et une retouche soignée.<br><br>
+                <strong>Offre spéciale clients fidèles :</strong> réservez avant le 31 mars avec le code <strong>FIDELITE2026</strong> pour bénéficier du tarif actuel jusqu'au 30 juin 2026.<br><br>
+                Avec toute ma gratitude,<br>
+                Marie Lefèvre — Fleur de Lumière
+              </div>
+              <div class="email-actions">
+                <button class="fl-btn fl-btn-primary" style="font-size:0.78rem;padding:0.35rem 0.85rem">
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Envoyer via Mailchimp
+                </button>
+                <button class="fl-btn fl-btn-outline" style="font-size:0.78rem;padding:0.35rem 0.85rem">Copier le texte</button>
+                <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.35rem 0.85rem">Modifier le ton</button>
+              </div>
+            </div>
+            <div class="msg-meta">Assistant IA · 09:17</div>
+          </div>
+        </div>
+
+        <!-- MSG 5 — utilisateur -->
+        <div class="msg-row user">
+          <div class="msg-avatar user-avatar">M</div>
+          <div>
+            <div class="msg-bubble user">
+              Parfait. Donne-moi aussi des idées de contenus Instagram pour les 2 prochaines semaines.
+            </div>
+            <div class="msg-meta">Marie · 09:21</div>
+          </div>
+        </div>
+
+        <!-- MSG 6 — IA marketing -->
+        <div class="msg-row">
+          <div class="msg-avatar ai">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div>
+            <div class="msg-bubble ai">
+              <h4>Planning Instagram — 10 au 22 mars 2026</h4>
+              <ul>
+                <li><strong>Lun 10</strong> — Coulisses : photo "before/after" retouche d'un portrait</li>
+                <li><strong>Mar 11</strong> — Reel : "3 choses à faire avant votre séance portrait" (tips pratiques)</li>
+                <li><strong>Jeu 13</strong> — Témoignage client avec citation et photo de la séance</li>
+                <li><strong>Sam 15</strong> — Carrousel : "Les lumières de printemps — mon spot préféré à Paris"</li>
+                <li><strong>Lun 17</strong> — Story interactive : sondage "Portrait en intérieur ou en extérieur ?"</li>
+                <li><strong>Mer 19</strong> — Annonce de la nouvelle grille tarifaire (visuel élégant + code FIDELITE2026)</li>
+                <li><strong>Ven 21</strong> — Reel : transformation — de la lumière naturelle au rendu final édité</li>
+                <li><strong>Sam 22</strong> — Photo de saison : cerisiers en fleurs pour "Bienvenue au printemps"</li>
+              </ul>
+              <div class="note-box">
+                Meilleurs horaires pour votre audience : <strong>mardi–jeudi 18h–20h</strong> et <strong>samedi 10h–12h</strong> (basé sur les données d'engagement Instagram typiques pour la photographie en France).
+              </div>
+            </div>
+            <div class="msg-meta">Assistant IA · 09:21</div>
+          </div>
+        </div>
+
+      </div><!-- /chat-history -->
+
+      <!-- ── Quick chips ── -->
+      <div class="chips-bar">
+        <span style="font-size:0.78rem;color:var(--fl-warm-gray);align-self:center;margin-right:0.25rem">Suggestions :</span>
+        <button class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Rédige un email de relance
+        </button>
+        <button class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Analyse mes stats
+        </button>
+        <button class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Crée une séquence email
+        </button>
+        <button class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Planifie mes prochaines séances
+        </button>
+        <button class="chip">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          Génère une proposition commerciale
+        </button>
+      </div>
+
+      <!-- ── Input bar ── -->
+      <div class="chat-input-bar">
+        <div class="chat-input-wrap">
+          <textarea rows="1" placeholder="Posez votre question à votre assistante IA…" onInput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+          <button class="send-btn" title="Envoyer">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="model-badge">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Propulsé par Claude — vos données restent confidentielles
+        </div>
+      </div>
+
+    </div><!-- /chat-layout -->
+
+  </main>
+</div><!-- /fl-admin-layout -->
+
+</body>
+</html>

@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarifs & Formules — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  /* ===== VARIABLES CHARTE GRAPHIQUE ROSE SAUVAGE ===== */
+  :root {
+    --color-rose: #C2727E;
+    --color-prune-nuit: #4A2E3D;
+    --color-or-chaud: #D4A03C;
+    --color-sauge: #6B7F5A;
+    --color-bg: #FFFFFF;
+    --color-bg-alt: #FFF9F7;
+    --color-texte: #2D2226;
+    --color-gris: #6B7280;
+    --color-rose-hover: #A85965;
+    --color-or-hover: #B8882F;
+    --color-erreur: #DC2626;
+    --font-titre: 'Playfair Display', Georgia, serif;
+    --font-texte: 'Lato', -apple-system, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-full: 9999px;
+    --shadow-sm: 0 2px 8px rgba(74,46,61,0.08);
+    --shadow-md: 0 4px 16px rgba(74,46,61,0.15);
+    --shadow-cta: 0 4px 12px rgba(194,114,126,0.3);
+    --transition: 0.3s ease;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-texte); color: var(--color-texte);
+    background: var(--color-bg); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+  h1, h2, h3, h4 { font-family: var(--font-titre); line-height: 1.25; }
+
+  /* ===== BOUTONS ===== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: var(--font-texte); font-size: 15px; font-weight: 700;
+    padding: 13px 32px; border-radius: var(--radius-sm);
+    cursor: pointer; transition: var(--transition);
+    border: 2px solid transparent; gap: 8px;
+  }
+  .btn-primary {
+    background: var(--color-rose); color: #fff; border-color: var(--color-rose);
+    box-shadow: var(--shadow-cta);
+  }
+  .btn-primary:hover {
+    background: var(--color-rose-hover); border-color: var(--color-rose-hover);
+    transform: translateY(-2px); box-shadow: 0 6px 20px rgba(194,114,126,0.4);
+  }
+  .btn-secondary {
+    background: transparent; color: var(--color-prune-nuit);
+    border: 2px solid var(--color-prune-nuit);
+  }
+  .btn-secondary:hover {
+    background: var(--color-prune-nuit); color: #fff; transform: translateY(-2px);
+  }
+  .btn-or {
+    background: var(--color-or-chaud); color: var(--color-texte);
+    border-color: var(--color-or-chaud);
+  }
+  .btn-or:hover {
+    background: var(--color-or-hover); border-color: var(--color-or-hover);
+    transform: translateY(-2px);
+  }
+  .btn-sauge {
+    background: var(--color-sauge); color: #fff; border-color: var(--color-sauge);
+  }
+  .btn-sauge:hover {
+    background: #5a6e4b; border-color: #5a6e4b; transform: translateY(-2px);
+  }
+  .btn-sm { padding: 10px 24px; font-size: 14px; }
+  .btn-full { width: 100%; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== HEADER ===== */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74,46,61,0.06);
+  }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1200px; margin: 0 auto; padding: 16px 24px;
+  }
+  .logo {
+    font-family: var(--font-titre); font-size: 22px; font-weight: 700;
+    color: var(--color-prune-nuit);
+  }
+  .logo span { color: var(--color-or-chaud); }
+  .nav { display: flex; align-items: center; gap: 32px; }
+  .nav a {
+    font-size: 15px; color: var(--color-prune-nuit); position: relative;
+    transition: var(--transition);
+  }
+  .nav a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+    background: var(--color-rose); transition: var(--transition);
+  }
+  .nav a:hover::after { width: 100%; }
+  .nav a:hover { color: var(--color-rose); }
+  .nav a.active { color: var(--color-rose); }
+  .nav a.active::after { width: 100%; }
+  .nav .btn { padding: 10px 28px; font-size: 14px; }
+  .menu-toggle {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 32px; height: 24px; position: relative;
+  }
+  .menu-toggle span {
+    display: block; width: 100%; height: 2px; background: var(--color-prune-nuit);
+    position: absolute; left: 0; transition: var(--transition);
+  }
+  .menu-toggle span:nth-child(1) { top: 0; }
+  .menu-toggle span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+  .menu-toggle span:nth-child(3) { bottom: 0; }
+
+  /* ===== PAGE HERO TARIFS ===== */
+  .page-hero {
+    padding: 140px 0 80px; text-align: center; position: relative;
+    background: var(--color-bg); overflow: hidden;
+  }
+  .page-hero::before {
+    content: ''; position: absolute; top: -100px; right: -150px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(194,114,126,0.05) 0%, transparent 70%);
+  }
+  .page-hero::after {
+    content: ''; position: absolute; bottom: -80px; left: -100px;
+    width: 350px; height: 350px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.04) 0%, transparent 70%);
+  }
+  .page-hero h1 {
+    font-size: clamp(32px, 5vw, 48px); color: var(--color-prune-nuit);
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .page-hero h1 em { font-style: italic; color: var(--color-rose); }
+  .page-hero p {
+    font-size: 18px; color: var(--color-gris); max-width: 560px;
+    margin: 0 auto 12px; line-height: 1.7; position: relative; z-index: 1;
+  }
+  .or-line {
+    width: 60px; height: 2px; background: var(--color-or-chaud);
+    margin: 20px auto; border-radius: 1px;
+  }
+
+  /* ===== NAVIGATION TABS SPÉCIALITÉS ===== */
+  .tabs-nav {
+    display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+    padding: 0 24px 0; margin-bottom: 0;
+    position: sticky; top: 68px; z-index: 90;
+    background: var(--color-bg); padding-top: 16px; padding-bottom: 16px;
+    border-bottom: 1px solid rgba(74,46,61,0.06);
+  }
+  .tab-btn {
+    font-family: var(--font-texte); font-size: 14px; font-weight: 700;
+    padding: 10px 24px; border-radius: var(--radius-full);
+    border: 2px solid rgba(74,46,61,0.12); background: var(--color-bg);
+    color: var(--color-prune-nuit); cursor: pointer; transition: var(--transition);
+    white-space: nowrap;
+  }
+  .tab-btn:hover { border-color: var(--color-rose); color: var(--color-rose); }
+  .tab-btn.active {
+    background: var(--color-prune-nuit); color: #fff;
+    border-color: var(--color-prune-nuit);
+  }
+
+  /* ===== SECTIONS TARIFS ===== */
+  .tarif-section {
+    padding: 80px 0; border-bottom: 1px solid rgba(74,46,61,0.06);
+  }
+  .tarif-section:nth-child(even) { background: var(--color-bg-alt); }
+  .tarif-section:last-child { border-bottom: none; }
+
+  .section-intro {
+    text-align: center; margin-bottom: 56px;
+  }
+  .section-intro h2 {
+    font-size: clamp(24px, 3.5vw, 36px); color: var(--color-prune-nuit);
+    margin-bottom: 8px;
+  }
+  .section-intro h2 em { color: var(--color-rose); font-style: italic; }
+  .section-intro .subtitle {
+    font-family: var(--font-texte); font-size: 16px; color: var(--color-gris);
+    max-width: 520px; margin: 0 auto;
+  }
+  .section-intro .icon-row {
+    display: flex; justify-content: center; gap: 6px; margin: 16px 0 8px;
+  }
+  .section-intro .icon-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--color-or-chaud);
+    opacity: 0.5;
+  }
+
+  /* ===== FORMULES GRID ===== */
+  .formules-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+    max-width: 1000px; margin: 0 auto;
+  }
+  .formules-grid.two-cols {
+    grid-template-columns: repeat(2, 1fr); max-width: 700px;
+  }
+
+  .formule-card {
+    background: var(--color-bg); border-radius: var(--radius-md);
+    padding: 36px 28px; text-align: center;
+    box-shadow: var(--shadow-sm); transition: var(--transition);
+    position: relative; border: 2px solid transparent;
+    display: flex; flex-direction: column;
+  }
+  .formule-card:hover {
+    transform: translateY(-4px); box-shadow: var(--shadow-md);
+  }
+  .formule-card.highlight {
+    border-color: var(--color-rose); box-shadow: var(--shadow-md);
+    transform: scale(1.02);
+  }
+  .formule-card.highlight:hover { transform: scale(1.02) translateY(-4px); }
+
+  .formule-badge {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    font-family: var(--font-texte); font-size: 12px; font-weight: 700;
+    padding: 5px 18px; border-radius: var(--radius-full);
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+  }
+  .badge-populaire { background: var(--color-rose); color: #fff; }
+  .badge-populaire::before { content: '★'; }
+  .badge-nouveau { background: var(--color-sauge); color: #fff; }
+  .badge-nouveau::before { content: '✦'; }
+  .badge-promo { background: var(--color-or-chaud); color: var(--color-texte); }
+
+  .formule-icon {
+    width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .icon-famille { background: rgba(194,114,126,0.1); }
+  .icon-equestre { background: rgba(107,127,90,0.12); }
+  .icon-event { background: rgba(212,160,60,0.12); }
+  .icon-maternite { background: rgba(194,114,126,0.1); }
+  .icon-scolaire { background: rgba(107,127,90,0.12); }
+
+  .formule-card h3 {
+    font-family: var(--font-titre); font-size: 22px;
+    color: var(--color-prune-nuit); margin-bottom: 4px;
+  }
+  .formule-card .formule-tagline {
+    font-size: 13px; color: var(--color-gris); font-style: italic;
+    margin-bottom: 16px;
+  }
+  .formule-price {
+    font-family: var(--font-titre); font-size: 38px; font-weight: 700;
+    color: var(--color-or-chaud); margin: 8px 0;
+    line-height: 1.1;
+  }
+  .formule-price .old-price {
+    font-size: 18px; color: var(--color-gris); text-decoration: line-through;
+    font-weight: 400; margin-right: 8px;
+  }
+  .formule-price small {
+    display: block; font-family: var(--font-texte); font-size: 14px;
+    font-weight: 400; color: var(--color-gris); margin-top: 4px;
+  }
+  .formule-devis {
+    font-family: var(--font-titre); font-size: 28px; font-weight: 700;
+    color: var(--color-or-chaud); font-style: italic; margin: 8px 0;
+  }
+
+  .formule-details {
+    list-style: none; margin: 20px 0; text-align: left; flex-grow: 1;
+  }
+  .formule-details li {
+    padding: 7px 0; font-size: 14px; color: var(--color-texte);
+    display: flex; align-items: flex-start; gap: 10px;
+    border-bottom: 1px solid rgba(74,46,61,0.05);
+  }
+  .formule-details li:last-child { border: none; }
+  .formule-details li::before {
+    content: '✓'; color: var(--color-sauge); font-weight: 700; flex-shrink: 0;
+  }
+  .formule-details li.bonus::before { content: '🎁'; }
+
+  .formule-card .btn { margin-top: 8px; }
+
+  /* ===== OPTIONS AJOUTABLES ===== */
+  .options-block {
+    max-width: 800px; margin: 56px auto 0; text-align: center;
+  }
+  .options-block h4 {
+    font-family: var(--font-titre); font-size: 20px; color: var(--color-prune-nuit);
+    margin-bottom: 8px;
+  }
+  .options-block > p {
+    font-size: 14px; color: var(--color-gris); margin-bottom: 24px;
+  }
+  .options-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px; text-align: left;
+  }
+  .option-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--color-bg); border: 1px solid rgba(74,46,61,0.08);
+    border-radius: var(--radius-sm); padding: 14px 18px;
+    transition: var(--transition); cursor: default;
+  }
+  .option-item:hover { border-color: var(--color-rose); box-shadow: var(--shadow-sm); }
+  .option-name {
+    font-size: 14px; color: var(--color-texte); font-weight: 400;
+  }
+  .option-price {
+    font-family: var(--font-titre); font-size: 15px; font-weight: 700;
+    color: var(--color-or-chaud); white-space: nowrap;
+  }
+
+  /* ===== ABONNEMENT 4 SAISONS ===== */
+  .abo-card {
+    max-width: 860px; margin: 0 auto;
+    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-alt) 100%);
+    border-radius: var(--radius-md); overflow: hidden;
+    box-shadow: var(--shadow-md); display: grid;
+    grid-template-columns: 1fr 1.2fr; border: 2px solid rgba(212,160,60,0.25);
+  }
+  .abo-visual {
+    position: relative; overflow: hidden;
+  }
+  .abo-visual .photo-placeholder {
+    width: 100%; height: 100%; min-height: 400px;
+  }
+  .abo-season-icons {
+    position: absolute; bottom: 20px; left: 20px; right: 20px;
+    display: flex; gap: 8px;
+  }
+  .season-chip {
+    flex: 1; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+    border-radius: var(--radius-sm); padding: 10px 8px; text-align: center;
+    font-size: 12px; font-weight: 700; color: var(--color-prune-nuit);
+    box-shadow: var(--shadow-sm);
+  }
+  .season-chip .s-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+  .abo-content {
+    padding: 48px 40px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .abo-content .formule-badge {
+    position: static; transform: none; margin-bottom: 16px; align-self: flex-start;
+  }
+  .abo-content h3 {
+    font-family: var(--font-titre); font-size: 28px; color: var(--color-prune-nuit);
+    margin-bottom: 12px;
+  }
+  .abo-content h3 em { color: var(--color-or-chaud); font-style: italic; }
+  .abo-content > p {
+    font-size: 15px; color: var(--color-gris); margin-bottom: 20px; line-height: 1.7;
+  }
+  .abo-pricing {
+    display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px;
+  }
+  .abo-pricing .main-price {
+    font-family: var(--font-titre); font-size: 42px; font-weight: 700;
+    color: var(--color-or-chaud);
+  }
+  .abo-pricing .sub-price {
+    font-size: 14px; color: var(--color-gris);
+  }
+  .abo-pricing-note {
+    font-size: 13px; color: var(--color-gris); margin-bottom: 24px;
+  }
+  .abo-features {
+    list-style: none; margin-bottom: 28px;
+  }
+  .abo-features li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 6px 0; font-size: 14px; color: var(--color-texte);
+  }
+  .abo-features li::before {
+    content: '✦'; color: var(--color-or-chaud); flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* ===== CARTE CADEAU BANNER ===== */
+  .carte-cadeau-banner {
+    padding: 80px 0; background: var(--color-prune-nuit);
+    position: relative; overflow: hidden;
+  }
+  .carte-cadeau-banner::before {
+    content: ''; position: absolute; top: 50%; right: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.08) 0%, transparent 70%);
+    transform: translateY(-50%);
+  }
+  .carte-cadeau-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 48px; position: relative; z-index: 1;
+  }
+  .carte-cadeau-text h2 {
+    font-size: clamp(24px, 3vw, 32px); color: #fff; margin-bottom: 12px;
+  }
+  .carte-cadeau-text h2 em { color: var(--color-or-chaud); font-style: italic; }
+  .carte-cadeau-text p {
+    font-size: 16px; color: rgba(255,255,255,0.7); max-width: 440px; line-height: 1.7;
+  }
+  .carte-cadeau-cta { flex-shrink: 0; }
+
+  /* ===== SECTION FAQ RAPIDE ===== */
+  .faq-section {
+    padding: 80px 0; background: var(--color-bg);
+  }
+  .faq-section .section-intro { margin-bottom: 40px; }
+  .faq-grid {
+    max-width: 760px; margin: 0 auto;
+  }
+  .faq-item {
+    border-bottom: 1px solid rgba(74,46,61,0.08); overflow: hidden;
+  }
+  .faq-question {
+    width: 100%; text-align: left; background: none; border: none;
+    padding: 20px 0; font-family: var(--font-texte); font-size: 16px;
+    font-weight: 700; color: var(--color-prune-nuit); cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: var(--transition);
+  }
+  .faq-question:hover { color: var(--color-rose); }
+  .faq-chevron {
+    width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.3s ease;
+    color: var(--color-or-chaud);
+  }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-answer {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease;
+  }
+  .faq-item.open .faq-answer { max-height: 300px; }
+  .faq-answer p {
+    padding-bottom: 20px; font-size: 15px; color: var(--color-gris); line-height: 1.7;
+  }
+
+  /* ===== CTA FINAL ===== */
+  .cta-section {
+    padding: 100px 0; background: var(--color-bg-alt); text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(to right, transparent, var(--color-or-chaud), transparent);
+  }
+  .cta-section h2 {
+    font-size: clamp(28px, 4vw, 40px); color: var(--color-prune-nuit); margin-bottom: 16px;
+  }
+  .cta-section h2 em { color: var(--color-rose); font-style: italic; }
+  .cta-section p {
+    font-size: 17px; color: var(--color-gris); max-width: 480px;
+    margin: 0 auto 32px; line-height: 1.7;
+  }
+  .cta-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--color-prune-nuit); color: #fff; padding: 80px 0 40px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+    margin-bottom: 60px;
+  }
+  .footer-brand .logo { color: #fff; font-size: 24px; margin-bottom: 16px; display: block; }
+  .footer-brand .logo span { color: var(--color-or-chaud); }
+  .footer-brand p { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7; margin-bottom: 20px; }
+  .footer-social { display: flex; gap: 16px; }
+  .footer-social a {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 16px; transition: var(--transition);
+  }
+  .footer-social a:hover { background: var(--color-or-chaud); border-color: var(--color-or-chaud); color: var(--color-prune-nuit); }
+  .footer h4 { font-family: var(--font-titre); font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 14px; color: rgba(255,255,255,0.6); transition: var(--transition); }
+  .footer-links a:hover { color: var(--color-or-chaud); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 13px; color: rgba(255,255,255,0.4); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 13px; color: rgba(255,255,255,0.4); transition: var(--transition); }
+  .footer-legal a:hover { color: var(--color-or-chaud); }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+  .reveal-d3 { transition-delay: 0.3s; }
+
+  /* Photo placeholders */
+  .photo-placeholder { border-radius: var(--radius-md); overflow: hidden; }
+  .ph-saisons {
+    background: linear-gradient(135deg, #f5e6d3 0%, #d4cfc5 33%, #c5bfb2 66%, #dfc080 100%);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .abo-card { grid-template-columns: 1fr; }
+    .abo-visual .photo-placeholder { min-height: 280px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .nav { display: none; }
+    .menu-toggle { display: block; }
+    .formules-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .formules-grid.two-cols { grid-template-columns: 1fr; max-width: 400px; }
+    .formule-card.highlight { transform: none; }
+    .tabs-nav { gap: 6px; }
+    .tab-btn { font-size: 13px; padding: 8px 16px; }
+    .carte-cadeau-inner { flex-direction: column; text-align: center; }
+    .carte-cadeau-text p { margin: 0 auto; }
+    .options-grid { grid-template-columns: 1fr; }
+    .abo-content { padding: 32px 24px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo">Fleur de <span>L</span>umière</a>
+    <nav class="nav">
+      <a href="#">Spécialités</a>
+      <a href="#" class="active">Formules</a>
+      <a href="#">Portfolio</a>
+      <a href="#">À propos</a>
+      <a href="#">Avis</a>
+      <a href="#">Contact</a>
+      <a href="#" class="btn btn-primary">Réserver</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <h1>Nos <em>formules</em> & tarifs</h1>
+    <div class="or-line"></div>
+    <p>Des formules pensées pour chaque moment de vie. Choisissez celle qui vous ressemble, personnalisez-la avec des options, et réservez votre créneau à l'Heure Dorée.</p>
+  </div>
+</section>
+
+<!-- TABS NAVIGATION -->
+<nav class="tabs-nav" id="tabs">
+  <button class="tab-btn active" onclick="scrollToSection('famille')">👨‍👩‍👧‍👦 Famille</button>
+  <button class="tab-btn" onclick="scrollToSection('equestre')">🐴 Équestre</button>
+  <button class="tab-btn" onclick="scrollToSection('evenementiel')">💍 Événementiel</button>
+  <button class="tab-btn" onclick="scrollToSection('maternite')">🤱 Maternité</button>
+  <button class="tab-btn" onclick="scrollToSection('scolaire')">🎒 Scolaire</button>
+  <button class="tab-btn" onclick="scrollToSection('saisons')">🍂 4 Saisons</button>
+</nav>
+
+<!-- ═══════════════════════════════ -->
+<!-- FAMILLE & PORTRAITS -->
+<!-- ═══════════════════════════════ -->
+<section class="tarif-section" id="famille">
+  <div class="container">
+    <div class="section-intro reveal">
+      <div class="icon-row"><span class="icon-dot"></span><span class="icon-dot"></span><span class="icon-dot"></span></div>
+      <h2>Famille & <em>Portraits</em></h2>
+      <p class="subtitle">Des moments complices en lumière naturelle, dans votre lieu préféré ou un endroit que je vous suggère.</p>
+    </div>
+
+    <div class="formules-grid reveal">
+      <div class="formule-card reveal-d1">
+        <div class="formule-icon icon-famille">📷</div>
+        <h3>Essentiel</h3>
+        <p class="formule-tagline">L'essentiel pour un souvenir lumineux</p>
+        <div class="formule-price">150€ <small>30 min · 10 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>Séance en extérieur, lumière naturelle</li>
+          <li>Galerie privée en ligne (90 jours)</li>
+          <li>Photos HD téléchargeables</li>
+          <li>Questionnaire pré-shooting</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-full">Réserver</a>
+      </div>
+
+      <div class="formule-card highlight reveal-d2">
+        <div class="formule-badge badge-populaire">Populaire</div>
+        <div class="formule-icon icon-famille">✨</div>
+        <h3>Signature</h3>
+        <p class="formule-tagline">La formule complète, notre coup de cœur</p>
+        <div class="formule-price">280€ <small>1h · 25 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>Tout Essentiel inclus</li>
+          <li>Durée étendue, plus de variété</li>
+          <li>Galerie de sélection interactive</li>
+          <li>Changement de tenue possible</li>
+          <li class="bonus">3 tirages 20×30 offerts</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-full">Réserver</a>
+      </div>
+
+      <div class="formule-card reveal-d3">
+        <div class="formule-icon icon-famille">💎</div>
+        <h3>Sur-Mesure</h3>
+        <p class="formule-tagline">Un projet unique mérite une formule unique</p>
+        <div class="formule-devis">Sur devis</div>
+        <div style="font-size:14px; color: var(--color-gris); margin-bottom: 4px;">Personnalisé selon vos envies</div>
+        <ul class="formule-details">
+          <li>Durée et nombre de photos à définir</li>
+          <li>Multi-lieux possibles</li>
+          <li>Idéal projets familiaux uniques</li>
+          <li>Devis gratuit sous 48h</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-full">Demander un devis</a>
+      </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="options-block reveal">
+      <h4>Options ajoutables</h4>
+      <p>Personnalisez votre séance avec ces options disponibles à la réservation.</p>
+      <div class="options-grid">
+        <div class="option-item">
+          <span class="option-name">Photo supplémentaire (unité)</span>
+          <span class="option-price">+15€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Tirage 20×30 cm</span>
+          <span class="option-price">+25€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Tirage 30×40 cm</span>
+          <span class="option-price">+40€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Boîte Souvenir « L'Écrin »</span>
+          <span class="option-price">+35€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Album photo 20 pages</span>
+          <span class="option-price">+120€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Toile 40×60 cm</span>
+          <span class="option-price">+85€</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ -->
+<!-- ÉQUESTRE -->
+<!-- ═══════════════════════════════ -->
+<section class="tarif-section" id="equestre">
+  <div class="container">
+    <div class="section-intro reveal">
+      <div class="icon-row"><span class="icon-dot"></span><span class="icon-dot"></span><span class="icon-dot"></span></div>
+      <h2>Séances <em>Équestres</em></h2>
+      <p class="subtitle">La complicité cavalier-cheval magnifiée par la lumière dorée. En liberté ou en selle.</p>
+    </div>
+
+    <div class="formules-grid reveal">
+      <div class="formule-card reveal-d1">
+        <div class="formule-icon icon-equestre">🐴</div>
+        <h3>Essentiel</h3>
+        <p class="formule-tagline">Vous et votre cheval, un premier souvenir</p>
+        <div class="formule-price">150€ <small>30 min · 10 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>En extérieur (écurie, champ, forêt)</li>
+          <li>Galerie privée en ligne (90 jours)</li>
+          <li>Photos HD téléchargeables</li>
+          <li>1 configuration (en selle ou en liberté)</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-full">Réserver</a>
+      </div>
+
+      <div class="formule-card highlight reveal-d2">
+        <div class="formule-badge badge-populaire">Populaire</div>
+        <div class="formule-icon icon-equestre">✨</div>
+        <h3>Signature</h3>
+        <p class="formule-tagline">En selle et en liberté, toute la complicité</p>
+        <div class="formule-price">280€ <small>1h · 25 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>Tout Essentiel inclus</li>
+          <li>Multi-configurations (selle + liberté)</li>
+          <li>Galerie de sélection interactive</li>
+          <li>Changement de tenue possible</li>
+          <li class="bonus">3 tirages 20×30 offerts</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-full">Réserver</a>
+      </div>
+
+      <div class="formule-card reveal-d3">
+        <div class="formule-icon icon-equestre">💎</div>
+        <h3>Sur-Mesure</h3>
+        <p class="formule-tagline">Plusieurs chevaux, concours, reportage…</p>
+        <div class="formule-devis">Sur devis</div>
+        <div style="font-size:14px; color: var(--color-gris); margin-bottom: 4px;">Personnalisé selon votre projet</div>
+        <ul class="formule-details">
+          <li>Durée et nombre de photos à définir</li>
+          <li>Plusieurs chevaux possibles</li>
+          <li>Concours et reportages</li>
+          <li>Devis gratuit sous 48h</li>
+        </ul>
+        <a href="#" class="btn btn-secondary btn-full">Demander un devis</a>
+      </div>
+    </div>
+
+    <!-- PASSEPORT ÉQUESTRE -->
+    <div class="options-block reveal" style="margin-top: 48px;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(107,127,90,0.1); padding: 10px 24px; border-radius: var(--radius-full); margin-bottom: 16px;">
+        <span style="font-size: 18px;">🏇</span>
+        <span style="font-family: var(--font-titre); font-size: 16px; font-weight: 700; color: var(--color-sauge);">Passeport Équestre</span>
+      </div>
+      <p style="font-size: 15px; color: var(--color-gris); margin-bottom: 8px;">Programme de fidélité cavaliers : 1 séance = 1 tampon. Au 5ème tampon, un tirage grand format offert !</p>
+    </div>
+
+    <div class="options-block reveal">
+      <h4>Options ajoutables</h4>
+      <div class="options-grid" style="margin-top: 16px;">
+        <div class="option-item">
+          <span class="option-name">Photo supplémentaire</span>
+          <span class="option-price">+15€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Boîte Souvenir « L'Écrin »</span>
+          <span class="option-price">+35€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Toile 40×60 cm</span>
+          <span class="option-price">+85€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Album photo 20 pages</span>
+          <span class="option-price">+120€</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ -->
+<!-- ÉVÉNEMENTIEL -->
+<!-- ═══════════════════════════════ -->
+<section class="tarif-section" id="evenementiel">
+  <div class="container">
+    <div class="section-intro reveal">
+      <div class="icon-row"><span class="icon-dot"></span><span class="icon-dot"></span><span class="icon-dot"></span></div>
+      <h2><em>Événementiel</em></h2>
+      <p class="subtitle">Mariages, baptêmes, anniversaires et célébrations. Chaque événement est unique, chaque devis aussi.</p>
+    </div>
+
+    <div style="max-width: 560px; margin: 0 auto;" class="reveal">
+      <div class="formule-card" style="text-align: center; padding: 48px 36px;">
+        <div class="formule-icon icon-event" style="width: 64px; height: 64px; font-size: 28px;">💍</div>
+        <h3 style="font-size: 26px;">Sur devis uniquement</h3>
+        <p class="formule-tagline">Chaque événement est unique, parlons du vôtre</p>
+        <div class="formule-devis" style="font-size: 24px; margin: 20px 0;">Devis gratuit & personnalisé</div>
+        <ul class="formule-details" style="max-width: 380px; margin: 24px auto;">
+          <li>Couverture complète de votre événement</li>
+          <li>Nombre de photos adapté à la durée</li>
+          <li>Galerie avec sous-dossiers (Préparatifs, Cérémonie, Soirée…)</li>
+          <li>Partage invités — commande de tirages possible</li>
+          <li>Retouche naturelle signature Fleur de Lumière</li>
+          <li>Acompte 30%, solde avant livraison</li>
+        </ul>
+        <a href="#" class="btn btn-primary" style="font-size: 16px; padding: 16px 48px;">Demander un devis →</a>
+        <p style="font-size: 13px; color: var(--color-gris); margin-top: 16px;">Réponse sous 48h avec proposition détaillée</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ -->
+<!-- MATERNITÉ -->
+<!-- ═══════════════════════════════ -->
+<section class="tarif-section" id="maternite">
+  <div class="container">
+    <div class="section-intro reveal">
+      <div class="icon-row"><span class="icon-dot"></span><span class="icon-dot"></span><span class="icon-dot"></span></div>
+      <h2>Maternité & <em>Naissance</em></h2>
+      <p class="subtitle">Les premiers instants de vie, dans la douceur et la tendresse. Deux formules pour deux moments magiques.</p>
+    </div>
+
+    <div class="formules-grid two-cols reveal">
+      <div class="formule-card reveal-d1">
+        <div class="formule-badge badge-nouveau">Nouveau</div>
+        <div class="formule-icon icon-maternite">🌸</div>
+        <h3>Première Lumière</h3>
+        <p class="formule-tagline">En maternité, dans les premières heures</p>
+        <div class="formule-price">180€ <small>30 min · 15 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>Séance en maternité, approche discrète</li>
+          <li>Idéalement entre H+6 et H+48</li>
+          <li>Galerie livrée sous 48 à 72h</li>
+          <li>Photos HD téléchargeables</li>
+          <li>Réservation dès le 7ème mois, date flexible</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-full">Réserver</a>
+      </div>
+
+      <div class="formule-card reveal-d2">
+        <div class="formule-icon icon-maternite">🏠</div>
+        <h3>Nid Douillet</h3>
+        <p class="formule-tagline">À domicile, dans la douceur du foyer</p>
+        <div class="formule-price">220€ <small>45 min · 20 photos retouchées</small></div>
+        <ul class="formule-details">
+          <li>Séance à domicile</li>
+          <li>Entre J+5 et J+15 de vie</li>
+          <li>Galerie privée en ligne (90 jours)</li>
+          <li>Photos HD téléchargeables</li>
+          <li>Ambiance naturelle, lumière du foyer</li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-full">Réserver</a>
+      </div>
+    </div>
+
+    <div class="options-block reveal">
+      <h4>Options ajoutables</h4>
+      <div class="options-grid" style="margin-top: 16px;">
+        <div class="option-item">
+          <span class="option-name">Photos supplémentaires (×5)</span>
+          <span class="option-price">+60€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Boîte Souvenir « L'Écrin »</span>
+          <span class="option-price">+35€</span>
+        </div>
+        <div class="option-item">
+          <span class="option-name">Faire-part photo personnalisé</span>
+          <span class="option-price">Sur devis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ -->
+<!-- SCOLAIRE -->
+<!-- ═══════════════════════════════ -->
+<section class="tarif-section" id="scolaire">
+  <div class="container">
+    <div class="section-intro reveal">
+      <div class="icon-row"><span class="icon-dot"></span><span class="icon-dot"></span><span class="icon-dot"></span></div>
+      <h2>Photographie <em>Scolaire</em></h2>
+      <p class="subtitle">Des photos scolaires naturelles et lumineuses. L'école ne paye rien, les parents choisissent en ligne.</p>
+    </div>
+
+    <div style="max-width: 640px; margin: 0 auto;" class="reveal">
+      <div class="formule-card" style="text-align: center; padding: 48px 36px; border: 2px solid rgba(107,127,90,0.2);">
+        <div class="formule-icon icon-scolaire" style="width: 64px; height: 64px; font-size: 28px;">🎒</div>
+        <h3 style="font-size: 24px;">Modèle « Galerie Parents »</h3>
+        <p class="formule-tagline">Aucun coût pour l'établissement</p>
+        <div style="margin: 28px 0;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; max-width: 420px; margin: 0 auto;">
+            <div style="background: var(--color-bg-alt); border-radius: var(--radius-sm); padding: 20px 12px;">
+              <div style="font-family: var(--font-titre); font-size: 28px; font-weight: 700; color: var(--color-sauge);">0€</div>
+              <div style="font-size: 12px; color: var(--color-gris); margin-top: 4px;">Pour l'école</div>
+            </div>
+            <div style="background: var(--color-bg-alt); border-radius: var(--radius-sm); padding: 20px 12px;">
+              <div style="font-family: var(--font-titre); font-size: 28px; font-weight: 700; color: var(--color-or-chaud);">100%</div>
+              <div style="font-size: 12px; color: var(--color-gris); margin-top: 4px;">En ligne</div>
+            </div>
+            <div style="background: var(--color-bg-alt); border-radius: var(--radius-sm); padding: 20px 12px;">
+              <div style="font-family: var(--font-titre); font-size: 28px; font-weight: 700; color: var(--color-rose);">🎁</div>
+              <div style="font-size: 12px; color: var(--color-gris); margin-top: 4px;">Photo de classe offerte</div>
+            </div>
+          </div>
+        </div>
+        <ul class="formule-details" style="max-width: 440px; margin: 24px auto;">
+          <li>Séance photo à l'école par Capucine</li>
+          <li>Galerie privée avec code unique par enfant</li>
+          <li>Les parents choisissent et commandent en ligne</li>
+          <li>Produits variés : tirages, objets personnalisés</li>
+          <li>Livraison à l'école par Capucine</li>
+          <li class="bonus">Photo de classe offerte à l'établissement</li>
+        </ul>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+          <a href="#" class="btn btn-sauge">Établissement ? Contactez-moi</a>
+        </div>
+        <p style="font-size: 13px; color: var(--color-gris); margin-top: 16px;">Crèches, maternelles, primaires, collèges, lycées, écoles Montessori</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ -->
+<!-- ABONNEMENT 4 SAISONS -->
+<!-- ═══════════════════════════════ -->
+<section class="tarif-section" id="saisons" style="background: var(--color-bg);">
+  <div class="container">
+    <div class="section-intro reveal">
+      <div class="icon-row"><span class="icon-dot"></span><span class="icon-dot"></span><span class="icon-dot"></span></div>
+      <h2>Les Saisons de <em>Lumière</em></h2>
+      <p class="subtitle">Un abonnement annuel pour capturer chaque saison de votre famille. 4 séances, 4 ambiances, une année de souvenirs.</p>
+    </div>
+
+    <div class="abo-card reveal">
+      <div class="abo-visual">
+        <div class="photo-placeholder ph-saisons" style="min-height: 100%;"></div>
+        <div class="abo-season-icons">
+          <div class="season-chip"><span class="s-icon">🌸</span> Printemps</div>
+          <div class="season-chip"><span class="s-icon">☀️</span> Été</div>
+          <div class="season-chip"><span class="s-icon">🍂</span> Automne</div>
+          <div class="season-chip"><span class="s-icon">❄️</span> Hiver</div>
+        </div>
+      </div>
+      <div class="abo-content">
+        <div class="formule-badge badge-promo" style="position: static; transform: none; margin-bottom: 16px;">Meilleur rapport qualité-prix</div>
+        <h3>Abonnement <em>4 Saisons</em></h3>
+        <p>4 mini-séances de 20 à 30 minutes réparties sur l'année, une par saison. Suivez l'évolution de votre famille au fil des mois.</p>
+        <div class="abo-pricing">
+          <span class="main-price">480€</span>
+          <span class="sub-price">/ an</span>
+        </div>
+        <p class="abo-pricing-note">Ou 120€ / saison en paiement récurrent · 40 photos retouchées sur l'année</p>
+        <ul class="abo-features">
+          <li>4 mini-séances (20-30 min) — 1 par saison</li>
+          <li>10 photos retouchées par saison (40 au total)</li>
+          <li>Galerie en ligne dédiée par saison</li>
+          <li>Offre spéciale album « 4 Saisons » en fin d'année</li>
+          <li>Renouvellement possible chaque année</li>
+        </ul>
+        <a href="#" class="btn btn-or" style="align-self: flex-start;">Souscrire à l'abonnement</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARTE CADEAU -->
+<section class="carte-cadeau-banner">
+  <div class="container">
+    <div class="carte-cadeau-inner">
+      <div class="carte-cadeau-text">
+        <h2>Offrez un moment de <em>Lumière</em></h2>
+        <p>Carte cadeau disponible : offrez une formule précise ou un montant libre. Envoi par email, PDF ou carte physique.</p>
+      </div>
+      <div class="carte-cadeau-cta">
+        <a href="#" class="btn btn-or" style="font-size: 16px; padding: 16px 40px;">🎁 Offrir une carte cadeau</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ TARIFS -->
+<section class="faq-section">
+  <div class="container">
+    <div class="section-intro reveal">
+      <h2>Questions fréquentes</h2>
+      <div class="or-line"></div>
+    </div>
+    <div class="faq-grid">
+      <div class="faq-item open">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Comment se passe la réservation ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Choisissez votre formule, ajoutez vos options, sélectionnez un créneau dans mon agenda et remplissez le questionnaire pré-shooting. Un acompte de 30% confirme votre réservation. Vous recevez ensuite un email de confirmation avec tous les détails.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Quels sont les moyens de paiement acceptés ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>En ligne : CB, Visa, Mastercard, Apple Pay, Google Pay via Stripe. Le jour J : TPE portable ou espèces. Pour les gros devis événementiels : virement bancaire. Pas de chèques.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Puis-je annuler ou reporter ma séance ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Plus de 7 jours avant : report gratuit (1 fois) ou remboursement intégral. Moins de 7 jours : report uniquement, 1 fois. Moins de 48h : ni report, ni remboursement. En cas de météo défavorable, je vous propose un report gratuit.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Combien de temps pour recevoir mes photos ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Votre galerie est généralement prête sous 2 à 3 semaines après la séance. Pour la formule « Première Lumière » (maternité), livraison express sous 48 à 72h. Vous êtes notifié par email et SMS dès que votre galerie est en ligne.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Où se déroulent les séances ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>J'interviens sur Toulouse, Gaillac, Lavaur et l'ensemble du Tarn. Les séances se font en extérieur pour profiter de la lumière naturelle : parcs, champs, forêts, bords de rivière… Je peux aussi vous suggérer mes spots préférés.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Prête à réserver votre <em>séance</em> ?</h2>
+    <p>Choisissez votre formule et réservez votre créneau à l'Heure Dorée. Des questions ? Contactez-moi, je vous réponds sous 24h.</p>
+    <div class="cta-actions">
+      <a href="#" class="btn btn-primary" style="font-size: 17px; padding: 16px 44px;">Réserver ma séance →</a>
+      <a href="#" class="btn btn-secondary" style="border-color: var(--color-prune-nuit);">Me contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo">Fleur de <span>L</span>umière</span>
+        <p>Photographie en lumière naturelle<br>Tarn & Toulouse</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille & Portraits</a></li>
+          <li><a href="#">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité & Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="#">Tarifs & Formules</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Offrir une carte cadeau</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="#">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse & environs</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="#">Mentions légales</a>
+        <a href="#">Politique de confidentialité</a>
+        <a href="#">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Tab navigation
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 140;
+      const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+    // Update active tab
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Auto-update tabs on scroll
+  const sections = ['famille', 'equestre', 'evenementiel', 'maternite', 'scolaire', 'saisons'];
+  window.addEventListener('scroll', () => {
+    const scrollPos = window.scrollY + 200;
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scrollPos) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-btn')[i]?.classList.add('active');
+      }
+    });
+  });
+
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(f => f.classList.remove('open'));
+    // Toggle current
+    if (!wasOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>

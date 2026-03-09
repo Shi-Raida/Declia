@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Visual Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========================================
+   VISUAL HUB — Standalone CSS
+   (Does NOT import design-system.css —
+    this file is the hub itself)
+   ======================================== */
+:root {
+  --prune: #4A2E3D;
+  --prune-light: #5E3A4F;
+  --rose: #C2727E;
+  --rose-pale: #F2E0E3;
+  --or: #D4A03C;
+  --or-light: #E8C576;
+  --sauge: #6B7F5A;
+  --bg: #FDFBFC;
+  --bg-alt: #F7F2F5;
+  --text: #2D2D2D;
+  --text-muted: #7A7A7A;
+  --border: #E8E0E3;
+  --sidebar-w: 300px;
+  --header-h: 60px;
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Outfit', -apple-system, sans-serif;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 2px 8px rgba(74,46,61,0.08);
+  --shadow-md: 0 6px 24px rgba(74,46,61,0.12);
+  --transition: 0.22s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: var(--font-body); color: var(--text); background: var(--bg); overflow: hidden; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* ---- HEADER ---- */
+.hub-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: var(--header-h);
+  background: var(--prune);
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  box-shadow: 0 2px 16px rgba(74,46,61,0.25);
+}
+.hub-logo {
+  font-family: var(--font-heading);
+  font-size: 1.25rem; font-weight: 600;
+  color: white; letter-spacing: 0.3px; white-space: nowrap;
+}
+.hub-logo-accent { color: var(--or-light); }
+.hub-header-divider {
+  width: 1px; height: 28px; background: rgba(255,255,255,0.15); flex-shrink: 0;
+}
+.hub-header-title {
+  font-size: 0.8125rem; color: rgba(255,255,255,0.55); flex: 1;
+}
+.hub-header-meta {
+  display: flex; align-items: center; gap: 10px;
+}
+.hub-version-badge {
+  font-size: 0.6875rem; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; padding: 4px 10px;
+  border-radius: 20px; background: rgba(212,160,60,0.2); color: var(--or-light);
+  border: 1px solid rgba(212,160,60,0.35);
+}
+.hub-pages-count {
+  font-size: 0.8125rem; color: rgba(255,255,255,0.45);
+}
+
+/* ---- LAYOUT ---- */
+.hub-layout {
+  display: flex;
+  padding-top: var(--header-h);
+  height: 100vh;
+}
+
+/* ---- SIDEBAR ---- */
+.hub-sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: #2D1E28;
+  display: flex; flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.hub-sidebar-scroll {
+  flex: 1; overflow-y: auto;
+  padding: 16px 0 24px;
+}
+.hub-sidebar-scroll::-webkit-scrollbar { width: 4px; }
+.hub-sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+.hub-sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+/* Search */
+.hub-search-wrap { padding: 0 14px 14px; }
+.hub-search {
+  width: 100%; padding: 8px 12px 8px 34px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: white; font-size: 0.8125rem; font-family: var(--font-body);
+  outline: none; transition: border-color var(--transition);
+}
+.hub-search::placeholder { color: rgba(255,255,255,0.3); }
+.hub-search:focus { border-color: rgba(194,114,126,0.5); background: rgba(255,255,255,0.08); }
+.hub-search-wrap { position: relative; padding: 12px 14px 14px; }
+.hub-search-icon {
+  position: absolute; left: 26px; top: 50%; transform: translateY(-50%);
+  color: rgba(255,255,255,0.3); pointer-events: none;
+}
+
+/* Category */
+.hub-category { margin-bottom: 4px; }
+.hub-category-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px 6px;
+  cursor: pointer; user-select: none;
+  transition: background var(--transition);
+  border-radius: 0;
+}
+.hub-category-header:hover { background: rgba(255,255,255,0.04); }
+.hub-category-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+}
+.hub-category-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.hub-category-count {
+  font-size: 0.6875rem; color: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 10px;
+}
+.hub-category-chevron {
+  font-size: 0.625rem; color: rgba(255,255,255,0.25);
+  transition: transform var(--transition);
+}
+.hub-category.collapsed .hub-category-chevron { transform: rotate(-90deg); }
+.hub-category.collapsed .hub-page-list { display: none; }
+
+/* Page item */
+.hub-page-list { padding: 0 8px 8px; }
+.hub-page-item {
+  display: flex; align-items: center;
+  padding: 8px 10px; border-radius: 8px; margin-bottom: 2px;
+  cursor: pointer; transition: background var(--transition);
+  gap: 10px;
+}
+.hub-page-item:hover { background: rgba(255,255,255,0.07); }
+.hub-page-item.active { background: rgba(194,114,126,0.18); }
+.hub-page-item.active .hub-page-name { color: var(--rose); }
+.hub-page-num {
+  font-size: 0.6875rem; font-weight: 600; color: rgba(255,255,255,0.2);
+  width: 18px; text-align: right; flex-shrink: 0;
+}
+.hub-page-name {
+  flex: 1; font-size: 0.8125rem; color: rgba(255,255,255,0.65);
+  line-height: 1.3; transition: color var(--transition);
+}
+.hub-page-item:hover .hub-page-name { color: rgba(255,255,255,0.9); }
+.hub-badge {
+  font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase; padding: 2px 6px; border-radius: 4px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.hub-badge-green { background: rgba(107,127,90,0.25); color: #8BA275; border: 1px solid rgba(107,127,90,0.3); }
+.hub-badge-gray  { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.1); }
+.hub-badge-or    { background: rgba(212,160,60,0.18); color: var(--or-light); border: 1px solid rgba(212,160,60,0.3); }
+
+/* Legacy section */
+.hub-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 8px 14px 12px; }
+
+/* Sidebar footer */
+.hub-sidebar-footer {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  font-size: 0.75rem; color: rgba(255,255,255,0.25); line-height: 1.6;
+}
+.hub-sidebar-footer strong { color: rgba(255,255,255,0.4); }
+
+/* ---- MAIN ---- */
+.hub-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Topbar */
+.hub-topbar {
+  height: 48px; background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 12px; flex-shrink: 0;
+}
+.hub-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.8125rem; color: var(--text-muted);
+}
+.hub-breadcrumb-sep { color: var(--border); }
+.hub-breadcrumb-current { color: var(--text); font-weight: 500; }
+.hub-topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.hub-btn-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border); background: white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all var(--transition); color: var(--text-muted);
+  font-size: 0.875rem;
+}
+.hub-btn-icon:hover { border-color: var(--rose); color: var(--rose); background: var(--rose-pale); }
+.hub-page-indicator {
+  font-size: 0.8125rem; color: var(--text-muted);
+}
+.hub-open-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 8px;
+  background: var(--prune); color: white;
+  font-size: 0.8125rem; font-weight: 500;
+  border: none; cursor: pointer;
+  transition: background var(--transition);
+  font-family: var(--font-body);
+}
+.hub-open-btn:hover { background: var(--prune-light); }
+
+/* Welcome / placeholder */
+.hub-welcome {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px; text-align: center;
+  background: var(--bg);
+}
+.hub-welcome-icon {
+  width: 72px; height: 72px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(74,46,61,0.08) 0%, rgba(194,114,126,0.12) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin-bottom: 24px;
+}
+.hub-welcome h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem; font-weight: 600; color: var(--prune);
+  margin-bottom: 10px;
+}
+.hub-welcome h2 em { font-style: italic; color: var(--rose); }
+.hub-welcome p { font-size: 0.9375rem; color: var(--text-muted); max-width: 400px; line-height: 1.7; margin-bottom: 32px; }
+
+/* Stats row */
+.hub-stats {
+  display: flex; gap: 32px; margin-bottom: 40px;
+}
+.hub-stat { text-align: center; }
+.hub-stat-value {
+  font-family: var(--font-heading);
+  font-size: 2rem; font-weight: 700; color: var(--prune); line-height: 1;
+}
+.hub-stat-label { font-size: 0.8125rem; color: var(--text-muted); margin-top: 4px; }
+
+/* Category pills on welcome */
+.hub-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.hub-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 20px;
+  border: 1px solid var(--border); background: white;
+  font-size: 0.8125rem; color: var(--text); cursor: pointer;
+  transition: all var(--transition); box-shadow: var(--shadow);
+}
+.hub-pill:hover { border-color: var(--rose); color: var(--rose); box-shadow: var(--shadow-md); }
+.hub-pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* Iframe container */
+.hub-iframe-wrap {
+  flex: 1; display: none; flex-direction: column; overflow: hidden;
+}
+.hub-iframe-wrap.visible { display: flex; }
+.hub-iframe {
+  flex: 1; border: none; width: 100%; height: 100%;
+  background: white;
+}
+.hub-welcome.hidden { display: none; }
+
+/* ---- LOADING ---- */
+.hub-loading {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(253,251,252,0.92); display: flex;
+  align-items: center; justify-content: center;
+  z-index: 10; transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.hub-loading.hidden { opacity: 0; }
+.hub-spinner {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: var(--rose);
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hub-header">
+  <div class="hub-logo">Fleur de <span class="hub-logo-accent">L</span>umière</div>
+  <div class="hub-header-divider"></div>
+  <div class="hub-header-title">Visual Hub — Maquettes harmonisées</div>
+  <div class="hub-header-meta">
+    <span class="hub-version-badge">v2.0 Harmonisé</span>
+    <span class="hub-pages-count">48 pages · 6 modules</span>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="hub-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="hub-sidebar">
+    <div class="hub-sidebar-scroll">
+
+      <!-- SEARCH -->
+      <div class="hub-search-wrap">
+        <span class="hub-search-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </span>
+        <input class="hub-search" type="text" placeholder="Rechercher une page…" id="search-input" oninput="filterPages(this.value)">
+      </div>
+
+      <!-- SITE PUBLIC (9 pages) -->
+      <div class="hub-category" id="cat-public">
+        <div class="hub-category-header" onclick="toggleCategory('cat-public')">
+          <div class="hub-category-label">
+            <span class="hub-category-dot" style="background:#6B7F5A;"></span>
+            Site Public
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="hub-category-count">9</span>
+            <span class="hub-category-chevron">▼</span>
+          </div>
+        </div>
+        <ul class="hub-page-list">
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/01-accueil.html','Accueil','Site Public')">
+            <span class="hub-page-num">01</span>
+            <span class="hub-page-name">Accueil</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/02-apropos.html','À propos','Site Public')">
+            <span class="hub-page-num">02</span>
+            <span class="hub-page-name">À propos</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/03-portfolio-temoignages.html','Portfolio & Témoignages','Site Public')">
+            <span class="hub-page-num">03</span>
+            <span class="hub-page-name">Portfolio &amp; Témoignages</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/04-specialite-equestre.html','Spécialité Équestre','Site Public')">
+            <span class="hub-page-num">04</span>
+            <span class="hub-page-name">Spécialité Équestre</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/05-tarifs.html','Tarifs & Formules','Site Public')">
+            <span class="hub-page-num">05</span>
+            <span class="hub-page-name">Tarifs &amp; Formules</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/06-boutique.html','Boutique','Site Public')">
+            <span class="hub-page-num">06</span>
+            <span class="hub-page-name">Boutique</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/07-cartes-cadeau-faq.html','Cartes Cadeau & FAQ','Site Public')">
+            <span class="hub-page-num">07</span>
+            <span class="hub-page-name">Cartes Cadeau &amp; FAQ</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/08-offres-legal.html','Offres & Légal','Site Public')">
+            <span class="hub-page-num">08</span>
+            <span class="hub-page-name">Offres &amp; Légal</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/site-public/09-contact.html','Contact','Site Public')">
+            <span class="hub-page-num">09</span>
+            <span class="hub-page-name">Contact</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- RÉSERVATION (2 pages) -->
+      <div class="hub-category" id="cat-resa">
+        <div class="hub-category-header" onclick="toggleCategory('cat-resa')">
+          <div class="hub-category-label">
+            <span class="hub-category-dot" style="background:#D4A03C;"></span>
+            Réservation
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="hub-category-count">2</span>
+            <span class="hub-category-chevron">▼</span>
+          </div>
+        </div>
+        <ul class="hub-page-list">
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/booking/01-reservation-part1.html','Réservation — Étapes 1–4','Réservation')">
+            <span class="hub-page-num">01</span>
+            <span class="hub-page-name">Réservation — Étapes 1–4</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/booking/02-reservation-part2.html','Réservation — Étapes 5–7','Réservation')">
+            <span class="hub-page-num">02</span>
+            <span class="hub-page-name">Réservation — Étapes 5–7</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ESPACE CLIENT (10 pages) -->
+      <div class="hub-category" id="cat-client">
+        <div class="hub-category-header" onclick="toggleCategory('cat-client')">
+          <div class="hub-category-label">
+            <span class="hub-category-dot" style="background:#C2727E;"></span>
+            Espace Client
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="hub-category-count">10</span>
+            <span class="hub-category-chevron">▼</span>
+          </div>
+        </div>
+        <ul class="hub-page-list">
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/01-client-journey.html','Parcours Client','Espace Client')">
+            <span class="hub-page-num">01</span>
+            <span class="hub-page-name">Parcours Client</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/02-chatbot-client.html','Chat Client','Espace Client')">
+            <span class="hub-page-num">02</span>
+            <span class="hub-page-name">Chat Client</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/03-notifications.html','Notifications','Espace Client')">
+            <span class="hub-page-num">03</span>
+            <span class="hub-page-name">Notifications</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/04-coffret-numerique.html','Coffret Numérique','Espace Client')">
+            <span class="hub-page-num">04</span>
+            <span class="hub-page-name">Coffret Numérique</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/05-mood-board.html','Mood Board','Espace Client')">
+            <span class="hub-page-num">05</span>
+            <span class="hub-page-name">Mood Board</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/06-selection-guidee.html','Sélection Guidée','Espace Client')">
+            <span class="hub-page-num">06</span>
+            <span class="hub-page-name">Sélection Guidée</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/07-before-after.html','Avant / Après','Espace Client')">
+            <span class="hub-page-num">07</span>
+            <span class="hub-page-name">Avant / Après</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/08-album-proofing.html','Aperçu Album','Espace Client')">
+            <span class="hub-page-num">08</span>
+            <span class="hub-page-name">Aperçu Album</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/09-gift-flow.html','Offrir une Séance','Espace Client')">
+            <span class="hub-page-num">09</span>
+            <span class="hub-page-name">Offrir une Séance</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/espace-client/10-espace-client.html','Espace Client','Espace Client')">
+            <span class="hub-page-num">10</span>
+            <span class="hub-page-name">Espace Client</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ADMINISTRATION (19 pages) -->
+      <div class="hub-category" id="cat-admin">
+        <div class="hub-category-header" onclick="toggleCategory('cat-admin')">
+          <div class="hub-category-label">
+            <span class="hub-category-dot" style="background:#4A2E3D;"></span>
+            Administration
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="hub-category-count">19</span>
+            <span class="hub-category-chevron">▼</span>
+          </div>
+        </div>
+        <ul class="hub-page-list">
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/01-dashboard.html','Dashboard Admin','Administration')">
+            <span class="hub-page-num">01</span>
+            <span class="hub-page-name">Dashboard Admin</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/02-facturation.html','Facturation','Administration')">
+            <span class="hub-page-num">02</span>
+            <span class="hub-page-name">Facturation</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/03-parametres-1.html','Paramètres (1)','Administration')">
+            <span class="hub-page-num">03</span>
+            <span class="hub-page-name">Paramètres (1)</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/04-parametres-2.html','Paramètres (2)','Administration')">
+            <span class="hub-page-num">04</span>
+            <span class="hub-page-name">Paramètres (2)</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/05-personnalisation.html','Personnalisation','Administration')">
+            <span class="hub-page-num">05</span>
+            <span class="hub-page-name">Personnalisation</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/06-assistant-admin.html','Assistant IA','Administration')">
+            <span class="hub-page-num">06</span>
+            <span class="hub-page-name">Assistant IA</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/07-scolaire-admin.html','Scolaire Admin','Administration')">
+            <span class="hub-page-num">07</span>
+            <span class="hub-page-name">Scolaire Admin</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/08-scolaire-ecole-parent.html','École &amp; Parents','Administration')">
+            <span class="hub-page-num">08</span>
+            <span class="hub-page-name">École &amp; Parents</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/09-marketing-automation.html','Automatisation Marketing','Administration')">
+            <span class="hub-page-num">09</span>
+            <span class="hub-page-name">Automatisation Marketing</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/10-export-comptable.html','Export Comptable','Administration')">
+            <span class="hub-page-num">10</span>
+            <span class="hub-page-name">Export Comptable</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/11-mini-sessions.html','Mini-Sessions','Administration')">
+            <span class="hub-page-num">11</span>
+            <span class="hub-page-name">Mini-Sessions</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/12-session-recap.html','Récap de Séance','Administration')">
+            <span class="hub-page-num">12</span>
+            <span class="hub-page-name">Récap de Séance</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/13-education-hub.html','Hub Éducation','Administration')">
+            <span class="hub-page-num">13</span>
+            <span class="hub-page-name">Hub Éducation</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/14-referral-proof.html','Fidélité &amp; Parrainage','Administration')">
+            <span class="hub-page-num">14</span>
+            <span class="hub-page-name">Fidélité &amp; Parrainage</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/15-campagnes-avancees.html','Campagnes Avancées','Administration')">
+            <span class="hub-page-num">15</span>
+            <span class="hub-page-name">Campagnes Avancées</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/16-reseau-prestataires.html','Réseau Prestataires','Administration')">
+            <span class="hub-page-num">16</span>
+            <span class="hub-page-name">Réseau Prestataires</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/17-blog-seo.html','Blog &amp; SEO','Administration')">
+            <span class="hub-page-num">17</span>
+            <span class="hub-page-name">Blog &amp; SEO</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/18-meteo-video-forecast.html','Météo &amp; Prévisions','Administration')">
+            <span class="hub-page-num">18</span>
+            <span class="hub-page-name">Météo &amp; Prévisions</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/admin/19-statistiques.html','Statistiques','Administration')">
+            <span class="hub-page-num">19</span>
+            <span class="hub-page-name">Statistiques</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- INTELLIGENCE IA (8 pages) -->
+      <div class="hub-category" id="cat-ia">
+        <div class="hub-category-header" onclick="toggleCategory('cat-ia')">
+          <div class="hub-category-label">
+            <span class="hub-category-dot" style="background:#C2727E;"></span>
+            Intelligence IA
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="hub-category-count">8</span>
+            <span class="hub-category-chevron">▼</span>
+          </div>
+        </div>
+        <ul class="hub-page-list">
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/01-hub-ia.html','Hub IA','Intelligence IA')">
+            <span class="hub-page-num">01</span>
+            <span class="hub-page-name">Hub IA</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/02-intel-crm.html','Intelligence CRM','Intelligence IA')">
+            <span class="hub-page-num">02</span>
+            <span class="hub-page-name">Intelligence CRM</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/03-leads-social-tri.html','Leads & Social','Intelligence IA')">
+            <span class="hub-page-num">03</span>
+            <span class="hub-page-name">Leads &amp; Social</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/04-reconnaissance-faciale.html','Reconnaissance Faciale','Intelligence IA')">
+            <span class="hub-page-num">04</span>
+            <span class="hub-page-name">Reconnaissance Faciale</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/05-lightroom.html','Lightroom / C1','Intelligence IA')">
+            <span class="hub-page-num">05</span>
+            <span class="hub-page-name">Lightroom / C1</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/06-print-preview-ar.html','Aperçu AR Impression','Intelligence IA')">
+            <span class="hub-page-num">06</span>
+            <span class="hub-page-name">Aperçu AR Impression</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/07-smart-pricing-vault.html','Smart Pricing + Vault','Intelligence IA')">
+            <span class="hub-page-num">07</span>
+            <span class="hub-page-name">Smart Pricing + Vault</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'harmonized/ia/08-social-planning-style.html','Planning Social + Style','Intelligence IA')">
+            <span class="hub-page-num">08</span>
+            <span class="hub-page-name">Planning Social + Style</span>
+            <span class="hub-badge hub-badge-green">Harmonisé</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="hub-divider"></div>
+
+      <!-- LEGACY (archives) -->
+      <div class="hub-category collapsed" id="cat-legacy">
+        <div class="hub-category-header" onclick="toggleCategory('cat-legacy')">
+          <div class="hub-category-label">
+            <span class="hub-category-dot" style="background:#7A7A7A;"></span>
+            Legacy (archives)
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="hub-category-count">9</span>
+            <span class="hub-category-chevron">▼</span>
+          </div>
+        </div>
+        <ul class="hub-page-list">
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/fleur-de-lumiere-ia-1-hub.html','Hub IA v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Hub IA v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/fleur-de-lumiere-ia-2-intel-crm.html','Intel CRM v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Intel CRM v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/fleur-de-lumiere-ia-3-leads-social-tri.html','Leads & Social v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Leads &amp; Social v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/mockup_v2_01_reconnaissance_faciale.html','Reconnaissance Faciale v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Reconnaissance Faciale v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/mockup_v2_02_lightroom.html','Lightroom v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Lightroom v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/mockup_v2_03_print_preview_ar.html','Print Preview AR v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Print Preview AR v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/mockup_v2_04_smart_pricing_vault.html','Smart Pricing v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Smart Pricing v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/mockup_v2_05_social_planning_style.html','Planning Social v1','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Planning Social v1</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+          <li class="hub-page-item" onclick="loadPage(this,'legacy/fleur-de-lumiere-client-contact-stats.html','Client Contact Stats','Legacy')">
+            <span class="hub-page-num">—</span>
+            <span class="hub-page-name">Client Contact Stats</span>
+            <span class="hub-badge hub-badge-gray">Legacy</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Sidebar footer -->
+    <div class="hub-sidebar-footer">
+      <strong>Design System v2.0</strong><br>
+      Cormorant Garamond + Outfit<br>
+      Palette Fleur de Lumière
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="hub-main" style="position:relative;">
+
+    <!-- TOPBAR -->
+    <div class="hub-topbar">
+      <div class="hub-breadcrumb">
+        <span>Visual Hub</span>
+        <span class="hub-breadcrumb-sep">›</span>
+        <span class="hub-breadcrumb-current" id="breadcrumb-section">—</span>
+        <span class="hub-breadcrumb-sep" id="breadcrumb-sep2" style="display:none;">›</span>
+        <span class="hub-breadcrumb-current" id="breadcrumb-page" style="display:none;"></span>
+      </div>
+      <div class="hub-topbar-actions">
+        <span class="hub-page-indicator" id="page-url-display" style="font-size:0.75rem; color: var(--text-muted); max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></span>
+        <button class="hub-btn-icon" title="Actualiser" onclick="reloadIframe()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
+        <button class="hub-open-btn" onclick="openInNewTab()" id="open-btn" style="display:none;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          Ouvrir dans un onglet
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="hub-loading hidden" id="hub-loading">
+      <div class="hub-spinner"></div>
+    </div>
+
+    <!-- WELCOME SCREEN -->
+    <div class="hub-welcome" id="hub-welcome">
+      <div class="hub-welcome-icon">✦</div>
+      <h2>Fleur de <em>Lumière</em></h2>
+      <div class="hub-stats">
+        <div class="hub-stat">
+          <div class="hub-stat-value">48</div>
+          <div class="hub-stat-label">Pages harmonisées</div>
+        </div>
+        <div class="hub-stat">
+          <div class="hub-stat-value">6</div>
+          <div class="hub-stat-label">Modules</div>
+        </div>
+        <div class="hub-stat">
+          <div class="hub-stat-value">1</div>
+          <div class="hub-stat-label">Design System</div>
+        </div>
+      </div>
+      <p>Sélectionnez une page dans le menu de gauche pour visualiser la maquette. Toutes les pages utilisent le même design system et la même palette Fleur de Lumière.</p>
+      <div class="hub-pills">
+        <div class="hub-pill" onclick="jumpToCategory('cat-public')">
+          <span class="hub-pill-dot" style="background:#6B7F5A;"></span>
+          Site Public (9)
+        </div>
+        <div class="hub-pill" onclick="jumpToCategory('cat-resa')">
+          <span class="hub-pill-dot" style="background:#D4A03C;"></span>
+          Réservation (2)
+        </div>
+        <div class="hub-pill" onclick="jumpToCategory('cat-client')">
+          <span class="hub-pill-dot" style="background:#C2727E;"></span>
+          Espace Client (10)
+        </div>
+        <div class="hub-pill" onclick="jumpToCategory('cat-admin')">
+          <span class="hub-pill-dot" style="background:#4A2E3D;"></span>
+          Administration (19)
+        </div>
+        <div class="hub-pill" onclick="jumpToCategory('cat-ia')">
+          <span class="hub-pill-dot" style="background:#C2727E;"></span>
+          Intelligence IA (8)
+        </div>
+      </div>
+    </div>
+
+    <!-- IFRAME -->
+    <div class="hub-iframe-wrap" id="hub-iframe-wrap">
+      <iframe class="hub-iframe" id="hub-iframe" src="about:blank" allowfullscreen></iframe>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let currentUrl = null;
+  let currentItem = null;
+
+  function loadPage(el, url, pageName, section) {
+    // Deactivate previous
+    if (currentItem) currentItem.classList.remove('active');
+    el.classList.add('active');
+    currentItem = el;
+    currentUrl = url;
+
+    // Update breadcrumb
+    document.getElementById('breadcrumb-section').textContent = section;
+    document.getElementById('breadcrumb-sep2').style.display = 'inline';
+    document.getElementById('breadcrumb-page').style.display = 'inline';
+    document.getElementById('breadcrumb-page').textContent = pageName;
+    document.getElementById('page-url-display').textContent = url;
+
+    // Show open btn
+    document.getElementById('open-btn').style.display = 'flex';
+
+    // Show loading
+    const loading = document.getElementById('hub-loading');
+    loading.classList.remove('hidden');
+
+    // Hide welcome, show iframe
+    document.getElementById('hub-welcome').classList.add('hidden');
+    const wrap = document.getElementById('hub-iframe-wrap');
+    wrap.classList.add('visible');
+
+    // Load iframe
+    const iframe = document.getElementById('hub-iframe');
+    iframe.src = url;
+    iframe.onload = () => {
+      setTimeout(() => loading.classList.add('hidden'), 150);
+    };
+  }
+
+  function reloadIframe() {
+    if (!currentUrl) return;
+    const loading = document.getElementById('hub-loading');
+    loading.classList.remove('hidden');
+    const iframe = document.getElementById('hub-iframe');
+    iframe.src = currentUrl;
+    iframe.onload = () => {
+      setTimeout(() => loading.classList.add('hidden'), 150);
+    };
+  }
+
+  function openInNewTab() {
+    if (currentUrl) window.open(currentUrl, '_blank');
+  }
+
+  function toggleCategory(id) {
+    const cat = document.getElementById(id);
+    cat.classList.toggle('collapsed');
+  }
+
+  function jumpToCategory(id) {
+    // Expand if collapsed
+    const cat = document.getElementById(id);
+    if (cat.classList.contains('collapsed')) cat.classList.remove('collapsed');
+    // Scroll to it
+    cat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function filterPages(query) {
+    const q = query.toLowerCase().trim();
+    const allItems = document.querySelectorAll('.hub-page-item');
+    const allCats = document.querySelectorAll('.hub-category');
+
+    if (!q) {
+      allItems.forEach(el => el.style.display = 'flex');
+      allCats.forEach(cat => {
+        if (cat.id !== 'cat-legacy') cat.classList.remove('collapsed');
+      });
+      return;
+    }
+
+    allCats.forEach(cat => {
+      let hasVisible = false;
+      cat.querySelectorAll('.hub-page-item').forEach(item => {
+        const name = item.querySelector('.hub-page-name').textContent.toLowerCase();
+        if (name.includes(q)) {
+          item.style.display = 'flex';
+          hasVisible = true;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      if (hasVisible) {
+        cat.classList.remove('collapsed');
+      }
+    });
+  }
+
+  // Keyboard shortcut: Escape = back to welcome
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && currentUrl) {
+      document.getElementById('hub-welcome').classList.remove('hidden');
+      document.getElementById('hub-iframe-wrap').classList.remove('visible');
+      if (currentItem) currentItem.classList.remove('active');
+      currentUrl = null;
+      currentItem = null;
+      document.getElementById('open-btn').style.display = 'none';
+      document.getElementById('breadcrumb-section').textContent = '—';
+      document.getElementById('breadcrumb-sep2').style.display = 'none';
+      document.getElementById('breadcrumb-page').style.display = 'none';
+      document.getElementById('page-url-display').textContent = '';
+      document.getElementById('hub-iframe').src = 'about:blank';
+    }
+  });
+</script>
+</body>
+</html>

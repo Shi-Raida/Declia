@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Campagnes Marketing Avancées</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--warning:#E8985E;--warning-bg:#FFF3EB;--info:#5B8FA8;--info-bg:#E8F0F4;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08);--gold:#C9A96E}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--charcoal)}
+.tag{display:inline-block;background:#D4BBFF;color:#3A1D6E;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+
+/* Layout */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--prune);padding:24px 0;flex-shrink:0}
+.sb-logo{font-family:'Cormorant Garamond',serif;color:#fff;font-size:18px;font-weight:600;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,.08)}.sb-logo span{color:var(--rose)}
+.sb-s{padding:16px 16px 6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.25)}
+.sb-i{display:flex;align-items:center;gap:10px;padding:9px 20px;color:rgba(255,255,255,.45);font-size:13px;cursor:pointer;border-left:3px solid transparent}
+.sb-i.on{color:#fff;background:rgba(194,114,126,.15);border-left-color:var(--rose);font-weight:500}
+.main{flex:1;padding:32px 36px;overflow-y:auto}
+
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.pt{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--prune)}
+.ps{font-size:13px;color:var(--warm-gray);margin-top:4px}
+
+/* Campaign cards — larger format */
+.campaigns{display:flex;flex-direction:column;gap:16px}
+.campaign{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;transition:all .2s}
+.campaign:hover{box-shadow:var(--shadow-lg)}
+.c-header{padding:18px 22px;display:flex;align-items:center;gap:14px;cursor:pointer}
+.c-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.c-icon.anniv{background:#F0E8F8}.c-icon.upsell{background:var(--success-bg)}.c-icon.season{background:var(--warning-bg)}
+.c-info{flex:1}
+.c-name{font-size:16px;font-weight:600;color:var(--charcoal)}
+.c-desc{font-size:12.5px;color:var(--warm-gray);margin-top:2px;line-height:1.4}
+.c-stats{display:flex;gap:16px;margin-top:6px}
+.c-stat{font-size:11px;display:flex;align-items:center;gap:3px}
+.c-stat.green{color:var(--success)}.c-stat.blue{color:var(--info)}.c-stat.gold{color:var(--gold)}
+.c-toggle{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.c-toggle-label{font-size:11px;color:var(--warm-gray)}
+.tog{width:44px;height:24px;background:#E0D6D9;border-radius:12px;cursor:pointer;position:relative;flex-shrink:0}.tog.on{background:var(--success)}
+.tog::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:all .3s;box-shadow:0 1px 3px rgba(0,0,0,.12)}.tog.on::after{left:23px}
+
+/* Expanded campaign config */
+.c-body{padding:0 22px 22px;display:block}
+.c-section{margin-bottom:18px}
+.c-section-title{font-size:13px;font-weight:600;color:var(--prune);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.c-section-title::before{content:'';width:3px;height:13px;background:var(--rose);border-radius:2px}
+
+/* Timeline */
+.timeline{display:flex;align-items:center;gap:0;padding:8px 0}
+.tl-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.tl-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;z-index:1}
+.tl-dot.email{background:var(--rose-light);color:var(--rose)}.tl-dot.sms{background:var(--info-bg);color:var(--info)}.tl-dot.promo{background:var(--warning-bg);color:var(--warning)}.tl-dot.gift{background:#F0E8F8;color:#8E6BAA}
+.tl-label{font-size:10.5px;font-weight:500;color:var(--charcoal);text-align:center;max-width:90px;line-height:1.2}
+.tl-time{font-size:9.5px;color:var(--warm-gray);text-align:center}
+.tl-line{flex:1;height:2px;background:var(--border);margin:0 -8px;position:relative;top:-18px}
+
+/* Config rows */
+.cfg{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--cream);border-radius:10px;margin-bottom:6px}
+.cfg-label{font-size:12.5px;color:var(--charcoal);font-weight:500}
+.cfg-value{display:flex;align-items:center;gap:6px}
+.cfg-input{width:55px;padding:5px 8px;border:1px solid var(--border);border-radius:7px;font-family:'Outfit',sans-serif;font-size:12px;text-align:center;background:var(--white)}
+.cfg-select{padding:5px 10px;border:1px solid var(--border);border-radius:7px;font-family:'Outfit',sans-serif;font-size:12px;background:var(--white);cursor:pointer}
+.cfg-unit{font-size:11px;color:var(--warm-gray)}
+
+/* Target rules */
+.target-chips{display:flex;flex-wrap:wrap;gap:6px}
+.target-chip{padding:5px 12px;border-radius:8px;font-size:11.5px;font-weight:500;border:1.5px solid var(--border);background:var(--white);color:var(--warm-gray);cursor:pointer;transition:all .2s}
+.target-chip.on{border-color:var(--rose);background:var(--rose-pale);color:var(--rose)}
+
+/* Email preview mini */
+.email-mini{border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:360px}
+.em-bar{background:var(--cream);padding:8px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--warm-gray);border-bottom:1px solid var(--border)}
+.em-dot{width:7px;height:7px;border-radius:50%}
+.em-body{padding:18px;text-align:center;background:var(--white)}
+.em-logo{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:var(--prune);margin-bottom:14px}
+.em-img{width:100%;height:100px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.4)}
+.em-title{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;color:var(--prune);margin-bottom:6px}
+.em-text{font-size:11.5px;color:var(--warm-gray);line-height:1.5;margin-bottom:12px}
+.em-btn{display:inline-block;background:var(--rose);color:#fff;padding:7px 20px;border-radius:7px;font-size:11px;font-weight:500}
+.em-promo{margin-top:12px;padding:10px;background:var(--warning-bg);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px}
+.em-promo-badge{background:var(--warning);color:#fff;padding:2px 8px;border-radius:5px;font-size:12px;font-weight:700}
+.em-promo-text{font-size:11px;color:var(--charcoal);font-weight:500}
+
+/* Season calendar */
+.season-cal{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.season-item{padding:12px;border-radius:10px;text-align:center;cursor:pointer;transition:all .2s;border:1.5px solid var(--border);background:var(--white)}
+.season-item.active{border-color:var(--rose);background:var(--rose-pale)}
+.season-item:hover{border-color:var(--rose-light)}
+.season-emoji{font-size:22px;margin-bottom:4px}
+.season-name{font-size:11px;font-weight:600;color:var(--charcoal)}
+.season-date{font-size:10px;color:var(--warm-gray)}
+.season-status{font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;margin-top:4px;display:inline-block}
+.season-status.on{background:var(--success-bg);color:var(--success)}.season-status.off{background:#F0EAEB;color:var(--warm-gray)}.season-status.sched{background:var(--info-bg);color:var(--info)}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sb-logo">Fleur de <span>Lumière</span></div>
+    <div class="sb-s">Général</div>
+    <div class="sb-i">📊 Tableau de bord</div>
+    <div class="sb-i">👥 Clients</div>
+    <div class="sb-s">Ventes</div>
+    <div class="sb-i">🛒 Commandes</div>
+    <div class="sb-i on">📈 Marketing</div>
+    <div class="sb-s">Admin</div>
+    <div class="sb-i">💰 Finances</div>
+    <div class="sb-i">⚙️ Paramètres</div>
+  </nav>
+
+  <main class="main">
+    <div class="ph">
+      <div>
+        <div class="pt">Campagnes Avancées <span class="tag">V1.5</span></div>
+        <div class="ps">Campagnes Anniversaire, Après-commande et Saisonnières — complètent les campagnes V1</div>
+      </div>
+    </div>
+
+    <div class="campaigns">
+
+      <!-- ===== ANNIVERSAIRE ===== -->
+      <div class="campaign">
+        <div class="c-header">
+          <div class="c-icon anniv">💍</div>
+          <div class="c-info">
+            <div class="c-name">Campagne Anniversaire</div>
+            <div class="c-desc">Automatiquement, un an après l'événement, le client reçoit un message personnalisé avec une offre spéciale.</div>
+            <div class="c-stats">
+              <div class="c-stat green">📧 24 envoyés</div>
+              <div class="c-stat blue">👁 79% ouverture</div>
+              <div class="c-stat gold">💰 680€ générés</div>
+            </div>
+          </div>
+          <div class="c-toggle"><div class="c-toggle-label">Actif</div><div class="tog on"></div></div>
+        </div>
+        <div class="c-body">
+          <div class="c-section">
+            <div class="c-section-title">Timing d'envoi</div>
+            <div class="cfg"><div class="cfg-label">Envoyer avant la date anniversaire</div><div class="cfg-value"><input class="cfg-input" value="21"><span class="cfg-unit">jours avant</span></div></div>
+            <div class="cfg"><div class="cfg-label">Rappel si pas d'action</div><div class="cfg-value"><input class="cfg-input" value="7"><span class="cfg-unit">jours avant</span></div></div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Types d'événements concernés</div>
+            <div class="target-chips">
+              <div class="target-chip on">💒 Mariage</div>
+              <div class="target-chip on">👶 Naissance</div>
+              <div class="target-chip on">👨‍👩‍👧 Famille</div>
+              <div class="target-chip">🐴 Équestre</div>
+              <div class="target-chip on">🤰 Maternité</div>
+              <div class="target-chip">⚡ Mini-session</div>
+            </div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Offre & message</div>
+            <div class="cfg"><div class="cfg-label">Réduction anniversaire</div><div class="cfg-value"><select class="cfg-select"><option selected>Pourcentage</option><option>Montant fixe</option><option>Produit offert</option></select><input class="cfg-input" value="20"><span class="cfg-unit">%</span></div></div>
+            <div class="cfg"><div class="cfg-label">Applicable sur</div><div class="cfg-value"><select class="cfg-select"><option selected>Nouvelle réservation + tirages</option><option>Tirages uniquement</option><option>Nouvelle réservation</option></select></div></div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Séquence d'envois</div>
+            <div class="timeline">
+              <div class="tl-step"><div class="tl-dot gift">💍</div><div class="tl-label">Email anniversaire + offre</div><div class="tl-time">J-21</div></div>
+              <div class="tl-line"></div>
+              <div class="tl-step"><div class="tl-dot sms">💬</div><div class="tl-label">SMS rappel</div><div class="tl-time">J-7</div></div>
+              <div class="tl-line"></div>
+              <div class="tl-step"><div class="tl-dot email">📧</div><div class="tl-label">Dernier rappel</div><div class="tl-time">Jour J</div></div>
+            </div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Aperçu email — Mariage</div>
+            <div class="email-mini">
+              <div class="em-bar"><div class="em-dot" style="background:#FF6058"></div><div class="em-dot" style="background:#FFBD2E"></div><div class="em-dot" style="background:#28CA42"></div><span>Aperçu</span></div>
+              <div class="em-body">
+                <div class="em-logo">Fleur de Lumière</div>
+                <div class="em-img" style="background:linear-gradient(135deg,#D0C0D4,#C0B0C8)">Photo du mariage</div>
+                <div class="em-title">Joyeux anniversaire de mariage, Marie & Thomas ! 💍</div>
+                <div class="em-text">Il y a déjà un an que vous vous êtes dit oui au Château de Lastours. Revivez cette journée magique et offrez-vous un souvenir éternel.</div>
+                <div class="em-btn">Revoir notre galerie →</div>
+                <div class="em-promo"><div class="em-promo-badge">-20%</div><div class="em-promo-text">Sur un album ou une nouvelle séance</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== APRÈS COMMANDE ===== -->
+      <div class="campaign">
+        <div class="c-header">
+          <div class="c-icon upsell">🎁</div>
+          <div class="c-info">
+            <div class="c-name">Campagne Après-Commande (Upsell)</div>
+            <div class="c-desc">Après chaque commande de tirages, suggérer un produit complémentaire intelligent basé sur ce qui a été acheté.</div>
+            <div class="c-stats">
+              <div class="c-stat green">📧 38 envoyés</div>
+              <div class="c-stat blue">👁 65% ouverture</div>
+              <div class="c-stat gold">💰 420€ générés</div>
+            </div>
+          </div>
+          <div class="c-toggle"><div class="c-toggle-label">Actif</div><div class="tog on"></div></div>
+        </div>
+        <div class="c-body">
+          <div class="c-section">
+            <div class="c-section-title">Règles de suggestion intelligente</div>
+            <div class="cfg"><div class="cfg-label">Délai après commande</div><div class="cfg-value"><input class="cfg-input" value="48"><span class="cfg-unit">heures</span></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+            <div class="cfg" style="flex-direction:column;align-items:flex-start;gap:4px"><div class="cfg-label">Si achat : Tirages</div><div style="font-size:11px;color:var(--rose);font-weight:500">→ Suggérer : Album ou Écrin Fleur de Lumière</div></div>
+            <div class="cfg" style="flex-direction:column;align-items:flex-start;gap:4px"><div class="cfg-label">Si achat : Album</div><div style="font-size:11px;color:var(--rose);font-weight:500">→ Suggérer : Toile grand format ou tirages famille</div></div>
+            <div class="cfg" style="flex-direction:column;align-items:flex-start;gap:4px"><div class="cfg-label">Si achat : Toile</div><div style="font-size:11px;color:var(--rose);font-weight:500">→ Suggérer : Pack mural (3 tirages assortis)</div></div>
+            <div class="cfg" style="flex-direction:column;align-items:flex-start;gap:4px"><div class="cfg-label">Si achat : Objets perso</div><div style="font-size:11px;color:var(--rose);font-weight:500">→ Suggérer : Pack cadeau famille (mugs + magnets)</div></div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Aperçu email</div>
+            <div class="email-mini">
+              <div class="em-bar"><div class="em-dot" style="background:#FF6058"></div><div class="em-dot" style="background:#FFBD2E"></div><div class="em-dot" style="background:#28CA42"></div><span>Aperçu</span></div>
+              <div class="em-body">
+                <div class="em-logo">Fleur de Lumière</div>
+                <div class="em-title">Merci pour votre commande, Sophie ! 🌸</div>
+                <div class="em-text">Vos 3 tirages 20x30 sont en cours de préparation. En attendant, avez-vous pensé à l'Écrin Fleur de Lumière ? Le coffret idéal pour sublimer vos souvenirs.</div>
+                <div class="em-btn">Découvrir l'Écrin →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SAISONNIÈRES ===== -->
+      <div class="campaign">
+        <div class="c-header">
+          <div class="c-icon season">📅</div>
+          <div class="c-info">
+            <div class="c-name">Campagnes Saisonnières</div>
+            <div class="c-desc">Relancez vos anciens clients avant les fêtes et événements : Noël, Fête des Mères, Saint-Valentin, rentrée...</div>
+            <div class="c-stats">
+              <div class="c-stat green">📧 156 envoyés (cumul)</div>
+              <div class="c-stat blue">👁 71% ouverture</div>
+              <div class="c-stat gold">💰 1 240€ générés</div>
+            </div>
+          </div>
+          <div class="c-toggle"><div class="c-toggle-label">Actif</div><div class="tog on"></div></div>
+        </div>
+        <div class="c-body">
+          <div class="c-section">
+            <div class="c-section-title">Calendrier des campagnes</div>
+            <div class="season-cal">
+              <div class="season-item"><div class="season-emoji">💝</div><div class="season-name">St-Valentin</div><div class="season-date">14 fév</div><div class="season-status on">Envoyé</div></div>
+              <div class="season-item active"><div class="season-emoji">🌸</div><div class="season-name">Fête des Mères</div><div class="season-date">7 juin</div><div class="season-status sched">Programmé</div></div>
+              <div class="season-item"><div class="season-emoji">👨</div><div class="season-name">Fête des Pères</div><div class="season-date">21 juin</div><div class="season-status sched">Programmé</div></div>
+              <div class="season-item"><div class="season-emoji">🎒</div><div class="season-name">Rentrée</div><div class="season-date">Sept</div><div class="season-status off">Inactif</div></div>
+              <div class="season-item"><div class="season-emoji">🍂</div><div class="season-name">Automne</div><div class="season-date">Oct</div><div class="season-status off">Inactif</div></div>
+              <div class="season-item"><div class="season-emoji">🎃</div><div class="season-name">Halloween</div><div class="season-date">31 oct</div><div class="season-status off">Inactif</div></div>
+              <div class="season-item"><div class="season-emoji">🎄</div><div class="season-name">Noël</div><div class="season-date">Déc</div><div class="season-status off">Inactif</div></div>
+              <div class="season-item"><div class="season-emoji">🥂</div><div class="season-name">Nouvel An</div><div class="season-date">Jan</div><div class="season-status off">Inactif</div></div>
+            </div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Configuration — Fête des Mères (active)</div>
+            <div class="cfg"><div class="cfg-label">Envoyer à</div><div class="cfg-value"><select class="cfg-select"><option selected>Tous les anciens clients</option><option>Clients des 12 derniers mois</option><option>Clients ayant acheté des tirages</option></select></div></div>
+            <div class="cfg"><div class="cfg-label">Date d'envoi</div><div class="cfg-value"><input class="cfg-input" value="21" style="width:40px"><span class="cfg-unit">jours avant</span></div></div>
+            <div class="cfg"><div class="cfg-label">Offre associée</div><div class="cfg-value"><select class="cfg-select"><option>Pas d'offre, juste un rappel</option><option selected>-15% sur les produits</option><option>Frais de port offerts</option><option>Un tirage offert pour toute commande</option></select></div></div>
+          </div>
+          <div class="c-section">
+            <div class="c-section-title">Aperçu email — Fête des Mères</div>
+            <div class="email-mini">
+              <div class="em-bar"><div class="em-dot" style="background:#FF6058"></div><div class="em-dot" style="background:#FFBD2E"></div><div class="em-dot" style="background:#28CA42"></div><span>Aperçu</span></div>
+              <div class="em-body">
+                <div class="em-logo">Fleur de Lumière</div>
+                <div class="em-img" style="background:linear-gradient(135deg,#F0D0D4,#E8C0C8)">💐 Visuel Fête des Mères</div>
+                <div class="em-title">Offrez un souvenir éternel pour la Fête des Mères 🌸</div>
+                <div class="em-text">Transformez vos plus belles photos en cadeau inoubliable : album, toile, ou coffret personnalisé. Maman va adorer !</div>
+                <div class="em-btn">Voir les idées cadeaux →</div>
+                <div class="em-promo"><div class="em-promo-badge">-15%</div><div class="em-promo-text">Jusqu'au 7 juin sur tous les produits</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+</body>
+</html>

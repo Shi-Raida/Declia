@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module Scolaire — Admin Photographe — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--bleu:#3B82F6;--bleu-light:rgba(59,130,246,.08);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+a{text-decoration:none;color:inherit}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.sw-btn{padding:9px 18px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.page-header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:18px 24px}
+.ph-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ph-icon{width:44px;height:44px;border-radius:50%;background:var(--bleu-light);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ph-info h1{font-size:20px;color:var(--prune)}.ph-info h1 em{color:var(--rose);font-style:italic}.ph-info p{font-size:12px;color:var(--gris)}
+.ph-badge{margin-left:auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--radius-full)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);overflow:hidden}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:14px;color:var(--prune);flex:1}.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:none}
+.btn-primary{background:var(--rose);color:#fff}.btn-primary:hover{background:var(--rose-hover)}
+.btn-secondary{background:transparent;color:var(--prune);border:1.5px solid var(--gris-border)}.btn-secondary:hover{background:var(--prune-light)}
+.btn-sauge{background:var(--sauge);color:#fff}.btn-sauge:hover{background:#5a6e4b}
+.btn-sm{padding:6px 12px;font-size:11px}
+.btn-full{width:100%}
+/* KPIs */
+.kpi{background:var(--bg);border-radius:var(--radius-md);padding:18px;border:1px solid var(--gris-border);text-align:center;box-shadow:var(--shadow-sm)}
+.kpi-icon{font-size:22px;margin-bottom:6px}.kpi-val{font-family:var(--font-titre);font-size:26px;font-weight:700;color:var(--prune)}.kpi-label{font-size:10px;color:var(--gris);text-transform:uppercase;letter-spacing:1px;margin-top:2px}.kpi-sub{font-size:11px;font-weight:700;margin-top:4px}
+.k-up{color:var(--sauge)}.k-alert{color:#DC2626}.k-neutral{color:var(--or)}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:10px 12px;font-size:12px;text-align:left;border-bottom:1px solid var(--gris-border)}
+.tbl th{background:var(--bg-alt);font-weight:700;color:var(--prune);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{color:var(--gris)}
+.tbl tr:hover td{background:var(--bg-alt)}
+.status-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);display:inline-block}
+.sb-ok{background:var(--sauge-light);color:var(--sauge)}.sb-pending{background:var(--or-light);color:#92750c}.sb-alert{background:rgba(220,38,38,.08);color:#DC2626}.sb-new{background:var(--bleu-light);color:var(--bleu)}
+/* SCHOOL CARDS */
+.school-card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:18px;box-shadow:var(--shadow-sm);transition:var(--tr);cursor:pointer}
+.school-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.sc-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.sc-icon{width:44px;height:44px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.sci-ecole{background:var(--bleu-light)}.sci-creche{background:var(--rose-light)}.sci-centre{background:var(--sauge-light)}
+.sc-top h4{font-size:15px;color:var(--prune)}.sc-top .sc-type{font-size:11px;color:var(--gris)}
+.sc-stats{display:flex;gap:14px;margin-bottom:12px}
+.sc-stat{text-align:center}.sc-stat .sv{font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--prune)}.sc-stat .sl{font-size:9px;color:var(--gris)}
+.sc-bar{height:6px;background:var(--gris-border);border-radius:3px;margin-bottom:8px;overflow:hidden}.sc-fill{height:100%;border-radius:3px}
+.sc-footer{display:flex;align-items:center;justify-content:space-between;font-size:11px}
+.sc-date{color:var(--gris)}.sc-status{font-weight:700}
+/* PLANNING */
+.planning-week{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pw-day{background:var(--bg);border-radius:var(--radius);border:1px solid var(--gris-border);padding:10px;min-height:100px}
+.pw-day-h{font-size:11px;font-weight:700;color:var(--prune);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--gris-border)}
+.pw-event{padding:6px 8px;border-radius:var(--radius);margin-bottom:4px;font-size:10px;font-weight:700;cursor:pointer;transition:var(--tr)}
+.pw-event:hover{transform:scale(1.02)}
+.pwe-ecole{background:var(--bleu-light);color:var(--bleu);border-left:3px solid var(--bleu)}
+.pwe-creche{background:var(--rose-light);color:var(--rose);border-left:3px solid var(--rose)}
+.pwe-retouche{background:var(--or-light);color:#92750c;border-left:3px solid var(--or)}
+.pwe-livraison{background:var(--sauge-light);color:var(--sauge);border-left:3px solid var(--sauge)}
+/* AUTH TRACKER */
+.auth-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(74,46,61,.04)}.auth-row:last-child{border:none}
+.auth-class{font-weight:700;font-size:13px;color:var(--prune);width:80px;flex-shrink:0}
+.auth-bar-wrap{flex:1}.auth-bar{height:8px;background:var(--gris-border);border-radius:4px;overflow:hidden}.auth-fill{height:100%;border-radius:4px}
+.auth-nums{font-size:11px;color:var(--gris);width:70px;text-align:right;flex-shrink:0}
+/* POCHETTE */
+.pochette{background:var(--bg);border-radius:var(--radius);border:1px solid var(--gris-border);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.pochette-icon{font-size:20px;flex-shrink:0}
+.pochette-info{flex:1}.pochette-info .pi-name{font-weight:700;font-size:12px;color:var(--prune)}.pochette-info .pi-detail{font-size:11px;color:var(--gris)}
+.pochette-price{font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--or)}
+@media(max-width:1024px){.grid-2,.grid-3{grid-template-columns:1fr}.planning-week{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.planning-week{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('dashboard',this)">📊 Dashboard</button>
+  <button class="sw-btn" onclick="switchView('etablissements',this)">🏫 Établissements</button>
+  <button class="sw-btn" onclick="switchView('planning',this)">📅 Planning</button>
+  <button class="sw-btn" onclick="switchView('autorisations',this)">📋 Autorisations</button>
+  <button class="sw-btn" onclick="switchView('pochettes',this)">📦 Pochettes & Packs</button>
+</div>
+
+<!-- DASHBOARD SCOLAIRE -->
+<div class="page-view active" id="view-dashboard">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon">🎓</div><div class="ph-info"><h1>Module <em>Scolaire</em></h1><p>Gestion des établissements, planning, autorisations et commandes</p></div><span class="ph-badge" style="background:var(--bleu-light);color:var(--bleu)">Saison 2025-2026</span></div></div>
+<div class="container">
+  <div class="grid-3" style="grid-template-columns:repeat(4,1fr)">
+    <div class="kpi"><div class="kpi-icon">🏫</div><div class="kpi-val">6</div><div class="kpi-label">Établissements</div><div class="kpi-sub k-up">+2 cette année</div></div>
+    <div class="kpi"><div class="kpi-icon">👧</div><div class="kpi-val">487</div><div class="kpi-label">Élèves</div><div class="kpi-sub k-neutral">18 classes</div></div>
+    <div class="kpi"><div class="kpi-icon">📋</div><div class="kpi-val">89%</div><div class="kpi-label">Autorisations</div><div class="kpi-sub k-up">+4% vs N-1</div></div>
+    <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-val">4 820€</div><div class="kpi-label">CA scolaire</div><div class="kpi-sub k-up">↑ +22%</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-h"><h3>📅 Prochains shootings</h3><span class="card-badge">Cette semaine</span></div><div class="card-b">
+      <table class="tbl"><tr><th>Date</th><th>Établissement</th><th>Classes</th><th>Élèves</th><th>Statut</th></tr>
+      <tr><td style="font-weight:700;color:var(--prune)">Jeu 6 mars</td><td>École Jean Jaurès</td><td>4 classes</td><td>96</td><td><span class="status-badge sb-ok">✅ Prêt</span></td></tr>
+      <tr><td style="font-weight:700;color:var(--prune)">Ven 7 mars</td><td>Crèche Les Petits Soleils</td><td>3 sections</td><td>42</td><td><span class="status-badge sb-pending">⏳ 3 autorisations</span></td></tr>
+      <tr><td style="font-weight:700;color:var(--prune)">Mar 11 mars</td><td>École Pasteur</td><td>5 classes</td><td>128</td><td><span class="status-badge sb-new">📋 Planification</span></td></tr>
+      </table>
+    </div></div>
+    <div class="card"><div class="card-h"><h3>💰 Commandes en cours</h3><span class="card-badge">4 établissements</span></div><div class="card-b">
+      <table class="tbl"><tr><th>Établissement</th><th>Commandes</th><th>Montant</th><th>Livraison</th><th>Statut</th></tr>
+      <tr><td style="font-weight:700;color:var(--prune)">Maternelle Hugo</td><td>58 pochettes</td><td>1 740€</td><td>12 mars</td><td><span class="status-badge sb-ok">Prêt</span></td></tr>
+      <tr><td style="font-weight:700;color:var(--prune)">Centre aéré Gaillac</td><td>32 pochettes</td><td>640€</td><td>14 mars</td><td><span class="status-badge sb-pending">Production</span></td></tr>
+      <tr><td style="font-weight:700;color:var(--prune)">École Jean Jaurès</td><td>—</td><td>—</td><td>—</td><td><span class="status-badge sb-new">Shooting jeu.</span></td></tr>
+      </table>
+    </div></div>
+  </div>
+</div></div>
+
+<!-- ÉTABLISSEMENTS -->
+<div class="page-view" id="view-etablissements">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon">🏫</div><div class="ph-info"><h1>Mes <em>établissements</em></h1><p>Écoles, crèches et centres partenaires</p></div><button class="btn btn-primary" style="margin-left:auto">+ Ajouter un établissement</button></div></div>
+<div class="container">
+  <div class="grid-3">
+    <div class="school-card"><div class="sc-top"><div class="sc-icon sci-ecole">🏫</div><div><h4>École Jean Jaurès</h4><div class="sc-type">École élémentaire · Saint-Sulpice</div></div></div><div class="sc-stats"><div class="sc-stat"><div class="sv">4</div><div class="sl">Classes</div></div><div class="sc-stat"><div class="sv">96</div><div class="sl">Élèves</div></div><div class="sc-stat"><div class="sv">92%</div><div class="sl">Autorisations</div></div></div><div class="sc-bar"><div class="sc-fill" style="width:92%;background:var(--sauge)"></div></div><div class="sc-footer"><span class="sc-date">📅 Shooting : 6 mars</span><span class="sc-status" style="color:var(--sauge)">✅ Prêt</span></div></div>
+
+    <div class="school-card"><div class="sc-top"><div class="sc-icon sci-creche">🍼</div><div><h4>Crèche Les Petits Soleils</h4><div class="sc-type">Crèche municipale · Parisot</div></div></div><div class="sc-stats"><div class="sc-stat"><div class="sv">3</div><div class="sl">Sections</div></div><div class="sc-stat"><div class="sv">42</div><div class="sl">Enfants</div></div><div class="sc-stat"><div class="sv">93%</div><div class="sl">Autorisations</div></div></div><div class="sc-bar"><div class="sc-fill" style="width:93%;background:var(--sauge)"></div></div><div class="sc-footer"><span class="sc-date">📅 Shooting : 7 mars</span><span class="sc-status" style="color:var(--or)">⏳ 3 restantes</span></div></div>
+
+    <div class="school-card"><div class="sc-top"><div class="sc-icon sci-ecole">🏫</div><div><h4>École Pasteur</h4><div class="sc-type">École maternelle + élémentaire · Gaillac</div></div></div><div class="sc-stats"><div class="sc-stat"><div class="sv">5</div><div class="sl">Classes</div></div><div class="sc-stat"><div class="sv">128</div><div class="sl">Élèves</div></div><div class="sc-stat"><div class="sv">74%</div><div class="sl">Autorisations</div></div></div><div class="sc-bar"><div class="sc-fill" style="width:74%;background:var(--or)"></div></div><div class="sc-footer"><span class="sc-date">📅 Shooting : 11 mars</span><span class="sc-status" style="color:var(--or)">⏳ En cours</span></div></div>
+
+    <div class="school-card"><div class="sc-top"><div class="sc-icon sci-ecole">🏫</div><div><h4>Maternelle Victor Hugo</h4><div class="sc-type">École maternelle · Saint-Sulpice</div></div></div><div class="sc-stats"><div class="sc-stat"><div class="sv">3</div><div class="sl">Classes</div></div><div class="sc-stat"><div class="sv">68</div><div class="sl">Élèves</div></div><div class="sc-stat"><div class="sv">100%</div><div class="sl">Autorisations</div></div></div><div class="sc-bar"><div class="sc-fill" style="width:100%;background:var(--sauge)"></div></div><div class="sc-footer"><span class="sc-date">📸 Shooté le 15 fév.</span><span class="sc-status" style="color:var(--sauge)">✅ Commandes livrées</span></div></div>
+
+    <div class="school-card"><div class="sc-top"><div class="sc-icon sci-centre">⛺</div><div><h4>Centre aéré Gaillac</h4><div class="sc-type">Centre de loisirs · Gaillac</div></div></div><div class="sc-stats"><div class="sc-stat"><div class="sv">4</div><div class="sl">Groupes</div></div><div class="sc-stat"><div class="sv">85</div><div class="sl">Enfants</div></div><div class="sc-stat"><div class="sv">100%</div><div class="sl">Autorisations</div></div></div><div class="sc-bar"><div class="sc-fill" style="width:100%;background:var(--sauge)"></div></div><div class="sc-footer"><span class="sc-date">📸 Shooté le 20 fév.</span><span class="sc-status" style="color:var(--or)">📦 Livraison 14 mars</span></div></div>
+
+    <div class="school-card"><div class="sc-top"><div class="sc-icon sci-creche">🍼</div><div><h4>Crèche Arc-en-Ciel</h4><div class="sc-type">Micro-crèche · Lavaur</div></div></div><div class="sc-stats"><div class="sc-stat"><div class="sv">2</div><div class="sl">Sections</div></div><div class="sc-stat"><div class="sv">18</div><div class="sl">Enfants</div></div><div class="sc-stat"><div class="sv">0%</div><div class="sl">Autorisations</div></div></div><div class="sc-bar"><div class="sc-fill" style="width:0%;background:var(--gris-border)"></div></div><div class="sc-footer"><span class="sc-date">📅 Shooting : 25 mars</span><span class="sc-status" style="color:#DC2626">❌ À démarrer</span></div></div>
+  </div>
+</div></div>
+
+<!-- PLANNING -->
+<div class="page-view" id="view-planning">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon">📅</div><div class="ph-info"><h1>Planning <em>scolaire</em></h1><p>Semaine du 3 au 7 mars 2026</p></div><div style="margin-left:auto;display:flex;gap:8px"><button class="btn btn-secondary btn-sm">← Semaine préc.</button><button class="btn btn-secondary btn-sm">Semaine suiv. →</button></div></div></div>
+<div class="container">
+  <div class="planning-week">
+    <div class="pw-day"><div class="pw-day-h">Lundi 3</div><div class="pw-event pwe-retouche">🖌️ Retouches Hugo (68 photos)</div></div>
+    <div class="pw-day"><div class="pw-day-h">Mardi 4</div><div class="pw-event pwe-retouche">🖌️ Retouches Centre Gaillac</div><div class="pw-event pwe-livraison">📦 Prépa pochettes Hugo</div></div>
+    <div class="pw-day"><div class="pw-day-h">Mercredi 5</div><div class="pw-event pwe-livraison">📦 Impression pochettes Hugo</div></div>
+    <div class="pw-day"><div class="pw-day-h">Jeudi 6</div><div class="pw-event pwe-ecole">🏫 SHOOTING<br>Jean Jaurès<br>8h30-16h<br>4 classes · 96 élèves</div></div>
+    <div class="pw-day"><div class="pw-day-h">Vendredi 7</div><div class="pw-event pwe-creche">🍼 SHOOTING<br>Crèche Petits Soleils<br>9h-12h<br>3 sections · 42 enfants</div><div class="pw-event pwe-livraison">📦 Livraison Hugo</div></div>
+  </div>
+  <div style="margin-top:20px">
+    <div class="card"><div class="card-h"><h3>📋 Détail journée — Jeudi 6 mars — École Jean Jaurès</h3></div><div class="card-b">
+      <table class="tbl">
+        <tr><th>Horaire</th><th>Classe</th><th>Enseignant</th><th>Élèves</th><th>Type</th><th>Statut</th></tr>
+        <tr><td style="font-weight:700">08h30 - 09h15</td><td>CP</td><td>Mme Dupuis</td><td>24</td><td>Individuel + Classe</td><td><span class="status-badge sb-ok">Prêt</span></td></tr>
+        <tr><td style="font-weight:700">09h30 - 10h15</td><td>CE1</td><td>M. Bernard</td><td>26</td><td>Individuel + Classe</td><td><span class="status-badge sb-ok">Prêt</span></td></tr>
+        <tr><td style="font-weight:700">10h30 - 11h15</td><td>CE2</td><td>Mme Roche</td><td>23</td><td>Individuel + Classe + Fratries</td><td><span class="status-badge sb-ok">Prêt</span></td></tr>
+        <tr><td style="font-weight:700">13h30 - 14h15</td><td>CM1</td><td>M. Lefèvre</td><td>23</td><td>Individuel + Classe</td><td><span class="status-badge sb-ok">Prêt</span></td></tr>
+        <tr><td style="font-weight:700">14h30</td><td colspan="4">📸 Photo de groupe école entière (cour)</td><td><span class="status-badge sb-pending">Si météo OK</span></td></tr>
+      </table>
+    </div></div>
+  </div>
+</div></div>
+
+<!-- AUTORISATIONS -->
+<div class="page-view" id="view-autorisations">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon">📋</div><div class="ph-info"><h1><em>Autorisations</em> parentales</h1><p>Suivi des droits à l'image par établissement et par classe</p></div><span class="ph-badge" style="background:var(--sauge-light);color:var(--sauge)">89% global</span></div></div>
+<div class="container">
+  <div class="grid-2">
+    <div class="card"><div class="card-h"><h3>🏫 École Jean Jaurès — 92%</h3><span class="card-badge">Shooting jeu. 6</span></div><div class="card-b">
+      <div class="auth-row"><div class="auth-class">CP</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:100%;background:var(--sauge)"></div></div></div><div class="auth-nums">24/24 ✅</div></div>
+      <div class="auth-row"><div class="auth-class">CE1</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:96%;background:var(--sauge)"></div></div></div><div class="auth-nums">25/26 ✅</div></div>
+      <div class="auth-row"><div class="auth-class">CE2</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:87%;background:var(--or)"></div></div></div><div class="auth-nums">20/23 ⚠️</div></div>
+      <div class="auth-row"><div class="auth-class">CM1</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:83%;background:var(--or)"></div></div></div><div class="auth-nums">19/23 ⚠️</div></div>
+      <p style="font-size:11px;color:var(--gris);margin-top:10px">5 autorisations manquantes — Relance email envoyée le 1er mars</p>
+      <button class="btn btn-secondary btn-sm" style="margin-top:8px">📧 Relancer les parents</button>
+    </div></div>
+
+    <div class="card"><div class="card-h"><h3>🍼 Crèche Les Petits Soleils — 93%</h3><span class="card-badge">Shooting ven. 7</span></div><div class="card-b">
+      <div class="auth-row"><div class="auth-class">Bébés</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:100%;background:var(--sauge)"></div></div></div><div class="auth-nums">12/12 ✅</div></div>
+      <div class="auth-row"><div class="auth-class">Moyens</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:93%;background:var(--sauge)"></div></div></div><div class="auth-nums">13/14 ✅</div></div>
+      <div class="auth-row"><div class="auth-class">Grands</div><div class="auth-bar-wrap"><div class="auth-bar"><div class="auth-fill" style="width:88%;background:var(--or)"></div></div></div><div class="auth-nums">14/16 ⚠️</div></div>
+      <p style="font-size:11px;color:var(--gris);margin-top:10px">3 autorisations manquantes — Section Grands</p>
+      <button class="btn btn-secondary btn-sm" style="margin-top:8px">📧 Relancer les parents</button>
+    </div></div>
+  </div>
+  <div class="card"><div class="card-h"><h3>📄 Modèle d'autorisation</h3></div><div class="card-b" style="display:flex;align-items:center;gap:16px">
+    <div style="width:60px;height:80px;background:var(--bg-alt);border:1px solid var(--gris-border);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0">📄</div>
+    <div style="flex:1"><p style="font-weight:700;color:var(--prune);margin-bottom:2px">Autorisation droit à l'image — Scolaire 2025-2026</p><p style="font-size:12px;color:var(--gris)">PDF pré-rempli avec nom de l'établissement, classe et coordonnées. Envoyé par email aux parents via l'espace école ou imprimable.</p></div>
+    <div style="display:flex;gap:6px"><button class="btn btn-secondary btn-sm">👁️ Aperçu</button><button class="btn btn-primary btn-sm">📤 Envoyer</button></div>
+  </div></div>
+</div></div>
+
+<!-- POCHETTES & PACKS -->
+<div class="page-view" id="view-pochettes">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon">📦</div><div class="ph-info"><h1>Pochettes & <em>Packs</em> scolaires</h1><p>Offres de vente configurables par établissement</p></div><button class="btn btn-primary" style="margin-left:auto">+ Créer un pack</button></div></div>
+<div class="container">
+  <div class="grid-2">
+    <div class="card"><div class="card-h"><h3>📦 Packs disponibles</h3><span class="card-badge">Saison 2025-2026</span></div><div class="card-b">
+      <div class="pochette"><div class="pochette-icon">📸</div><div class="pochette-info"><div class="pi-name">Pack Essentiel</div><div class="pi-detail">1 photo individuelle 13×18 + 1 photo de classe 20×30</div></div><div class="pochette-price">12€</div></div>
+      <div class="pochette"><div class="pochette-icon">⭐</div><div class="pochette-info"><div class="pi-name">Pack Famille</div><div class="pi-detail">2 individuelles (13×18 + 10×15) + 1 classe 20×30 + 4 photos identité</div></div><div class="pochette-price">22€</div></div>
+      <div class="pochette"><div class="pochette-icon">💎</div><div class="pochette-info"><div class="pi-name">Pack Premium</div><div class="pi-detail">3 individuelles (20×30 + 13×18 + 10×15) + 1 classe + 8 identités + 1 magnet</div></div><div class="pochette-price">35€</div></div>
+      <div class="pochette"><div class="pochette-icon">👨‍👩‍👧‍👦</div><div class="pochette-info"><div class="pi-name">Option Fratrie</div><div class="pi-detail">1 photo fratrie 20×30 (ajout à tout pack)</div></div><div class="pochette-price">+8€</div></div>
+      <div class="pochette"><div class="pochette-icon">🖼️</div><div class="pochette-info"><div class="pi-name">Photo de classe seule</div><div class="pi-detail">1 photo de classe 20×30</div></div><div class="pochette-price">8€</div></div>
+      <div class="pochette"><div class="pochette-icon">💾</div><div class="pochette-info"><div class="pi-name">Option numérique</div><div class="pi-detail">Toutes les photos en HD téléchargeables (ajout à tout pack)</div></div><div class="pochette-price">+10€</div></div>
+    </div></div>
+
+    <div class="card"><div class="card-h"><h3>📊 Statistiques commandes</h3><span class="card-badge">Saison en cours</span></div><div class="card-b">
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Pack Essentiel</span><span style="font-weight:700">18%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:18%;background:var(--gris);border-radius:4px"></div></div></div>
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Pack Famille</span><span style="font-weight:700;color:var(--or)">52% ⭐</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:52%;background:var(--or);border-radius:4px"></div></div></div>
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Pack Premium</span><span style="font-weight:700">22%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:22%;background:var(--rose);border-radius:4px"></div></div></div>
+      <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Photo classe seule</span><span style="font-weight:700">8%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:8%;background:var(--gris-light);border-radius:4px"></div></div></div>
+      <div style="margin-top:16px;padding:12px;background:var(--or-light);border-radius:var(--radius)"><p style="font-size:12px;color:var(--texte)">💡 <strong>Panier moyen :</strong> 26€ par famille · <strong>Taux de commande :</strong> 82% des familles</p></div>
+    </div></div>
+  </div>
+</div></div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

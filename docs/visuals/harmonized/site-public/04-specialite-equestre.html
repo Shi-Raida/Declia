@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photographie Équestre — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border);
+    transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto; padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+
+  /* ===== HERO FULL-WIDTH ===== */
+  .eq-hero {
+    position: relative; overflow: hidden;
+    min-height: 85vh; display: flex; align-items: flex-end;
+  }
+  .eq-hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(145deg, #d8cfc0 0%, #c5b8a0 25%, #b0a080 55%, #a08860 80%, #8a7050 100%);
+  }
+  .eq-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(74,46,61,0.75) 0%, rgba(74,46,61,0.3) 50%, transparent 100%);
+  }
+  .eq-hero-content {
+    position: relative; z-index: 2; padding: 80px 0;
+    max-width: var(--fl-container); margin: 0 auto; width: 100%; padding-left: 24px; padding-right: 24px;
+  }
+  .eq-specialty-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--fl-or); color: var(--fl-prune);
+    font-size: 0.6875rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 7px 16px; border-radius: var(--fl-radius-full); margin-bottom: 20px;
+  }
+  .eq-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 600; color: white; line-height: 1.1; margin-bottom: 20px; }
+  .eq-hero h1 em { font-style: italic; color: var(--fl-or); }
+  .eq-hero-desc { font-size: 1.125rem; color: rgba(255,255,255,0.85); line-height: 1.7; max-width: 560px; margin-bottom: 36px; }
+  .eq-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .eq-hero .fl-btn-ghost { border-color: rgba(255,255,255,0.4); color: white; }
+  .eq-hero .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.1); }
+
+  /* ===== INTRO ===== */
+  .eq-intro { padding: 96px 0; background: var(--fl-bg); }
+  .eq-intro-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .eq-intro-text .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .eq-intro-text h2 { color: var(--fl-prune); margin-bottom: 20px; }
+  .eq-intro-text h2 em { font-style: italic; color: var(--fl-or); }
+  .eq-intro-text p { font-size: 1rem; color: var(--fl-warm-gray); line-height: 1.8; margin-bottom: 16px; }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px 0; border-radius: 1px; }
+  .eq-intro-photo { border-radius: 20px; overflow: hidden; box-shadow: var(--fl-shadow-lg); }
+  .ph-eq-intro { aspect-ratio: 4/5; background: linear-gradient(145deg, #c8c0b0 0%, #b8ad9c 40%, #a8a08c 100%); }
+
+  /* ===== GALLERY ===== */
+  .eq-gallery { padding: 96px 0; background: var(--fl-bg-alt); }
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head h2 em { font-style: italic; color: var(--fl-or); }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .eq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .eq-photo { border-radius: var(--fl-radius); overflow: hidden; position: relative; cursor: pointer; }
+  .eq-photo .ph { width: 100%; transition: transform 0.5s ease; }
+  .eq-photo:hover .ph { transform: scale(1.05); }
+  .ph-eq1 { aspect-ratio: 4/3; background: linear-gradient(145deg, #c5b8a8 0%, #b0a48e 50%, #9a9078 100%); }
+  .ph-eq2 { aspect-ratio: 3/4; background: linear-gradient(135deg, #c8bfac 0%, #b5aa94 50%, #a09880 100%); }
+  .ph-eq3 { aspect-ratio: 4/3; background: linear-gradient(140deg, #d4cfc5 0%, #c0b8a8 50%, #aaa090 100%); }
+  .ph-eq4 { aspect-ratio: 3/4; background: linear-gradient(135deg, #b8c0a8 0%, #a8b098 50%, #98a088 100%); }
+  .ph-eq5 { aspect-ratio: 4/3; background: linear-gradient(145deg, #e0d0b8 0%, #ccc0a4 50%, #b8aa8c 100%); }
+  .ph-eq6 { aspect-ratio: 4/3; background: linear-gradient(135deg, #c0b0a0 0%, #b0a090 50%, #a09080 100%); }
+  .eq-photo-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(74,46,61,0.55)); opacity: 0; transition: opacity var(--fl-transition); display: flex; align-items: flex-end; padding: 16px; }
+  .eq-photo:hover .eq-photo-overlay { opacity: 1; }
+  .eq-photo-caption { color: #fff; font-size: 0.8125rem; font-style: italic; }
+
+  /* ===== TIMELINE ===== */
+  .eq-timeline { padding: 96px 0; background: var(--fl-bg); }
+  .timeline { max-width: 760px; margin: 0 auto; position: relative; }
+  .timeline::before { content: ''; position: absolute; left: 28px; top: 0; bottom: 0; width: 1.5px; background: linear-gradient(to bottom, var(--fl-or), transparent); }
+  .timeline-step { display: flex; gap: 28px; margin-bottom: 48px; position: relative; }
+  .timeline-step:last-child { margin-bottom: 0; }
+  .timeline-num {
+    width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0;
+    background: var(--fl-or); color: var(--fl-prune);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--fl-font-heading); font-size: 1.25rem; font-weight: 700;
+    position: relative; z-index: 1; box-shadow: 0 0 0 4px rgba(212,160,60,0.15);
+  }
+  .timeline-content { padding-top: 12px; flex: 1; }
+  .timeline-content h3 { font-family: var(--fl-font-heading); font-size: 1.1875rem; color: var(--fl-prune); margin-bottom: 8px; }
+  .timeline-content p { font-size: 0.9375rem; color: var(--fl-warm-gray); line-height: 1.7; }
+
+  /* ===== PRACTICAL INFO ===== */
+  .eq-practical { padding: 96px 0; background: var(--fl-bg-alt); }
+  .practical-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .practical-card { background: white; border-radius: var(--fl-radius); padding: 32px 28px; box-shadow: var(--fl-shadow-sm); border: 1px solid var(--fl-border); }
+  .practical-card-icon { font-size: 2rem; margin-bottom: 16px; }
+  .practical-card h3 { font-family: var(--fl-font-heading); font-size: 1.125rem; color: var(--fl-prune); margin-bottom: 16px; }
+  .practical-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 0.9rem; color: var(--fl-charcoal); border-bottom: 1px solid var(--fl-border); }
+  .practical-list li:last-child { border: none; }
+  .check { color: var(--fl-sauge); font-weight: 700; flex-shrink: 0; }
+  .price-highlight { font-family: var(--fl-font-heading); font-size: 2rem; font-weight: 700; color: var(--fl-or); }
+  .price-note { font-size: 0.8125rem; color: var(--fl-warm-gray); margin-top: 4px; }
+
+  /* ===== FAQ ===== */
+  .eq-faq { padding: 96px 0; background: var(--fl-bg); }
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item { border-bottom: 1px solid var(--fl-border); }
+  .faq-q {
+    width: 100%; text-align: left; background: none; border: none;
+    padding: 20px 0; font-family: var(--fl-font-body); font-size: 1rem;
+    font-weight: 600; color: var(--fl-prune); cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: color var(--fl-transition);
+  }
+  .faq-q:hover { color: var(--fl-rose); }
+  .faq-chevron { width: 20px; height: 20px; flex-shrink: 0; transition: transform 0.3s; color: var(--fl-or); }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p { padding-bottom: 20px; font-size: 0.9375rem; color: var(--fl-warm-gray); line-height: 1.7; }
+
+  /* ===== TESTIMONIALS ===== */
+  .eq-temoignages { padding: 96px 0; background: var(--fl-bg-alt); }
+  .temo-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .temo-card { background: white; border-radius: var(--fl-radius); padding: 32px 28px; box-shadow: var(--fl-shadow-sm); border: 1px solid var(--fl-border); transition: transform var(--fl-transition), box-shadow var(--fl-transition); }
+  .temo-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .temo-quote-mark { font-family: var(--fl-font-heading); font-size: 3.5rem; line-height: 1; color: var(--fl-or); opacity: 0.35; margin-bottom: -8px; }
+  .temo-stars { color: var(--fl-or); letter-spacing: 3px; font-size: 0.875rem; margin-bottom: 14px; }
+  .temo-text { font-size: 0.9375rem; color: var(--fl-charcoal); line-height: 1.75; font-style: italic; margin-bottom: 20px; }
+  .temo-author { display: flex; align-items: center; gap: 12px; }
+  .temo-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--fl-rose), #d4a0a8); display: flex; align-items: center; justify-content: center; font-family: var(--fl-font-heading); font-size: 1.125rem; font-weight: 600; color: white; flex-shrink: 0; }
+  .temo-name { font-family: var(--fl-font-heading); font-size: 0.9375rem; font-style: italic; color: var(--fl-prune); }
+  .temo-type { font-size: 0.75rem; color: var(--fl-warm-gray); }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-or); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+
+  @media (max-width: 1024px) {
+    .eq-intro-inner { grid-template-columns: 1fr; gap: 48px; }
+    .eq-intro-photo { max-width: 480px; margin: 0 auto; }
+    .practical-grid { grid-template-columns: 1fr; }
+    .temo-grid-2 { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .eq-grid { grid-template-columns: 1fr 1fr; }
+    .timeline::before { left: 20px; }
+    .timeline-num { width: 40px; height: 40px; font-size: 1rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="03-portfolio-temoignages.html#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO FULL-WIDTH -->
+<section class="eq-hero">
+  <div class="eq-hero-bg"></div>
+  <div class="eq-hero-overlay"></div>
+  <div class="eq-hero-content">
+    <div class="eq-specialty-badge">★ Spécialité Signature</div>
+    <h1>Photographie<br><em>Équestre</em></h1>
+    <p class="eq-hero-desc">La complicité entre cavalière et cheval, magnifiée par la lumière dorée du coucher du soleil. Des images qui capturent l'âme du lien unique qui vous unit à votre cheval.</p>
+    <div class="eq-hero-actions">
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance équestre</a>
+      <a href="#timeline" class="fl-btn fl-btn-ghost fl-btn-lg">Comment ça se passe ?</a>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="eq-intro">
+  <div class="fl-container">
+    <div class="eq-intro-inner">
+      <div class="eq-intro-text reveal">
+        <div class="section-label">Spécialité Équestre</div>
+        <h2>L'Heure Dorée avec votre <em>cheval</em></h2>
+        <div class="gold-rule"></div>
+        <p>Cavalière moi-même, je connais cette relation unique, presque mystique, qui unit une cavalière à son cheval. Cette complicité silencieuse, ces regards échangés, cette confiance mutuelle — c'est ce que je cherche à capturer.</p>
+        <p>Les séances équestres sont mes préférées. La lumière rasante du soir transforme les robes des chevaux en or, les silhouettes deviennent des œuvres d'art. Chaque séance est unique, comme votre lien avec votre monture.</p>
+        <p>Je travaille en extérieur, à votre écurie ou dans un lieu que vous aimez. Dans le Tarn, l'Aveyron, et jusqu'à Toulouse — toujours à l'Heure Dorée, toujours en lumière naturelle.</p>
+      </div>
+      <div class="eq-intro-photo reveal reveal-delay-2">
+        <div class="ph-eq-intro"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="eq-gallery">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Galerie Équestre</div>
+      <h2>Quelques images <em>équestres</em></h2>
+      <div class="gold-rule"></div>
+      <p>Des moments de pure complicité capturés dans la lumière magique de l'Heure Dorée.</p>
+    </div>
+    <div class="eq-grid reveal">
+      <div class="eq-photo">
+        <div class="ph ph-eq1">
+          <div class="eq-photo-overlay"><span class="eq-photo-caption">Cavalière au galop · Heure Dorée</span></div>
+        </div>
+      </div>
+      <div class="eq-photo">
+        <div class="ph ph-eq2">
+          <div class="eq-photo-overlay"><span class="eq-photo-caption">Portrait cheval · Lumière rasante</span></div>
+        </div>
+      </div>
+      <div class="eq-photo">
+        <div class="ph ph-eq3">
+          <div class="eq-photo-overlay"><span class="eq-photo-caption">Complicité · Main sur l'encolure</span></div>
+        </div>
+      </div>
+      <div class="eq-photo">
+        <div class="ph ph-eq4">
+          <div class="eq-photo-overlay"><span class="eq-photo-caption">Galop en liberté</span></div>
+        </div>
+      </div>
+      <div class="eq-photo">
+        <div class="ph ph-eq5">
+          <div class="eq-photo-overlay"><span class="eq-photo-caption">Silhouette au crépuscule</span></div>
+        </div>
+      </div>
+      <div class="eq-photo">
+        <div class="ph ph-eq6">
+          <div class="eq-photo-overlay"><span class="eq-photo-caption">Écurie des Chênes · Tarn</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="eq-timeline" id="timeline">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Déroulement</div>
+      <h2>Comment se déroule <em>une séance</em> ?</h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="timeline reveal">
+      <div class="timeline-step">
+        <div class="timeline-num">1</div>
+        <div class="timeline-content">
+          <h3>Contact &amp; planification</h3>
+          <p>On se retrouve par message ou téléphone pour parler de votre cheval, de votre complicité, de vos envies. Je vous pose des questions sur son caractère, ses réactions, les situations où vous vous sentez le plus en harmonie ensemble.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-num">2</div>
+        <div class="timeline-content">
+          <h3>Repérage du lieu</h3>
+          <p>On définit ensemble le lieu de la séance — votre écurie, un champ que vous aimez, un spot que je connais dans le Tarn. Je viens parfois repérer les lumières avant la séance pour vous garantir le meilleur résultat.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-num">3</div>
+        <div class="timeline-content">
+          <h3>Séance au coucher du soleil</h3>
+          <p>On se retrouve environ 1h30 avant le coucher du soleil. On commence doucement, le temps que votre cheval s'habitue à ma présence. Puis la magie opère — la lumière devient dorée, et je capture ces instants uniques.</p>
+        </div>
+      </div>
+      <div class="timeline-step">
+        <div class="timeline-num">4</div>
+        <div class="timeline-content">
+          <h3>Livraison de votre galerie</h3>
+          <p>Sous 2-3 semaines, vous recevez votre galerie privée en ligne. Vos photos retouchées à la main, dans des tons chauds et naturels qui subliment les robes de vos chevaux et les lumières du Tarn.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICAL INFO -->
+<section class="eq-practical">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Infos Pratiques</div>
+      <h2>Tout ce que vous devez <em>savoir</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="practical-grid">
+      <div class="practical-card reveal reveal-delay-1">
+        <div class="practical-card-icon">📍</div>
+        <h3>Zones couvertes</h3>
+        <ul class="practical-list">
+          <li><span class="check">✓</span>Tarn (81) — département principal</li>
+          <li><span class="check">✓</span>Aveyron (12) — jusqu'à 50km</li>
+          <li><span class="check">✓</span>Toulouse &amp; environs</li>
+          <li><span class="check">✓</span>Déplacement hors zone sur devis</li>
+        </ul>
+      </div>
+      <div class="practical-card reveal reveal-delay-2">
+        <div class="practical-card-icon">✦</div>
+        <h3>Tarif</h3>
+        <div class="price-highlight">À partir de 280€</div>
+        <div class="price-note">Formule Signature — 1h · 25 photos retouchées</div>
+        <ul class="practical-list" style="margin-top: 16px;">
+          <li><span class="check">✓</span>Galerie privée en ligne 90 jours</li>
+          <li><span class="check">✓</span>Photos HD téléchargeables</li>
+          <li><span class="check">✓</span>3 tirages 20×30 offerts</li>
+          <li><span class="check">✓</span>Report gratuit si météo défavorable</li>
+        </ul>
+      </div>
+      <div class="practical-card reveal reveal-delay-3">
+        <div class="practical-card-icon">📋</div>
+        <h3>À prévoir</h3>
+        <ul class="practical-list">
+          <li><span class="check">✓</span>Tenues en tons naturels (beige, écru, terracotta)</li>
+          <li><span class="check">✓</span>Cheval propre et brossé</li>
+          <li><span class="check">✓</span>Licou et longe propres</li>
+          <li><span class="check">✓</span>Prévoir 2h de disponibilité</li>
+          <li><span class="check">✓</span>Un(e) aide pour tenir le cheval si besoin</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="eq-faq">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Questions</div>
+      <h2>Questions <em>fréquentes</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="faq-list reveal">
+
+      <div class="faq-item open">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Mon cheval est nerveux, est-ce que ça pose problème ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Pas du tout ! Cavalière moi-même, j'ai l'habitude des chevaux sensibles. J'arrive toujours avec calme et discrétion. On prend le temps que votre cheval s'habitue à ma présence avant de commencer. Si un jour il n'est vraiment pas disponible, on reporte sans frais.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Puis-je faire une séance avec plusieurs chevaux ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Absolument ! Si vous avez plusieurs chevaux ou si vous souhaitez une séance avec votre famille et vos montures, je m'adapte. Ce type de séance demande souvent un peu plus de temps — comptez une formule Sur-Mesure pour un résultat optimal.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Faut-il être une cavalière confirmée ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Non, le niveau équestre n'a aucune importance ! Ce que je capture, c'est votre relation avec votre cheval. Des photos à pied, à la longe, dans les bras de votre cheval… Les plus belles images naissent souvent dans la complicité au sol.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Peut-on faire la séance à l'écurie ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Oui, je me déplace à votre écurie ! Cela a d'ailleurs souvent un charme particulier — votre cheval est dans son environnement familier, ce qui le rend plus serein. Dès lors qu'il y a un espace extérieur pour profiter de la lumière naturelle, c'est parfait.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Que se passe-t-il si la météo est défavorable ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>La lumière est ma signature — je ne fais jamais de compromis dessus. En cas de ciel couvert ou de pluie, je vous propose systématiquement un report gratuit à une date qui nous convient. Votre Heure Dorée sera au rendez-vous.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES ÉQUESTRES -->
+<section class="eq-temoignages">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Témoignages</div>
+      <h2>Ce qu'elles en <em>disent</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="temo-grid-2">
+      <div class="temo-card reveal reveal-delay-1">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Cavalière depuis 20 ans, je n'avais jamais eu de vraies belles photos avec mon cheval. Capucine comprend les chevaux, elle sait les mettre en valeur. Le résultat m'a fait pleurer de joie. Ces photos, je les chérirai toute ma vie.</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #C2727E, #d4a0a8);">M</div>
+          <div>
+            <div class="temo-name">Marie Delcourt</div>
+            <div class="temo-type">Séance Équestre · Signature</div>
+          </div>
+        </div>
+      </div>
+      <div class="temo-card reveal reveal-delay-2">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Wow ! Les couleurs de l'heure dorée avec mon cheval… c'est magique. Je recommande à 200 % ! Capucine est aussi cavalière, ça fait toute la différence. Elle sait exactement où se placer, comment approcher les chevaux.</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #6B7F5A, #8fa876);">L</div>
+          <div>
+            <div class="temo-name">Léa Fournier</div>
+            <div class="temo-type">Séance Équestre · Essentiel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="reserver">
+  <div class="fl-container">
+    <h2>Réservez votre séance<br><em>équestre</em></h2>
+    <p>Offrez-vous des photos de votre complicité avec votre cheval, sublimées par la lumière dorée du Tarn.</p>
+    <div class="cta-actions">
+      <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance équestre →</a>
+      <a href="05-tarifs.html" class="fl-btn fl-btn-ghost fl-btn-lg">Voir les tarifs</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

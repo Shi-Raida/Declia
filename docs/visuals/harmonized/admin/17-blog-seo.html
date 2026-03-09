@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Blog & SEO</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .article-thumb { width:80px; height:56px; border-radius:var(--fl-radius-sm); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.625rem; color:rgba(255,255,255,0.4); }
+  .seo-score-bar { height:6px; border-radius:var(--fl-radius-full); }
+  .seo-item { display:flex; align-items:center; gap:var(--fl-space-sm); padding:6px 0; font-size:0.8125rem; border-bottom:1px solid var(--fl-border); }
+  .seo-item:last-child { border-bottom:none; }
+  .seo-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .keyword-row { display:flex; align-items:center; gap:var(--fl-space-md); padding:10px 0; border-bottom:1px solid var(--fl-border); font-size:0.875rem; }
+  .keyword-row:last-child { border-bottom:none; }
+  /* SVG ring for score */
+  .score-ring { position:relative; display:inline-flex; align-items:center; justify-content:center; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Blog & SEO</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header fl-flex-between">
+        <div>
+          <div class="fl-page-title">Blog & SEO</div>
+          <div class="fl-page-subtitle">Gérez vos articles et optimisez votre visibilité sur Google</div>
+        </div>
+        <button class="fl-btn fl-btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvel article
+        </button>
+      </div>
+
+      <!-- Blog Stats -->
+      <div class="fl-grid-4 fl-mb-lg">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Articles publiés</div>
+          <div class="fl-kpi-value">12</div>
+          <div class="fl-kpi-trend up">+2 ce mois</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Trafic organique</div>
+          <div class="fl-kpi-value">1 842</div>
+          <div class="fl-kpi-trend up">+23% ce mois</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Backlinks</div>
+          <div class="fl-kpi-value">34</div>
+          <div class="fl-kpi-trend up">+5 nouveaux</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Meta desc. manquantes</div>
+          <div class="fl-kpi-value" style="color:var(--fl-warning);">3</div>
+          <div class="fl-kpi-trend down">À corriger</div>
+        </div>
+      </div>
+
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- SEO Dashboard -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <div class="fl-flex-between fl-mb-md">
+              <h3 class="fl-h3" style="font-size:1.125rem;">Score SEO global</h3>
+              <div style="text-align:center;">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--fl-border)" stroke-width="8"/>
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--fl-sauge)" stroke-width="8"
+                    stroke-dasharray="213.6" stroke-dashoffset="47" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+                  <text x="40" y="44" text-anchor="middle" font-family="Cormorant Garamond,serif" font-size="20" font-weight="700" fill="var(--fl-charcoal)">78</text>
+                  <text x="40" y="56" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" fill="var(--fl-warm-gray)">/100</text>
+                </svg>
+              </div>
+            </div>
+            <div>
+              <div class="seo-item">
+                <div class="seo-dot" style="background:var(--fl-success);"></div>
+                <span style="flex:1;">Balises title optimisées</span>
+                <span class="fl-badge fl-badge-success">9/12</span>
+              </div>
+              <div class="seo-item">
+                <div class="seo-dot" style="background:var(--fl-warning);"></div>
+                <span style="flex:1;">Meta descriptions manquantes</span>
+                <span class="fl-badge fl-badge-warning">3 pages</span>
+              </div>
+              <div class="seo-item">
+                <div class="seo-dot" style="background:var(--fl-success);"></div>
+                <span style="flex:1;">Images avec alt text</span>
+                <span class="fl-badge fl-badge-success">94%</span>
+              </div>
+              <div class="seo-item">
+                <div class="seo-dot" style="background:var(--fl-success);"></div>
+                <span style="flex:1;">Vitesse de chargement</span>
+                <span class="fl-badge fl-badge-success">92ms</span>
+              </div>
+              <div class="seo-item">
+                <div class="seo-dot" style="background:var(--fl-warning);"></div>
+                <span style="flex:1;">Maillage interne</span>
+                <span class="fl-badge fl-badge-warning">À améliorer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Mots-clés positionnés</h3>
+            <div class="keyword-row">
+              <div style="flex:1;font-weight:500;">photographe famille tarn</div>
+              <div class="fl-text-sm fl-text-muted">320/mois</div>
+              <div style="font-weight:700;color:var(--fl-success);width:30px;text-align:center;">2</div>
+              <span style="color:var(--fl-success);">↑</span>
+            </div>
+            <div class="keyword-row">
+              <div style="flex:1;font-weight:500;">photographe équestre occitanie</div>
+              <div class="fl-text-sm fl-text-muted">110/mois</div>
+              <div style="font-weight:700;color:var(--fl-success);width:30px;text-align:center;">4</div>
+              <span style="color:var(--fl-success);">↑</span>
+            </div>
+            <div class="keyword-row">
+              <div style="flex:1;font-weight:500;">séance photo maternité toulouse</div>
+              <div class="fl-text-sm fl-text-muted">480/mois</div>
+              <div style="font-weight:700;color:var(--fl-warning);width:30px;text-align:center;">11</div>
+              <span style="color:var(--fl-sauge);">→</span>
+            </div>
+            <div class="keyword-row">
+              <div style="flex:1;font-weight:500;">golden hour photographe parisot</div>
+              <div class="fl-text-sm fl-text-muted">90/mois</div>
+              <div style="font-weight:700;color:var(--fl-success);width:30px;text-align:center;">1</div>
+              <span style="color:var(--fl-success);">↑</span>
+            </div>
+            <div class="keyword-row">
+              <div style="flex:1;font-weight:500;">fleur de lumière photographe</div>
+              <div class="fl-text-sm fl-text-muted">210/mois</div>
+              <div style="font-weight:700;color:var(--fl-success);width:30px;text-align:center;">1</div>
+              <span style="color:var(--fl-sauge);">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Articles Table -->
+      <div class="fl-card fl-mb-lg">
+        <div class="fl-card-body">
+          <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Articles du blog</h3>
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th style="width:60px;"></th>
+                <th>Titre</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Vues</th>
+                <th>Score SEO</th>
+                <th style="width:80px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="article-thumb" style="background:linear-gradient(135deg,#D4B8A0,#C0A088);"></div></td>
+                <td style="font-weight:600;">Comment préparer une séance photo en forêt</td>
+                <td><span class="fl-badge fl-badge-success">Publié</span></td>
+                <td class="fl-text-muted" style="font-size:0.8125rem;">1 mars 2026</td>
+                <td style="font-weight:600;color:var(--fl-prune);">842</td>
+                <td><div style="display:flex;align-items:center;gap:6px;"><div class="seo-score-bar" style="width:60px;height:6px;background:var(--fl-border);border-radius:3px;"><div style="width:88%;height:100%;background:var(--fl-success);border-radius:3px;"></div></div><span style="font-size:0.75rem;font-weight:600;color:var(--fl-success);">88</span></div></td>
+                <td><button class="fl-btn fl-btn-ghost fl-btn-sm">Éditer</button></td>
+              </tr>
+              <tr>
+                <td><div class="article-thumb" style="background:linear-gradient(135deg,#C8D8C0,#A8C098);"></div></td>
+                <td style="font-weight:600;">L'heure dorée : le secret des photos magiques</td>
+                <td><span class="fl-badge fl-badge-success">Publié</span></td>
+                <td class="fl-text-muted" style="font-size:0.8125rem;">15 fév. 2026</td>
+                <td style="font-weight:600;color:var(--fl-prune);">1 240</td>
+                <td><div style="display:flex;align-items:center;gap:6px;"><div class="seo-score-bar" style="width:60px;height:6px;background:var(--fl-border);border-radius:3px;"><div style="width:95%;height:100%;background:var(--fl-success);border-radius:3px;"></div></div><span style="font-size:0.75rem;font-weight:600;color:var(--fl-success);">95</span></div></td>
+                <td><button class="fl-btn fl-btn-ghost fl-btn-sm">Éditer</button></td>
+              </tr>
+              <tr>
+                <td><div class="article-thumb" style="background:linear-gradient(135deg,#D0C8E0,#B8A8D0);"></div></td>
+                <td style="font-weight:600;">Séance équestre : bien préparer son cheval</td>
+                <td><span class="fl-badge fl-badge-info">Planifié</span></td>
+                <td class="fl-text-muted" style="font-size:0.8125rem;">20 mars 2026</td>
+                <td class="fl-text-muted">—</td>
+                <td><div style="display:flex;align-items:center;gap:6px;"><div class="seo-score-bar" style="width:60px;height:6px;background:var(--fl-border);border-radius:3px;"><div style="width:72%;height:100%;background:var(--fl-warning);border-radius:3px;"></div></div><span style="font-size:0.75rem;font-weight:600;color:var(--fl-warning);">72</span></div></td>
+                <td><button class="fl-btn fl-btn-ghost fl-btn-sm">Éditer</button></td>
+              </tr>
+              <tr>
+                <td><div class="article-thumb" style="background:linear-gradient(135deg,#E8D0C8,#D4B8B0);"></div></td>
+                <td style="font-weight:600;">5 idées tenues pour une séance famille en automne</td>
+                <td><span class="fl-badge fl-badge-success">Publié</span></td>
+                <td class="fl-text-muted" style="font-size:0.8125rem;">5 janv. 2026</td>
+                <td style="font-weight:600;color:var(--fl-prune);">564</td>
+                <td><div style="display:flex;align-items:center;gap:6px;"><div class="seo-score-bar" style="width:60px;height:6px;background:var(--fl-border);border-radius:3px;"><div style="width:81%;height:100%;background:var(--fl-success);border-radius:3px;"></div></div><span style="font-size:0.75rem;font-weight:600;color:var(--fl-success);">81</span></div></td>
+                <td><button class="fl-btn fl-btn-ghost fl-btn-sm">Éditer</button></td>
+              </tr>
+              <tr>
+                <td><div class="article-thumb" style="background:linear-gradient(135deg,#F0E4D4,#E0CDB8);"></div></td>
+                <td style="font-weight:600;">Pourquoi réserver une mini-session au printemps</td>
+                <td><span class="fl-badge" style="background:var(--fl-bg-alt);color:var(--fl-warm-gray);">Brouillon</span></td>
+                <td class="fl-text-muted" style="font-size:0.8125rem;">En cours</td>
+                <td class="fl-text-muted">—</td>
+                <td><div style="display:flex;align-items:center;gap:6px;"><div class="seo-score-bar" style="width:60px;height:6px;background:var(--fl-border);border-radius:3px;"><div style="width:45%;height:100%;background:var(--fl-error);border-radius:3px;"></div></div><span style="font-size:0.75rem;font-weight:600;color:var(--fl-error);">45</span></div></td>
+                <td><button class="fl-btn fl-btn-ghost fl-btn-sm">Éditer</button></td>
+              </tr>
+              <tr>
+                <td><div class="article-thumb" style="background:linear-gradient(135deg,#D8E8E0,#C0D8C8);"></div></td>
+                <td style="font-weight:600;">Album photo ou galerie numérique ? Mon avis</td>
+                <td><span class="fl-badge fl-badge-success">Publié</span></td>
+                <td class="fl-text-muted" style="font-size:0.8125rem;">10 déc. 2025</td>
+                <td style="font-weight:600;color:var(--fl-prune);">328</td>
+                <td><div style="display:flex;align-items:center;gap:6px;"><div class="seo-score-bar" style="width:60px;height:6px;background:var(--fl-border);border-radius:3px;"><div style="width:68%;height:100%;background:var(--fl-warning);border-radius:3px;"></div></div><span style="font-size:0.75rem;font-weight:600;color:var(--fl-warning);">68</span></div></td>
+                <td><button class="fl-btn fl-btn-ghost fl-btn-sm">Éditer</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Write + AI -->
+      <div class="fl-card">
+        <div class="fl-card-body">
+          <div class="fl-flex-between fl-mb-md">
+            <h3 class="fl-h3" style="font-size:1.125rem;">Rédiger un nouvel article</h3>
+            <button class="fl-btn fl-btn-sm" style="background:linear-gradient(135deg,#8E6BAA,#A87FC0);color:white;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4"/></svg>
+              Générer un plan IA
+            </button>
+          </div>
+          <div class="fl-grid-2 fl-gap-md">
+            <div class="fl-form-group">
+              <label class="fl-label">Titre de l'article</label>
+              <input class="fl-input" type="text" placeholder="Ex: Mes meilleurs spots photo dans le Tarn...">
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label">Mot-clé principal</label>
+              <input class="fl-input" type="text" placeholder="Ex: photographe tarn famille">
+            </div>
+          </div>
+          <div style="margin-top:var(--fl-space-md);padding:var(--fl-space-md);background:linear-gradient(135deg,#F0E8F8,#E8E0F4);border:1px solid #D8CCE4;border-radius:var(--fl-radius-sm);">
+            <div style="font-size:0.875rem;color:#5A3D6E;font-weight:600;margin-bottom:6px;">Suggestion IA</div>
+            <div style="font-size:0.8125rem;color:#5A3D6E;line-height:1.5;">Plan en 5 parties suggéré : Introduction · Les meilleurs parcs du Tarn · La lumière du Tarn · Mes lieux secrets · Comment réserver votre séance</div>
+          </div>
+          <div style="margin-top:var(--fl-space-md);display:flex;gap:var(--fl-space-sm);">
+            <button class="fl-btn fl-btn-primary">Commencer à rédiger</button>
+            <button class="fl-btn fl-btn-ghost">Enregistrer le plan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

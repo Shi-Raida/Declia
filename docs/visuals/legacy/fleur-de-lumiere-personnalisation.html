@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personnalisation du site — Fleur de Lumière SaaS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--bleu:#3B82F6;--bleu-light:rgba(59,130,246,.08);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+/* TOP BAR */
+.topbar{background:var(--prune);padding:10px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200}
+.topbar-title{color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;flex-shrink:0}.topbar-title span{color:var(--or)}
+.topbar-pages{display:flex;gap:4px;flex:1;overflow-x:auto;margin:0 12px}
+.tp{padding:6px 14px;border-radius:var(--radius-full);font-size:11px;font-weight:700;border:1.5px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.5);cursor:pointer;transition:var(--tr);white-space:nowrap}.tp:hover{border-color:rgba(255,255,255,.3);color:#fff}.tp.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.topbar-actions{display:flex;gap:6px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;padding:7px 14px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:none}
+.btn-save{background:var(--sauge);color:#fff}.btn-save:hover{background:#5a6e4b}
+.btn-preview{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.2)}.btn-preview:hover{background:rgba(255,255,255,.2)}
+.btn-secondary{background:transparent;color:var(--prune);border:1.5px solid var(--gris-border)}.btn-secondary:hover{background:var(--prune-light)}
+.btn-primary{background:var(--rose);color:#fff}.btn-primary:hover{background:#A85965}
+.btn-sm{padding:5px 10px;font-size:10px}
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 46px)}
+/* SIDEBAR EDITOR */
+.sidebar{background:var(--bg);border-right:1px solid var(--gris-border);overflow-y:auto;height:calc(100vh - 46px);position:sticky;top:46px}
+.sb-section{border-bottom:1px solid var(--gris-border)}
+.sb-section-h{padding:12px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:var(--tr);font-size:12px;font-weight:700;color:var(--prune)}
+.sb-section-h:hover{background:var(--bg-alt)}
+.sb-section-h .sh-icon{font-size:15px;width:20px;text-align:center}
+.sb-section-h .sh-arrow{margin-left:auto;font-size:10px;color:var(--gris-light);transition:var(--tr)}
+.sb-section.open .sh-arrow{transform:rotate(180deg)}
+.sb-section-body{display:none;padding:0 16px 14px}.sb-section.open .sb-section-body{display:block}
+.field{margin-bottom:12px}
+.field-label{display:flex;align-items:center;justify-content:space-between;font-size:10px;font-weight:700;color:var(--prune);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.field-label .fl-page{font-size:9px;color:var(--gris-light);font-weight:400;text-transform:none;letter-spacing:0}
+.field-hint{font-size:9px;color:var(--gris-light);margin-top:2px}
+.finput{width:100%;padding:8px 10px;border:1.5px solid var(--gris-border);border-radius:var(--radius);font-size:12px;font-family:var(--font);outline:none;transition:var(--tr);background:var(--bg)}
+.finput:focus{border-color:var(--rose)}
+textarea.finput{min-height:56px;resize:vertical;line-height:1.5}
+select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath fill='%236B7280' d='M5 7L0 2h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer}
+.switch-row{display:flex;align-items:center;gap:8px;padding:6px 0}
+.sw-label{flex:1;font-size:11px;color:var(--prune);font-weight:700}
+.switch{width:36px;height:20px;background:var(--gris-border);border-radius:10px;position:relative;cursor:pointer;transition:var(--tr);flex-shrink:0}
+.switch.on{background:var(--sauge)}.switch::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:var(--tr);box-shadow:0 1px 2px rgba(0,0,0,.15)}.switch.on::after{left:18px}
+/* Color picker inline */
+.color-pick{display:flex;align-items:center;gap:8px}
+.cp-swatch{width:28px;height:28px;border-radius:var(--radius);cursor:pointer;border:2px solid var(--gris-border);flex-shrink:0;transition:var(--tr)}.cp-swatch:hover{transform:scale(1.1)}
+.cp-hex{width:80px}
+/* Section within section */
+.sub-group{background:var(--bg-alt);border-radius:var(--radius);padding:10px;margin-bottom:10px}
+.sub-group-h{font-size:10px;font-weight:700;color:var(--or);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+/* PREVIEW PANEL */
+.preview{background:var(--bg-shell);overflow-y:auto;height:calc(100vh - 46px);position:relative}
+.preview-bar{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:8px 16px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:10}
+.pb-label{font-size:11px;color:var(--gris);flex:1}
+.pb-device{display:flex;gap:4px}
+.pb-d{width:28px;height:28px;border-radius:var(--radius);border:1.5px solid var(--gris-border);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;transition:var(--tr)}.pb-d:hover{border-color:var(--prune)}.pb-d.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+.preview-frame{padding:20px;display:flex;justify-content:center}
+.preview-content{background:var(--bg);border-radius:var(--radius-md);box-shadow:var(--shadow-md);overflow:hidden;width:100%;max-width:900px;border:1px solid var(--gris-border)}
+/* FAKE SITE PREVIEW */
+.fake-nav{display:flex;align-items:center;padding:12px 20px;border-bottom:1px solid var(--gris-border);background:var(--bg)}
+.fn-logo{font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--prune)}.fn-logo span{color:var(--or)}
+.fn-links{margin-left:auto;display:flex;gap:16px;font-size:11px;color:var(--gris)}
+.fn-links span{cursor:pointer;transition:var(--tr)}.fn-links span:hover{color:var(--prune)}
+.fn-cta{padding:6px 14px;border-radius:var(--radius-full);background:var(--rose);color:#fff;font-size:10px;font-weight:700;margin-left:12px}
+.fake-hero{padding:48px 32px;text-align:center;background:linear-gradient(180deg,var(--bg-alt),var(--bg))}
+.fh-badge{display:inline-block;padding:4px 14px;border-radius:var(--radius-full);background:var(--or-light);color:var(--or);font-size:10px;font-weight:700;margin-bottom:12px}
+.fh-h1{font-family:var(--font-titre);font-size:clamp(22px,3vw,32px);color:var(--prune);margin-bottom:8px;line-height:1.2}
+.fh-h1 em{color:var(--rose);font-style:italic}
+.fh-sub{font-size:14px;color:var(--gris);max-width:480px;margin:0 auto 16px}
+.fh-cta{display:inline-flex;padding:10px 24px;border-radius:var(--radius-full);background:var(--rose);color:#fff;font-size:13px;font-weight:700;gap:6px;cursor:pointer;transition:var(--tr)}.fh-cta:hover{background:#A85965}
+.fake-section{padding:32px}
+.fs-h2{font-family:var(--font-titre);font-size:20px;color:var(--prune);margin-bottom:6px;text-align:center}
+.fs-h2 em{color:var(--rose);font-style:italic}
+.fs-sub{font-size:12px;color:var(--gris);text-align:center;margin-bottom:20px}
+.fs-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fs-card{border:1px solid var(--gris-border);border-radius:var(--radius-md);padding:16px;text-align:center;transition:var(--tr)}.fs-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.fsc-icon{font-size:24px;margin-bottom:6px}
+.fsc-h{font-family:var(--font-titre);font-size:14px;color:var(--prune);margin-bottom:4px}
+.fsc-desc{font-size:11px;color:var(--gris);line-height:1.5}
+.fsc-price{font-family:var(--font-titre);font-size:18px;font-weight:700;color:var(--or);margin-top:8px}
+.fake-trust{display:flex;gap:20px;justify-content:center;padding:20px;background:var(--bg-alt)}
+.ft-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gris)}
+.fake-footer{padding:20px 32px;background:var(--prune);color:rgba(255,255,255,.5);font-size:10px;text-align:center}
+/* Editable highlight */
+.editable{position:relative;cursor:pointer;transition:var(--tr);border-radius:3px}
+.editable:hover{outline:2px dashed var(--or);outline-offset:2px}
+.editable:hover::after{content:'✏️';position:absolute;top:-8px;right:-8px;font-size:10px;background:var(--or);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:5}
+/* Search */
+.search-box{padding:10px 16px;border-bottom:1px solid var(--gris-border);background:var(--bg-alt)}
+.search-input{width:100%;padding:8px 12px 8px 32px;border:1.5px solid var(--gris-border);border-radius:var(--radius-full);font-size:12px;font-family:var(--font);outline:none;background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E") 10px center no-repeat}.search-input:focus{border-color:var(--rose)}
+@media(max-width:1024px){.layout{grid-template-columns:1fr}.sidebar{height:auto;position:static;max-height:50vh}.preview{height:auto}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🎨 <span>Personnalisation</span></div>
+  <div class="topbar-pages">
+    <button class="tp active" onclick="switchPage('accueil',this)">Accueil</button>
+    <button class="tp" onclick="switchPage('specialites',this)">Spécialités</button>
+    <button class="tp" onclick="switchPage('tarifs',this)">Tarifs</button>
+    <button class="tp" onclick="switchPage('apropos',this)">À propos</button>
+    <button class="tp" onclick="switchPage('portfolio',this)">Portfolio</button>
+    <button class="tp" onclick="switchPage('temoignages',this)">Témoignages</button>
+    <button class="tp" onclick="switchPage('faq',this)">FAQ</button>
+    <button class="tp" onclick="switchPage('contact',this)">Contact</button>
+    <button class="tp" onclick="switchPage('reservation',this)">Réservation</button>
+    <button class="tp" onclick="switchPage('boutique',this)">Boutique</button>
+    <button class="tp" onclick="switchPage('galerie',this)">Galerie client</button>
+    <button class="tp" onclick="switchPage('cartecadeau',this)">Carte cadeau</button>
+    <button class="tp" onclick="switchPage('offres',this)">Offres</button>
+    <button class="tp" onclick="switchPage('legal',this)">Pages légales</button>
+    <button class="tp" onclick="switchPage('chatbot',this)">Chatbot</button>
+    <button class="tp" onclick="switchPage('emails',this)">Emails</button>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-preview">👁️ Prévisualiser</button>
+    <button class="btn btn-save">💾 Publier</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- SIDEBAR EDITOR -->
+  <div class="sidebar">
+    <div class="search-box"><input class="search-input" placeholder="Rechercher un texte, un champ..."></div>
+
+    <!-- GLOBAL -->
+    <div class="sb-section open">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🌐</span> Identité globale <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Nom de la marque</div><input class="finput" value="Fleur de Lumière"></div>
+        <div class="field"><div class="field-label">Tagline / Sous-titre</div><input class="finput" value="Photographe en lumière naturelle"></div>
+        <div class="field"><div class="field-label">Logo</div><div style="display:flex;gap:6px;align-items:center"><div style="width:40px;height:40px;border-radius:var(--radius);background:var(--or-light);display:flex;align-items:center;justify-content:center;font-size:18px">🌸</div><button class="btn btn-sm btn-secondary">📤 Changer</button></div></div>
+        <div class="field"><div class="field-label">Favicon</div><div style="display:flex;gap:6px;align-items:center"><div style="width:24px;height:24px;border-radius:4px;background:var(--rose-light);display:flex;align-items:center;justify-content:center;font-size:10px">C</div><button class="btn btn-sm btn-secondary">📤</button></div></div>
+      </div>
+    </div>
+
+    <!-- COULEURS -->
+    <div class="sb-section open">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🎨</span> Couleurs <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Couleur primaire</div><div class="color-pick"><div class="cp-swatch" style="background:#C2727E"></div><input class="finput cp-hex" value="#C2727E"></div><div class="field-hint">Boutons, CTA, liens actifs</div></div>
+        <div class="field"><div class="field-label">Couleur foncée</div><div class="color-pick"><div class="cp-swatch" style="background:#4A2E3D"></div><input class="finput cp-hex" value="#4A2E3D"></div><div class="field-hint">Titres, navigation, footer</div></div>
+        <div class="field"><div class="field-label">Couleur accent</div><div class="color-pick"><div class="cp-swatch" style="background:#D4A03C"></div><input class="finput cp-hex" value="#D4A03C"></div><div class="field-hint">Prix, badges, mises en avant</div></div>
+        <div class="field"><div class="field-label">Couleur succès / nature</div><div class="color-pick"><div class="cp-swatch" style="background:#6B7F5A"></div><input class="finput cp-hex" value="#6B7F5A"></div><div class="field-hint">Validations, disponibilités</div></div>
+        <div class="field"><div class="field-label">Fond principal</div><div class="color-pick"><div class="cp-swatch" style="background:#FFFFFF;border:1px solid #ddd"></div><input class="finput cp-hex" value="#FFFFFF"></div></div>
+        <div class="field"><div class="field-label">Fond alternatif</div><div class="color-pick"><div class="cp-swatch" style="background:#FFF9F7;border:1px solid #ddd"></div><input class="finput cp-hex" value="#FFF9F7"></div></div>
+        <div class="field"><div class="field-label">Couleur texte</div><div class="color-pick"><div class="cp-swatch" style="background:#2D2226"></div><input class="finput cp-hex" value="#2D2226"></div></div>
+        <div style="display:flex;gap:4px;margin-top:4px"><button class="btn btn-sm btn-secondary">📦 Palettes prédéfinies</button><button class="btn btn-sm btn-secondary">↩️ Reset</button></div>
+      </div>
+    </div>
+
+    <!-- TYPOGRAPHIES -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🔤</span> Typographies <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Police titres</div><select class="finput"><option selected>Playfair Display</option><option>Cormorant Garamond</option><option>Libre Baskerville</option><option>DM Serif Display</option><option>Bodoni Moda</option><option>Merriweather</option></select></div>
+        <div class="field"><div class="field-label">Police textes</div><select class="finput"><option selected>Lato</option><option>Inter</option><option>Source Sans Pro</option><option>Nunito</option><option>Open Sans</option><option>Raleway</option></select></div>
+        <div class="field"><div class="field-label">Taille de base</div><select class="finput"><option>13px</option><option selected>14px</option><option>15px</option><option>16px</option></select></div>
+        <div class="field"><div class="field-label">Style des titres accentués</div><select class="finput"><option selected>Italique coloré (Lumière Dorée)</option><option>Gras coloré</option><option>Souligné</option><option>Normal</option></select></div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🧭</span> Navigation <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Style du menu</div><select class="finput"><option selected>Horizontal classique</option><option>Hamburger (mobile-first)</option><option>Latéral fixe</option></select></div>
+        <div class="field"><div class="field-label">Position</div><select class="finput"><option selected>Fixe en haut</option><option>Scroll avec la page</option><option>Transparent sur hero</option></select></div>
+        <div class="field"><div class="field-label">Fond navigation</div><select class="finput"><option selected>Blanc</option><option>Couleur foncée</option><option>Transparent</option><option>Flou (glassmorphism)</option></select></div>
+        <div class="sub-group"><div class="sub-group-h">📝 Liens du menu</div>
+          <div class="field"><div class="field-label">Lien 1</div><input class="finput" value="Spécialités"></div>
+          <div class="field"><div class="field-label">Lien 2</div><input class="finput" value="Formules & Tarifs"></div>
+          <div class="field"><div class="field-label">Lien 3</div><input class="finput" value="Portfolio"></div>
+          <div class="field"><div class="field-label">Lien 4</div><input class="finput" value="Témoignages"></div>
+          <div class="field"><div class="field-label">Lien 5</div><input class="finput" value="Contact"></div>
+          <div class="field"><div class="field-label">Lien 6 (optionnel)</div><input class="finput" placeholder="Boutique"></div>
+          <div class="field"><div class="field-label">Bouton CTA</div><input class="finput" value="Réserver ma séance"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE ACCUEIL -->
+    <div class="sb-section open">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🏠</span> Page Accueil <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="sub-group"><div class="sub-group-h">🌟 Hero / En-tête</div>
+          <div class="field"><div class="field-label">Badge au-dessus du titre</div><input class="finput" value="✨ Photographe Tarn & Toulouse"><div class="field-hint">Petit texte au-dessus du titre principal</div></div>
+          <div class="field"><div class="field-label">Titre principal (H1)</div><textarea class="finput" rows="2">Vos souvenirs dans la Lumière Dorée</textarea><div class="field-hint">Le texte entre *astérisques* sera en couleur accent : *Lumière Dorée*</div></div>
+          <div class="field"><div class="field-label">Sous-titre</div><textarea class="finput" rows="2">Photographe en lumière naturelle — Séances famille, équestre & scolaire dans le Tarn et à Toulouse</textarea></div>
+          <div class="field"><div class="field-label">Texte du bouton CTA</div><input class="finput" value="Réserver ma séance →"></div>
+          <div class="field"><div class="field-label">Image hero</div><div style="display:flex;gap:6px;align-items:center"><div style="width:80px;height:45px;border-radius:var(--radius);background:linear-gradient(135deg,#f0d9a8,#dfc080)"></div><button class="btn btn-sm btn-secondary">📤 Changer</button></div></div>
+          <div class="field"><div class="field-label">Style du hero</div><select class="finput"><option selected>Image pleine largeur + texte centré</option><option>Split (texte gauche / image droite)</option><option>Vidéo de fond</option><option>Slider d'images</option><option>Minimaliste (texte seul)</option></select></div>
+        </div>
+
+        <div class="sub-group"><div class="sub-group-h">📸 Section Spécialités</div>
+          <div class="field"><div class="field-label">Titre de section</div><input class="finput" value="Mes Spécialités"></div>
+          <div class="field"><div class="field-label">Sous-titre</div><input class="finput" value="Chaque séance est unique, comme votre histoire"></div>
+          <div class="switch-row"><span class="sw-label">Afficher cette section</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="sw-label">Afficher les prix</span><div class="switch"></div></div>
+        </div>
+
+        <div class="sub-group"><div class="sub-group-h">⭐ Section Témoignages</div>
+          <div class="field"><div class="field-label">Titre</div><input class="finput" value="Ce qu'ils disent de moi"></div>
+          <div class="switch-row"><span class="sw-label">Afficher cette section</span><div class="switch on"></div></div>
+          <div class="switch-row"><span class="sw-label">Afficher les étoiles</span><div class="switch on"></div></div>
+          <div class="field"><div class="field-label">Nombre de témoignages affichés</div><select class="finput"><option>2</option><option selected>3</option><option>4</option><option>6</option></select></div>
+        </div>
+
+        <div class="sub-group"><div class="sub-group-h">🔢 Section Chiffres clés</div>
+          <div class="field"><div class="field-label">Chiffre 1 — Valeur</div><input class="finput" value="500+"></div>
+          <div class="field"><div class="field-label">Chiffre 1 — Label</div><input class="finput" value="Familles photographiées"></div>
+          <div class="field"><div class="field-label">Chiffre 2 — Valeur</div><input class="finput" value="4.9/5"></div>
+          <div class="field"><div class="field-label">Chiffre 2 — Label</div><input class="finput" value="Satisfaction client"></div>
+          <div class="field"><div class="field-label">Chiffre 3 — Valeur</div><input class="finput" value="100%"></div>
+          <div class="field"><div class="field-label">Chiffre 3 — Label</div><input class="finput" value="Lumière naturelle"></div>
+          <div class="switch-row"><span class="sw-label">Afficher cette section</span><div class="switch on"></div></div>
+        </div>
+
+        <div class="sub-group"><div class="sub-group-h">🎁 Bandeau promo</div>
+          <div class="switch-row"><span class="sw-label">Afficher le bandeau</span><div class="switch on"></div></div>
+          <div class="field"><div class="field-label">Texte du bandeau</div><input class="finput" value="🌸 Mini-sessions printemps — Places limitées !"></div>
+          <div class="field"><div class="field-label">Lien</div><select class="finput"><option selected>Page Offres</option><option>Réservation</option><option>URL personnalisée</option></select></div>
+        </div>
+
+        <div class="sub-group"><div class="sub-group-h">📰 Section Instagram</div>
+          <div class="field"><div class="field-label">Titre</div><input class="finput" value="Suivez-moi sur Instagram"></div>
+          <div class="field"><div class="field-label">@handle</div><input class="finput" value="@fleurdelumiere.photo"></div>
+          <div class="switch-row"><span class="sw-label">Afficher le feed Instagram</span><div class="switch on"></div></div>
+          <div class="field"><div class="field-label">Nombre de photos</div><select class="finput"><option>4</option><option selected>6</option><option>8</option><option>12</option></select></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">📦</span> Footer <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Texte footer</div><textarea class="finput" rows="2">Fleur de Lumière — Photographe en lumière naturelle
+Tarn & Toulouse · Tous droits réservés © 2026</textarea></div>
+        <div class="field"><div class="field-label">Style</div><select class="finput"><option selected>Fond sombre (couleur foncée)</option><option>Fond clair</option><option>Transparent</option></select></div>
+        <div class="switch-row"><span class="sw-label">Afficher les réseaux sociaux</span><div class="switch on"></div></div>
+        <div class="switch-row"><span class="sw-label">Afficher les liens légaux</span><div class="switch on"></div></div>
+        <div class="switch-row"><span class="sw-label">Afficher "Propulsé par [SaaS]"</span><div class="switch on"></div></div>
+      </div>
+    </div>
+
+    <!-- SECTIONS GLOBALES -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🔲</span> Sections réutilisables <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="sub-group"><div class="sub-group-h">🤝 Bandeau de confiance</div>
+          <div class="field"><div class="field-label">Item 1</div><input class="finput" value="🌅 100% Lumière naturelle"></div>
+          <div class="field"><div class="field-label">Item 2</div><input class="finput" value="📸 +500 familles"></div>
+          <div class="field"><div class="field-label">Item 3</div><input class="finput" value="⭐ 4.9/5 satisfaction"></div>
+          <div class="field"><div class="field-label">Item 4</div><input class="finput" value="🎁 3 tirages offerts"></div>
+        </div>
+        <div class="sub-group"><div class="sub-group-h">📣 CTA récurrent</div>
+          <div class="field"><div class="field-label">Titre CTA</div><input class="finput" value="Prêt(e) à capturer vos plus beaux moments ?"></div>
+          <div class="field"><div class="field-label">Sous-titre CTA</div><input class="finput" value="Réservez votre séance à l'Heure Dorée"></div>
+          <div class="field"><div class="field-label">Texte bouton</div><input class="finput" value="Réserver maintenant →"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🔍</span> SEO & Méta <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Méta titre <span class="fl-page">Page Accueil</span></div><input class="finput" value="Fleur de Lumière — Photographe famille & équestre | Tarn & Toulouse"><div class="field-hint">Max 60 caractères recommandé</div></div>
+        <div class="field"><div class="field-label">Méta description <span class="fl-page">Page Accueil</span></div><textarea class="finput" rows="2">Photographe en lumière naturelle spécialisée famille, équestre et scolaire. Séances à l'Heure Dorée dans le Tarn et à Toulouse. Réservez en ligne.</textarea><div class="field-hint">Max 160 caractères recommandé</div></div>
+        <div class="field"><div class="field-label">Image de partage (OG Image)</div><div style="display:flex;gap:6px;align-items:center"><div style="width:80px;height:42px;border-radius:var(--radius);background:linear-gradient(135deg,#f0d9a8,#dfc080)"></div><button class="btn btn-sm btn-secondary">📤</button></div><div class="field-hint">1200×630px — Affiché lors du partage sur les réseaux</div></div>
+        <div class="field"><div class="field-label">URL canonique</div><input class="finput" value="https://www.fleurdelumiere.fr"></div>
+        <div class="switch-row"><span class="sw-label">Indexer le site (Google)</span><div class="switch on"></div></div>
+        <div class="switch-row"><span class="sw-label">Générer le sitemap.xml</span><div class="switch on"></div></div>
+      </div>
+    </div>
+
+    <!-- IMAGES & MÉDIAS -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🖼️</span> Images & Médias <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="sub-group"><div class="sub-group-h">📸 Photos par page</div>
+          <div class="field"><div class="field-label">Hero accueil</div><div style="display:flex;gap:6px;align-items:center"><div style="width:60px;height:34px;border-radius:4px;background:linear-gradient(135deg,#f0d9a8,#dfc080)"></div><button class="btn btn-sm btn-secondary">📤</button></div></div>
+          <div class="field"><div class="field-label">Photo "À propos"</div><div style="display:flex;gap:6px;align-items:center"><div style="width:60px;height:34px;border-radius:4px;background:linear-gradient(135deg,#e8d5c4,#d0bba6)"></div><button class="btn btn-sm btn-secondary">📤</button></div></div>
+          <div class="field"><div class="field-label">Photo spécialité Famille</div><div style="display:flex;gap:6px;align-items:center"><div style="width:60px;height:34px;border-radius:4px;background:linear-gradient(135deg,#d4cfc5,#b8b0a0)"></div><button class="btn btn-sm btn-secondary">📤</button></div></div>
+          <div class="field"><div class="field-label">Photo spécialité Équestre</div><div style="display:flex;gap:6px;align-items:center"><div style="width:60px;height:34px;border-radius:4px;background:linear-gradient(135deg,#cec3ad,#b0a58f)"></div><button class="btn btn-sm btn-secondary">📤</button></div></div>
+        </div>
+        <div class="field"><div class="field-label">Style d'affichage des images</div><select class="finput"><option selected>Coins arrondis (8px)</option><option>Coins carrés</option><option>Très arrondis (16px)</option><option>Cercle (avatar)</option></select></div>
+        <div class="field"><div class="field-label">Effet au survol</div><select class="finput"><option selected>Zoom léger</option><option>Aucun</option><option>Assombrir</option><option>Bordure dorée</option></select></div>
+      </div>
+    </div>
+
+    <!-- BOUTONS & FORMES -->
+    <div class="sb-section">
+      <div class="sb-section-h" onclick="toggleSection(this)"><span class="sh-icon">🔘</span> Boutons & Formes <span class="sh-arrow">▼</span></div>
+      <div class="sb-section-body">
+        <div class="field"><div class="field-label">Style des boutons</div><select class="finput"><option selected>Arrondis (pilule)</option><option>Légèrement arrondis</option><option>Carrés</option></select></div>
+        <div class="field"><div class="field-label">Taille des boutons</div><select class="finput"><option>Compact</option><option selected>Standard</option><option>Large</option></select></div>
+        <div class="field"><div class="field-label">Style des cartes</div><select class="finput"><option selected>Bordure + ombre légère</option><option>Bordure seule</option><option>Ombre seule</option><option>Fond coloré</option></select></div>
+        <div class="field"><div class="field-label">Coins des cartes</div><select class="finput"><option>Carrés</option><option>Légers (8px)</option><option selected>Moyens (12px)</option><option>Très arrondis (20px)</option></select></div>
+        <div class="field"><div class="field-label">Espacement général</div><select class="finput"><option>Compact</option><option selected>Aéré</option><option>Très aéré</option></select></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="preview">
+    <div class="preview-bar">
+      <span class="pb-label">👁️ Aperçu en temps réel — <strong>Page Accueil</strong></span>
+      <div class="pb-device">
+        <div class="pb-d active" title="Desktop">💻</div>
+        <div class="pb-d" title="Tablette">📱</div>
+        <div class="pb-d" title="Mobile">📲</div>
+      </div>
+    </div>
+    <div class="preview-frame">
+      <div class="preview-content">
+        <!-- FAKE SITE -->
+        <div class="fake-nav">
+          <div class="fn-logo editable">Fleur de <span>L</span>umière</div>
+          <div class="fn-links">
+            <span class="editable">Spécialités</span>
+            <span class="editable">Formules & Tarifs</span>
+            <span class="editable">Portfolio</span>
+            <span class="editable">Témoignages</span>
+            <span class="editable">Contact</span>
+          </div>
+          <span class="fn-cta editable">Réserver ma séance</span>
+        </div>
+        <div class="fake-hero">
+          <div class="fh-badge editable">✨ Photographe Tarn & Toulouse</div>
+          <h1 class="fh-h1 editable">Vos souvenirs dans la <em>Lumière Dorée</em></h1>
+          <p class="fh-sub editable">Photographe en lumière naturelle — Séances famille, équestre & scolaire dans le Tarn et à Toulouse</p>
+          <span class="fh-cta editable">Réserver ma séance →</span>
+        </div>
+        <div class="fake-section">
+          <h2 class="fs-h2 editable">Mes <em>Spécialités</em></h2>
+          <p class="fs-sub editable">Chaque séance est unique, comme votre histoire</p>
+          <div class="fs-cards">
+            <div class="fs-card editable"><div class="fsc-icon">👨‍👩‍👧‍👦</div><div class="fsc-h">Famille</div><div class="fsc-desc">L'amour, la complicité, les éclats de rire... en lumière dorée.</div><div class="fsc-price">À partir de 150€</div></div>
+            <div class="fs-card editable"><div class="fsc-icon">🐴</div><div class="fsc-h">Équestre</div><div class="fsc-desc">Le lien unique entre cavalier et cheval, sublimé par la Golden Hour.</div><div class="fsc-price">À partir de 150€</div></div>
+            <div class="fs-card editable"><div class="fsc-icon">🎓</div><div class="fsc-h">Scolaire</div><div class="fsc-desc">Photos de classe et portraits individuels pour écoles et crèches.</div><div class="fsc-price">Packs dès 12€</div></div>
+          </div>
+        </div>
+        <div class="fake-trust">
+          <span class="ft-item editable">🌅 100% Lumière naturelle</span>
+          <span class="ft-item editable">📸 +500 familles</span>
+          <span class="ft-item editable">⭐ 4.9/5 satisfaction</span>
+          <span class="ft-item editable">🎁 3 tirages offerts</span>
+        </div>
+        <div class="fake-footer editable">
+          Fleur de Lumière — Photographe en lumière naturelle<br>
+          Tarn & Toulouse · Tous droits réservés © 2026
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSection(el){el.parentElement.classList.toggle('open')}
+function switchPage(id,btn){document.querySelectorAll('.tp').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelector('.pb-label strong').textContent='Page '+btn.textContent.trim()}
+</script>
+</body>
+</html>

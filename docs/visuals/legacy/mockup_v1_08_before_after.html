@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Before/After Retouche</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --bg: #FDFBFC;
+    --white: #FFFFFF;
+    --cream: #FDF9F7;
+    --success: #4CAF7C;
+    --success-bg: #E8F5EE;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: #EDEAEB; color: var(--charcoal); }
+
+  .mockup-tag { display: inline-block; background: #FFE066; color: #5D4E00; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 8px; }
+
+  .screen-divider { background: var(--prune); padding: 20px; text-align: center; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; }
+  .screen-divider span { background: rgba(255,255,255,0.08); padding: 6px 20px; border-radius: 20px; }
+
+  /* ===== CLIENT GALLERY VIEW ===== */
+  .gallery-screen { background: var(--charcoal); min-height: 100vh; padding: 0; }
+
+  .gallery-topbar {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .gallery-topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.8); }
+  .gallery-topbar-logo span { color: var(--rose); }
+  .gallery-topbar-right { display: flex; gap: 16px; align-items: center; }
+  .gallery-topbar-btn { padding: 7px 16px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: 'Outfit', sans-serif; }
+  .gallery-topbar-btn.mode { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+  .gallery-topbar-btn.mode.active { background: var(--rose); color: #fff; }
+  .gallery-topbar-btn.back { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); }
+
+  /* Photo viewer */
+  .photo-viewer { max-width: 900px; margin: 0 auto; padding: 40px 32px; }
+
+  .photo-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/2;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: col-resize;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    margin-bottom: 24px;
+  }
+
+  .photo-before, .photo-after {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .photo-before {
+    background: linear-gradient(135deg, #8A7A6A, #9A8A7A, #7A6A5A, #8A7868);
+    clip-path: inset(0 45% 0 0);
+  }
+
+  .photo-after {
+    background: linear-gradient(135deg, #C89878, #D4A888, #B88868, #C89070);
+    z-index: 0;
+  }
+
+  /* Slider line */
+  .slider-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 55%;
+    width: 3px;
+    background: white;
+    z-index: 5;
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  }
+
+  .slider-handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--prune);
+  }
+
+  /* Labels */
+  .photo-label {
+    position: absolute;
+    top: 16px;
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 6;
+    backdrop-filter: blur(8px);
+  }
+
+  .photo-label.before { left: 16px; background: rgba(0,0,0,0.5); color: rgba(255,255,255,0.8); }
+  .photo-label.after { right: 16px; background: rgba(194,114,126,0.8); color: white; }
+
+  /* Photo info */
+  .photo-info { text-align: center; margin-bottom: 32px; }
+  .photo-info-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 6px; }
+  .photo-info-sub { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+  /* Retouche details */
+  .retouche-details {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .retouche-title { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .retouche-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .retouche-tag { padding: 5px 12px; border-radius: 8px; font-size: 11.5px; font-weight: 500; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.55); border: 1px solid rgba(255,255,255,0.08); }
+
+  /* Upsell CTA */
+  .upsell-card {
+    background: linear-gradient(135deg, var(--prune), #5A3A4D);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(194,114,126,0.2);
+  }
+  .upsell-icon { font-size: 28px; flex-shrink: 0; }
+  .upsell-text { flex: 1; }
+  .upsell-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 3px; }
+  .upsell-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.4; }
+  .upsell-btn { background: var(--rose); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; flex-shrink: 0; }
+
+  /* ===== ADMIN CONFIG ===== */
+  .admin-screen { background: var(--bg); padding: 40px; min-height: 50vh; }
+  .admin-container { max-width: 700px; margin: 0 auto; }
+  .admin-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; color: var(--prune); margin-bottom: 6px; }
+  .admin-sub { font-size: 13px; color: var(--warm-gray); margin-bottom: 24px; }
+
+  .admin-card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px; overflow: hidden; }
+  .admin-card-header { padding: 14px 20px; background: var(--rose-pale); border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; color: var(--prune); display: flex; align-items: center; gap: 8px; }
+  .admin-card-body { padding: 20px; }
+
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-row-left { flex: 1; }
+  .toggle-row-label { font-size: 13px; font-weight: 500; color: var(--charcoal); }
+  .toggle-row-hint { font-size: 11px; color: var(--warm-gray); margin-top: 2px; }
+  .toggle { width: 40px; height: 22px; background: #E0D6D9; border-radius: 11px; cursor: pointer; position: relative; flex-shrink: 0; }
+  .toggle.on { background: var(--success); }
+  .toggle::after { content: ''; position: absolute; top: 2.5px; left: 2.5px; width: 17px; height: 17px; background: white; border-radius: 50%; transition: all 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
+  .toggle.on::after { left: 20.5px; }
+
+  .photo-pair { display: flex; gap: 10px; margin-top: 12px; }
+  .photo-pair-item { flex: 1; height: 80px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--warm-gray); position: relative; }
+  .photo-pair-item.before-thumb { background: linear-gradient(135deg, #C8C0B8, #B8B0A8); }
+  .photo-pair-item.after-thumb { background: linear-gradient(135deg, #D4A888, #C89878); }
+  .photo-pair-label { position: absolute; bottom: 6px; left: 8px; font-size: 9px; font-weight: 600; background: rgba(0,0,0,0.4); color: white; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .photo-pair-badge { position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; background: var(--success); color: white; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ===== CLIENT VIEW — Gallery with Before/After ===== -->
+<div class="gallery-screen">
+  <div class="gallery-topbar">
+    <div class="gallery-topbar-logo">Fleur de <span>Lumière</span></div>
+    <div class="gallery-topbar-right">
+      <div class="gallery-topbar-btn mode">Galerie</div>
+      <div class="gallery-topbar-btn mode active">Avant / Après</div>
+      <div class="gallery-topbar-btn mode">Favoris (8)</div>
+      <div class="gallery-topbar-btn back">← Retour</div>
+    </div>
+  </div>
+
+  <div class="photo-viewer">
+    <div class="photo-container">
+      <div class="photo-after">Photo retouchée (Golden Hour, tons chauds)</div>
+      <div class="photo-before">Photo originale (RAW développée)</div>
+      <div class="photo-label before">Avant</div>
+      <div class="photo-label after">Après</div>
+      <div class="slider-line">
+        <div class="slider-handle">⟷</div>
+      </div>
+    </div>
+
+    <div class="photo-info">
+      <div class="photo-info-title">Photo 12/30 — Léa et les feuilles d'automne</div>
+      <div class="photo-info-sub">Faites glisser le curseur pour comparer avant et après retouche</div>
+    </div>
+
+    <div class="retouche-details">
+      <div class="retouche-title">✨ Retouches appliquées sur cette photo</div>
+      <div class="retouche-tags">
+        <div class="retouche-tag">Balance des blancs corrigée</div>
+        <div class="retouche-tag">Tons chauds Golden Hour</div>
+        <div class="retouche-tag">Contraste doux</div>
+        <div class="retouche-tag">Lissage peau subtil</div>
+        <div class="retouche-tag">Netteté renforcée</div>
+        <div class="retouche-tag">Suppression éléments parasites</div>
+      </div>
+    </div>
+
+    <div class="upsell-card">
+      <div class="upsell-icon">✨</div>
+      <div class="upsell-text">
+        <div class="upsell-title">Vous aimez cette retouche ?</div>
+        <div class="upsell-desc">Commandez des retouches supplémentaires sur vos photos préférées — portrait créatif, noir & blanc artistique, ou retouche avancée.</div>
+      </div>
+      <button class="upsell-btn">Voir les options →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Configuration admin — Before/After ↓</span></div>
+
+<!-- ===== ADMIN CONFIG ===== -->
+<div class="admin-screen">
+  <div class="admin-container">
+    <div class="admin-title">Before/After Retouche <span class="mockup-tag">V1 — Admin</span></div>
+    <div class="admin-sub">Activez la comparaison avant/après sur vos galeries pour valoriser votre travail de retouche</div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">⚙️ Paramètres généraux</div>
+      <div class="admin-card-body">
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Activer le mode Before/After sur les galeries</div>
+            <div class="toggle-row-hint">Un bouton "Avant/Après" apparaîtra dans la barre de navigation des galeries</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Afficher les tags de retouche</div>
+            <div class="toggle-row-hint">Montre au client les types de retouches appliquées sous chaque photo</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Proposer des retouches supplémentaires (upsell)</div>
+            <div class="toggle-row-hint">Affiche un CTA pour commander des retouches additionnelles</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Sélectionner manuellement les photos Before/After</div>
+            <div class="toggle-row-hint">Sinon, toutes les photos avec une version "avant" uploadée seront disponibles</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <div class="admin-card-header">🖼 Photos Before/After — Galerie Sophie Dupont</div>
+      <div class="admin-card-body">
+        <div style="font-size: 12px; color: var(--warm-gray); margin-bottom: 12px;">5 photos sélectionnées pour le mode Avant/Après sur cette galerie</div>
+        <div class="photo-pair">
+          <div class="photo-pair-item before-thumb">
+            <div class="photo-pair-label">Avant</div>
+          </div>
+          <div class="photo-pair-item after-thumb">
+            <div class="photo-pair-label">Après</div>
+            <div class="photo-pair-badge">✓</div>
+          </div>
+        </div>
+        <div class="photo-pair">
+          <div class="photo-pair-item before-thumb" style="background: linear-gradient(135deg, #B8B8B0, #A8A8A0);">
+            <div class="photo-pair-label">Avant</div>
+          </div>
+          <div class="photo-pair-item after-thumb" style="background: linear-gradient(135deg, #C8A090, #B89080);">
+            <div class="photo-pair-label">Après</div>
+            <div class="photo-pair-badge">✓</div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 12px;">
+          <button class="btn-primary" style="font-size: 12px; padding: 8px 16px;">+ Ajouter des photos Avant/Après</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

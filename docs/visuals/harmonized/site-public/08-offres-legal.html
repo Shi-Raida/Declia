@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offres Spéciales &amp; Mentions Légales — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border); transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto; padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+
+  /* ===== HERO ===== */
+  .page-hero { padding: 96px 0 64px; text-align: center; background: linear-gradient(180deg, var(--fl-bg) 0%, var(--fl-bg-alt) 100%); position: relative; overflow: hidden; }
+  .page-hero::before {
+    content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.06) 0%, transparent 70%);
+  }
+  .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .page-hero h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); color: var(--fl-prune); margin-bottom: 16px; position: relative; z-index: 1; }
+  .page-hero h1 em { font-style: italic; color: var(--fl-or); }
+  .page-hero p { font-size: 1.0625rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.7; position: relative; z-index: 1; }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px auto; border-radius: 1px; }
+
+  /* ===== PAGE TABS ===== */
+  .page-tabs { background: var(--fl-bg); border-bottom: 1px solid var(--fl-border); }
+  .page-tabs-inner { max-width: var(--fl-container); margin: 0 auto; padding: 0 24px; display: flex; gap: 0; }
+  .page-tab {
+    padding: 16px 28px; font-size: 0.9375rem; font-weight: 600; color: var(--fl-warm-gray);
+    border-bottom: 3px solid transparent; cursor: pointer; transition: all var(--fl-transition);
+    background: none; border-top: none; border-left: none; border-right: none; font-family: var(--fl-font-body);
+  }
+  .page-tab:hover { color: var(--fl-prune); }
+  .page-tab.active { color: var(--fl-prune); border-bottom-color: var(--fl-or); }
+  .page-view { display: none; }
+  .page-view.active { display: block; }
+
+  /* ===== OFFRES ===== */
+  .offres-section { padding: 80px 0; background: var(--fl-bg-alt); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head h2 em { font-style: italic; color: var(--fl-rose); }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .offres-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .offre-card {
+    background: white; border-radius: var(--fl-radius); overflow: hidden;
+    border: 1.5px solid var(--fl-border); box-shadow: var(--fl-shadow-sm);
+    transition: transform var(--fl-transition), box-shadow var(--fl-transition);
+  }
+  .offre-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .offre-card.featured { border-color: var(--fl-or); box-shadow: 0 4px 20px rgba(212,160,60,0.15); }
+  .offre-img { aspect-ratio: 2.2; position: relative; overflow: hidden; }
+  .offre-img .ph { width: 100%; height: 100%; }
+  .offre-badge { position: absolute; top: 14px; left: 14px; font-size: 0.75rem; font-weight: 700; padding: 6px 14px; border-radius: var(--fl-radius-full); z-index: 2; }
+  .ob-spring { background: var(--fl-sauge); color: white; }
+  .ob-parrain { background: var(--fl-rose); color: white; }
+  .ob-pack { background: var(--fl-or); color: var(--fl-charcoal); }
+  .offre-expire { position: absolute; bottom: 12px; right: 12px; font-size: 0.6875rem; font-weight: 700; padding: 4px 10px; border-radius: var(--fl-radius-full); background: rgba(0,0,0,0.5); color: white; backdrop-filter: blur(4px); }
+  .offre-body { padding: 24px; }
+  .offre-body h3 { font-family: var(--fl-font-heading); font-size: 1.25rem; color: var(--fl-prune); margin-bottom: 8px; }
+  .offre-body h3 em { font-style: italic; color: var(--fl-rose); }
+  .offre-desc { font-size: 0.9rem; color: var(--fl-warm-gray); line-height: 1.7; margin-bottom: 16px; }
+  .offre-details { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .offre-detail { font-size: 0.75rem; color: var(--fl-charcoal); background: var(--fl-bg-alt); padding: 5px 10px; border-radius: var(--fl-radius-full); border: 1px solid var(--fl-border); }
+  .offre-pricing { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
+  .offre-price { font-family: var(--fl-font-heading); font-size: 1.75rem; font-weight: 700; color: var(--fl-or); }
+  .offre-old { font-size: 1rem; color: var(--fl-warm-gray); text-decoration: line-through; }
+  .offre-save { font-size: 0.8125rem; font-weight: 700; color: var(--fl-sauge); background: rgba(107,127,90,0.1); padding: 4px 10px; border-radius: var(--fl-radius-full); }
+
+  /* Promo code block */
+  .promo-block { background: var(--fl-prune); border-radius: var(--fl-radius); padding: 40px; text-align: center; margin: 48px 0; position: relative; overflow: hidden; }
+  .promo-block::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(212,160,60,0.08) 0%, transparent 60%); }
+  .promo-block h2 { font-family: var(--fl-font-heading); font-size: 1.5rem; color: white; margin-bottom: 8px; position: relative; z-index: 1; }
+  .promo-block h2 em { font-style: italic; color: var(--fl-or); }
+  .promo-block p { color: rgba(255,255,255,0.6); font-size: 0.9375rem; margin-bottom: 24px; position: relative; z-index: 1; }
+  .promo-code-box { display: inline-flex; align-items: center; gap: 14px; background: rgba(255,255,255,0.08); border: 2px dashed rgba(212,160,60,0.4); border-radius: var(--fl-radius); padding: 14px 28px; position: relative; z-index: 1; }
+  .promo-code { font-family: monospace; font-size: 1.375rem; font-weight: 700; letter-spacing: 4px; color: var(--fl-or); }
+  .promo-conditions { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 12px; position: relative; z-index: 1; }
+
+  /* Placeholder photos for offers */
+  .ph-o1 { background: linear-gradient(135deg,#f0d9a8,#dfc080); }
+  .ph-o2 { background: linear-gradient(140deg,#e8d5c4,#d0bba6); }
+  .ph-o3 { background: linear-gradient(130deg,#d5c8b8,#bbad9a); }
+
+  /* ===== LEGAL CONTENT ===== */
+  .legal-section { padding: 80px 0; background: var(--fl-bg); }
+  .legal-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 48px; }
+  .legal-tab {
+    padding: 12px 24px; border-radius: var(--fl-radius-full); font-size: 0.875rem; font-weight: 600;
+    border: 2px solid var(--fl-border); background: var(--fl-bg); color: var(--fl-warm-gray);
+    cursor: pointer; transition: all var(--fl-transition);
+  }
+  .legal-tab:hover { border-color: var(--fl-prune); color: var(--fl-prune); }
+  .legal-tab.active { background: var(--fl-prune); color: white; border-color: var(--fl-prune); }
+  .legal-view { display: none; }
+  .legal-view.active { display: block; }
+  .legal-content { max-width: 760px; margin: 0 auto; }
+  .legal-content h2 { font-family: var(--fl-font-heading); font-size: 1.25rem; color: var(--fl-prune); margin: 32px 0 12px; padding-top: 20px; border-top: 1px solid var(--fl-border); }
+  .legal-content h2:first-child { border: none; padding-top: 0; margin-top: 0; }
+  .legal-content h3 { font-family: var(--fl-font-heading); font-size: 1rem; color: var(--fl-prune); margin: 20px 0 8px; }
+  .legal-content p { font-size: 0.9375rem; color: var(--fl-warm-gray); line-height: 1.8; margin-bottom: 12px; }
+  .legal-content strong { color: var(--fl-charcoal); }
+  .legal-update { font-size: 0.8125rem; color: var(--fl-warm-gray); font-style: italic; margin-bottom: 28px; }
+  .legal-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  .legal-table th, .legal-table td { padding: 10px 14px; font-size: 0.875rem; text-align: left; border-bottom: 1px solid var(--fl-border); }
+  .legal-table th { background: var(--fl-bg-alt); font-weight: 700; color: var(--fl-prune); }
+  .legal-table td { color: var(--fl-warm-gray); }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-or); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+
+  @media (max-width: 1024px) {
+    .offres-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .page-tabs-inner { overflow-x: auto; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .legal-tabs { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="03-portfolio-temoignages.html#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="fl-container">
+    <div class="section-label">Offres &amp; Légal</div>
+    <h1>Offres Spéciales &amp; <em>Mentions Légales</em></h1>
+    <div class="gold-rule"></div>
+    <p>Profitez de nos offres saisonnières et retrouvez toutes les informations légales concernant Fleur de Lumière.</p>
+  </div>
+</section>
+
+<!-- PAGE TABS -->
+<div class="page-tabs">
+  <div class="page-tabs-inner">
+    <button class="page-tab active" onclick="switchPage('offres',this)">Offres &amp; Promotions</button>
+    <button class="page-tab" onclick="switchPage('cgv',this)">CGV</button>
+    <button class="page-tab" onclick="switchPage('mentions',this)">Mentions légales</button>
+    <button class="page-tab" onclick="switchPage('rgpd',this)">Confidentialité &amp; RGPD</button>
+  </div>
+</div>
+
+<!-- ===== PAGE OFFRES ===== -->
+<div class="page-view active" id="view-offres">
+
+  <section class="offres-section">
+    <div class="fl-container">
+      <div class="section-head reveal">
+        <div class="section-label">Promotions</div>
+        <h2>Offres en cours</h2>
+        <div class="gold-rule"></div>
+        <p>Profitez de nos offres spéciales pour capturer vos souvenirs à prix doux.</p>
+      </div>
+
+      <div class="offres-grid">
+
+        <div class="offre-card featured reveal reveal-delay-1">
+          <div class="offre-img">
+            <div class="ph ph-o1"></div>
+            <span class="offre-badge ob-spring">Printemps</span>
+            <span class="offre-expire">Expire le 30 avril</span>
+          </div>
+          <div class="offre-body">
+            <h3>Offre Printemps <em>-20%</em></h3>
+            <div class="offre-desc">Pour célébrer le renouveau, bénéficiez de -20% sur votre première séance Essentiel ou Signature. Saisissez le code LUMIERE20 lors de votre réservation.</div>
+            <div class="offre-details">
+              <span class="offre-detail">Première séance</span>
+              <span class="offre-detail">Code : LUMIERE20</span>
+              <span class="offre-detail">Jusqu'au 30 avril</span>
+            </div>
+            <div class="offre-pricing">
+              <span class="offre-price">Dès 120€</span>
+              <span class="offre-old">150€</span>
+              <span class="offre-save">-20%</span>
+            </div>
+            <a href="#reserver" class="fl-btn fl-btn-primary" style="width:100%;justify-content:center;">Profiter de l'offre →</a>
+          </div>
+        </div>
+
+        <div class="offre-card reveal reveal-delay-2">
+          <div class="offre-img">
+            <div class="ph ph-o2"></div>
+            <span class="offre-badge ob-parrain">Parrainage</span>
+            <span class="offre-expire">Offre permanente</span>
+          </div>
+          <div class="offre-body">
+            <h3>Parrainage <em>50€ offerts</em></h3>
+            <div class="offre-desc">Recommandez Fleur de Lumière à vos proches et recevez 50€ de crédit boutique à chaque parrainage validé. Vos amis bénéficient de -10% sur leur première séance.</div>
+            <div class="offre-details">
+              <span class="offre-detail">50€ par filleul</span>
+              <span class="offre-detail">-10% pour le filleul</span>
+              <span class="offre-detail">Sans limite</span>
+            </div>
+            <a href="#" class="fl-btn fl-btn-outline-prune" style="width:100%;justify-content:center;">Obtenir mon code parrainage</a>
+          </div>
+        </div>
+
+        <div class="offre-card reveal reveal-delay-3">
+          <div class="offre-img">
+            <div class="ph ph-o3"></div>
+            <span class="offre-badge ob-pack">Pack</span>
+          </div>
+          <div class="offre-body">
+            <h3>Pack Famille <em>Complète</em></h3>
+            <div class="offre-desc">Une séance par saison pour suivre la croissance de votre famille tout au long de l'année. 4 séances Essentiel + album offert en fin d'année. La formule idéale pour les familles.</div>
+            <div class="offre-details">
+              <span class="offre-detail">4 séances</span>
+              <span class="offre-detail">Album offert</span>
+              <span class="offre-detail">-25% sur l'année</span>
+            </div>
+            <div class="offre-pricing">
+              <span class="offre-price">450€/an</span>
+              <span class="offre-old">600€</span>
+              <span class="offre-save">-25%</span>
+            </div>
+            <a href="#reserver" class="fl-btn fl-btn-ghost" style="width:100%;justify-content:center;">Souscrire au Pack</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Promo code block -->
+      <div class="promo-block reveal">
+        <h2>Vous avez un <em>code promo</em> ?</h2>
+        <p>Entrez-le lors de votre réservation ou dans le panier de la boutique. Les codes ne sont pas cumulables.</p>
+        <div class="promo-code-box">
+          <span class="promo-code">LUMIERE20</span>
+          <button class="fl-btn fl-btn-primary fl-btn-sm" onclick="navigator.clipboard.writeText('LUMIERE20');this.textContent='Copié !'">Copier</button>
+        </div>
+        <div class="promo-conditions">Valable sur les formules Essentiel et Signature pour toute première réservation. Non cumulable.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA for offers page -->
+  <section class="cta-final" id="reserver">
+    <div class="fl-container">
+      <h2>Prête à profiter des<br><em>offres</em> du moment ?</h2>
+      <p>Réservez maintenant et profitez de -20% sur votre première séance avec le code LUMIERE20.</p>
+      <div class="cta-actions">
+        <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver avec le code LUMIERE20 →</a>
+        <a href="05-tarifs.html" class="fl-btn fl-btn-ghost fl-btn-lg">Voir les formules</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===== PAGE CGV ===== -->
+<div class="page-view" id="view-cgv">
+  <section class="legal-section">
+    <div class="fl-container">
+      <div class="legal-content">
+        <p class="legal-update">Dernière mise à jour : 1er mars 2026</p>
+
+        <h2>Article 1 — Objet</h2>
+        <p>Les présentes Conditions Générales de Vente régissent les relations contractuelles entre Fleur de Lumière (ci-après « la Photographe ») et toute personne physique ou morale (ci-après « le Client ») effectuant une réservation ou un achat sur le site fleurdelumiere.fr.</p>
+
+        <h2>Article 2 — Prestations</h2>
+        <p>Fleur de Lumière propose des prestations de photographie en lumière naturelle, déclinées en formules (Essentiel, Signature, Sur-Mesure) et spécialités (Famille, Équestre, Événementiel, Maternité, Scolaire), ainsi qu'une boutique en ligne de tirages et objets personnalisés.</p>
+
+        <h2>Article 3 — Réservation et acompte</h2>
+        <p>Toute réservation est confirmée par le versement d'un acompte de <strong>30% du montant total</strong> via le système de paiement en ligne Stripe. Le solde est exigible avant la livraison de la galerie en ligne. L'acompte n'est pas remboursable en cas d'annulation moins de 48h avant la séance, sauf cas de force majeure.</p>
+
+        <h2>Article 4 — Annulation et report</h2>
+        <table class="legal-table">
+          <tr><th>Situation</th><th>Politique applicable</th></tr>
+          <tr><td>Plus de 7 jours avant</td><td>Report gratuit (1 fois) ou remboursement intégral</td></tr>
+          <tr><td>Moins de 7 jours</td><td>Report uniquement, une seule fois</td></tr>
+          <tr><td>Moins de 48 heures</td><td>Ni report, ni remboursement</td></tr>
+          <tr><td>Météo défavorable</td><td>Report gratuit à l'initiative de la Photographe</td></tr>
+          <tr><td>Retard client &gt; 30 min</td><td>Séance annulée, pas de remboursement</td></tr>
+        </table>
+        <p>Droit de rétractation : 14 jours conformément à la loi (vente en ligne), sauf si la prestation a été exécutée.</p>
+
+        <h2>Article 5 — Droit à l'image</h2>
+        <p>Sauf opposition écrite du Client, la Photographe est autorisée à utiliser les photographies réalisées à des fins de promotion : portfolio, réseaux sociaux, site web, supports commerciaux. Le Client peut s'opposer à cet usage par email à tout moment.</p>
+
+        <h2>Article 6 — Propriété intellectuelle</h2>
+        <p>Les photographies restent la propriété intellectuelle de Fleur de Lumière (articles L.111-1 et suivants du CPI). Le Client dispose d'un droit d'usage <strong>personnel et non commercial</strong>. Toute utilisation commerciale nécessite une autorisation écrite et fait l'objet d'une facturation spécifique.</p>
+
+        <h2>Article 7 — Galerie en ligne</h2>
+        <p>La galerie privée est accessible pendant <strong>90 jours</strong> à compter de sa mise en ligne. Passé ce délai, les fichiers sont supprimés. Un rappel est envoyé avant expiration. L'accès à la galerie est conditionné au paiement intégral de la prestation.</p>
+
+        <h2>Article 8 — Boutique et livraisons</h2>
+        <p>Les commandes de tirages et objets personnalisés sont livrées sous 7 à 10 jours ouvrés. Chaque produit est vérifié avant envoi. En cas de défaut de fabrication, le produit est refait gratuitement. Livraison offerte dès 80€ d'achat.</p>
+
+        <h2>Article 9 — Cartes cadeaux</h2>
+        <p>Les cartes cadeaux sont valables <strong>12 mois</strong> à compter de la date d'achat. Elles ne sont ni échangeables, ni remboursables, même partiellement. Le montant est utilisable sur toutes les formules et la boutique.</p>
+
+        <h2>Article 10 — Litiges</h2>
+        <p>En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, les tribunaux compétents seront ceux du ressort du siège social de Fleur de Lumière. Le droit français est applicable.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PAGE MENTIONS LÉGALES ===== -->
+<div class="page-view" id="view-mentions">
+  <section class="legal-section">
+    <div class="fl-container">
+      <div class="legal-content">
+        <p class="legal-update">Dernière mise à jour : 1er mars 2026</p>
+
+        <h2>1. Éditeur du site</h2>
+        <p><strong>Fleur de Lumière</strong> — Photographie professionnelle<br>
+        Auto-entreprise — Capucine<br>
+        SIRET : [À compléter]<br>
+        Adresse : Parisot (81310), Tarn, France<br>
+        Email : contact@fleurdelumiere.fr<br>
+        Directrice de la publication : Capucine</p>
+
+        <h2>2. Hébergement</h2>
+        <p><strong>[Hébergeur à définir]</strong><br>
+        Adresse : [À compléter]<br>
+        Téléphone : [À compléter]</p>
+
+        <h2>3. Développement technique</h2>
+        <p><strong>Raida</strong> — Agence tech &amp; créative<br>
+        Contact : contact@raida.fr</p>
+
+        <h2>4. Propriété intellectuelle</h2>
+        <p>L'ensemble du contenu de ce site (textes, photographies, images, vidéos, logos, éléments graphiques) est la propriété exclusive de Fleur de Lumière, sauf mention contraire. Toute reproduction, représentation ou diffusion, même partielle, est interdite sans autorisation écrite préalable.</p>
+        <p>Les photographies présentées sur ce site sont protégées par le droit d'auteur (Code de la propriété intellectuelle, articles L.111-1 et suivants).</p>
+
+        <h2>5. Responsabilité</h2>
+        <p>Fleur de Lumière s'efforce de fournir des informations exactes et à jour. Toutefois, l'éditeur ne saurait être tenu responsable des erreurs, omissions ou résultats qui pourraient être obtenus par un mauvais usage de ces informations.</p>
+
+        <h2>6. Cookies</h2>
+        <p>Ce site utilise des cookies strictement nécessaires au fonctionnement (session, panier) et des cookies analytiques (mesure d'audience). Vous pouvez configurer vos préférences via la bannière cookies affichée à votre première visite.</p>
+
+        <h2>7. Crédits</h2>
+        <p>Photographies : © Capucine / Fleur de Lumière<br>
+        Design &amp; développement : Raida<br>
+        Polices : Cormorant Garamond, Outfit (Google Fonts)</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== PAGE RGPD ===== -->
+<div class="page-view" id="view-rgpd">
+  <section class="legal-section">
+    <div class="fl-container">
+      <div class="legal-content">
+        <p class="legal-update">Dernière mise à jour : 1er mars 2026</p>
+
+        <h2>1. Responsable du traitement</h2>
+        <p>Capucine, exerçant sous le nom commercial Fleur de Lumière, est responsable du traitement des données personnelles collectées via ce site, conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés.</p>
+
+        <h2>2. Données collectées</h2>
+        <p>Nous collectons les données suivantes dans le cadre de nos services :</p>
+        <table class="legal-table">
+          <tr><th>Donnée</th><th>Finalité</th><th>Base légale</th></tr>
+          <tr><td>Prénom, nom, email, téléphone</td><td>Réservation, communication</td><td>Exécution du contrat</td></tr>
+          <tr><td>Adresse postale</td><td>Livraison des commandes</td><td>Exécution du contrat</td></tr>
+          <tr><td>Données bancaires</td><td>Paiement via Stripe</td><td>Exécution du contrat</td></tr>
+          <tr><td>Photos du client</td><td>Prestation photographique</td><td>Consentement</td></tr>
+          <tr><td>Réponses au questionnaire</td><td>Préparation de la séance</td><td>Exécution du contrat</td></tr>
+          <tr><td>Email (newsletter)</td><td>Offres et actualités</td><td>Consentement</td></tr>
+        </table>
+
+        <h2>3. Durée de conservation</h2>
+        <p>Les données clients sont conservées pendant 3 ans après la dernière interaction. Les données de facturation sont conservées 10 ans (obligation légale). Les galeries en ligne sont accessibles 90 jours après mise en ligne.</p>
+
+        <h2>4. Vos droits</h2>
+        <p>Conformément au RGPD, vous disposez des droits suivants : accès, rectification, effacement, opposition, limitation du traitement, portabilité des données. Pour exercer ces droits, contactez-nous à <strong>contact@fleurdelumiere.fr</strong>. Réponse sous 30 jours.</p>
+
+        <h2>5. Cookies</h2>
+        <p>Ce site utilise des cookies strictement nécessaires au fonctionnement (session, panier) et des cookies analytiques (mesure d'audience). Vous pouvez configurer vos préférences via la bannière cookies affichée à votre première visite.</p>
+
+        <h2>6. Transfert de données</h2>
+        <p>Les paiements sont traités par Stripe (conforme PCI DSS). Les emails sont envoyés via un prestataire certifié. Aucun transfert hors UE n'est effectué sans garanties appropriées.</p>
+
+        <h2>7. Contact DPO</h2>
+        <p>Pour toute question relative à la protection de vos données, contactez-nous à : <strong>contact@fleurdelumiere.fr</strong></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  function switchPage(id, btn) {
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
+    document.querySelectorAll('.page-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({ top: document.querySelector('.page-tabs').offsetTop - 80, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver ma séance — Étapes 1 à 4 — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== BOOKING SHELL D ===== */
+  .bk-header {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 0 var(--fl-space-xl);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .bk-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    letter-spacing: 0.3px;
+  }
+
+  .bk-logo em {
+    color: var(--fl-rose);
+    font-style: normal;
+  }
+
+  .bk-step-count {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    font-weight: 500;
+  }
+
+  /* ===== STEPPER ===== */
+  .bk-stepper-wrap {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 22px var(--fl-space-xl) 28px;
+    position: sticky;
+    top: 60px;
+    z-index: 90;
+  }
+
+  .bk-stepper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .bk-step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+  }
+
+  .bk-step-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .bk-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border: 2px solid var(--fl-border-dark);
+    color: var(--fl-warm-gray);
+    background: var(--fl-bg-card);
+    transition: all var(--fl-transition);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .bk-dot.active {
+    border-color: var(--fl-rose);
+    color: var(--fl-rose);
+    background: var(--fl-rose-pale);
+    box-shadow: 0 0 0 4px rgba(194,114,126,0.12);
+  }
+
+  .bk-dot.done {
+    border-color: var(--fl-sauge);
+    background: var(--fl-sauge);
+    color: #fff;
+  }
+
+  .bk-step-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--fl-warm-gray);
+    margin-top: 6px;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .bk-dot.active + .bk-step-label,
+  .bk-step-item.s-active .bk-step-label {
+    color: var(--fl-prune);
+    font-weight: 600;
+  }
+
+  .bk-dot.done + .bk-step-label,
+  .bk-step-item.s-done .bk-step-label {
+    color: var(--fl-sauge);
+    font-weight: 600;
+  }
+
+  .bk-line {
+    flex: 1;
+    height: 2px;
+    background: var(--fl-border-dark);
+    margin: 0 4px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .bk-line.done {
+    background: var(--fl-sauge);
+  }
+
+  /* ===== LAYOUT ===== */
+  .bk-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    min-height: calc(100vh - 130px);
+    align-items: start;
+  }
+
+  .bk-main {
+    padding: var(--fl-space-2xl) 40px;
+    max-width: 720px;
+  }
+
+  .bk-sidebar {
+    background: var(--fl-bg-card);
+    border-left: 1px solid var(--fl-border);
+    padding: var(--fl-space-xl) var(--fl-space-lg);
+    position: sticky;
+    top: 130px;
+    align-self: start;
+    min-height: calc(100vh - 130px);
+  }
+
+  /* ===== STEP VIEWS ===== */
+  .step-view {
+    display: none;
+  }
+
+  .step-view.active {
+    display: block;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-heading {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--fl-prune);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .step-heading em {
+    color: var(--fl-rose);
+    font-style: italic;
+  }
+
+  .step-desc {
+    font-size: 0.9375rem;
+    color: var(--fl-warm-gray);
+    margin-bottom: var(--fl-space-xl);
+    line-height: 1.7;
+  }
+
+  /* ===== STEP 1 — SPÉCIALITÉ ===== */
+  .spec-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--fl-space-md);
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .spec-card {
+    background: var(--fl-bg-card);
+    border: 2px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-lg) var(--fl-space-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    position: relative;
+  }
+
+  .spec-card:hover {
+    border-color: var(--fl-rose-light);
+    box-shadow: var(--fl-shadow);
+    transform: translateY(-2px);
+  }
+
+  .spec-card.selected {
+    border-color: var(--fl-rose);
+    background: var(--fl-rose-pale);
+    box-shadow: var(--fl-shadow-md);
+  }
+
+  .spec-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--fl-rose);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spec-icon {
+    font-size: 1.75rem;
+    margin-bottom: var(--fl-space-sm);
+    display: block;
+  }
+
+  .spec-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--fl-charcoal);
+    line-height: 1.3;
+  }
+
+  /* ===== STEP 2 — OPTIONS ===== */
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fl-space-sm);
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .option-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--fl-bg-card);
+    border: 2px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-md) var(--fl-space-lg);
+    cursor: pointer;
+    transition: all var(--fl-transition);
+  }
+
+  .option-row:hover {
+    border-color: var(--fl-or);
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .option-row.selected {
+    border-color: var(--fl-or);
+    background: var(--fl-or-light);
+  }
+
+  .option-left {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-md);
+  }
+
+  .opt-check {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 2px solid var(--fl-border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: all var(--fl-transition);
+    flex-shrink: 0;
+  }
+
+  .option-row.selected .opt-check {
+    background: var(--fl-or);
+    border-color: var(--fl-or);
+    color: #fff;
+  }
+
+  .opt-name {
+    font-weight: 600;
+    color: var(--fl-prune);
+    font-size: 0.9rem;
+  }
+
+  .opt-desc {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    margin-top: 2px;
+  }
+
+  .opt-price {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--fl-or);
+    white-space: nowrap;
+  }
+
+  .duration-selector {
+    display: flex;
+    gap: var(--fl-space-sm);
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .dur-btn {
+    flex: 1;
+    padding: var(--fl-space-md);
+    border: 2px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius);
+    background: var(--fl-bg-card);
+    font-family: var(--fl-font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--fl-warm-gray);
+    cursor: pointer;
+    text-align: center;
+    transition: all var(--fl-transition);
+  }
+
+  .dur-btn:hover {
+    border-color: var(--fl-rose);
+    color: var(--fl-rose);
+  }
+
+  .dur-btn.selected {
+    border-color: var(--fl-rose);
+    background: var(--fl-rose-pale);
+    color: var(--fl-prune);
+  }
+
+  .dur-sub {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--fl-warm-gray);
+    margin-top: 2px;
+  }
+
+  /* ===== STEP 3 — CALENDRIER ===== */
+  .cal-wrap {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    overflow: hidden;
+    box-shadow: var(--fl-shadow-sm);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--fl-space-md) var(--fl-space-lg);
+    border-bottom: 1px solid var(--fl-border);
+    background: var(--fl-bg);
+  }
+
+  .cal-header h3 {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    color: var(--fl-prune);
+    font-weight: 600;
+  }
+
+  .cal-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--fl-border-dark);
+    background: var(--fl-bg-card);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fl-warm-gray);
+    transition: all var(--fl-transition);
+  }
+
+  .cal-nav-btn:hover {
+    border-color: var(--fl-rose);
+    color: var(--fl-rose);
+  }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    padding: var(--fl-space-sm);
+  }
+
+  .cal-head {
+    padding: var(--fl-space-sm) 4px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--fl-warm-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .cal-day {
+    padding: 9px 4px;
+    font-size: 0.8125rem;
+    color: var(--fl-charcoal);
+    cursor: pointer;
+    border-radius: var(--fl-radius-sm);
+    margin: 2px;
+    transition: all var(--fl-transition);
+    position: relative;
+  }
+
+  .cal-day:hover:not(.disabled) {
+    background: var(--fl-rose-light);
+    color: var(--fl-rose);
+  }
+
+  .cal-day.disabled {
+    color: var(--fl-border-dark);
+    cursor: default;
+    opacity: 0.45;
+  }
+
+  .cal-day.available {
+    font-weight: 600;
+    color: var(--fl-sauge);
+  }
+
+  .cal-day.available::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--fl-sauge);
+  }
+
+  .cal-day.selected {
+    background: var(--fl-rose);
+    color: #fff;
+    font-weight: 700;
+    border-radius: var(--fl-radius-sm);
+  }
+
+  .cal-day.selected::after {
+    display: none;
+  }
+
+  .timeslots {
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  .timeslots h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+  }
+
+  .slots-grid {
+    display: flex;
+    gap: var(--fl-space-sm);
+    flex-wrap: wrap;
+  }
+
+  .slot-btn {
+    padding: var(--fl-space-md) var(--fl-space-lg);
+    border: 2px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius-full);
+    background: var(--fl-bg-card);
+    font-family: var(--fl-font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--fl-warm-gray);
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    text-align: center;
+  }
+
+  .slot-btn:hover {
+    border-color: var(--fl-or);
+    color: var(--fl-or);
+  }
+
+  .slot-btn.selected {
+    background: var(--fl-or);
+    border-color: var(--fl-or);
+    color: #fff;
+  }
+
+  .slot-sub {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    margin-top: 2px;
+    opacity: 0.75;
+  }
+
+  .golden-note {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    background: var(--fl-or-light);
+    border: 1px solid rgba(212,160,60,0.2);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-md) var(--fl-space-lg);
+    margin-bottom: var(--fl-space-xl);
+    font-size: 0.875rem;
+    color: var(--fl-charcoal);
+    line-height: 1.6;
+  }
+
+  .golden-note-icon {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ===== STEP 4 — INFOS ===== */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--fl-space-md);
+  }
+
+  .form-group {
+    margin-bottom: var(--fl-space-md);
+  }
+
+  .form-hint {
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+    margin-top: 4px;
+  }
+
+  .form-section-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    color: var(--fl-prune);
+    margin: var(--fl-space-xl) 0 var(--fl-space-md);
+    padding-top: var(--fl-space-lg);
+    border-top: 1px solid var(--fl-border);
+  }
+
+  .rgpd-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    padding: var(--fl-space-md);
+    background: var(--fl-bg);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius-sm);
+    cursor: pointer;
+    margin-bottom: var(--fl-space-sm);
+  }
+
+  .rgpd-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--fl-border-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    transition: all var(--fl-transition);
+  }
+
+  .rgpd-row.checked .rgpd-check {
+    background: var(--fl-sauge);
+    border-color: var(--fl-sauge);
+    color: #fff;
+  }
+
+  .rgpd-label {
+    font-size: 0.875rem;
+    color: var(--fl-charcoal);
+    line-height: 1.5;
+  }
+
+  .rgpd-label a {
+    color: var(--fl-rose);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .req {
+    color: var(--fl-rose);
+  }
+
+  /* ===== STEP NAVIGATION ===== */
+  .step-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--fl-space-2xl);
+    padding-top: var(--fl-space-lg);
+    border-top: 1px solid var(--fl-border);
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-lg);
+    font-weight: 600;
+  }
+
+  .recap-section {
+    margin-bottom: var(--fl-space-md);
+    padding-bottom: var(--fl-space-md);
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .recap-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .recap-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--fl-warm-gray);
+    margin-bottom: 4px;
+  }
+
+  .recap-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+  }
+
+  .recap-value.light {
+    font-weight: 400;
+    color: var(--fl-charcoal);
+    font-size: 0.8125rem;
+  }
+
+  .recap-price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.8125rem;
+  }
+
+  .rp-l { color: var(--fl-warm-gray); }
+  .rp-v { font-weight: 600; color: var(--fl-prune); }
+
+  .recap-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--fl-space-md) 0 0;
+    margin-top: var(--fl-space-sm);
+    border-top: 2px solid var(--fl-border-dark);
+  }
+
+  .rp-total-l {
+    font-weight: 700;
+    color: var(--fl-prune);
+    font-size: 0.9375rem;
+  }
+
+  .rp-total-v {
+    font-family: var(--fl-font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--fl-or);
+  }
+
+  .recap-deposit {
+    background: var(--fl-or-light);
+    border-radius: var(--fl-radius-sm);
+    padding: var(--fl-space-md);
+    text-align: center;
+    margin-top: var(--fl-space-md);
+    font-size: 0.8125rem;
+    color: var(--fl-charcoal);
+  }
+
+  .recap-deposit strong {
+    display: block;
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    color: var(--fl-or);
+    margin: 4px 0;
+  }
+
+  .sidebar-trust {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+    margin-top: var(--fl-space-sm);
+  }
+
+  /* ===== FOOTER ===== */
+  .bk-footer {
+    background: var(--fl-bg-card);
+    border-top: 1px solid var(--fl-border);
+    padding: var(--fl-space-lg) var(--fl-space-xl);
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .bk-layout { grid-template-columns: 1fr; }
+    .bk-sidebar { position: static; border-left: none; border-top: 1px solid var(--fl-border); min-height: auto; }
+  }
+
+  @media (max-width: 768px) {
+    .spec-grid { grid-template-columns: repeat(3, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .bk-main { padding: var(--fl-space-lg); }
+    .bk-stepper-wrap { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="bk-header">
+  <div class="bk-logo">Fleur de <em>Lumière</em></div>
+  <div class="bk-step-count" id="step-count">Étape 1 sur 7</div>
+</header>
+
+<!-- STEPPER -->
+<div class="bk-stepper-wrap">
+  <div class="bk-stepper">
+
+    <div class="bk-step-item">
+      <div class="bk-dot active" id="dot-1">1</div>
+      <div class="bk-step-label" id="lbl-1">Spécialité</div>
+    </div>
+    <div class="bk-line" id="line-1"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-2">2</div>
+      <div class="bk-step-label" id="lbl-2">Options</div>
+    </div>
+    <div class="bk-line" id="line-2"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-3">3</div>
+      <div class="bk-step-label" id="lbl-3">Calendrier</div>
+    </div>
+    <div class="bk-line" id="line-3"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-4">4</div>
+      <div class="bk-step-label" id="lbl-4">Vos infos</div>
+    </div>
+    <div class="bk-line" id="line-4"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-5">5</div>
+      <div class="bk-step-label" id="lbl-5">CGV</div>
+    </div>
+    <div class="bk-line" id="line-5"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-6">6</div>
+      <div class="bk-step-label" id="lbl-6">Paiement</div>
+    </div>
+    <div class="bk-line" id="line-6"></div>
+
+    <div class="bk-step-item">
+      <div class="bk-dot" id="dot-7">7</div>
+      <div class="bk-step-label" id="lbl-7">Confirmé</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOOKING LAYOUT -->
+<div class="bk-layout">
+
+  <!-- MAIN CONTENT -->
+  <main class="bk-main">
+
+    <!-- ===== STEP 1 : SPÉCIALITÉ ===== -->
+    <div class="step-view active" id="step-1">
+      <h2 class="step-heading">Choisissez votre <em>spécialité</em></h2>
+      <p class="step-desc">Sélectionnez le type de séance qui vous correspond. Chaque spécialité est travaillée avec une approche unique.</p>
+
+      <div class="spec-grid">
+        <div class="spec-card selected" onclick="selectSpec(this, 'Famille')">
+          <span class="spec-icon">👨‍👩‍👧‍👦</span>
+          <div class="spec-name">Famille</div>
+        </div>
+        <div class="spec-card" onclick="selectSpec(this, 'Équestre')">
+          <span class="spec-icon">🐴</span>
+          <div class="spec-name">Équestre</div>
+        </div>
+        <div class="spec-card" onclick="selectSpec(this, 'Événementiel')">
+          <span class="spec-icon">💍</span>
+          <div class="spec-name">Événementiel</div>
+        </div>
+        <div class="spec-card" onclick="selectSpec(this, 'Maternité')">
+          <span class="spec-icon">🤱</span>
+          <div class="spec-name">Maternité</div>
+        </div>
+        <div class="spec-card" onclick="selectSpec(this, 'Scolaire')">
+          <span class="spec-icon">🎒</span>
+          <div class="spec-name">Scolaire</div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <span></span>
+        <button class="fl-btn fl-btn-primary fl-btn-lg" onclick="goStep(2)">
+          Continuer
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 2 : OPTIONS ===== -->
+    <div class="step-view" id="step-2">
+      <h2 class="step-heading">Personnalisez vos <em>options</em></h2>
+      <p class="step-desc">Ajoutez des extras à votre séance. Vous pourrez aussi les ajouter après réservation depuis votre galerie privée.</p>
+
+      <div class="options-list">
+        <div class="option-row selected" onclick="toggleOption(this)">
+          <div class="option-left">
+            <div class="opt-check">✓</div>
+            <div>
+              <div class="opt-name">Tirages Fine Art</div>
+              <div class="opt-desc">3 tirages 20×30 cm sur papier Fine Art professionnel</div>
+            </div>
+          </div>
+          <div class="opt-price">+29€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this)">
+          <div class="option-left">
+            <div class="opt-check"></div>
+            <div>
+              <div class="opt-name">Album Photo Prestige</div>
+              <div class="opt-desc">Album relié cuir, 20 pages, impression premium</div>
+            </div>
+          </div>
+          <div class="opt-price">+149€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this)">
+          <div class="option-left">
+            <div class="opt-check"></div>
+            <div>
+              <div class="opt-name">Livraison Rush 48h</div>
+              <div class="opt-desc">Galerie livrée en 48h au lieu de 2-3 semaines</div>
+            </div>
+          </div>
+          <div class="opt-price">+50€</div>
+        </div>
+        <div class="option-row" onclick="toggleOption(this)">
+          <div class="option-left">
+            <div class="opt-check"></div>
+            <div>
+              <div class="opt-name">Boîte Souvenir « L'Écrin »</div>
+              <div class="opt-desc">Coffret kraft : clé USB, 3 tirages, mot manuscrit</div>
+            </div>
+          </div>
+          <div class="opt-price">+35€</div>
+        </div>
+      </div>
+
+      <h4 class="fl-h4 fl-mb-md" style="color: var(--fl-prune);">Durée de la séance</h4>
+      <div class="duration-selector">
+        <button class="dur-btn" onclick="selectDur(this)">
+          30 min
+          <span class="dur-sub">Session essentielle</span>
+        </button>
+        <button class="dur-btn selected" onclick="selectDur(this)">
+          1 heure
+          <span class="dur-sub">Formule Signature</span>
+        </button>
+        <button class="dur-btn" onclick="selectDur(this)">
+          2 heures
+          <span class="dur-sub">Session complète</span>
+        </button>
+      </div>
+
+      <div class="step-nav">
+        <button class="fl-btn fl-btn-ghost" onclick="goStep(1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour
+        </button>
+        <button class="fl-btn fl-btn-primary fl-btn-lg" onclick="goStep(3)">
+          Continuer
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3 : CALENDRIER ===== -->
+    <div class="step-view" id="step-3">
+      <h2 class="step-heading">Choisissez votre <em>créneau</em></h2>
+      <p class="step-desc">Les jours marqués d'un point vert sont disponibles. Chaque créneau est calé sur l'Heure Dorée.</p>
+
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav-btn">&#8249;</button>
+          <h3>Mars 2026</h3>
+          <button class="cal-nav-btn">&#8250;</button>
+        </div>
+        <div class="cal-grid">
+          <span class="cal-head">Lun</span>
+          <span class="cal-head">Mar</span>
+          <span class="cal-head">Mer</span>
+          <span class="cal-head">Jeu</span>
+          <span class="cal-head">Ven</span>
+          <span class="cal-head">Sam</span>
+          <span class="cal-head">Dim</span>
+
+          <!-- Week 1 -->
+          <span class="cal-day disabled"></span>
+          <span class="cal-day disabled"></span>
+          <span class="cal-day disabled"></span>
+          <span class="cal-day disabled"></span>
+          <span class="cal-day disabled"></span>
+          <span class="cal-day disabled"></span>
+          <span class="cal-day available" onclick="selectDay(this)">1</span>
+
+          <!-- Week 2 -->
+          <span class="cal-day disabled">2</span>
+          <span class="cal-day available" onclick="selectDay(this)">3</span>
+          <span class="cal-day disabled">4</span>
+          <span class="cal-day disabled">5</span>
+          <span class="cal-day disabled">6</span>
+          <span class="cal-day available" onclick="selectDay(this)">7</span>
+          <span class="cal-day available" onclick="selectDay(this)">8</span>
+
+          <!-- Week 3 -->
+          <span class="cal-day disabled">9</span>
+          <span class="cal-day disabled">10</span>
+          <span class="cal-day available" onclick="selectDay(this)">11</span>
+          <span class="cal-day disabled">12</span>
+          <span class="cal-day disabled">13</span>
+          <span class="cal-day available selected" onclick="selectDay(this)">15</span>
+          <span class="cal-day disabled">16</span>
+
+          <!-- Week 4 -->
+          <span class="cal-day disabled">17</span>
+          <span class="cal-day disabled">18</span>
+          <span class="cal-day disabled">19</span>
+          <span class="cal-day disabled">20</span>
+          <span class="cal-day available" onclick="selectDay(this)">21</span>
+          <span class="cal-day available" onclick="selectDay(this)">22</span>
+          <span class="cal-day disabled">23</span>
+
+          <!-- Week 5 -->
+          <span class="cal-day disabled">24</span>
+          <span class="cal-day disabled">25</span>
+          <span class="cal-day disabled">26</span>
+          <span class="cal-day disabled">27</span>
+          <span class="cal-day disabled">28</span>
+          <span class="cal-day available" onclick="selectDay(this)">29</span>
+          <span class="cal-day disabled">30</span>
+          <span class="cal-day disabled">31</span>
+        </div>
+      </div>
+
+      <div class="timeslots">
+        <h4>
+          <span>&#9728;&#65039;</span>
+          Créneaux — Dimanche 15 mars 2026
+        </h4>
+        <div class="slots-grid">
+          <button class="slot-btn" onclick="selectSlot(this)">
+            5h30
+            <span class="slot-sub">Lever du soleil</span>
+          </button>
+          <button class="slot-btn selected" onclick="selectSlot(this)">
+            19h45
+            <span class="slot-sub">Coucher — Heure Dorée</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="golden-note">
+        <span class="golden-note-icon">&#127749;</span>
+        <div>
+          <strong>L'Heure Dorée garantie</strong> — Chaque créneau est calculé en fonction du lever et coucher du soleil. Si la météo ne le permet pas, je vous propose un report gratuit sans conditions.
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="fl-btn fl-btn-ghost" onclick="goStep(2)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour
+        </button>
+        <button class="fl-btn fl-btn-primary fl-btn-lg" onclick="goStep(4)">
+          Continuer
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 4 : VOS INFORMATIONS ===== -->
+    <div class="step-view" id="step-4">
+      <h2 class="step-heading">Parlez-moi de <em>vous</em></h2>
+      <p class="step-desc">Ces informations m'aident à préparer une séance qui vous ressemble. Remplissez ce que vous pouvez !</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl-label">Prénom <span class="req">*</span></label>
+          <input type="text" class="fl-input" placeholder="Votre prénom">
+        </div>
+        <div class="form-group">
+          <label class="fl-label">Nom <span class="req">*</span></label>
+          <input type="text" class="fl-input" placeholder="Votre nom">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="fl-label">Email <span class="req">*</span></label>
+          <input type="email" class="fl-input" placeholder="votre@email.fr">
+        </div>
+        <div class="form-group">
+          <label class="fl-label">Téléphone <span class="req">*</span></label>
+          <input type="tel" class="fl-input" placeholder="06 12 34 56 78">
+        </div>
+      </div>
+
+      <h3 class="form-section-title">À propos de la séance</h3>
+
+      <div class="form-group">
+        <label class="fl-label">Nombre de personnes sur les photos</label>
+        <select class="fl-select">
+          <option value="">Sélectionnez...</option>
+          <option>1 personne</option>
+          <option>2 personnes (couple)</option>
+          <option>3-4 personnes (petite famille)</option>
+          <option>5+ personnes (grande famille)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="fl-label">Y a-t-il des enfants ? Si oui, quels âges ?</label>
+        <input type="text" class="fl-input" placeholder="Ex : 2 enfants — 4 ans et 7 ans">
+      </div>
+      <div class="form-group">
+        <label class="fl-label">Avez-vous un lieu en tête ?</label>
+        <input type="text" class="fl-input" placeholder="Ex : Parc, champ, forêt, bord de rivière...">
+        <div class="form-hint">Si vous n'avez pas d'idée, je vous proposerai mes spots préférés !</div>
+      </div>
+      <div class="form-group">
+        <label class="fl-label">Demande spéciale ou informations utiles</label>
+        <textarea class="fl-textarea" rows="3" placeholder="Occasion spéciale, surprise, besoins particuliers, personnes timides devant l'objectif..."></textarea>
+      </div>
+
+      <h3 class="form-section-title">Confidentialité & RGPD</h3>
+
+      <div class="rgpd-row" onclick="toggleRgpd(this)">
+        <div class="rgpd-check"></div>
+        <div class="rgpd-label">
+          J'autorise Fleur de Lumière à traiter mes données personnelles pour la gestion de ma réservation, conformément à la <a href="#">politique de confidentialité</a>. <span class="req">*</span>
+        </div>
+      </div>
+      <div class="rgpd-row" onclick="toggleRgpd(this)">
+        <div class="rgpd-check"></div>
+        <div class="rgpd-label">
+          J'autorise Fleur de Lumière à utiliser les photos de ma séance à des fins de portfolio et réseaux sociaux. <em style="color: var(--fl-warm-gray); font-size: 0.8125rem;">(Optionnel)</em>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="fl-btn fl-btn-ghost" onclick="goStep(3)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour
+        </button>
+        <button class="fl-btn fl-btn-primary fl-btn-lg" onclick="goStep(5)">
+          Continuer vers les CGV
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 5+ placeholder -->
+    <div class="step-view" id="step-5">
+      <div style="text-align: center; padding: 60px 0;">
+        <div style="font-size: 3rem; margin-bottom: 16px;">&#128203;</div>
+        <h2 class="step-heading">Étapes 5 à 7</h2>
+        <p class="step-desc">CGV + Paiement + Confirmation — voir le fichier <strong>02-reservation-part2.html</strong></p>
+        <button class="fl-btn fl-btn-ghost fl-mt-lg" onclick="goStep(4)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour à l'étape 4
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR RÉCAP -->
+  <aside class="bk-sidebar">
+    <h3 class="sidebar-title">Récapitulatif</h3>
+
+    <div class="recap-section">
+      <div class="recap-label">Spécialité</div>
+      <div class="recap-value">&#128106;&#8205;&#128105;&#8205;&#128103;&#8205;&#128102; Famille &amp; Portraits</div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Formule</div>
+      <div class="recap-value">Signature</div>
+      <div class="recap-value light">1h · 25 photos retouchées</div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Options sélectionnées</div>
+      <div class="recap-price-row">
+        <span class="rp-l">Tirages Fine Art</span>
+        <span class="rp-v">+29€</span>
+      </div>
+    </div>
+
+    <div class="recap-section">
+      <div class="recap-label">Créneau</div>
+      <div class="recap-value">Dim. 15 mars 2026</div>
+      <div class="recap-value light">19h45 — Heure Dorée &#127749;</div>
+    </div>
+
+    <hr class="fl-divider">
+
+    <div class="recap-price-row">
+      <span class="rp-l">Formule Signature</span>
+      <span class="rp-v">280€</span>
+    </div>
+    <div class="recap-price-row">
+      <span class="rp-l">Tirages Fine Art</span>
+      <span class="rp-v">+29€</span>
+    </div>
+
+    <div class="recap-total">
+      <span class="rp-total-l">Total</span>
+      <span class="rp-total-v">309€</span>
+    </div>
+
+    <div class="recap-deposit">
+      Acompte à régler (30%)
+      <strong>92,70€</strong>
+      <span style="font-size: 0.75rem; color: var(--fl-warm-gray); display: block;">Solde : 216,30€ avant livraison</span>
+    </div>
+
+    <hr class="fl-divider">
+
+    <div class="sidebar-trust">
+      <span>&#128274;</span>
+      <span>Paiement sécurisé Stripe</span>
+    </div>
+    <div class="sidebar-trust">
+      <span>&#8617;&#65039;</span>
+      <span>Report gratuit si météo défavorable</span>
+    </div>
+    <div class="sidebar-trust">
+      <span>&#10003;</span>
+      <span>Annulation gratuite &gt; 7 jours</span>
+    </div>
+  </aside>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="bk-footer">
+  &copy; 2026 Fleur de Lumière — Tous droits réservés
+</footer>
+
+<script>
+  let currentStep = 1;
+
+  function goStep(n) {
+    document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('step-' + n);
+    if (target) target.classList.add('active');
+
+    for (let i = 1; i <= 7; i++) {
+      const dot = document.getElementById('dot-' + i);
+      if (!dot) continue;
+      dot.className = 'bk-dot';
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+    for (let i = 1; i <= 6; i++) {
+      const line = document.getElementById('line-' + i);
+      if (line) line.className = 'bk-line' + (i < n ? ' done' : '');
+    }
+
+    document.getElementById('step-count').textContent = 'Étape ' + n + ' sur 7';
+    currentStep = n;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectSpec(el, name) {
+    document.querySelectorAll('.spec-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function toggleOption(el) {
+    el.classList.toggle('selected');
+    const check = el.querySelector('.opt-check');
+    check.textContent = el.classList.contains('selected') ? '✓' : '';
+  }
+
+  function selectDur(el) {
+    document.querySelectorAll('.dur-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectDay(el) {
+    if (el.classList.contains('disabled')) return;
+    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectSlot(el) {
+    document.querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function toggleRgpd(el) {
+    el.classList.toggle('checked');
+    const check = el.querySelector('.rgpd-check');
+    check.textContent = el.classList.contains('checked') ? '✓' : '';
+  }
+</script>
+</body>
+</html>

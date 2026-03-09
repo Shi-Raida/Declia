@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Maquettes complémentaires</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E; --prune: #4A2E3D; --or: #D4A03C; --sauge: #6B7F5A;
+    --bg: #FFFFFF; --bg-alt: #FFF9F7; --bg-shell: #F8F6F4;
+    --texte: #2D2226; --gris: #6B7280; --gris-light: #9CA3AF; --gris-border: #E5E7EB;
+    --rose-hover: #A85965; --rose-light: rgba(194,114,126,0.08);
+    --or-light: rgba(212,160,60,0.1); --sauge-light: rgba(107,127,90,0.1);
+    --prune-light: rgba(74,46,61,0.05); --erreur: #DC2626;
+    --font-titre: 'Playfair Display', Georgia, serif;
+    --font: 'Lato', -apple-system, sans-serif;
+    --radius: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-full: 9999px;
+    --shadow-sm: 0 1px 3px rgba(74,46,61,0.06); --shadow: 0 2px 8px rgba(74,46,61,0.08);
+    --shadow-md: 0 4px 16px rgba(74,46,61,0.12); --shadow-cta: 0 4px 12px rgba(194,114,126,0.3);
+    --transition: 0.25s ease;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font); color: var(--texte); background: var(--bg-shell); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  a { text-decoration: none; color: inherit; }
+  button { font-family: var(--font); cursor: pointer; }
+  h1,h2,h3,h4 { font-family: var(--font-titre); line-height: 1.25; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font); font-size: 14px; font-weight: 700;
+    padding: 12px 28px; border-radius: var(--radius); cursor: pointer;
+    transition: var(--transition); border: 2px solid transparent;
+  }
+  .btn-primary { background: var(--rose); color: #fff; border-color: var(--rose); box-shadow: var(--shadow-cta); }
+  .btn-primary:hover { background: var(--rose-hover); border-color: var(--rose-hover); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--prune); border: 2px solid var(--prune); }
+  .btn-secondary:hover { background: var(--prune); color: #fff; }
+  .btn-sm { padding: 8px 18px; font-size: 13px; }
+  .btn-full { width: 100%; }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .or-line { width: 60px; height: 2px; background: var(--or); margin: 16px auto; border-radius: 1px; }
+  .photo-placeholder { width: 100%; height: 100%; position: relative; }
+
+  /* ===== VIEW SWITCHER ===== */
+  .view-switcher {
+    position: sticky; top: 0; z-index: 100; background: var(--prune);
+    padding: 12px 24px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .view-switcher-btn {
+    padding: 10px 24px; border-radius: var(--radius-full); font-size: 13px; font-weight: 700;
+    border: 2px solid rgba(255,255,255,0.15); background: transparent;
+    color: rgba(255,255,255,0.7); cursor: pointer; transition: var(--transition);
+  }
+  .view-switcher-btn:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+  .view-switcher-btn.active { background: var(--rose); border-color: var(--rose); color: #fff; }
+
+  .page-view { display: none; }
+  .page-view.active { display: block; }
+
+  /* ===== SHARED HEADER ===== */
+  .header {
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gris-border); padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 100%;
+  }
+  .logo { font-family: var(--font-titre); font-size: 20px; font-weight: 700; color: var(--prune); }
+  .logo span { color: var(--or); }
+  .header-nav { display: flex; align-items: center; gap: 24px; }
+  .header-nav a { font-size: 14px; color: var(--prune); transition: var(--transition); }
+  .header-nav a:hover { color: var(--rose); }
+  .header-nav .btn { padding: 8px 20px; font-size: 13px; }
+
+  /* ═══════════════════════════════════════ */
+  /*  1. ESPACE CLIENT                      */
+  /* ═══════════════════════════════════════ */
+  .client-space { background: var(--bg-shell); min-height: 100vh; }
+
+  .client-header-bar {
+    background: var(--bg); border-bottom: 1px solid var(--gris-border);
+    padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .client-welcome h1 { font-size: 22px; color: var(--prune); }
+  .client-welcome h1 em { color: var(--rose); font-style: italic; }
+  .client-welcome p { font-size: 13px; color: var(--gris); margin-top: 2px; }
+
+  .client-tabs {
+    display: flex; gap: 4px; background: var(--bg); border-bottom: 1px solid var(--gris-border);
+    padding: 0 32px;
+  }
+  .client-tab {
+    padding: 14px 20px; font-size: 14px; font-weight: 700; color: var(--gris);
+    border: none; background: none; cursor: pointer; position: relative;
+    transition: var(--transition);
+  }
+  .client-tab:hover { color: var(--prune); }
+  .client-tab.active { color: var(--rose); }
+  .client-tab.active::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+    height: 3px; background: var(--rose); border-radius: 3px 3px 0 0;
+  }
+  .client-tab .tab-badge {
+    background: var(--rose); color: #fff; font-size: 10px; padding: 2px 7px;
+    border-radius: 99px; margin-left: 6px;
+  }
+
+  .client-content { padding: 28px 32px; max-width: 1100px; margin: 0 auto; }
+
+  /* Galerie client */
+  .galerie-client-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+  }
+  .galerie-client-header h2 { font-size: 20px; color: var(--prune); }
+  .galerie-client-header h2 em { color: var(--rose); font-style: italic; }
+  .galerie-expire {
+    font-size: 13px; color: var(--gris); background: var(--or-light);
+    padding: 6px 16px; border-radius: var(--radius-full);
+  }
+  .galerie-expire strong { color: var(--or); }
+
+  .galerie-actions-bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .galerie-actions-bar .filter-chip {
+    padding: 6px 14px; border-radius: var(--radius-full); font-size: 12px; font-weight: 700;
+    border: 1px solid var(--gris-border); background: var(--bg); color: var(--gris);
+    cursor: pointer; transition: var(--transition);
+  }
+  .galerie-actions-bar .filter-chip:hover { border-color: var(--rose); color: var(--rose); }
+  .galerie-actions-bar .filter-chip.active { background: var(--rose); color: #fff; border-color: var(--rose); }
+
+  .photo-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .photo-item {
+    border-radius: var(--radius); overflow: hidden; position: relative;
+    cursor: pointer; transition: var(--transition);
+  }
+  .photo-item:hover { transform: scale(1.02); box-shadow: var(--shadow-md); }
+  .photo-item .photo-placeholder { aspect-ratio: 4/5; }
+  .photo-item-overlay {
+    position: absolute; inset: 0; background: rgba(74,46,61,0);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    opacity: 0; transition: var(--transition);
+  }
+  .photo-item:hover .photo-item-overlay { background: rgba(74,46,61,0.3); opacity: 1; }
+  .photo-action-btn {
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.9);
+    border: none; font-size: 16px; cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .photo-action-btn:hover { background: #fff; transform: scale(1.1); }
+  .photo-fav {
+    position: absolute; top: 8px; right: 8px; width: 32px; height: 32px;
+    border-radius: 50%; background: rgba(255,255,255,0.8); border: none;
+    font-size: 14px; cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .photo-fav.liked { background: var(--rose); color: #fff; }
+  .photo-number {
+    position: absolute; bottom: 8px; left: 8px; font-size: 11px; font-weight: 700;
+    color: #fff; background: rgba(74,46,61,0.6); padding: 2px 8px;
+    border-radius: 99px; backdrop-filter: blur(4px);
+  }
+
+  /* Photo colors */
+  .pc1 { background: linear-gradient(135deg, #d4cfc5, #b8b0a0); }
+  .pc2 { background: linear-gradient(145deg, #e8d5c4, #d0bba6); }
+  .pc3 { background: linear-gradient(130deg, #c8bfac, #a69c85); }
+  .pc4 { background: linear-gradient(140deg, #f0d9a8, #dfc080); }
+  .pc5 { background: linear-gradient(155deg, #d5c8b8, #bbad9a); }
+  .pc6 { background: linear-gradient(135deg, #cec3ad, #b0a58f); }
+  .pc7 { background: linear-gradient(145deg, #e0d5c0, #c0b49c); }
+  .pc8 { background: linear-gradient(130deg, #d8ccb8, #b8ac96); }
+
+  /* Commandes client */
+  .orders-list { display: flex; flex-direction: column; gap: 16px; }
+  .order-card {
+    background: var(--bg); border-radius: var(--radius-md); padding: 24px;
+    border: 1px solid var(--gris-border); box-shadow: var(--shadow-sm);
+    display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center;
+  }
+  .order-visual {
+    width: 80px; height: 80px; border-radius: var(--radius); overflow: hidden;
+  }
+  .order-info h4 { font-size: 15px; color: var(--prune); margin-bottom: 4px; }
+  .order-info .order-ref { font-size: 12px; color: var(--gris); }
+  .order-info .order-products { font-size: 13px; color: var(--texte); margin-top: 8px; }
+  .order-status-col { text-align: right; }
+  .order-price { font-family: var(--font-titre); font-size: 20px; font-weight: 700; color: var(--or); }
+
+  /* Suivi commande */
+  .order-tracker {
+    display: flex; align-items: center; gap: 4px; margin-top: 12px;
+  }
+  .tracker-step {
+    flex: 1; height: 6px; border-radius: 3px; background: var(--gris-border);
+    position: relative;
+  }
+  .tracker-step.done { background: var(--sauge); }
+  .tracker-step.current { background: var(--or); }
+  .tracker-labels {
+    display: flex; justify-content: space-between; font-size: 10px;
+    color: var(--gris); margin-top: 6px;
+  }
+
+  /* Réservations client */
+  .booking-card {
+    background: var(--bg); border-radius: var(--radius-md); padding: 24px;
+    border: 1px solid var(--gris-border); box-shadow: var(--shadow-sm);
+    display: flex; align-items: center; gap: 20px;
+  }
+  .booking-date-box {
+    width: 64px; height: 64px; border-radius: var(--radius); flex-shrink: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .booking-date-box .bday { font-family: var(--font-titre); font-size: 24px; font-weight: 700; line-height: 1; }
+  .booking-date-box .bmonth { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+  .bdb-rose { background: var(--rose-light); color: var(--rose); }
+  .bdb-sauge { background: var(--sauge-light); color: var(--sauge); }
+  .bdb-or { background: var(--or-light); color: #92750c; }
+  .booking-info { flex: 1; }
+  .booking-info h4 { font-size: 15px; color: var(--prune); margin-bottom: 2px; }
+  .booking-info .booking-meta { font-size: 13px; color: var(--gris); }
+  .booking-status {
+    font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: var(--radius-full);
+  }
+  .bs-confirmed { background: var(--sauge-light); color: var(--sauge); }
+  .bs-pending { background: var(--or-light); color: #92750c; }
+  .bs-done { background: var(--prune-light); color: var(--prune); }
+
+  /* Fidélité client */
+  .fidelite-card {
+    background: var(--bg); border-radius: var(--radius-md); padding: 28px;
+    border: 1px solid var(--gris-border); box-shadow: var(--shadow-sm);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  .fidelite-block h4 { font-size: 16px; color: var(--prune); margin-bottom: 12px; }
+  .fidelite-stat {
+    display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
+  }
+  .fidelite-stat .f-val { font-family: var(--font-titre); font-size: 28px; font-weight: 700; color: var(--or); }
+  .fidelite-stat .f-label { font-size: 13px; color: var(--gris); }
+  .parrainage-code {
+    background: var(--or-light); border-radius: var(--radius); padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between; margin-top: 12px;
+  }
+  .parrainage-code .code { font-family: monospace; font-size: 16px; font-weight: 700; color: var(--prune); letter-spacing: 2px; }
+
+  /* ═══════════════════════════════════════ */
+  /*  2. PAGE CONTACT                       */
+  /* ═══════════════════════════════════════ */
+  .contact-page { background: var(--bg); }
+  .contact-hero {
+    padding: 120px 0 80px; text-align: center; background: var(--bg);
+  }
+  .contact-hero h1 { font-size: clamp(32px, 5vw, 46px); color: var(--prune); margin-bottom: 12px; }
+  .contact-hero h1 em { color: var(--rose); font-style: italic; }
+  .contact-hero p { font-size: 17px; color: var(--gris); max-width: 480px; margin: 0 auto; }
+
+  .contact-section { padding: 0 0 100px; }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start;
+  }
+  .contact-info { padding-top: 8px; }
+  .contact-info-item {
+    display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px;
+  }
+  .ci-icon {
+    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .ci-icon-rose { background: var(--rose-light); }
+  .ci-icon-or { background: var(--or-light); }
+  .ci-icon-sauge { background: var(--sauge-light); }
+  .contact-info-item h3 { font-size: 16px; color: var(--prune); margin-bottom: 4px; }
+  .contact-info-item p { font-size: 14px; color: var(--gris); line-height: 1.6; }
+  .contact-info-item a { color: var(--rose); font-weight: 700; }
+
+  .contact-social { margin-top: 16px; display: flex; gap: 12px; }
+  .contact-social a {
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--gris-border);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    transition: var(--transition);
+  }
+  .contact-social a:hover { background: var(--or); border-color: var(--or); }
+
+  .contact-form-card {
+    background: var(--bg); border-radius: var(--radius-lg); padding: 40px;
+    box-shadow: var(--shadow-md); border: 1px solid var(--gris-border);
+  }
+  .contact-form-card h2 { font-size: 22px; color: var(--prune); margin-bottom: 24px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block; font-size: 13px; font-weight: 700; color: var(--prune);
+    margin-bottom: 6px;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px 16px; border: 2px solid var(--gris-border);
+    border-radius: var(--radius); font-family: var(--font); font-size: 14px;
+    color: var(--texte); background: var(--bg); transition: var(--transition);
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--rose); box-shadow: 0 0 0 3px rgba(194,114,126,0.15);
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--gris-light); }
+  .form-group textarea { min-height: 140px; resize: vertical; }
+  .form-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+
+  /* ═══════════════════════════════════════ */
+  /*  3. STATISTIQUES ADMIN                 */
+  /* ═══════════════════════════════════════ */
+  .stats-page { background: var(--bg-shell); min-height: 100vh; }
+
+  .stats-header-bar {
+    background: var(--bg); border-bottom: 1px solid var(--gris-border);
+    padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .stats-header-bar h1 { font-size: 22px; color: var(--prune); }
+  .stats-header-bar h1 em { color: var(--rose); font-style: italic; }
+  .stats-period {
+    display: flex; gap: 4px;
+  }
+  .stats-period button {
+    padding: 8px 16px; border-radius: var(--radius-full); font-size: 12px;
+    font-weight: 700; border: 1px solid var(--gris-border); background: var(--bg);
+    color: var(--gris); cursor: pointer; transition: var(--transition);
+  }
+  .stats-period button.active { background: var(--prune); color: #fff; border-color: var(--prune); }
+
+  .stats-content { padding: 28px 32px; max-width: 1200px; margin: 0 auto; }
+
+  /* KPI row */
+  .kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 28px; }
+  .kpi-card {
+    background: var(--bg); border-radius: var(--radius-md); padding: 20px;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gris-border);
+    text-align: center;
+  }
+  .kpi-card .kpi-icon { font-size: 24px; margin-bottom: 8px; }
+  .kpi-card .kpi-value { font-family: var(--font-titre); font-size: 28px; font-weight: 700; color: var(--prune); }
+  .kpi-card .kpi-label { font-size: 11px; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .kpi-card .kpi-change { font-size: 11px; font-weight: 700; margin-top: 6px; }
+  .kpi-up { color: var(--sauge); }
+  .kpi-down { color: var(--erreur); }
+
+  /* Charts */
+  .charts-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 28px; }
+  .chart-card {
+    background: var(--bg); border-radius: var(--radius-md); box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gris-border); overflow: hidden;
+  }
+  .chart-card-header {
+    padding: 18px 24px; border-bottom: 1px solid var(--gris-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .chart-card-header h3 { font-family: var(--font-titre); font-size: 15px; color: var(--prune); }
+  .chart-card-body { padding: 20px 24px; }
+
+  /* Bar chart enhanced */
+  .revenue-chart {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    height: 220px; padding: 0 4px; gap: 8px;
+  }
+  .rev-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .rev-bar {
+    width: 100%; max-width: 36px; border-radius: 4px 4px 0 0;
+    transition: var(--transition); position: relative; cursor: pointer;
+  }
+  .rev-bar:hover { opacity: 0.8; }
+  .rev-bar::after {
+    content: attr(data-val); position: absolute; top: -22px; left: 50%;
+    transform: translateX(-50%); font-size: 10px; font-weight: 700;
+    color: var(--prune); white-space: nowrap; opacity: 0; transition: var(--transition);
+  }
+  .rev-bar:hover::after { opacity: 1; }
+  .rev-label { font-size: 10px; color: var(--gris); margin-top: 8px; }
+
+  /* Donut chart CSS */
+  .donut-container { display: flex; align-items: center; gap: 32px; }
+  .donut {
+    width: 160px; height: 160px; border-radius: 50%; position: relative;
+    background: conic-gradient(
+      var(--rose) 0deg 144deg,
+      var(--sauge) 144deg 230deg,
+      var(--or) 230deg 300deg,
+      #be185d 300deg 330deg,
+      var(--gris-border) 330deg 360deg
+    );
+  }
+  .donut::after {
+    content: ''; position: absolute; inset: 30px; border-radius: 50%;
+    background: var(--bg);
+  }
+  .donut-center {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 1;
+  }
+  .donut-center .dc-val { font-family: var(--font-titre); font-size: 28px; font-weight: 700; color: var(--prune); }
+  .donut-center .dc-label { font-size: 11px; color: var(--gris); }
+  .donut-legend { flex: 1; }
+  .donut-legend-item {
+    display: flex; align-items: center; gap: 10px; padding: 6px 0;
+    font-size: 13px;
+  }
+  .donut-legend-item .dl-color { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .donut-legend-item .dl-pct { margin-left: auto; font-weight: 700; color: var(--prune); }
+
+  /* Rankings */
+  .ranking-list { list-style: none; }
+  .ranking-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid rgba(74,46,61,0.04);
+  }
+  .ranking-item:last-child { border: none; }
+  .ranking-num {
+    width: 28px; height: 28px; border-radius: 50%; background: var(--or-light);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-titre); font-size: 13px; font-weight: 700; color: var(--or);
+    flex-shrink: 0;
+  }
+  .ranking-info { flex: 1; }
+  .ranking-info .r-name { font-weight: 700; font-size: 13px; color: var(--prune); }
+  .ranking-info .r-sub { font-size: 11px; color: var(--gris); }
+  .ranking-value { font-family: var(--font-titre); font-weight: 700; color: var(--or); }
+
+  /* Metrics grid */
+  .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 28px; }
+  .metric-card {
+    background: var(--bg); border-radius: var(--radius-md); padding: 24px;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--gris-border);
+  }
+  .metric-card h4 { font-size: 13px; color: var(--gris); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .metric-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
+  .metric-row .m-label { font-size: 13px; color: var(--texte); }
+  .metric-row .m-value { font-weight: 700; color: var(--prune); }
+  .metric-row .m-bar { flex: 1; margin: 0 16px; height: 6px; background: var(--gris-border); border-radius: 3px; overflow: hidden; }
+  .metric-row .m-bar-fill { height: 100%; border-radius: 3px; }
+
+  /* Source acquisition */
+  .source-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .source-item {
+    display: flex; align-items: center; gap: 12px; padding: 14px;
+    background: var(--bg-alt); border-radius: var(--radius);
+  }
+  .source-icon { font-size: 20px; }
+  .source-info { flex: 1; }
+  .source-info .s-name { font-weight: 700; font-size: 13px; color: var(--prune); }
+  .source-info .s-val { font-size: 12px; color: var(--gris); }
+  .source-pct { font-family: var(--font-titre); font-weight: 700; color: var(--or); }
+
+  /* ===== FOOTER (shared) ===== */
+  .page-footer {
+    background: var(--prune); color: #fff; padding: 40px 24px; text-align: center;
+  }
+  .page-footer .logo { color: #fff; font-size: 20px; margin-bottom: 8px; display: block; }
+  .page-footer .logo span { color: var(--or); }
+  .page-footer p { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+    .charts-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .fidelite-card { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .source-grid { grid-template-columns: 1fr; }
+    .order-card { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .view-switcher { flex-wrap: wrap; }
+    .view-switcher-btn { font-size: 12px; padding: 8px 16px; }
+    .client-content { padding: 20px 16px; }
+    .stats-content { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- VIEW SWITCHER -->
+<div class="view-switcher">
+  <button class="view-switcher-btn active" onclick="switchView('espace-client', this)">👤 Espace Client</button>
+  <button class="view-switcher-btn" onclick="switchView('contact', this)">📬 Page Contact</button>
+  <button class="view-switcher-btn" onclick="switchView('statistiques', this)">📈 Statistiques Admin</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 1. ESPACE CLIENT                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page-view active" id="view-espace-client">
+  <div class="client-space">
+
+    <!-- Header client -->
+    <div class="header">
+      <a class="logo">Fleur de <span>L</span>umière</a>
+      <div class="header-nav">
+        <a href="#">Mon espace</a>
+        <a href="#">Mes galeries</a>
+        <a href="#">Mes commandes</a>
+        <a href="#" class="btn btn-primary btn-sm">Réserver une séance</a>
+      </div>
+    </div>
+
+    <div class="client-header-bar">
+      <div class="client-welcome">
+        <h1>Bonjour <em>Sophie</em> ✨</h1>
+        <p>Bienvenue dans votre espace personnel Fleur de Lumière</p>
+      </div>
+      <a href="#" class="btn btn-secondary btn-sm">⚙ Mon profil</a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="client-tabs">
+      <button class="client-tab active" onclick="switchClientTab('galerie', this)">🖼️ Mes galeries <span class="tab-badge">2</span></button>
+      <button class="client-tab" onclick="switchClientTab('commandes', this)">📦 Mes commandes</button>
+      <button class="client-tab" onclick="switchClientTab('reservations', this)">📅 Mes réservations</button>
+      <button class="client-tab" onclick="switchClientTab('fidelite', this)">🎁 Fidélité & Parrainage</button>
+    </div>
+
+    <div class="client-content">
+
+      <!-- TAB: Galerie -->
+      <div id="client-galerie">
+        <div class="galerie-client-header">
+          <h2>Séance <em>Signature</em> — Équestre</h2>
+          <span class="galerie-expire">⏱ Expire dans <strong>62 jours</strong></span>
+        </div>
+
+        <div class="galerie-actions-bar">
+          <span class="filter-chip active">Toutes (25)</span>
+          <span class="filter-chip">❤️ Favoris (6)</span>
+          <a class="btn btn-sm btn-primary">⬇ Tout télécharger</a>
+          <a class="btn btn-sm btn-secondary">🛒 Commander des tirages</a>
+        </div>
+
+        <div class="photo-grid">
+          <div class="photo-item"><div class="photo-placeholder pc1"></div><button class="photo-fav liked">❤</button><span class="photo-number">1</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc2"></div><button class="photo-fav">🤍</button><span class="photo-number">2</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc3"></div><button class="photo-fav liked">❤</button><span class="photo-number">3</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc4"></div><button class="photo-fav">🤍</button><span class="photo-number">4</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc5"></div><button class="photo-fav liked">❤</button><span class="photo-number">5</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc6"></div><button class="photo-fav">🤍</button><span class="photo-number">6</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc7"></div><button class="photo-fav liked">❤</button><span class="photo-number">7</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+          <div class="photo-item"><div class="photo-placeholder pc8"></div><button class="photo-fav liked">❤</button><span class="photo-number">8</span><div class="photo-item-overlay"><button class="photo-action-btn">⬇</button><button class="photo-action-btn">🛒</button></div></div>
+        </div>
+      </div>
+
+      <!-- TAB: Commandes -->
+      <div id="client-commandes" style="display:none;">
+        <h2 style="font-size: 20px; color: var(--prune); margin-bottom: 20px;">Mes <em style="color:var(--rose); font-style:italic;">commandes</em></h2>
+        <div class="orders-list">
+          <div class="order-card">
+            <div class="order-visual"><div class="photo-placeholder pc3" style="border-radius: var(--radius);"></div></div>
+            <div class="order-info">
+              <h4>Commande #FDL-127</h4>
+              <div class="order-ref">25 février 2026</div>
+              <div class="order-products">1× Tirage 30×40 cm + 1× Boîte Souvenir « L'Écrin »</div>
+              <div class="order-tracker">
+                <div class="tracker-step done"></div>
+                <div class="tracker-step done"></div>
+                <div class="tracker-step done"></div>
+                <div class="tracker-step current"></div>
+                <div class="tracker-step"></div>
+                <div class="tracker-step"></div>
+                <div class="tracker-step"></div>
+              </div>
+              <div class="tracker-labels"><span>Reçue</span><span>Payée</span><span>Prépa</span><span>Production</span><span>Contrôle</span><span>Expédié</span><span>Livré</span></div>
+            </div>
+            <div class="order-status-col">
+              <div class="order-price">75€</div>
+              <span class="booking-status bs-pending" style="margin-top: 8px; display: inline-block;">En production</span>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div class="order-visual"><div class="photo-placeholder pc1" style="border-radius: var(--radius);"></div></div>
+            <div class="order-info">
+              <h4>Commande #FDL-098</h4>
+              <div class="order-ref">18 octobre 2025</div>
+              <div class="order-products">3× Tirages 20×30 cm (inclus formule Signature)</div>
+              <div class="order-tracker">
+                <div class="tracker-step done"></div><div class="tracker-step done"></div><div class="tracker-step done"></div>
+                <div class="tracker-step done"></div><div class="tracker-step done"></div><div class="tracker-step done"></div><div class="tracker-step done"></div>
+              </div>
+              <div class="tracker-labels"><span>Reçue</span><span>Payée</span><span>Prépa</span><span>Production</span><span>Contrôle</span><span>Expédié</span><span>Livré ✓</span></div>
+            </div>
+            <div class="order-status-col">
+              <div class="order-price" style="color: var(--sauge);">Inclus</div>
+              <span class="booking-status bs-confirmed" style="margin-top: 8px; display: inline-block;">Livré</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Réservations -->
+      <div id="client-reservations" style="display:none;">
+        <h2 style="font-size: 20px; color: var(--prune); margin-bottom: 20px;">Mes <em style="color:var(--rose); font-style:italic;">réservations</em></h2>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="booking-card">
+            <div class="booking-date-box bdb-sauge"><span class="bday">11</span><span class="bmonth">Mars</span></div>
+            <div class="booking-info"><h4>Séance Signature — Équestre</h4><div class="booking-meta">17h30 · Écurie des Chênes, Gaillac · Avec Éclair</div></div>
+            <span class="booking-status bs-confirmed">✓ Confirmée</span>
+          </div>
+          <div class="booking-card">
+            <div class="booking-date-box bdb-rose"><span class="bday">22</span><span class="bmonth">Fév</span></div>
+            <div class="booking-info"><h4>Séance Signature — Équestre</h4><div class="booking-meta">18h00 · Champ route de Cahuzac · 25 photos livrées</div></div>
+            <span class="booking-status bs-done">Terminée</span>
+          </div>
+          <div class="booking-card">
+            <div class="booking-date-box bdb-or"><span class="bday">10</span><span class="bmonth">Oct</span></div>
+            <div class="booking-info"><h4>Séance Essentiel — Équestre</h4><div class="booking-meta">17h00 · Champ route de Cahuzac · 10 photos livrées</div></div>
+            <span class="booking-status bs-done">Terminée</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Fidélité -->
+      <div id="client-fidelite" style="display:none;">
+        <h2 style="font-size: 20px; color: var(--prune); margin-bottom: 20px;">Fidélité & <em style="color:var(--rose); font-style:italic;">Parrainage</em></h2>
+        <div class="fidelite-card">
+          <div class="fidelite-block">
+            <h4>🏇 Passeport Équestre</h4>
+            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+              <span style="width: 40px; height: 40px; border-radius: 50%; background: var(--sauge); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px;">✓</span>
+              <span style="width: 40px; height: 40px; border-radius: 50%; background: var(--sauge); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px;">✓</span>
+              <span style="width: 40px; height: 40px; border-radius: 50%; background: var(--sauge); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px;">✓</span>
+              <span style="width: 40px; height: 40px; border-radius: 50%; border: 2px dashed var(--gris-border); display: flex; align-items: center; justify-content: center; color: var(--gris); font-size: 14px;">4</span>
+              <span style="width: 40px; height: 40px; border-radius: 50%; border: 2px dashed var(--gris-border); display: flex; align-items: center; justify-content: center; color: var(--gris); font-size: 14px;">5</span>
+            </div>
+            <p style="font-size: 13px; color: var(--gris);">Encore <strong>2 séances</strong> pour obtenir un tirage grand format offert !</p>
+            <div class="fidelite-stat" style="margin-top: 20px;"><span class="f-val">3</span><span class="f-label">séances réalisées</span></div>
+            <div class="fidelite-stat"><span class="f-val">560€</span><span class="f-label">dépensés au total</span></div>
+          </div>
+          <div class="fidelite-block">
+            <h4>💐 Bouquet de Recommandations</h4>
+            <div class="fidelite-stat"><span class="f-val">1</span><span class="f-label">parrainage réussi</span></div>
+            <p style="font-size: 13px; color: var(--gris); margin-bottom: 16px;">Partagez votre code et offrez <strong>-10%</strong> à vos proches. Vous recevez <strong>-15%</strong> sur votre prochaine séance. Au 3ème parrainage : une mini-séance offerte !</p>
+            <div class="parrainage-code">
+              <div><div style="font-size: 11px; color: var(--gris); margin-bottom: 2px;">Votre code parrainage</div><span class="code">SOPHIE-FDL</span></div>
+              <button class="btn btn-sm btn-primary" style="padding: 8px 16px;">Copier</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 2. PAGE CONTACT                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page-view" id="view-contact">
+  <div class="contact-page">
+    <div class="header">
+      <a class="logo">Fleur de <span>L</span>umière</a>
+      <div class="header-nav">
+        <a href="#">Spécialités</a><a href="#">Formules</a><a href="#">Portfolio</a><a href="#">À propos</a>
+        <a href="#" class="btn btn-primary btn-sm">Réserver</a>
+      </div>
+    </div>
+
+    <div class="contact-hero">
+      <div class="container">
+        <h1>Parlons de votre <em>projet</em></h1>
+        <div class="or-line"></div>
+        <p>Une question, une envie, un projet ? N'hésitez pas à me contacter. Je vous réponds sous 24h.</p>
+      </div>
+    </div>
+
+    <div class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="contact-info-item">
+              <div class="ci-icon ci-icon-rose">📧</div>
+              <div><h3>Email</h3><p><a href="#">contact@fleurdelumiere.fr</a></p></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="ci-icon ci-icon-or">📍</div>
+              <div><h3>Zone d'intervention</h3><p>Parisot (81) — Tarn<br>Toulouse, Gaillac, Lavaur et environs</p></div>
+            </div>
+            <div class="contact-info-item">
+              <div class="ci-icon ci-icon-sauge">⏱</div>
+              <div><h3>Délai de réponse</h3><p>Je vous réponds sous <strong>24 heures</strong>, du lundi au samedi.</p></div>
+            </div>
+            <div class="contact-social">
+              <a href="#">📸</a>
+              <a href="#">🎵</a>
+              <a href="#">📘</a>
+            </div>
+          </div>
+
+          <div class="contact-form-card">
+            <h2>Envoyez-moi un <em style="color:var(--rose); font-style:italic;">message</em></h2>
+            <div class="form-row">
+              <div class="form-group"><label>Prénom</label><input type="text" placeholder="Votre prénom"></div>
+              <div class="form-group"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
+            </div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="votre@email.fr"></div>
+            <div class="form-group">
+              <label>Sujet</label>
+              <select>
+                <option value="">Sélectionnez un sujet...</option>
+                <option>Question sur une prestation</option>
+                <option>Demande de devis événementiel</option>
+                <option>Partenariat / Presse</option>
+                <option>Réclamation</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Message</label><textarea placeholder="Décrivez votre projet, posez vos questions... Je lis chaque message personnellement !"></textarea></div>
+            <button class="btn btn-primary btn-full" style="font-size: 16px; padding: 16px;">Envoyer mon message →</button>
+            <p style="font-size: 12px; color: var(--gris); text-align: center; margin-top: 12px;">En soumettant ce formulaire, vous acceptez la <a href="#" style="color: var(--rose); text-decoration: underline;">politique de confidentialité</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span class="logo">Fleur de <span>L</span>umière</span>
+      <p>© 2026 Fleur de Lumière — Photographie en lumière naturelle — Tarn & Toulouse</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 3. STATISTIQUES ADMIN                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page-view" id="view-statistiques">
+  <div class="stats-page">
+
+    <div class="stats-header-bar">
+      <h1>📈 <em>Statistiques</em></h1>
+      <div class="stats-period">
+        <button>7 jours</button>
+        <button class="active">Ce mois</button>
+        <button>3 mois</button>
+        <button>Cette année</button>
+      </div>
+    </div>
+
+    <div class="stats-content">
+
+      <!-- KPIs -->
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-icon">💰</div><div class="kpi-value">3 240€</div><div class="kpi-label">CA février</div><div class="kpi-change kpi-up">↑ +18% vs janv.</div></div>
+        <div class="kpi-card"><div class="kpi-icon">📷</div><div class="kpi-value">12</div><div class="kpi-label">Séances réalisées</div><div class="kpi-change kpi-up">↑ +33%</div></div>
+        <div class="kpi-card"><div class="kpi-icon">🛒</div><div class="kpi-value">270€</div><div class="kpi-label">Panier moyen</div><div class="kpi-change kpi-up">↑ +8%</div></div>
+        <div class="kpi-card"><div class="kpi-icon">🔄</div><div class="kpi-value">34%</div><div class="kpi-label">Taux conversion</div><div class="kpi-change kpi-down">↓ -2%</div></div>
+        <div class="kpi-card"><div class="kpi-icon">❤️</div><div class="kpi-value">42%</div><div class="kpi-label">Clients récurrents</div><div class="kpi-change kpi-up">↑ +5%</div></div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-card-header"><h3>Chiffre d'affaires mensuel</h3><span style="font-size: 12px; color: var(--gris);">12 derniers mois</span></div>
+          <div class="chart-card-body">
+            <div class="revenue-chart">
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 35%; background: var(--rose);" data-val="1 420€"></div><span class="rev-label">Mars</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 50%; background: var(--rose);" data-val="2 010€"></div><span class="rev-label">Avr</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 72%; background: var(--rose);" data-val="2 880€"></div><span class="rev-label">Mai</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 90%; background: var(--or);" data-val="3 600€"></div><span class="rev-label">Juin</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 65%; background: var(--rose);" data-val="2 580€"></div><span class="rev-label">Juil</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 45%; background: var(--rose);" data-val="1 800€"></div><span class="rev-label">Août</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 78%; background: var(--rose);" data-val="3 100€"></div><span class="rev-label">Sept</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 82%; background: var(--rose);" data-val="3 280€"></div><span class="rev-label">Oct</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 58%; background: var(--rose);" data-val="2 320€"></div><span class="rev-label">Nov</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 42%; background: var(--rose);" data-val="1 680€"></div><span class="rev-label">Déc</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 68%; background: var(--rose);" data-val="2 750€"></div><span class="rev-label">Janv</span></div>
+              <div class="rev-bar-group"><div class="rev-bar" style="height: 80%; background: var(--or);" data-val="3 240€"></div><span class="rev-label">Fév</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-header"><h3>CA par spécialité</h3></div>
+          <div class="chart-card-body">
+            <div class="donut-container">
+              <div class="donut">
+                <div class="donut-center"><span class="dc-val">30,6k€</span><span class="dc-label">Total annuel</span></div>
+              </div>
+              <div class="donut-legend">
+                <div class="donut-legend-item"><span class="dl-color" style="background:var(--rose);"></span>Famille<span class="dl-pct">40%</span></div>
+                <div class="donut-legend-item"><span class="dl-color" style="background:var(--sauge);"></span>Équestre<span class="dl-pct">24%</span></div>
+                <div class="donut-legend-item"><span class="dl-color" style="background:var(--or);"></span>Événementiel<span class="dl-pct">19%</span></div>
+                <div class="donut-legend-item"><span class="dl-color" style="background:#be185d;"></span>Maternité<span class="dl-pct">8%</span></div>
+                <div class="donut-legend-item"><span class="dl-color" style="background:var(--gris-border);"></span>Autres<span class="dl-pct">9%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <h4>📦 Top produits (tirages & objets)</h4>
+          <ul class="ranking-list">
+            <li class="ranking-item"><span class="ranking-num">1</span><div class="ranking-info"><div class="r-name">Tirage 20×30 cm</div><div class="r-sub">42 vendus</div></div><span class="ranking-value">1 050€</span></li>
+            <li class="ranking-item"><span class="ranking-num">2</span><div class="ranking-info"><div class="r-name">Boîte Souvenir « L'Écrin »</div><div class="r-sub">18 vendues</div></div><span class="ranking-value">630€</span></li>
+            <li class="ranking-item"><span class="ranking-num">3</span><div class="ranking-info"><div class="r-name">Toile 40×60 cm</div><div class="r-sub">8 vendues</div></div><span class="ranking-value">680€</span></li>
+            <li class="ranking-item"><span class="ranking-num">4</span><div class="ranking-info"><div class="r-name">Album photo 20 pages</div><div class="r-sub">5 vendus</div></div><span class="ranking-value">600€</span></li>
+          </ul>
+        </div>
+
+        <div class="metric-card">
+          <h4>📊 Indicateurs clés</h4>
+          <div class="metric-row"><span class="m-label">Délai moyen résa → shooting</span><span class="m-value">12 jours</span></div>
+          <div class="metric-row"><span class="m-label">Taux commande tirages</span><span class="m-value">38%</span></div>
+          <div class="metric-row"><span class="m-label">Galeries vues par client</span><span class="m-value">4,2 fois</span></div>
+          <div class="metric-row"><span class="m-label">Panier abandonné</span><span class="m-value" style="color: var(--erreur);">12%</span></div>
+          <div class="metric-row"><span class="m-label">Cartes cadeaux actives</span><span class="m-value">6</span></div>
+          <div class="metric-row"><span class="m-label">Taux satisfaction</span><span class="m-value" style="color: var(--sauge);">4,9/5 ⭐</span></div>
+        </div>
+
+        <div class="metric-card">
+          <h4>📍 Sources d'acquisition</h4>
+          <div class="source-grid">
+            <div class="source-item"><span class="source-icon">📸</span><div class="source-info"><div class="s-name">Instagram</div><div class="s-val">22 clients</div></div><span class="source-pct">47%</span></div>
+            <div class="source-item"><span class="source-icon">🗣️</span><div class="source-info"><div class="s-name">Bouche-à-oreille</div><div class="s-val">12 clients</div></div><span class="source-pct">26%</span></div>
+            <div class="source-item"><span class="source-icon">🔍</span><div class="source-info"><div class="s-name">Google</div><div class="s-val">8 clients</div></div><span class="source-pct">17%</span></div>
+            <div class="source-item"><span class="source-icon">💐</span><div class="source-info"><div class="s-name">Parrainage</div><div class="s-val">5 clients</div></div><span class="source-pct">10%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Saisonnalité -->
+      <div class="chart-card" style="margin-bottom: 28px;">
+        <div class="chart-card-header"><h3>📅 Saisonnalité — Nombre de séances par mois</h3></div>
+        <div class="chart-card-body">
+          <div class="revenue-chart" style="height: 150px;">
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 25%; background: var(--sauge);" data-val="3"></div><span class="rev-label">Jan</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 30%; background: var(--sauge);" data-val="4"></div><span class="rev-label">Fév</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 55%; background: var(--sauge);" data-val="7"></div><span class="rev-label">Mar</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 70%; background: var(--sauge);" data-val="9"></div><span class="rev-label">Avr</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 85%; background: var(--sauge);" data-val="11"></div><span class="rev-label">Mai</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 100%; background: var(--or);" data-val="14"></div><span class="rev-label">Juin</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 65%; background: var(--sauge);" data-val="8"></div><span class="rev-label">Juil</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 40%; background: var(--sauge);" data-val="5"></div><span class="rev-label">Août</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 90%; background: var(--or);" data-val="12"></div><span class="rev-label">Sept</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 80%; background: var(--sauge);" data-val="10"></div><span class="rev-label">Oct</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 50%; background: var(--sauge);" data-val="6"></div><span class="rev-label">Nov</span></div>
+            <div class="rev-bar-group"><div class="rev-bar" style="height: 20%; background: var(--sauge);" data-val="2"></div><span class="rev-label">Déc</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchView(id, btn) {
+    document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
+    document.querySelectorAll('.view-switcher-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    window.scrollTo({ top: 0 });
+  }
+
+  function switchClientTab(tab, btn) {
+    const tabs = ['galerie', 'commandes', 'reservations', 'fidelite'];
+    tabs.forEach(t => {
+      const el = document.getElementById('client-' + t);
+      if (el) el.style.display = t === tab ? 'block' : 'none';
+    });
+    document.querySelectorAll('.client-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

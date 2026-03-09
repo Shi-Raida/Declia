@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personnalisation du site — Fleur de Lumière Admin</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+.perso-layout { display: grid; grid-template-columns: 340px 1fr; gap: 0; flex: 1; overflow: hidden; }
+.perso-panel { background: var(--fl-bg-card); border-right: 1px solid var(--fl-border); overflow-y: auto; height: calc(100vh - 60px); padding-bottom: 80px; }
+.perso-preview { background: var(--fl-bg); overflow-y: auto; height: calc(100vh - 60px); padding: var(--fl-space-lg); }
+.panel-section { border-bottom: 1px solid var(--fl-border); }
+.panel-section-header { padding: 12px 16px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 600; color: var(--fl-charcoal); transition: background var(--fl-transition); }
+.panel-section-header:hover { background: var(--fl-bg-alt); }
+.panel-section-icon { font-size: 1rem; width: 20px; }
+.panel-section-arrow { margin-left: auto; color: var(--fl-warm-gray); font-size: 0.75rem; transition: transform var(--fl-transition); }
+.panel-section.open .panel-section-arrow { transform: rotate(180deg); }
+.panel-section-body { padding: 0 16px 14px; display: none; }
+.panel-section.open .panel-section-body { display: block; }
+.field { margin-bottom: 12px; }
+.field-label { font-size: 0.75rem; font-weight: 600; color: var(--fl-prune); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
+.field-hint { font-size: 0.6875rem; color: var(--fl-warm-gray); margin-top: 3px; }
+.finput { width: 100%; padding: 8px 10px; border: 1.5px solid var(--fl-border-dark); border-radius: var(--fl-radius-sm); font-family: var(--fl-font-body); font-size: 0.8125rem; color: var(--fl-charcoal); background: var(--fl-bg-card); outline: none; transition: border-color var(--fl-transition); }
+.finput:focus { border-color: var(--fl-rose); }
+textarea.finput { min-height: 52px; resize: vertical; }
+.color-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.cswatch { width: 32px; height: 32px; border-radius: var(--fl-radius-sm); cursor: pointer; border: 2px solid transparent; transition: transform var(--fl-transition); }
+.cswatch:hover { transform: scale(1.1); }
+.cswatch.active { border-color: var(--fl-charcoal); }
+.upload-zone { border: 2px dashed var(--fl-border-dark); border-radius: var(--fl-radius-sm); padding: 12px; text-align: center; cursor: pointer; transition: all var(--fl-transition); font-size: 0.75rem; color: var(--fl-warm-gray); }
+.upload-zone:hover { border-color: var(--fl-rose); background: var(--fl-rose-pale); }
+.preview-frame { background: var(--fl-bg-card); border-radius: var(--fl-radius-lg); box-shadow: var(--fl-shadow-lg); overflow: hidden; border: 1px solid var(--fl-border); }
+.preview-bar { background: var(--fl-bg-alt); padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--fl-border); }
+.preview-device { display: flex; gap: 4px; margin-left: auto; }
+.device-btn { width: 28px; height: 28px; border-radius: var(--fl-radius-sm); border: 1.5px solid var(--fl-border-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem; background: none; transition: all var(--fl-transition); }
+.device-btn.active { background: var(--fl-prune); color: white; border-color: var(--fl-prune); }
+/* Fake site preview */
+.fake-nav { display: flex; align-items: center; padding: 10px 20px; border-bottom: 1px solid var(--fl-border); background: white; }
+.fake-logo { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: var(--fl-prune); }
+.fake-logo span { color: var(--fl-or); }
+.fake-nav-links { margin-left: auto; display: flex; gap: 14px; font-size: 0.75rem; color: var(--fl-warm-gray); }
+.fake-cta { padding: 5px 14px; border-radius: var(--fl-radius-full); background: var(--fl-rose); color: white; font-size: 0.6875rem; font-weight: 600; margin-left: 12px; }
+.fake-hero { padding: 40px 28px; text-align: center; background: linear-gradient(180deg, var(--fl-bg-alt), white); }
+.fake-hero-badge { display: inline-block; padding: 3px 12px; border-radius: var(--fl-radius-full); background: var(--fl-or-light); color: var(--fl-or-hover); font-size: 0.6875rem; font-weight: 600; margin-bottom: 10px; }
+.fake-hero h1 { font-family: var(--fl-font-heading); font-size: 1.5rem; color: var(--fl-prune); margin-bottom: 8px; line-height: 1.2; }
+.fake-hero h1 em { color: var(--fl-rose); }
+.fake-hero p { font-size: 0.8125rem; color: var(--fl-warm-gray); max-width: 340px; margin: 0 auto 14px; }
+.fake-hero-btn { display: inline-block; padding: 9px 22px; border-radius: var(--fl-radius-full); background: var(--fl-rose); color: white; font-size: 0.8125rem; font-weight: 600; cursor: pointer; }
+.fake-section { padding: 24px 20px; }
+.fake-section h2 { font-family: var(--fl-font-heading); font-size: 1.25rem; color: var(--fl-prune); text-align: center; margin-bottom: 4px; }
+.fake-section h2 em { color: var(--fl-rose); }
+.fake-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+.fake-card { border: 1px solid var(--fl-border); border-radius: var(--fl-radius); padding: 12px; text-align: center; }
+.fake-card-icon { font-size: 1.5rem; margin-bottom: 5px; }
+.fake-card h4 { font-family: var(--fl-font-heading); font-size: 0.875rem; color: var(--fl-prune); margin-bottom: 3px; }
+.fake-card p { font-size: 0.6875rem; color: var(--fl-warm-gray); }
+.fake-card-price { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 700; color: var(--fl-or); margin-top: 6px; }
+.fake-trust { display: flex; gap: 14px; justify-content: center; padding: 14px; background: var(--fl-bg-alt); flex-wrap: wrap; }
+.fake-trust span { font-size: 0.6875rem; color: var(--fl-warm-gray); }
+.fake-footer { padding: 14px 20px; background: var(--fl-prune); color: rgba(255,255,255,0.5); font-size: 0.625rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout" style="flex-direction:column;">
+
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="fl-admin-main" style="overflow:hidden;">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Personnalisation du site</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <button class="fl-btn fl-btn-ghost fl-btn-sm">Prévisualiser</button>
+        <button class="fl-btn fl-btn-primary fl-btn-sm">Publier les changements</button>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;cursor:pointer;">C</div>
+      </div>
+    </div>
+
+    <div class="perso-layout">
+      <!-- Left: Editor panel -->
+      <div class="perso-panel">
+
+        <!-- Search -->
+        <div style="padding:10px 14px;border-bottom:1px solid var(--fl-border);background:var(--fl-bg-alt);">
+          <div style="position:relative;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--fl-warm-gray)" stroke-width="1.5" style="position:absolute;left:9px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="text" placeholder="Rechercher un champ..." class="finput" style="padding-left:28px;border-radius:var(--fl-radius-full);">
+          </div>
+        </div>
+
+        <!-- Identity -->
+        <div class="panel-section open">
+          <div class="panel-section-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="panel-section-icon">🌐</span> Identité globale <span class="panel-section-arrow">▼</span>
+          </div>
+          <div class="panel-section-body">
+            <div class="field"><label class="field-label">Nom de la marque</label><input class="finput" value="Fleur de Lumière"></div>
+            <div class="field"><label class="field-label">Tagline</label><input class="finput" value="Photographe en lumière naturelle"></div>
+            <div class="field"><label class="field-label">Logo principal</label>
+              <div class="upload-zone">
+                <div style="font-size:1.5rem;margin-bottom:4px;">🌸</div>
+                <div>Cliquez pour changer le logo</div>
+                <div style="font-size:0.625rem;margin-top:2px;">PNG/SVG · fond transparent</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colors -->
+        <div class="panel-section open">
+          <div class="panel-section-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="panel-section-icon">🎨</span> Palette de couleurs <span class="panel-section-arrow">▼</span>
+          </div>
+          <div class="panel-section-body">
+            <div class="field"><label class="field-label">Couleur primaire</label>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="cswatch active" style="background:#C2727E;"></div>
+                <input class="finput" value="#C2727E" style="width:80px;">
+              </div>
+              <div class="field-hint">Boutons, CTA, liens actifs</div>
+            </div>
+            <div class="field"><label class="field-label">Couleur foncée</label>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="cswatch active" style="background:#4A2E3D;"></div>
+                <input class="finput" value="#4A2E3D" style="width:80px;">
+              </div>
+            </div>
+            <div class="field"><label class="field-label">Accent (Or)</label>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="cswatch active" style="background:#D4A03C;"></div>
+                <input class="finput" value="#D4A03C" style="width:80px;">
+              </div>
+            </div>
+            <div class="field"><label class="field-label">Palettes prédéfinies</label>
+              <div class="color-row">
+                <div class="cswatch active" style="background:#C2727E;" title="Rose Sauvage (actuel)"></div>
+                <div class="cswatch" style="background:#8B6D9C;" title="Lavande"></div>
+                <div class="cswatch" style="background:#6B9E8C;" title="Jade"></div>
+                <div class="cswatch" style="background:#C9916B;" title="Terracotta"></div>
+                <div class="cswatch" style="background:#7B8EA6;" title="Ardoise"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fonts -->
+        <div class="panel-section">
+          <div class="panel-section-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="panel-section-icon">🔤</span> Typographies <span class="panel-section-arrow">▼</span>
+          </div>
+          <div class="panel-section-body">
+            <div class="field"><label class="field-label">Police titres</label>
+              <select class="finput">
+                <option selected>Cormorant Garamond</option>
+                <option>Playfair Display</option>
+                <option>Libre Baskerville</option>
+                <option>DM Serif Display</option>
+              </select>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--fl-prune);margin-top:6px;font-style:italic;">L'Heure Dorée</div>
+            </div>
+            <div class="field"><label class="field-label">Police textes</label>
+              <select class="finput">
+                <option selected>Outfit</option>
+                <option>Inter</option>
+                <option>Lato</option>
+                <option>Source Sans Pro</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero -->
+        <div class="panel-section open">
+          <div class="panel-section-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="panel-section-icon">🏠</span> Page Accueil — Hero <span class="panel-section-arrow">▼</span>
+          </div>
+          <div class="panel-section-body">
+            <div class="field"><label class="field-label">Badge au-dessus du titre</label><input class="finput" value="✨ Photographe Tarn & Toulouse"></div>
+            <div class="field"><label class="field-label">Titre principal (H1)</label><textarea class="finput" rows="2">Vos souvenirs dans la Lumière Dorée</textarea><div class="field-hint">Le texte entre *astérisques* sera en couleur rose</div></div>
+            <div class="field"><label class="field-label">Sous-titre</label><textarea class="finput" rows="2">Photographe en lumière naturelle — Séances famille, équestre & scolaire</textarea></div>
+            <div class="field"><label class="field-label">Texte du bouton CTA</label><input class="finput" value="Réserver ma séance →"></div>
+          </div>
+        </div>
+
+        <!-- Announcement -->
+        <div class="panel-section">
+          <div class="panel-section-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="panel-section-icon">📣</span> Bandeau annonce <span class="panel-section-arrow">▼</span>
+          </div>
+          <div class="panel-section-body">
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0;margin-bottom:8px;">
+              <span style="flex:1;font-size:0.8125rem;font-weight:600;color:var(--fl-charcoal);">Afficher le bandeau</span>
+              <div class="fl-toggle on"></div>
+            </div>
+            <div class="field"><label class="field-label">Texte du bandeau</label><input class="finput" value="🌸 Mini-sessions printemps — Places limitées !"></div>
+          </div>
+        </div>
+
+        <!-- Social links -->
+        <div class="panel-section">
+          <div class="panel-section-header" onclick="this.parentElement.classList.toggle('open')">
+            <span class="panel-section-icon">📱</span> Réseaux sociaux <span class="panel-section-arrow">▼</span>
+          </div>
+          <div class="panel-section-body">
+            <div class="field"><label class="field-label">Instagram</label><input class="finput" value="@fleurdelumiere.photo"></div>
+            <div class="field"><label class="field-label">Facebook</label><input class="finput" placeholder="facebook.com/fleurdelumiere"></div>
+            <div class="field"><label class="field-label">TikTok</label><input class="finput" placeholder="@fleurdelumiere"></div>
+            <div class="field"><label class="field-label">Pinterest</label><input class="finput" placeholder="pinterest.com/fleurdelumiere"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: Live preview -->
+      <div class="perso-preview">
+        <div class="preview-bar">
+          <span style="font-size:0.8125rem;color:var(--fl-warm-gray);flex:1;">Aperçu en temps réel — <strong>Page Accueil</strong></span>
+          <div class="preview-device">
+            <button class="device-btn active" title="Desktop">💻</button>
+            <button class="device-btn" title="Tablette">📱</button>
+            <button class="device-btn" title="Mobile">📲</button>
+          </div>
+        </div>
+
+        <div style="padding:16px;">
+          <div class="preview-frame">
+            <!-- Fake site -->
+            <div class="fake-nav">
+              <div class="fake-logo">Fleur de <span>L</span>umière</div>
+              <div class="fake-nav-links">
+                <span>Spécialités</span>
+                <span>Formules</span>
+                <span>Portfolio</span>
+                <span>Contact</span>
+              </div>
+              <span class="fake-cta">Réserver</span>
+            </div>
+            <!-- Announcement banner -->
+            <div style="background:var(--fl-prune);color:white;text-align:center;padding:6px;font-size:0.6875rem;font-weight:500;">
+              🌸 Mini-sessions printemps — Places limitées !
+            </div>
+            <div class="fake-hero">
+              <div class="fake-hero-badge">✨ Photographe Tarn & Toulouse</div>
+              <h1>Vos souvenirs dans la <em>Lumière Dorée</em></h1>
+              <p>Photographe en lumière naturelle — Séances famille, équestre & scolaire dans le Tarn et à Toulouse</p>
+              <div class="fake-hero-btn">Réserver ma séance →</div>
+            </div>
+            <div class="fake-section">
+              <h2>Mes <em>Spécialités</em></h2>
+              <p style="font-size:0.6875rem;color:var(--fl-warm-gray);text-align:center;">Chaque séance est unique, comme votre histoire</p>
+              <div class="fake-cards">
+                <div class="fake-card">
+                  <div class="fake-card-icon">👨‍👩‍👧‍👦</div>
+                  <h4>Famille</h4>
+                  <p>L'amour en lumière dorée</p>
+                  <div class="fake-card-price">À partir de 150€</div>
+                </div>
+                <div class="fake-card">
+                  <div class="fake-card-icon">🐴</div>
+                  <h4>Équestre</h4>
+                  <p>Cavalier & cheval, Golden Hour</p>
+                  <div class="fake-card-price">À partir de 150€</div>
+                </div>
+                <div class="fake-card">
+                  <div class="fake-card-icon">🎓</div>
+                  <h4>Scolaire</h4>
+                  <p>Photos de classe & portraits</p>
+                  <div class="fake-card-price">Packs dès 12€</div>
+                </div>
+              </div>
+            </div>
+            <div class="fake-trust">
+              <span>🌅 100% Lumière naturelle</span>
+              <span>📸 +500 familles</span>
+              <span>⭐ 4.9/5</span>
+              <span>🎁 3 tirages offerts</span>
+            </div>
+            <div class="fake-footer">
+              Fleur de Lumière — Photographe en lumière naturelle · Tarn & Toulouse · © 2026
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.panel-section-header').forEach(header => {
+  header.addEventListener('click', () => {
+    header.parentElement.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

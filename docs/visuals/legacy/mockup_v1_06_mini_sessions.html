@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Mini-Sessions Automatisées</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E;
+    --rose-light: #F5E1E4;
+    --rose-pale: #FFF5F7;
+    --prune: #4A2E3D;
+    --prune-light: #6B4A5C;
+    --prune-deep: #2D1A25;
+    --charcoal: #2D2226;
+    --warm-gray: #8A7A7E;
+    --bg: #FDFBFC;
+    --white: #FFFFFF;
+    --cream: #FDF9F7;
+    --success: #4CAF7C;
+    --success-bg: #E8F5EE;
+    --warning: #E8985E;
+    --warning-bg: #FFF3EB;
+    --info: #5B8FA8;
+    --info-bg: #E8F0F4;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+    --gold: #C9A96E;
+    --gold-light: #F5EDE0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; background: #EDEAEB; color: var(--charcoal); }
+
+  .mockup-tag {
+    display: inline-block;
+    background: #FFE066;
+    color: #5D4E00;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .screen-divider {
+    background: var(--prune);
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .screen-divider span {
+    background: rgba(255,255,255,0.08);
+    padding: 6px 20px;
+    border-radius: 20px;
+  }
+
+  /* ===================================================================
+     SCREEN 1: ADMIN — Création d'un événement mini-session
+     =================================================================== */
+  .admin-screen {
+    background: var(--bg);
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .admin-container { max-width: 880px; margin: 0 auto; }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+  }
+
+  .page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .page-subtitle { font-size: 14px; color: var(--warm-gray); margin-top: 4px; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(194,114,126,0.25);
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: #B5656F; transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    color: var(--prune);
+    border: 1.5px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  /* Steps progress */
+  .creation-steps {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 4px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .creation-step {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--warm-gray);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .creation-step.active {
+    background: var(--rose);
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .creation-step.done {
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  /* Admin cards */
+  .admin-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .admin-card-header {
+    padding: 16px 22px;
+    background: var(--rose-pale);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .admin-card-body { padding: 22px; }
+
+  .field-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .field-row:last-child { margin-bottom: 0; }
+
+  .field {
+    flex: 1;
+  }
+
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    background: var(--cream);
+  }
+
+  .field-input:focus { outline: none; border-color: var(--rose); }
+
+  .field-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    background: var(--cream);
+    resize: vertical;
+    min-height: 70px;
+  }
+
+  .field-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    color: var(--charcoal);
+    background: var(--cream);
+    cursor: pointer;
+  }
+
+  /* Slots grid */
+  .slots-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .slots-header-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .slots-auto-btn {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--rose);
+    background: var(--rose-pale);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .slots-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .slot-cell {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--white);
+  }
+
+  .slot-cell.available { border-color: var(--success); background: var(--success-bg); }
+  .slot-cell.booked { border-color: var(--rose); background: var(--rose-pale); }
+  .slot-cell.blocked { border-color: var(--border); background: #F5F2F3; opacity: 0.5; }
+
+  .slot-time {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .slot-cell.booked .slot-time { color: var(--rose); }
+
+  .slot-status {
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  .slot-status.free { color: var(--success); }
+  .slot-status.taken { color: var(--rose); font-weight: 600; }
+  .slot-status.off { color: var(--warm-gray); }
+
+  .slot-client {
+    font-size: 9.5px;
+    color: var(--prune);
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  .slots-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 11px;
+    color: var(--warm-gray);
+  }
+
+  .slots-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  .legend-dot.free { background: var(--success-bg); border: 1.5px solid var(--success); }
+  .legend-dot.booked { background: var(--rose-pale); border: 1.5px solid var(--rose); }
+  .legend-dot.blocked { background: #F5F2F3; border: 1.5px solid var(--border); }
+
+  /* Toggle row */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .toggle-row:last-child { border-bottom: none; }
+
+  .toggle-row-left {
+    flex: 1;
+  }
+
+  .toggle-row-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  .toggle-row-hint {
+    font-size: 11px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  .toggle {
+    width: 40px;
+    height: 22px;
+    background: #E0D6D9;
+    border-radius: 11px;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .toggle.on { background: var(--success); }
+
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2.5px;
+    left: 2.5px;
+    width: 17px;
+    height: 17px;
+    background: var(--white);
+    border-radius: 50%;
+    transition: all 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  .toggle.on::after { left: 20.5px; }
+
+  /* Actions bar */
+  .actions-bar {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 24px;
+  }
+
+  .actions-bar-right {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* Stats mini cards */
+  .stats-mini {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-mini {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+  }
+
+  .stat-mini-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--prune);
+  }
+
+  .stat-mini-label {
+    font-size: 11px;
+    color: var(--warm-gray);
+    margin-top: 2px;
+  }
+
+  /* ===================================================================
+     SCREEN 2: PUBLIC — Page de réservation client
+     =================================================================== */
+  .public-screen {
+    background: var(--cream);
+    min-height: 100vh;
+  }
+
+  .public-nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .public-nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .public-nav-logo span { color: var(--rose); }
+
+  .public-nav-links {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--warm-gray);
+  }
+
+  .public-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* Hero */
+  .mini-hero {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .mini-hero-cover {
+    width: 100%;
+    height: 240px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #E8C0A0, #D4A080, #C89878, #B88868);
+  }
+
+  .mini-hero-cover-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(45,26,37,0.1) 0%, rgba(45,26,37,0.5) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 24px;
+  }
+
+  .mini-hero-season {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .mini-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.15;
+  }
+
+  .mini-details {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+
+  .mini-detail {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--charcoal);
+  }
+
+  .mini-detail-icon { font-size: 16px; }
+
+  .mini-desc {
+    font-size: 14px;
+    color: var(--warm-gray);
+    line-height: 1.6;
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* Urgency banner */
+  .urgency-banner {
+    background: var(--warning-bg);
+    border: 1px solid #F0D4B8;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .urgency-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .urgency-text {
+    flex: 1;
+  }
+
+  .urgency-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .urgency-sub {
+    font-size: 12px;
+    color: var(--warning);
+    font-weight: 500;
+  }
+
+  .urgency-count {
+    background: var(--warning);
+    color: var(--white);
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Includes card */
+  .includes-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .includes-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .includes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .include-item {
+    text-align: center;
+    padding: 14px 8px;
+    background: var(--cream);
+    border-radius: 12px;
+  }
+
+  .include-icon { font-size: 24px; margin-bottom: 6px; }
+
+  .include-text {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--charcoal);
+    line-height: 1.3;
+  }
+
+  .price-tag {
+    text-align: center;
+    margin: 20px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--prune);
+  }
+
+  .price-unit {
+    font-size: 14px;
+    color: var(--warm-gray);
+  }
+
+  /* Time slots public */
+  .slots-section {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .slots-section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .slots-section-sub {
+    font-size: 13px;
+    color: var(--warm-gray);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .public-slots {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .public-slot {
+    padding: 14px 10px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+  }
+
+  .public-slot.available:hover {
+    border-color: var(--rose);
+    background: var(--rose-pale);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(194,114,126,0.15);
+  }
+
+  .public-slot.selected {
+    border-color: var(--rose);
+    background: var(--rose-pale);
+    box-shadow: 0 4px 12px rgba(194,114,126,0.15);
+  }
+
+  .public-slot.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 12px;
+    color: var(--rose);
+    font-weight: 700;
+  }
+
+  .public-slot.taken {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .public-slot-time {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .public-slot.taken .public-slot-time { color: var(--warm-gray); }
+
+  .public-slot-status {
+    font-size: 10.5px;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  .public-slot-status.free { color: var(--success); }
+  .public-slot-status.reserved { color: var(--warm-gray); }
+
+  /* Booking CTA */
+  .booking-cta {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .booking-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--rose);
+    color: var(--white);
+    border: none;
+    padding: 16px 48px;
+    border-radius: 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(194,114,126,0.3);
+    transition: all 0.25s;
+  }
+
+  .booking-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(194,114,126,0.4);
+  }
+
+  .booking-note {
+    font-size: 12px;
+    color: var(--warm-gray);
+    margin-top: 10px;
+  }
+
+  /* Waitlist card */
+  .waitlist-card {
+    background: var(--info-bg);
+    border: 1px solid #C8DDE6;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .waitlist-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--info);
+    margin-bottom: 6px;
+  }
+
+  .waitlist-text {
+    font-size: 13px;
+    color: var(--warm-gray);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .waitlist-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--info);
+    color: var(--white);
+    border: none;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* Share section */
+  .share-section {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    padding: 20px;
+    text-align: center;
+  }
+
+  .share-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--prune);
+    margin-bottom: 12px;
+  }
+
+  .share-btns {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .share-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+  }
+
+  .share-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--rose-light);
+    background: var(--rose-pale);
+  }
+
+  /* ===================================================================
+     SCREEN 3: ADMIN — Dashboard d'un événement en cours
+     =================================================================== */
+  .event-dashboard {
+    background: var(--bg);
+    padding: 40px;
+    min-height: 50vh;
+  }
+
+  .event-container { max-width: 880px; margin: 0 auto; }
+
+  .event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .event-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .event-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  .event-status-badge.live {
+    background: var(--success-bg);
+    color: var(--success);
+  }
+
+  .event-status-badge.live::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: blink 1.5s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Clients list */
+  .clients-table {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .clients-table-header {
+    display: grid;
+    grid-template-columns: 50px 1.5fr 1fr 1fr 0.8fr 80px;
+    padding: 12px 20px;
+    background: var(--rose-pale);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--prune);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .client-row {
+    display: grid;
+    grid-template-columns: 50px 1.5fr 1fr 1fr 0.8fr 80px;
+    padding: 14px 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    transition: background 0.15s;
+  }
+
+  .client-row:last-child { border-bottom: none; }
+  .client-row:hover { background: var(--rose-pale); }
+
+  .client-row-num {
+    font-weight: 600;
+    color: var(--warm-gray);
+    font-size: 12px;
+  }
+
+  .client-row-name {
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+
+  .client-row-time {
+    font-weight: 600;
+    color: var(--prune);
+  }
+
+  .client-row-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .client-row-status.paid { background: var(--success-bg); color: var(--success); }
+  .client-row-status.pending { background: var(--warning-bg); color: var(--warning); }
+
+  .client-row-email {
+    font-size: 12px;
+    color: var(--warm-gray);
+  }
+
+  .client-row-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .mini-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mini-action-btn:hover { border-color: var(--rose); background: var(--rose-pale); }
+
+  /* Waitlist mini */
+  .waitlist-mini {
+    background: var(--info-bg);
+    border: 1px solid #C8DDE6;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .waitlist-mini-icon { font-size: 20px; }
+
+  .waitlist-mini-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--info);
+  }
+
+  .waitlist-mini-text strong { font-weight: 600; }
+
+  .waitlist-mini-count {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--info);
+    background: var(--white);
+    padding: 4px 12px;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     SCREEN 1: ADMIN — Création Mini-Session
+     ===================================================== -->
+<div class="admin-screen">
+  <div class="admin-container">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Créer un événement Mini-Session <span class="mockup-tag">V1 — Admin</span></div>
+        <div class="page-subtitle">Définissez votre événement, les créneaux et les options — une page de réservation publique sera générée automatiquement</div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="creation-steps">
+      <div class="creation-step done">✓ Informations</div>
+      <div class="creation-step done">✓ Créneaux</div>
+      <div class="creation-step active">3. Options</div>
+      <div class="creation-step">4. Visuel</div>
+      <div class="creation-step">5. Publier</div>
+    </div>
+
+    <!-- Event info -->
+    <div class="admin-card">
+      <div class="admin-card-header">📸 Informations de l'événement</div>
+      <div class="admin-card-body">
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Nom de l'événement</div>
+            <input class="field-input" type="text" value="Mini-Sessions d'Automne 🍂">
+          </div>
+          <div class="field" style="flex: 0.6;">
+            <div class="field-label">Type</div>
+            <select class="field-select">
+              <option>Mini-session saisonnière</option>
+              <option selected>Mini-session saisonnière</option>
+              <option>Mini-session thématique</option>
+              <option>Marathon photo</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Date</div>
+            <input class="field-input" type="text" value="Samedi 18 octobre 2026">
+          </div>
+          <div class="field">
+            <div class="field-label">Lieu</div>
+            <input class="field-input" type="text" value="Parc du Capitole, Toulouse">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <div class="field-label">Description (visible par les clients)</div>
+            <textarea class="field-textarea">Profitez des magnifiques couleurs d'automne pour une séance photo express en famille ou en couple ! 20 minutes dans la lumière dorée d'octobre, 10 photos retouchées livrées sous 7 jours.</textarea>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" style="flex: 0.4;">
+            <div class="field-label">Prix</div>
+            <input class="field-input" type="text" value="89 €">
+          </div>
+          <div class="field" style="flex: 0.4;">
+            <div class="field-label">Durée par créneau</div>
+            <select class="field-select">
+              <option>15 minutes</option>
+              <option selected>20 minutes</option>
+              <option>30 minutes</option>
+            </select>
+          </div>
+          <div class="field" style="flex: 0.4;">
+            <div class="field-label">Photos incluses</div>
+            <input class="field-input" type="text" value="10 photos HD">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slots -->
+    <div class="admin-card">
+      <div class="admin-card-header">🕐 Gestion des créneaux</div>
+      <div class="admin-card-body">
+        <div class="slots-header">
+          <div class="slots-header-title">Samedi 18 octobre 2026 — 9h00 à 17h40</div>
+          <button class="slots-auto-btn">⚡ Générer automatiquement</button>
+        </div>
+
+        <div class="slots-grid">
+          <div class="slot-cell booked">
+            <div class="slot-time">9h00</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">M. Laurent</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">9h20</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">Fam. Bernard</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">9h40</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">Fam. Petit</div>
+          </div>
+          <div class="slot-cell available">
+            <div class="slot-time">10h00</div>
+            <div class="slot-status free">Disponible</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">10h20</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">C. Moreau</div>
+          </div>
+          <div class="slot-cell available">
+            <div class="slot-time">10h40</div>
+            <div class="slot-status free">Disponible</div>
+          </div>
+          <div class="slot-cell blocked">
+            <div class="slot-time">11h00</div>
+            <div class="slot-status off">Pause</div>
+          </div>
+          <div class="slot-cell blocked">
+            <div class="slot-time">11h20</div>
+            <div class="slot-status off">Pause</div>
+          </div>
+          <div class="slot-cell available">
+            <div class="slot-time">14h00</div>
+            <div class="slot-status free">Disponible</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">14h20</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">Fam. Dubois</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">14h40</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">A. Roche</div>
+          </div>
+          <div class="slot-cell available">
+            <div class="slot-time">15h00</div>
+            <div class="slot-status free">Disponible</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">15h20</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">Fam. Garcia</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">15h40</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">L. Martin</div>
+          </div>
+          <div class="slot-cell booked">
+            <div class="slot-time">16h00</div>
+            <div class="slot-status taken">Réservé</div>
+            <div class="slot-client">Fam. Leroy</div>
+          </div>
+          <div class="slot-cell available">
+            <div class="slot-time">16h20</div>
+            <div class="slot-status free">Disponible</div>
+          </div>
+        </div>
+
+        <div class="slots-legend">
+          <div class="slots-legend-item"><div class="legend-dot free"></div> Disponible</div>
+          <div class="slots-legend-item"><div class="legend-dot booked"></div> Réservé</div>
+          <div class="slots-legend-item"><div class="legend-dot blocked"></div> Pause / bloqué</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Options -->
+    <div class="admin-card">
+      <div class="admin-card-header">⚙️ Options de l'événement</div>
+      <div class="admin-card-body">
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Afficher le compteur de places restantes</div>
+            <div class="toggle-row-hint">Crée un effet d'urgence chez les visiteurs</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Activer la liste d'attente quand complet</div>
+            <div class="toggle-row-hint">Les intéressés sont notifiés si un créneau se libère</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Envoyer le guide pré-shooting automatiquement</div>
+            <div class="toggle-row-hint">Le guide "Mini-Session" sera envoyé dès la réservation</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Paiement intégral à la réservation</div>
+            <div class="toggle-row-hint">Le créneau est confirmé uniquement après paiement</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-row-left">
+            <div class="toggle-row-label">Générer un visuel Instagram automatiquement</div>
+            <div class="toggle-row-hint">Un visuel promo sera créé au format feed + story pour partager</div>
+          </div>
+          <div class="toggle on"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn-secondary">👁 Prévisualiser la page publique</button>
+      <div class="actions-bar-right">
+        <button class="btn-secondary">Enregistrer en brouillon</button>
+        <button class="btn-primary">🚀 Publier l'événement</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Page publique vue par les clients ↓</span></div>
+
+<!-- =====================================================
+     SCREEN 2: PUBLIC — Page de réservation
+     ===================================================== -->
+<div class="public-screen">
+  <nav class="public-nav">
+    <div class="public-nav-logo">Fleur de <span>Lumière</span></div>
+    <div class="public-nav-links">
+      <span>Accueil</span>
+      <span>Portfolio</span>
+      <span>Tarifs</span>
+      <span style="color: var(--rose); font-weight: 600;">Mini-Sessions</span>
+      <span>Contact</span>
+    </div>
+  </nav>
+
+  <div class="public-container">
+    <!-- Hero -->
+    <div class="mini-hero">
+      <div class="mini-hero-cover">
+        <div class="mini-hero-cover-overlay">
+          <div class="mini-hero-season">✦ Édition limitée ✦</div>
+          <div class="mini-hero-title">Mini-Sessions<br>d'Automne 🍂</div>
+        </div>
+      </div>
+
+      <div class="mini-details">
+        <div class="mini-detail"><span class="mini-detail-icon">📅</span> Samedi 18 octobre 2026</div>
+        <div class="mini-detail"><span class="mini-detail-icon">📍</span> Parc du Capitole, Toulouse</div>
+        <div class="mini-detail"><span class="mini-detail-icon">🕐</span> 20 min par séance</div>
+      </div>
+
+      <div class="mini-desc">
+        Profitez des magnifiques couleurs d'automne pour une séance photo express en famille ou en couple ! 20 minutes dans la lumière dorée d'octobre, 10 photos retouchées livrées sous 7 jours.
+      </div>
+    </div>
+
+    <!-- Urgency -->
+    <div class="urgency-banner">
+      <div class="urgency-icon">🔥</div>
+      <div class="urgency-text">
+        <div class="urgency-title">Places limitées !</div>
+        <div class="urgency-sub">Il ne reste que quelques créneaux disponibles</div>
+      </div>
+      <div class="urgency-count">5</div>
+    </div>
+
+    <!-- What's included -->
+    <div class="includes-card">
+      <div class="includes-title">Ce qui est inclus</div>
+      <div class="includes-grid">
+        <div class="include-item">
+          <div class="include-icon">📸</div>
+          <div class="include-text">10 photos HD retouchées</div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon">🕐</div>
+          <div class="include-text">20 min de shooting</div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon">🌅</div>
+          <div class="include-text">Lumière naturelle d'automne</div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon">🖼</div>
+          <div class="include-text">Galerie privée en ligne</div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon">📅</div>
+          <div class="include-text">Livraison sous 7 jours</div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon">🎁</div>
+          <div class="include-text">-15% sur les tirages</div>
+        </div>
+      </div>
+      <div class="price-tag">
+        <div class="price-amount">89 €</div>
+        <div class="price-unit">par séance · Paiement sécurisé</div>
+      </div>
+    </div>
+
+    <!-- Time slots -->
+    <div class="slots-section">
+      <div class="slots-section-title">Choisissez votre créneau</div>
+      <div class="slots-section-sub">Cliquez sur un horaire disponible pour réserver</div>
+
+      <div class="public-slots">
+        <div class="public-slot taken">
+          <div class="public-slot-time">9h00</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">9h20</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">9h40</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot available selected">
+          <div class="public-slot-time">10h00</div>
+          <div class="public-slot-status free">Disponible</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">10h20</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot available">
+          <div class="public-slot-time">10h40</div>
+          <div class="public-slot-status free">Disponible</div>
+        </div>
+        <div class="public-slot available">
+          <div class="public-slot-time">14h00</div>
+          <div class="public-slot-status free">Disponible</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">14h20</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">14h40</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot available">
+          <div class="public-slot-time">15h00</div>
+          <div class="public-slot-status free">Disponible</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">15h20</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">15h40</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot taken">
+          <div class="public-slot-time">16h00</div>
+          <div class="public-slot-status reserved">Complet</div>
+        </div>
+        <div class="public-slot available">
+          <div class="public-slot-time">16h20</div>
+          <div class="public-slot-status free">Disponible</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="booking-cta">
+      <button class="booking-btn">
+        Réserver le créneau de 10h00 — 89 €
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <div class="booking-note">🔒 Paiement sécurisé par Stripe · Confirmation immédiate</div>
+    </div>
+
+    <!-- Waitlist -->
+    <div class="waitlist-card">
+      <div class="waitlist-title">📋 Tous les créneaux sont pris ?</div>
+      <div class="waitlist-text">Inscrivez-vous sur la liste d'attente ! Si un créneau se libère, vous serez notifié(e) en priorité et aurez 24h pour réserver.</div>
+      <button class="waitlist-btn">🔔 M'inscrire sur la liste d'attente</button>
+    </div>
+
+    <!-- Share -->
+    <div class="share-section">
+      <div class="share-title">Partagez avec vos proches !</div>
+      <div class="share-btns">
+        <div class="share-btn">📱</div>
+        <div class="share-btn">💬</div>
+        <div class="share-btn">📧</div>
+        <div class="share-btn">🔗</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Dashboard admin — Suivi d'un événement en cours ↓</span></div>
+
+<!-- =====================================================
+     SCREEN 3: ADMIN — Dashboard événement en cours
+     ===================================================== -->
+<div class="event-dashboard">
+  <div class="event-container">
+    <div class="event-header">
+      <div>
+        <div class="event-title">Mini-Sessions d'Automne 🍂 <span class="mockup-tag">Dashboard</span></div>
+        <div class="page-subtitle">Samedi 18 octobre 2026 · Parc du Capitole, Toulouse</div>
+      </div>
+      <div class="event-status-badge live">En ligne</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-mini">
+      <div class="stat-mini">
+        <div class="stat-mini-value">11/16</div>
+        <div class="stat-mini-label">Créneaux réservés</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value">979 €</div>
+        <div class="stat-mini-label">Revenus encaissés</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value">5</div>
+        <div class="stat-mini-label">Places restantes</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-value">3</div>
+        <div class="stat-mini-label">Liste d'attente</div>
+      </div>
+    </div>
+
+    <!-- Clients table -->
+    <div class="clients-table">
+      <div class="clients-table-header">
+        <span>#</span>
+        <span>Client</span>
+        <span>Créneau</span>
+        <span>Email</span>
+        <span>Paiement</span>
+        <span>Actions</span>
+      </div>
+      <div class="client-row">
+        <div class="client-row-num">1</div>
+        <div class="client-row-name">Marc Laurent</div>
+        <div class="client-row-time">9h00</div>
+        <div class="client-row-email">marc.l@email.fr</div>
+        <div><span class="client-row-status paid">✓ Payé</span></div>
+        <div class="client-row-actions">
+          <div class="mini-action-btn">📧</div>
+          <div class="mini-action-btn">📋</div>
+        </div>
+      </div>
+      <div class="client-row">
+        <div class="client-row-num">2</div>
+        <div class="client-row-name">Famille Bernard</div>
+        <div class="client-row-time">9h20</div>
+        <div class="client-row-email">s.bernard@email.fr</div>
+        <div><span class="client-row-status paid">✓ Payé</span></div>
+        <div class="client-row-actions">
+          <div class="mini-action-btn">📧</div>
+          <div class="mini-action-btn">📋</div>
+        </div>
+      </div>
+      <div class="client-row">
+        <div class="client-row-num">3</div>
+        <div class="client-row-name">Famille Petit</div>
+        <div class="client-row-time">9h40</div>
+        <div class="client-row-email">petit.julie@email.fr</div>
+        <div><span class="client-row-status paid">✓ Payé</span></div>
+        <div class="client-row-actions">
+          <div class="mini-action-btn">📧</div>
+          <div class="mini-action-btn">📋</div>
+        </div>
+      </div>
+      <div class="client-row">
+        <div class="client-row-num">4</div>
+        <div class="client-row-name">Camille Moreau</div>
+        <div class="client-row-time">10h20</div>
+        <div class="client-row-email">c.moreau@email.fr</div>
+        <div><span class="client-row-status paid">✓ Payé</span></div>
+        <div class="client-row-actions">
+          <div class="mini-action-btn">📧</div>
+          <div class="mini-action-btn">📋</div>
+        </div>
+      </div>
+      <div class="client-row">
+        <div class="client-row-num">5</div>
+        <div class="client-row-name">Famille Dubois</div>
+        <div class="client-row-time">14h20</div>
+        <div class="client-row-email">dubois.f@email.fr</div>
+        <div><span class="client-row-status pending">⏳ En attente</span></div>
+        <div class="client-row-actions">
+          <div class="mini-action-btn">📧</div>
+          <div class="mini-action-btn">📋</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Waitlist -->
+    <div class="waitlist-mini">
+      <div class="waitlist-mini-icon">📋</div>
+      <div class="waitlist-mini-text"><strong>Liste d'attente :</strong> Marie Fontaine, Lucas Girard, Famille Rousseau — seront notifiés automatiquement si un créneau se libère</div>
+      <div class="waitlist-mini-count">3</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

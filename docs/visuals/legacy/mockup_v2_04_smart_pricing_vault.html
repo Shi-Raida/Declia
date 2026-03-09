@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Smart Pricing & Memory Vault</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--warning:#E8985E;--warning-bg:#FFF3EB;--info:#5B8FA8;--info-bg:#E8F0F4;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08);--gold:#C9A96E;--gold-bg:#F9F3E8;--ai:#7C5CFC;--ai-bg:#F5F3FF}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#EDEAEB;color:var(--charcoal)}
+.tag{display:inline-block;background:#7C5CFC;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.divider{background:var(--prune);padding:20px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.divider span{background:rgba(255,255,255,.08);padding:6px 20px;border-radius:20px}
+
+/* ===== SMART PRICING ===== */
+.admin{background:var(--bg);padding:32px 40px;min-height:100vh}
+.admin-c{max-width:920px;margin:0 auto}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.pt{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--prune)}
+.ps{font-size:13px;color:var(--warm-gray);margin-top:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;padding:9px 18px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+.btn-p{background:var(--rose);color:#fff;box-shadow:0 2px 8px rgba(194,114,126,.2)}.btn-s{background:var(--white);color:var(--prune);border:1.5px solid var(--border)}
+
+/* AI suggestions banner */
+.ai-banner{background:linear-gradient(135deg,var(--ai-bg),#EDE8FF);border:1px solid #D8D0EE;border-radius:16px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:flex-start;gap:16px}
+.ai-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--ai),#9B7FFF);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 16px rgba(124,92,252,.25)}
+.ai-content{flex:1}
+.ai-title{font-size:15px;font-weight:600;color:var(--prune);margin-bottom:4px}.ai-text{font-size:13px;color:var(--warm-gray);line-height:1.5}
+
+/* Suggestion cards */
+.suggestions{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.sug-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);padding:20px 22px;display:flex;align-items:flex-start;gap:16px;transition:all .2s}
+.sug-card:hover{box-shadow:var(--shadow-lg)}
+.sug-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sug-icon.up{background:var(--success-bg)}.sug-icon.down{background:var(--warning-bg)}.sug-icon.bundle{background:var(--gold-bg)}.sug-icon.peak{background:var(--info-bg)}.sug-icon.new{background:var(--rose-light)}
+.sug-content{flex:1}
+.sug-title{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:3px}
+.sug-desc{font-size:12.5px;color:var(--warm-gray);line-height:1.5}
+.sug-data{display:flex;gap:16px;margin-top:8px}
+.sug-metric{display:flex;flex-direction:column}
+.sug-metric-value{font-size:15px;font-weight:700;color:var(--prune)}.sug-metric-label{font-size:10px;color:var(--warm-gray)}
+.sug-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0;align-self:center}
+.sug-apply{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;font-family:'Outfit',sans-serif;background:var(--success);color:#fff}
+.sug-dismiss{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);font-family:'Outfit',sans-serif;background:var(--white);color:var(--warm-gray)}
+
+/* Benchmark card */
+.bench-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);padding:24px;margin-bottom:24px}
+.bench-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--prune);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bench-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bench-item{background:var(--cream);border-radius:12px;padding:16px;text-align:center}
+.bench-item-label{font-size:11px;color:var(--warm-gray);margin-bottom:6px}
+.bench-item-you{font-size:22px;font-weight:700;color:var(--prune)}
+.bench-item-avg{font-size:12px;color:var(--warm-gray);margin-top:4px}
+.bench-item-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:6px}
+.bench-item-fill{height:100%;border-radius:3px}
+.bench-item-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;margin-top:6px;display:inline-block}
+.bench-item-tag.low{background:#FDECEA;color:#C62828}.bench-item-tag.ok{background:var(--success-bg);color:var(--success)}.bench-item-tag.high{background:var(--gold-bg);color:var(--gold)}
+
+/* ===== MEMORY VAULT ===== */
+.vault-section{margin-top:20px}
+.vault-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
+.vault-h{padding:16px 22px;background:linear-gradient(135deg,var(--gold-bg),#F0E8D8);border-bottom:1px solid #E8DCC8;display:flex;align-items:center;gap:10px;justify-content:space-between}
+.vault-h-left{display:flex;align-items:center;gap:10px}
+.vault-h-icon{font-size:22px}.vault-h-title{font-size:14px;font-weight:600;color:#8A6A2E}.vault-h-badge{font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--gold);color:#fff}
+.vault-b{padding:22px}
+
+/* Vault tiers */
+.vault-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.vault-tier{border-radius:14px;border:2px solid var(--border);padding:20px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.vault-tier:hover{border-color:var(--gold)}
+.vault-tier.popular{border-color:var(--gold);background:var(--gold-bg)}
+.vault-tier.popular::before{content:'Populaire';position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;font-size:9px;font-weight:700;padding:2px 10px;border-radius:4px;text-transform:uppercase}
+.vault-tier-icon{font-size:28px;margin-bottom:8px}
+.vault-tier-name{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
+.vault-tier-desc{font-size:11px;color:var(--warm-gray);line-height:1.4;margin-bottom:10px;min-height:28px}
+.vault-tier-price{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--prune)}
+.vault-tier-unit{font-size:11px;color:var(--warm-gray)}
+
+/* Vault stats */
+.vault-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.vs{background:var(--cream);border-radius:10px;padding:14px;text-align:center}
+.vs-v{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--prune)}.vs-l{font-size:10px;color:var(--warm-gray);margin-top:2px}
+
+/* Vault client list */
+.vault-clients{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.vc-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;padding:10px 16px;background:var(--cream);font-size:11px;font-weight:600;color:var(--prune);text-transform:uppercase;letter-spacing:.3px}
+.vc-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;padding:12px 16px;align-items:center;border-bottom:1px solid var(--border);font-size:12.5px}
+.vc-row:last-child{border-bottom:none}
+.vc-row:hover{background:var(--rose-pale)}
+.vc-name{font-weight:500;color:var(--charcoal)}.vc-tier{font-size:11px;font-weight:600;padding:3px 8px;border-radius:5px;display:inline-block}
+.vc-tier.gold{background:var(--gold-bg);color:var(--gold)}.vc-tier.silver{background:var(--info-bg);color:var(--info)}.vc-tier.free{background:#F0EAEB;color:var(--warm-gray)}
+.vc-revenue{font-weight:600;color:var(--success)}
+</style>
+</head>
+<body>
+
+<!-- ===== SMART PRICING ===== -->
+<div class="admin">
+<div class="admin-c">
+  <div class="ph">
+    <div>
+      <div class="pt">Smart Pricing <span class="tag">V2</span></div>
+      <div class="ps">L'IA analyse vos données et celles du marché pour vous suggérer des optimisations tarifaires</div>
+    </div>
+    <button class="btn btn-s">📊 Voir l'historique des suggestions</button>
+  </div>
+
+  <!-- AI banner -->
+  <div class="ai-banner">
+    <div class="ai-icon">🤖</div>
+    <div class="ai-content">
+      <div class="ai-title">4 suggestions de prix basées sur vos 6 derniers mois d'activité</div>
+      <div class="ai-text">L'analyse prend en compte votre taux de réservation, le panier moyen, les prix de la région Toulouse/Tarn, et la saisonnalité. Ces suggestions sont indicatives — vous restez maître de vos tarifs.</div>
+    </div>
+  </div>
+
+  <!-- Suggestions -->
+  <div class="suggestions">
+    <div class="sug-card">
+      <div class="sug-icon up">📈</div>
+      <div class="sug-content">
+        <div class="sug-title">Augmenter la Séance Famille Signature de 290€ à 320€</div>
+        <div class="sug-desc">Votre taux de réservation est de 94% sur les 3 derniers mois — largement au-dessus de la moyenne. Vous pouvez augmenter sans perdre de clients. Les photographes de votre niveau dans la région facturent en moyenne 310€.</div>
+        <div class="sug-data">
+          <div class="sug-metric"><div class="sug-metric-value">94%</div><div class="sug-metric-label">Taux de résa</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">310€</div><div class="sug-metric-label">Moyenne région</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">+1 440€/an</div><div class="sug-metric-label">Impact estimé</div></div>
+        </div>
+      </div>
+      <div class="sug-actions"><button class="sug-apply">✓ Appliquer</button><button class="sug-dismiss">Ignorer</button></div>
+    </div>
+
+    <div class="sug-card">
+      <div class="sug-icon down">📉</div>
+      <div class="sug-content">
+        <div class="sug-title">Baisser le tirage 30×40 de 45€ à 35€</div>
+        <div class="sug-desc">Ce format ne se vend presque jamais (2 commandes en 6 mois). À 35€, vous vous alignez sur le prix psychologique et vous pourriez tripler les ventes. Alternativement, proposez-le en bundle.</div>
+        <div class="sug-data">
+          <div class="sug-metric"><div class="sug-metric-value">2</div><div class="sug-metric-label">Ventes / 6 mois</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">35€</div><div class="sug-metric-label">Prix suggéré</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">×3</div><div class="sug-metric-label">Ventes estimées</div></div>
+        </div>
+      </div>
+      <div class="sug-actions"><button class="sug-apply">✓ Appliquer</button><button class="sug-dismiss">Ignorer</button></div>
+    </div>
+
+    <div class="sug-card">
+      <div class="sug-icon peak">⏰</div>
+      <div class="sug-content">
+        <div class="sug-title">Ajouter un supplément week-end de +30€</div>
+        <div class="sug-desc">Le samedi représente 78% de vos réservations et vous refusez régulièrement des demandes. Un supplément week-end est standard dans la profession et optimise vos revenus sur les créneaux premium.</div>
+        <div class="sug-data">
+          <div class="sug-metric"><div class="sug-metric-value">78%</div><div class="sug-metric-label">Résa samedi</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">+30€</div><div class="sug-metric-label">Supplément</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">+960€/an</div><div class="sug-metric-label">Impact estimé</div></div>
+        </div>
+      </div>
+      <div class="sug-actions"><button class="sug-apply">✓ Appliquer</button><button class="sug-dismiss">Ignorer</button></div>
+    </div>
+
+    <div class="sug-card">
+      <div class="sug-icon bundle">🎁</div>
+      <div class="sug-content">
+        <div class="sug-title">Créer un "Pack Mur de Souvenirs" à 149€ (3 tirages + 1 toile)</div>
+        <div class="sug-desc">68% de vos clients achètent des tirages mais seulement 12% prennent une toile. Un bundle à prix préférentiel pourrait convertir les hésitants. Prix unitaire normal : 185€ → bundle à 149€ = -20% perçu.</div>
+        <div class="sug-data">
+          <div class="sug-metric"><div class="sug-metric-value">68%</div><div class="sug-metric-label">Achètent des tirages</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">12%</div><div class="sug-metric-label">Prennent une toile</div></div>
+          <div class="sug-metric"><div class="sug-metric-value">149€</div><div class="sug-metric-label">Prix bundle</div></div>
+        </div>
+      </div>
+      <div class="sug-actions"><button class="sug-apply">✓ Créer le bundle</button><button class="sug-dismiss">Ignorer</button></div>
+    </div>
+  </div>
+
+  <!-- Benchmark -->
+  <div class="bench-card">
+    <div class="bench-title">📊 Benchmark régional — Toulouse & Tarn</div>
+    <div class="bench-grid">
+      <div class="bench-item">
+        <div class="bench-item-label">Séance Famille</div>
+        <div class="bench-item-you">290 €</div>
+        <div class="bench-item-avg">Moyenne région : 310 €</div>
+        <div class="bench-item-bar"><div class="bench-item-fill" style="width:85%;background:var(--warning)"></div></div>
+        <div class="bench-item-tag low">Légèrement sous le marché</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-item-label">Séance Équestre</div>
+        <div class="bench-item-you">260 €</div>
+        <div class="bench-item-avg">Moyenne région : 240 €</div>
+        <div class="bench-item-bar"><div class="bench-item-fill" style="width:108%;background:var(--success)"></div></div>
+        <div class="bench-item-tag ok">Bien positionné</div>
+      </div>
+      <div class="bench-item">
+        <div class="bench-item-label">Mini-Session</div>
+        <div class="bench-item-you">89 €</div>
+        <div class="bench-item-avg">Moyenne région : 75 €</div>
+        <div class="bench-item-bar"><div class="bench-item-fill" style="width:118%;background:var(--gold)"></div></div>
+        <div class="bench-item-tag high">Premium — justifié par qualité</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="divider"><span>↓ Memory Vault — Archivage longue durée ↓</span></div>
+
+<!-- ===== MEMORY VAULT ===== -->
+<div class="admin" style="background:var(--cream)">
+<div class="admin-c">
+  <div class="ph">
+    <div>
+      <div class="pt">Memory Vault <span class="tag">V2</span></div>
+      <div class="ps">Proposez à vos clients de conserver l'accès à leur galerie indéfiniment — un revenu récurrent passif</div>
+    </div>
+    <button class="btn btn-p">⚙️ Configurer les tarifs</button>
+  </div>
+
+  <!-- Vault tiers -->
+  <div class="vault-card">
+    <div class="vault-h"><div class="vault-h-left"><span class="vault-h-icon">🏛</span><span class="vault-h-title">Formules Memory Vault proposées aux clients</span></div><div class="vault-h-badge">Revenu récurrent</div></div>
+    <div class="vault-b">
+      <div class="vault-tiers">
+        <div class="vault-tier">
+          <div class="vault-tier-icon">📦</div>
+          <div class="vault-tier-name">Standard</div>
+          <div class="vault-tier-desc">Galerie accessible 90 jours (inclus)</div>
+          <div class="vault-tier-price">Gratuit</div>
+          <div class="vault-tier-unit">inclus dans la prestation</div>
+        </div>
+        <div class="vault-tier popular">
+          <div class="vault-tier-icon">⭐</div>
+          <div class="vault-tier-name">Extension 1 an</div>
+          <div class="vault-tier-desc">Gardez l'accès + commandes pendant 12 mois</div>
+          <div class="vault-tier-price">29 €</div>
+          <div class="vault-tier-unit">paiement unique</div>
+        </div>
+        <div class="vault-tier">
+          <div class="vault-tier-icon">🏛</div>
+          <div class="vault-tier-name">Vault Illimité</div>
+          <div class="vault-tier-desc">Accès à vie, commandes à tout moment</div>
+          <div class="vault-tier-price">9 €</div>
+          <div class="vault-tier-unit">/ an · Renouvelé automatiquement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="vault-card">
+    <div class="vault-h"><div class="vault-h-left"><span class="vault-h-icon">📊</span><span class="vault-h-title">Performance Memory Vault</span></div></div>
+    <div class="vault-b">
+      <div class="vault-stats">
+        <div class="vs"><div class="vs-v">23</div><div class="vs-l">Clients Vault actifs</div></div>
+        <div class="vs"><div class="vs-v">387 €</div><div class="vs-l">Revenus récurrents / an</div></div>
+        <div class="vs"><div class="vs-v">42%</div><div class="vs-l">Taux de souscription</div></div>
+        <div class="vs"><div class="vs-v">180 €</div><div class="vs-l">Commandes additionnelles</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--warm-gray);padding:10px 14px;background:var(--success-bg);border-radius:10px;display:flex;align-items:center;gap:8px">
+        <span>💡</span> Les clients avec un Vault actif commandent en moyenne <strong style="color:var(--success)">2.4× plus de tirages</strong> que ceux avec une galerie standard expirée.
+      </div>
+    </div>
+  </div>
+
+  <!-- Client list -->
+  <div class="vault-card">
+    <div class="vault-h"><div class="vault-h-left"><span class="vault-h-icon">👥</span><span class="vault-h-title">Clients Memory Vault</span></div></div>
+    <div class="vault-b">
+      <div class="vault-clients">
+        <div class="vc-header"><span>Client</span><span>Formule</span><span>Galeries</span><span>Depuis</span><span>Revenus</span></div>
+        <div class="vc-row"><div class="vc-name">Marie & Thomas Leroy</div><div><span class="vc-tier gold">Vault Illimité</span></div><div>2 galeries</div><div>Sept 2025</div><div class="vc-revenue">9 €/an + 85 €</div></div>
+        <div class="vc-row"><div class="vc-name">Sophie Dupont</div><div><span class="vc-tier silver">Extension 1 an</span></div><div>1 galerie</div><div>Fév 2026</div><div class="vc-revenue">29 € + 45 €</div></div>
+        <div class="vc-row"><div class="vc-name">Famille Bernard</div><div><span class="vc-tier gold">Vault Illimité</span></div><div>3 galeries</div><div>Juin 2025</div><div class="vc-revenue">9 €/an + 120 €</div></div>
+        <div class="vc-row"><div class="vc-name">Camille Moreau</div><div><span class="vc-tier silver">Extension 1 an</span></div><div>1 galerie</div><div>Mars 2026</div><div class="vc-revenue">29 €</div></div>
+        <div class="vc-row"><div class="vc-name">Famille Garcia</div><div><span class="vc-tier free">Standard (expire J-12)</span></div><div>1 galerie</div><div>Fév 2026</div><div class="vc-revenue">—</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

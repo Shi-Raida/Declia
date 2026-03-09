@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartes Cadeau &amp; FAQ — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border); transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto; padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+
+  /* ===== HERO ===== */
+  .page-hero { padding: 96px 0 64px; text-align: center; background: var(--fl-bg); position: relative; overflow: hidden; }
+  .page-hero::before {
+    content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.06) 0%, transparent 70%);
+  }
+  .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .page-hero h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); color: var(--fl-prune); margin-bottom: 16px; position: relative; z-index: 1; }
+  .page-hero h1 em { font-style: italic; color: var(--fl-or); }
+  .page-hero p { font-size: 1.0625rem; color: var(--fl-warm-gray); max-width: 540px; margin: 0 auto; line-height: 1.7; position: relative; z-index: 1; }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px auto; border-radius: 1px; }
+
+  /* ===== GIFT CARD SECTION ===== */
+  .gc-section { padding: 80px 0; background: var(--fl-bg-alt); }
+  .gc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+
+  /* Card visual */
+  .gc-card-visual { position: relative; }
+  .gc-card {
+    width: 100%; aspect-ratio: 1.6; border-radius: 16px;
+    background: linear-gradient(135deg, var(--fl-prune) 0%, #6a4a5d 50%, var(--fl-prune) 100%);
+    box-shadow: 0 20px 60px rgba(74,46,61,0.25);
+    padding: 36px; display: flex; flex-direction: column;
+    justify-content: space-between; color: white; position: relative; overflow: hidden;
+  }
+  .gc-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(212,160,60,0.12); }
+  .gc-card::after { content: ''; position: absolute; bottom: -30px; left: -30px; width: 160px; height: 160px; border-radius: 50%; background: rgba(194,114,126,0.08); }
+  .gc-card-logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; position: relative; z-index: 1; }
+  .gc-card-logo .logo-accent { color: var(--fl-or); }
+  .gc-card-amount { font-family: var(--fl-font-heading); font-size: 3.25rem; font-weight: 700; color: var(--fl-or); position: relative; z-index: 1; line-height: 1; }
+  .gc-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; position: relative; z-index: 1; }
+  .gc-card-to { font-size: 0.8125rem; opacity: 0.7; }
+  .gc-card-to strong { display: block; font-size: 1rem; opacity: 1; color: white; }
+  .gc-card-code { font-family: monospace; font-size: 0.875rem; letter-spacing: 2px; opacity: 0.5; }
+  .gc-note { text-align: center; font-size: 0.8125rem; color: var(--fl-warm-gray); margin-top: 16px; font-style: italic; }
+
+  /* Form */
+  .gc-form { background: white; border-radius: var(--fl-radius); padding: 36px; box-shadow: var(--fl-shadow-sm); border: 1px solid var(--fl-border); }
+  .gc-form h2 { font-family: var(--fl-font-heading); font-size: 1.5rem; color: var(--fl-prune); margin-bottom: 24px; }
+  .gc-form h2 em { font-style: italic; color: var(--fl-rose); }
+  .amount-label { font-size: 0.8125rem; font-weight: 700; color: var(--fl-prune); margin-bottom: 10px; display: block; }
+  .amounts { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .amt {
+    padding: 10px 20px; border-radius: var(--fl-radius); border: 2px solid var(--fl-border);
+    font-size: 1rem; font-weight: 700; color: var(--fl-warm-gray); cursor: pointer;
+    transition: all var(--fl-transition); font-family: var(--fl-font-heading); background: var(--fl-bg);
+  }
+  .amt:hover { border-color: var(--fl-or); color: var(--fl-or); }
+  .amt.active { background: var(--fl-or); color: var(--fl-charcoal); border-color: var(--fl-or); }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.8125rem; font-weight: 700; color: var(--fl-prune); margin-bottom: 6px; }
+  .form-group label .req { color: var(--fl-rose); }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 11px 14px; border: 2px solid var(--fl-border);
+    border-radius: var(--fl-radius); font-family: var(--fl-font-body); font-size: 0.9375rem;
+    color: var(--fl-charcoal); background: var(--fl-bg); transition: border-color var(--fl-transition); outline: none;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--fl-rose); box-shadow: 0 0 0 3px rgba(194,114,126,0.12); }
+  .form-group textarea { min-height: 80px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-hint { font-size: 0.75rem; color: var(--fl-warm-gray); margin-top: 4px; }
+  .delivery-opts { display: flex; gap: 10px; margin-bottom: 20px; }
+  .del-opt {
+    flex: 1; padding: 14px; border-radius: var(--fl-radius); border: 2px solid var(--fl-border);
+    text-align: center; cursor: pointer; transition: all var(--fl-transition);
+  }
+  .del-opt:hover { border-color: var(--fl-or); }
+  .del-opt.active { border-color: var(--fl-or); background: rgba(212,160,60,0.06); }
+  .del-icon { font-size: 1.25rem; margin-bottom: 4px; }
+  .del-title { font-weight: 700; font-size: 0.8125rem; color: var(--fl-prune); }
+  .del-desc { font-size: 0.6875rem; color: var(--fl-warm-gray); }
+  .gc-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; margin: 16px 0; border-top: 2px solid var(--fl-border); }
+  .gc-total .gt-label { font-weight: 700; color: var(--fl-prune); }
+  .gc-total .gt-value { font-family: var(--fl-font-heading); font-size: 1.75rem; font-weight: 700; color: var(--fl-or); }
+  .secure-note { font-size: 0.75rem; color: var(--fl-warm-gray); text-align: center; margin-top: 10px; }
+
+  /* ===== GIFT BENEFITS ===== */
+  .gc-benefits { padding: 80px 0; background: var(--fl-bg); }
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head h2 em { font-style: italic; color: var(--fl-rose); }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .benefit-card { background: var(--fl-bg-alt); border-radius: var(--fl-radius); padding: 32px 24px; text-align: center; border: 1px solid var(--fl-border); transition: transform var(--fl-transition); }
+  .benefit-card:hover { transform: translateY(-3px); }
+  .benefit-icon { font-size: 2.25rem; margin-bottom: 16px; }
+  .benefit-card h3 { font-family: var(--fl-font-heading); font-size: 1.125rem; color: var(--fl-prune); margin-bottom: 10px; }
+  .benefit-card p { font-size: 0.9rem; color: var(--fl-warm-gray); line-height: 1.65; }
+
+  /* ===== HOW IT WORKS ===== */
+  .gc-how { padding: 80px 0; background: var(--fl-bg-alt); }
+  .how-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; max-width: 860px; margin: 0 auto; text-align: center; }
+  .how-step-card { position: relative; }
+  .how-step-card::after { content: '→'; position: absolute; top: 24px; right: -16px; font-size: 1.5rem; color: rgba(212,160,60,0.3); }
+  .how-step-card:last-child::after { display: none; }
+  .how-num { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 700; }
+  .hn1 { background: rgba(212,160,60,0.1); color: var(--fl-or); }
+  .hn2 { background: rgba(194,114,126,0.1); color: var(--fl-rose); }
+  .hn3 { background: rgba(107,127,90,0.1); color: var(--fl-sauge); }
+  .how-step-card h4 { font-family: var(--fl-font-heading); font-size: 1.0625rem; color: var(--fl-prune); margin-bottom: 10px; }
+  .how-step-card p { font-size: 0.9rem; color: var(--fl-warm-gray); line-height: 1.65; }
+
+  /* ===== FAQ ===== */
+  .faq-section { padding: 96px 0; background: var(--fl-bg); }
+  .faq-cats { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+  .faq-cat {
+    padding: 9px 20px; border-radius: var(--fl-radius-full); font-size: 0.8125rem; font-weight: 600;
+    border: 2px solid var(--fl-border); background: var(--fl-bg); color: var(--fl-warm-gray);
+    cursor: pointer; transition: all var(--fl-transition);
+  }
+  .faq-cat:hover { border-color: var(--fl-rose); color: var(--fl-rose); }
+  .faq-cat.active { background: var(--fl-prune); color: white; border-color: var(--fl-prune); }
+  .faq-grid { max-width: 760px; margin: 0 auto; }
+  .faq-category-title {
+    font-family: var(--fl-font-heading); font-size: 1.125rem; color: var(--fl-prune);
+    margin: 36px 0 16px; padding-top: 24px; border-top: 1px solid var(--fl-border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .faq-category-title:first-child { border: none; padding-top: 0; margin-top: 0; }
+  .faq-item { border-bottom: 1px solid rgba(74,46,61,0.06); }
+  .faq-q {
+    width: 100%; text-align: left; background: none; border: none;
+    padding: 18px 0; font-family: var(--fl-font-body); font-size: 0.9375rem; font-weight: 600;
+    color: var(--fl-prune); cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; transition: color var(--fl-transition);
+  }
+  .faq-q:hover { color: var(--fl-rose); }
+  .faq-chevron { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.3s; color: var(--fl-or); }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+  .faq-item.open .faq-a { max-height: 300px; }
+  .faq-a p { padding-bottom: 18px; font-size: 0.9rem; color: var(--fl-warm-gray); line-height: 1.75; }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-or); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+
+  @media (max-width: 1024px) {
+    .gc-grid { grid-template-columns: 1fr; max-width: 580px; margin: 0 auto; }
+    .benefits-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr; }
+    .how-step-card::after { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .delivery-opts { flex-direction: column; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .benefits-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="03-portfolio-temoignages.html#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="fl-container">
+    <div class="section-label">Cartes Cadeau &amp; FAQ</div>
+    <h1>Offrez de la <em>Lumière</em></h1>
+    <div class="gold-rule"></div>
+    <p>Une carte cadeau Fleur de Lumière, c'est offrir un moment magique à l'Heure Dorée. Le cadeau parfait pour toutes les occasions — anniversaires, Noël, naissance, mariage.</p>
+  </div>
+</section>
+
+<!-- GIFT CARD SECTION -->
+<section class="gc-section">
+  <div class="fl-container">
+    <div class="gc-grid">
+
+      <!-- Card visual -->
+      <div class="gc-card-visual reveal">
+        <div class="gc-card">
+          <div class="gc-card-logo">Fleur de <span class="logo-accent">L</span>umière</div>
+          <div class="gc-card-amount" id="card-amount">150€</div>
+          <div class="gc-card-bottom">
+            <div class="gc-card-to">Pour<br><strong id="card-to">Votre proche</strong></div>
+            <div class="gc-card-code">FDL-XXXX-XXXX</div>
+          </div>
+        </div>
+        <p class="gc-note">Aperçu de la carte — le design final sera personnalisé</p>
+      </div>
+
+      <!-- Form -->
+      <div class="gc-form reveal reveal-delay-2">
+        <h2>Personnalisez votre <em>carte</em></h2>
+
+        <label class="amount-label">Montant de la carte</label>
+        <div class="amounts">
+          <span class="amt" onclick="selectAmt(this,50)">50€</span>
+          <span class="amt" onclick="selectAmt(this,100)">100€</span>
+          <span class="amt active" onclick="selectAmt(this,150)">150€</span>
+          <span class="amt" onclick="selectAmt(this,280)">280€</span>
+          <span class="amt" onclick="selectAmt(this,0)">Sur mesure</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom du destinataire <span class="req">*</span></label>
+            <input type="text" placeholder="Prénom" oninput="document.getElementById('card-to').textContent=this.value||'Votre proche'">
+          </div>
+          <div class="form-group">
+            <label>Email du destinataire <span class="req">*</span></label>
+            <input type="email" placeholder="prenom@email.fr">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Votre prénom <span class="req">*</span></label>
+            <input type="text" placeholder="Votre prénom">
+          </div>
+          <div class="form-group">
+            <label>Votre email <span class="req">*</span></label>
+            <input type="email" placeholder="vous@email.fr">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Message personnel</label>
+          <textarea placeholder="Un petit mot pour accompagner la carte… (optionnel)"></textarea>
+          <div class="form-hint">Max 200 caractères</div>
+        </div>
+
+        <label class="amount-label">Mode d'envoi</label>
+        <div class="delivery-opts">
+          <div class="del-opt active" onclick="selectDel(this)">
+            <div class="del-icon">📧</div>
+            <div class="del-title">Par email</div>
+            <div class="del-desc">Envoi immédiat ou programmé</div>
+          </div>
+          <div class="del-opt" onclick="selectDel(this)">
+            <div class="del-icon">📮</div>
+            <div class="del-title">Par courrier</div>
+            <div class="del-desc">Carte imprimée +5€</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Date d'envoi</label>
+          <input type="date" value="2026-03-08">
+          <div class="form-hint">Date du jour pour un envoi immédiat</div>
+        </div>
+
+        <div class="gc-total">
+          <span class="gt-label">Total</span>
+          <span class="gt-value" id="gc-total">150€</span>
+        </div>
+
+        <button class="fl-btn fl-btn-primary" style="width:100%;justify-content:center;font-size:1rem;padding:14px;" onclick="alert('Paiement sécurisé — fonctionnalité disponible bientôt !')">Offrir cette carte cadeau</button>
+        <p class="secure-note">Paiement sécurisé Stripe · Carte valable 12 mois</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="gc-benefits">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Avantages</div>
+      <h2>Pourquoi offrir une <em>carte cadeau</em> ?</h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card reveal reveal-delay-1">
+        <div class="benefit-icon">✨</div>
+        <h3>Un cadeau unique</h3>
+        <p>Offrez bien plus qu'un objet — offrez un moment, une expérience, des souvenirs qui durent toute une vie. Bien plus précieux que n'importe quel cadeau matériel.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-2">
+        <div class="benefit-icon">🗓️</div>
+        <h3>Valable 12 mois</h3>
+        <p>Le destinataire choisit sa date parmi les créneaux disponibles. 12 mois de validité pour trouver le moment parfait à l'Heure Dorée.</p>
+      </div>
+      <div class="benefit-card reveal reveal-delay-3">
+        <div class="benefit-icon">🎁</div>
+        <h3>Pour toutes les occasions</h3>
+        <p>Anniversaire, Noël, fête des mères, naissance, mariage… La carte cadeau Fleur de Lumière s'adapte à toutes les occasions et tous les budgets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="gc-how">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Comment ça marche</div>
+      <h2>Comment ça <em>marche</em> ?</h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="how-steps">
+      <div class="how-step-card reveal reveal-delay-1">
+        <div class="how-num hn1">1</div>
+        <h4>Choisissez &amp; personnalisez</h4>
+        <p>Sélectionnez le montant, rédigez votre message et choisissez la date d'envoi.</p>
+      </div>
+      <div class="how-step-card reveal reveal-delay-2">
+        <div class="how-num hn2">2</div>
+        <h4>Le destinataire reçoit</h4>
+        <p>La carte arrive par email ou courrier, avec le code et les instructions pour réserver.</p>
+      </div>
+      <div class="how-step-card reveal reveal-delay-3">
+        <div class="how-num hn3">3</div>
+        <h4>Il/Elle réserve sa séance</h4>
+        <p>Le code est utilisable sur toutes les formules et la boutique en ligne. Valable 12 mois.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">FAQ</div>
+      <h2>Questions <em>fréquentes</em></h2>
+      <div class="gold-rule"></div>
+      <p>Tout ce que vous devez savoir avant, pendant et après votre séance photo.</p>
+    </div>
+
+    <div class="faq-cats">
+      <span class="faq-cat active" onclick="filterFaq(this,'all')">Toutes</span>
+      <span class="faq-cat" onclick="filterFaq(this,'reservation')">Réservation</span>
+      <span class="faq-cat" onclick="filterFaq(this,'seance')">Déroulement</span>
+      <span class="faq-cat" onclick="filterFaq(this,'photos')">Photos &amp; livraison</span>
+      <span class="faq-cat" onclick="filterFaq(this,'paiement')">Tarifs &amp; paiement</span>
+    </div>
+
+    <div class="faq-grid reveal">
+
+      <h3 class="faq-category-title" data-cat="reservation">Réservation &amp; organisation</h3>
+
+      <div class="faq-item open" data-cat="reservation">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment réserver une séance ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>C'est très simple ! Choisissez votre formule, sélectionnez un créneau disponible à l'Heure Dorée, remplissez le questionnaire pré-shooting et réglez l'acompte de 30%. Vous recevez une confirmation par email immédiatement.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="reservation">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Puis-je reporter ma séance ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Oui ! Plus de 7 jours avant : report gratuit (1 fois) ou remboursement intégral. Moins de 7 jours : report uniquement. Moins de 48h : ni report ni remboursement, sauf force majeure. En cas de météo défavorable, je vous propose systématiquement un report gratuit.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="reservation">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quel acompte faut-il verser ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Un acompte de 30% du montant total est demandé à la réservation pour confirmer votre créneau. Le solde est à régler avant la livraison de votre galerie en ligne.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="reservation">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Que se passe-t-il si la météo est mauvaise ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>La lumière est ma signature — je ne fais pas de compromis dessus. Si les conditions ne permettent pas la belle lumière promise, je vous propose un report gratuit à une date qui vous convient.</p></div>
+      </div>
+
+      <h3 class="faq-category-title" data-cat="seance">Le jour de la séance</h3>
+
+      <div class="faq-item" data-cat="seance">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Qu'est-ce que l'Heure Dorée ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>C'est la période juste avant le coucher du soleil (ou juste après le lever). La lumière y est chaude, dorée, douce — parfaite pour sublimer les visages, les paysages et les émotions. C'est ma signature et toutes mes séances sont programmées à ce moment magique.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="seance">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment se préparer pour la séance ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Privilégiez des tenues dans des tons naturels (beige, crème, terracotta, sauge). Évitez les motifs trop chargés et les logos. Je vous envoie un guide complet avec des conseils tenues 3 jours avant la séance.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="seance">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Où se déroulent les séances ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Toujours en extérieur, en lumière naturelle ! Dans le Tarn et la région toulousaine : champs, forêts, bords de rivière, écuries, parcs… Si vous n'avez pas d'idée, je vous proposerai mes spots préférés selon la saison.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="seance">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Puis-je changer de tenue pendant la séance ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Oui, avec les formules Signature et Sur-Mesure ! Vous pouvez prévoir 2 tenues. Je vous laisse le temps de vous changer tranquillement pendant la séance.</p></div>
+      </div>
+
+      <h3 class="faq-category-title" data-cat="photos">Photos &amp; livraison</h3>
+
+      <div class="faq-item" data-cat="photos">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Combien de temps ai-je accès à ma galerie ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Votre galerie est accessible pendant 90 jours. Vous recevez un rappel avant l'expiration. Pensez à télécharger vos photos et passer vos commandes avant la fin !</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="photos">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quel est le délai de livraison des photos ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Comptez 2 à 3 semaines après la séance pour la livraison de votre galerie. Si vous avez la formule Signature, vous recevez d'abord une galerie de sélection, puis les photos finales retouchées.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="photos">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quel type de retouche faites-vous ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Retouche naturelle uniquement : correction lumière, harmonie des couleurs, tons chauds dorés. Je ne fais pas de retouche beauté excessive — l'authenticité est ma philosophie. Pas de peau lissée artificielle ni de filtres dénaturants.</p></div>
+      </div>
+
+      <h3 class="faq-category-title" data-cat="paiement">Tarifs &amp; paiement</h3>
+
+      <div class="faq-item" data-cat="paiement">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quels moyens de paiement acceptez-vous ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Carte bancaire (Visa, Mastercard), Apple Pay et Google Pay via Stripe. Le paiement est 100% sécurisé et chiffré. Je propose aussi le virement bancaire sur demande.</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="paiement">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment fonctionne le parrainage ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Partagez votre code parrainage à vos proches. Ils reçoivent -10% sur leur première séance, et vous recevez -15% sur votre prochaine. Au 3ème parrainage réussi, une mini-séance offerte !</p></div>
+      </div>
+
+      <div class="faq-item" data-cat="paiement">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          La carte cadeau est-elle remboursable ?
+          <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="faq-a"><p>Non, les cartes cadeaux ne sont ni échangeables ni remboursables. Elles sont valables 12 mois à compter de la date d'achat et utilisables sur toutes les formules de séance et la boutique en ligne.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="reserver">
+  <div class="fl-container">
+    <h2>Prête à vivre votre <em>expérience</em> ?</h2>
+    <p>Rejoignez les 240 familles et cavalières qui ont confié leurs souvenirs à Fleur de Lumière.</p>
+    <div class="cta-actions">
+      <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance →</a>
+      <a href="05-tarifs.html" class="fl-btn fl-btn-ghost fl-btn-lg">Voir les formules</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  function selectAmt(el, val) {
+    document.querySelectorAll('.amt').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+    if (val > 0) {
+      document.getElementById('card-amount').textContent = val + '€';
+      document.getElementById('gc-total').textContent = val + '€';
+    } else {
+      document.getElementById('card-amount').textContent = '?€';
+      document.getElementById('gc-total').textContent = 'Sur mesure';
+    }
+  }
+
+  function selectDel(el) {
+    document.querySelectorAll('.del-opt').forEach(d => d.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+
+  function filterFaq(el, cat) {
+    document.querySelectorAll('.faq-cat').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.faq-item, .faq-category-title').forEach(i => {
+      i.style.display = (cat === 'all' || i.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

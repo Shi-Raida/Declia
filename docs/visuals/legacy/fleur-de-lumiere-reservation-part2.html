@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réserver — Étapes 5 à 7 — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;
+    --bg:#FFFFFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;
+    --texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;
+    --rose-hover:#A85965;--rose-light:rgba(194,114,126,0.08);
+    --or-light:rgba(212,160,60,0.1);--sauge-light:rgba(107,127,90,0.1);
+    --prune-light:rgba(74,46,61,0.05);
+    --font-titre:'Playfair Display',Georgia,serif;
+    --font:'Lato',-apple-system,sans-serif;
+    --radius:8px;--radius-md:12px;--radius-full:9999px;
+    --shadow-sm:0 1px 3px rgba(74,46,61,0.06);--shadow:0 2px 8px rgba(74,46,61,0.08);
+    --shadow-md:0 4px 16px rgba(74,46,61,0.12);--shadow-cta:0 4px 12px rgba(194,114,126,0.3);
+    --transition:0.25s ease;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  a{text-decoration:none;color:inherit;}
+  button{font-family:var(--font);cursor:pointer;}
+  h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);font-size:15px;font-weight:700;padding:14px 32px;border-radius:var(--radius);cursor:pointer;transition:var(--transition);border:2px solid transparent;}
+  .btn-primary{background:var(--rose);color:#fff;border-color:var(--rose);box-shadow:var(--shadow-cta);}
+  .btn-primary:hover{background:var(--rose-hover);border-color:var(--rose-hover);transform:translateY(-1px);}
+  .btn-secondary{background:transparent;color:var(--prune);border:2px solid var(--prune);}
+  .btn-secondary:hover{background:var(--prune);color:#fff;}
+  .btn-sauge{background:var(--sauge);color:#fff;border-color:var(--sauge);}
+  .btn-sauge:hover{background:#5a6e4b;border-color:#5a6e4b;}
+  .btn-ghost{background:transparent;color:var(--gris);border:none;padding:14px 16px;font-size:14px;font-weight:700;}
+  .btn-ghost:hover{color:var(--prune);}
+  .btn-full{width:100%;}
+
+  .header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:var(--font-titre);font-size:20px;font-weight:700;color:var(--prune);}
+  .logo span{color:var(--or);}
+  .header-help{font-size:13px;color:var(--gris);}
+  .header-help a{color:var(--rose);font-weight:700;}
+
+  .stepper-wrap{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:20px 24px;position:sticky;top:0;z-index:50;}
+  .stepper{display:flex;align-items:center;justify-content:center;max-width:750px;margin:0 auto;}
+  .step-item{display:flex;align-items:center;}
+  .step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid var(--gris-border);color:var(--gris-light);background:var(--bg);transition:var(--transition);flex-shrink:0;position:relative;}
+  .step-dot.active{border-color:var(--rose);color:var(--rose);background:var(--rose-light);}
+  .step-dot.done{border-color:var(--sauge);background:var(--sauge);color:#fff;}
+  .step-label{font-size:10px;color:var(--gris-light);position:absolute;top:42px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+  .step-dot.active .step-label,.step-dot.done .step-label{color:var(--prune);font-weight:700;}
+  .step-line{width:40px;height:2px;background:var(--gris-border);margin:0 4px;}
+  .step-line.done{background:var(--sauge);}
+
+  .booking-layout{display:grid;grid-template-columns:1fr 340px;min-height:calc(100vh - 130px);}
+  .booking-main{padding:36px 40px;max-width:700px;width:100%;}
+  .booking-sidebar{background:var(--bg);border-left:1px solid var(--gris-border);padding:28px 24px;position:sticky;top:130px;align-self:start;}
+
+  .step-view{display:none;}
+  .step-view.active{display:block;animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+  .step-title{font-size:clamp(22px,3vw,28px);color:var(--prune);margin-bottom:8px;}
+  .step-title em{color:var(--rose);font-style:italic;}
+  .step-desc{font-size:15px;color:var(--gris);margin-bottom:28px;line-height:1.7;}
+
+  /* CGV */
+  .cgv-block{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:24px;margin-bottom:20px;}
+  .cgv-block h4{font-size:15px;color:var(--prune);margin-bottom:12px;}
+  .cgv-text{font-size:13px;color:var(--gris);line-height:1.7;max-height:180px;overflow-y:auto;padding-right:8px;margin-bottom:16px;border:1px solid var(--gris-border);border-radius:var(--radius);padding:16px;background:var(--bg-alt);}
+  .cgv-text::-webkit-scrollbar{width:4px;}
+  .cgv-text::-webkit-scrollbar-thumb{background:var(--gris-border);border-radius:2px;}
+  .checkbox-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;cursor:pointer;}
+  .checkbox-box{width:22px;height:22px;border-radius:4px;border:2px solid var(--gris-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);font-size:12px;font-weight:700;}
+  .checkbox-row.checked .checkbox-box{background:var(--sauge);border-color:var(--sauge);color:#fff;}
+  .checkbox-label{font-size:14px;color:var(--texte);line-height:1.5;}
+  .checkbox-label a{color:var(--rose);font-weight:700;text-decoration:underline;}
+
+  /* PAYMENT */
+  .payment-summary{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:24px;margin-bottom:24px;}
+  .payment-summary h4{font-size:16px;color:var(--prune);margin-bottom:16px;}
+  .ps-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid rgba(74,46,61,0.04);}
+  .ps-row:last-child{border:none;}
+  .ps-row .ps-l{color:var(--gris);}
+  .ps-row .ps-v{font-weight:700;color:var(--prune);}
+  .ps-total{display:flex;justify-content:space-between;padding:16px 0 0;margin-top:8px;border-top:2px solid var(--gris-border);}
+  .ps-total .ps-l{font-weight:700;color:var(--prune);font-size:15px;}
+  .ps-total .ps-v{font-family:var(--font-titre);font-size:24px;font-weight:700;color:var(--or);}
+  .ps-deposit{text-align:center;margin-top:16px;padding:16px;background:var(--or-light);border-radius:var(--radius);font-size:14px;}
+  .ps-deposit strong{color:var(--or);font-family:var(--font-titre);font-size:22px;}
+
+  .stripe-card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:28px;margin-bottom:20px;}
+  .stripe-card h4{font-size:16px;color:var(--prune);margin-bottom:4px;display:flex;align-items:center;gap:10px;}
+  .stripe-badge{font-size:11px;background:var(--sauge-light);color:var(--sauge);padding:3px 10px;border-radius:var(--radius-full);font-weight:700;}
+  .stripe-sub{font-size:13px;color:var(--gris);margin-bottom:20px;}
+  .payment-methods{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .pm{padding:8px 16px;border-radius:var(--radius);border:1px solid var(--gris-border);font-size:12px;font-weight:700;color:var(--gris);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:6px;}
+  .pm:hover{border-color:var(--prune);}
+  .pm.active{border-color:var(--prune);color:var(--prune);background:var(--prune-light);}
+  .card-mock{background:var(--bg-alt);border:2px solid var(--gris-border);border-radius:var(--radius);padding:20px;margin-bottom:20px;}
+  .card-row{display:flex;gap:12px;margin-bottom:12px;}
+  .card-row:last-child{margin:0;}
+  .card-field{flex:1;padding:11px 14px;border:1px solid var(--gris-border);border-radius:6px;font-size:14px;color:var(--gris-light);background:var(--bg);}
+  .card-field.small{max-width:130px;}
+  .secure-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gris);margin-top:16px;}
+
+  /* CONFIRMATION */
+  .confirmation{text-align:center;padding:40px 0;}
+  .conf-icon{width:100px;height:100px;border-radius:50%;background:var(--sauge-light);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 24px;animation:pop 0.5s ease;}
+  @keyframes pop{0%{transform:scale(0);}60%{transform:scale(1.15);}100%{transform:scale(1);}}
+  .conf-title{font-size:28px;color:var(--prune);margin-bottom:8px;}
+  .conf-title em{color:var(--rose);font-style:italic;}
+  .conf-subtitle{font-size:16px;color:var(--gris);margin-bottom:32px;line-height:1.7;max-width:460px;margin-left:auto;margin-right:auto;}
+  .conf-card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);padding:28px;text-align:left;max-width:500px;margin:0 auto 28px;box-shadow:var(--shadow-sm);}
+  .conf-card h4{font-size:15px;color:var(--prune);margin-bottom:16px;text-align:center;}
+  .cd-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid rgba(74,46,61,0.04);}
+  .cd-row:last-child{border:none;}
+  .cd-row .cd-l{color:var(--gris);}
+  .cd-row .cd-v{font-weight:700;color:var(--prune);}
+  .conf-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .conf-email{background:var(--sauge-light);border-radius:var(--radius);padding:16px 24px;display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--sauge);font-weight:700;margin-bottom:24px;}
+  .conf-next{max-width:500px;margin:0 auto;}
+  .conf-next h4{font-size:16px;color:var(--prune);margin-bottom:16px;}
+  .next-steps{list-style:none;}
+  .next-steps li{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid rgba(74,46,61,0.04);font-size:14px;}
+  .next-steps li:last-child{border:none;}
+  .next-step-num{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;}
+  .nsn-1{background:var(--rose-light);color:var(--rose);}
+  .nsn-2{background:var(--or-light);color:var(--or);}
+  .nsn-3{background:var(--sauge-light);color:var(--sauge);}
+  .nsn-4{background:var(--prune-light);color:var(--prune);}
+  .next-step-text .nst-title{font-weight:700;color:var(--prune);}
+  .next-step-text .nst-desc{font-size:13px;color:var(--gris);}
+
+  /* SIDEBAR */
+  .sidebar-title{font-family:var(--font-titre);font-size:17px;color:var(--prune);margin-bottom:18px;}
+  .recap-section{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--gris-border);}
+  .recap-section:last-of-type{border:none;}
+  .recap-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gris-light);margin-bottom:4px;}
+  .recap-value{font-size:14px;color:var(--prune);font-weight:700;}
+  .recap-value.light{font-weight:400;color:var(--texte);font-size:13px;}
+  .recap-price-row{display:flex;justify-content:space-between;padding:3px 0;font-size:13px;}
+  .recap-price-row .rp-l{color:var(--gris);}
+  .recap-price-row .rp-v{font-weight:700;color:var(--prune);}
+  .recap-total{display:flex;justify-content:space-between;padding:14px 0 0;margin-top:8px;border-top:2px solid var(--gris-border);}
+  .recap-total .rp-l{font-weight:700;color:var(--prune);font-size:15px;}
+  .recap-total .rp-v{font-family:var(--font-titre);font-size:22px;font-weight:700;color:var(--or);}
+  .recap-deposit{background:var(--or-light);border-radius:var(--radius);padding:12px;text-align:center;margin-top:12px;font-size:13px;}
+  .recap-deposit strong{color:var(--or);font-family:var(--font-titre);font-size:18px;}
+  .sidebar-secure{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gris);margin-top:12px;}
+
+  .step-nav{display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:20px;border-top:1px solid var(--gris-border);}
+
+  @media(max-width:1024px){.booking-layout{grid-template-columns:1fr;}.booking-sidebar{position:static;border-left:none;border-top:1px solid var(--gris-border);}}
+  @media(max-width:768px){.booking-main{padding:24px 16px;}.stepper{overflow-x:auto;justify-content:flex-start;padding-bottom:20px;}.step-line{width:20px;}.card-row{flex-direction:column;}.card-field.small{max-width:none;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a class="logo">Fleur de <span>L</span>umière</a>
+  <div class="header-help">Besoin d'aide ? <a href="#">Contactez-moi</a></div>
+</div>
+
+<div class="stepper-wrap">
+  <div class="stepper">
+    <div class="step-item"><div class="step-dot done" id="dot-1"><span class="step-label">Formule</span></div></div>
+    <div class="step-line done" id="line-1"></div>
+    <div class="step-item"><div class="step-dot done" id="dot-2"><span class="step-label">Options</span></div></div>
+    <div class="step-line done" id="line-2"></div>
+    <div class="step-item"><div class="step-dot done" id="dot-3"><span class="step-label">Créneau</span></div></div>
+    <div class="step-line done" id="line-3"></div>
+    <div class="step-item"><div class="step-dot done" id="dot-4"><span class="step-label">Infos</span></div></div>
+    <div class="step-line done" id="line-4"></div>
+    <div class="step-item"><div class="step-dot active" id="dot-5"><span>5</span><span class="step-label">CGV</span></div></div>
+    <div class="step-line" id="line-5"></div>
+    <div class="step-item"><div class="step-dot" id="dot-6"><span>6</span><span class="step-label">Paiement</span></div></div>
+    <div class="step-line" id="line-6"></div>
+    <div class="step-item"><div class="step-dot" id="dot-7"><span>7</span><span class="step-label">Confirmé</span></div></div>
+  </div>
+</div>
+
+<div class="booking-layout">
+  <div class="booking-main">
+
+    <!-- ===== STEP 5: CGV ===== -->
+    <div class="step-view active" id="step-5">
+      <h2 class="step-title">Conditions <em>générales</em></h2>
+      <p class="step-desc">Avant de procéder au paiement, veuillez prendre connaissance et accepter les conditions.</p>
+
+      <div class="cgv-block">
+        <h4>📄 Conditions Générales de Vente</h4>
+        <div class="cgv-text">
+          <strong>Article 1 — Objet</strong><br>
+          Les présentes conditions régissent les relations entre Fleur de Lumière (auto-entreprise) et le Client pour toute prestation de photographie.<br><br>
+          <strong>Article 2 — Réservation et acompte</strong><br>
+          Toute réservation est confirmée par le versement d'un acompte de 30% du montant total. L'acompte n'est pas remboursable en cas d'annulation moins de 48h avant la séance, sauf cas de force majeure.<br><br>
+          <strong>Article 3 — Report et annulation</strong><br>
+          • Plus de 7 jours avant : report gratuit (1 fois) ou remboursement intégral.<br>
+          • Moins de 7 jours : report uniquement, une seule fois.<br>
+          • Moins de 48h : ni report, ni remboursement.<br>
+          • Météo défavorable : report gratuit proposé par la photographe.<br><br>
+          <strong>Article 4 — Solde et livraison</strong><br>
+          Le solde de la prestation est dû avant la livraison de la galerie en ligne. La galerie est accessible pendant 90 jours à compter de sa mise en ligne.<br><br>
+          <strong>Article 5 — Droit à l'image</strong><br>
+          Sauf mention contraire, le Client autorise Fleur de Lumière à utiliser les photographies à des fins de promotion (portfolio, réseaux sociaux, site web). Le Client peut s'y opposer par écrit.<br><br>
+          <strong>Article 6 — Propriété intellectuelle</strong><br>
+          Les photographies restent la propriété intellectuelle de Fleur de Lumière. Le Client dispose d'un droit d'usage personnel et non commercial.
+        </div>
+      </div>
+
+      <div class="checkbox-row" onclick="toggleCheck(this)">
+        <div class="checkbox-box"></div>
+        <div class="checkbox-label">J'ai lu et j'accepte les <a href="#">Conditions Générales de Vente</a> de Fleur de Lumière. <span class="req" style="color:var(--rose);">*</span></div>
+      </div>
+      <div class="checkbox-row" onclick="toggleCheck(this)">
+        <div class="checkbox-box"></div>
+        <div class="checkbox-label">J'autorise Fleur de Lumière à utiliser les photos de ma séance à des fins de promotion (portfolio, réseaux). <em style="color:var(--gris);font-size:12px;">Optionnel</em></div>
+      </div>
+      <div class="checkbox-row" onclick="toggleCheck(this)">
+        <div class="checkbox-box"></div>
+        <div class="checkbox-label">J'accepte la <a href="#">politique de confidentialité</a> et le traitement de mes données personnelles. <span class="req" style="color:var(--rose);">*</span></div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-ghost" onclick="goStep(5, 'back')">← Retour (étape 4 dans Partie 1)</button>
+        <button class="btn btn-primary" onclick="goStep(6)">Procéder au paiement →</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 6: Paiement ===== -->
+    <div class="step-view" id="step-6">
+      <h2 class="step-title">Paiement de <em>l'acompte</em></h2>
+      <p class="step-desc">Réglez votre acompte de 30% pour confirmer votre réservation. Le solde sera demandé avant la livraison de votre galerie.</p>
+
+      <div class="payment-summary">
+        <h4>Résumé de votre commande</h4>
+        <div class="ps-row"><span class="ps-l">Formule Signature — Famille</span><span class="ps-v">280€</span></div>
+        <div class="ps-row"><span class="ps-l">Boîte Souvenir « L'Écrin »</span><span class="ps-v">+35€</span></div>
+        <div class="ps-total"><span class="ps-l">Total prestation</span><span class="ps-v">315€</span></div>
+        <div class="ps-deposit">Acompte à régler maintenant (30%) :<br><strong>94,50€</strong></div>
+      </div>
+
+      <div class="stripe-card">
+        <h4>💳 Paiement sécurisé <span class="stripe-badge">🔒 Stripe</span></h4>
+        <p class="stripe-sub">Vos données bancaires sont chiffrées et sécurisées par Stripe.</p>
+
+        <div class="payment-methods">
+          <div class="pm active">💳 Carte bancaire</div>
+          <div class="pm">Apple Pay</div>
+          <div class="pm">Google Pay</div>
+        </div>
+
+        <div class="card-mock">
+          <div class="card-row">
+            <div class="card-field">1234 5678 9012 3456</div>
+          </div>
+          <div class="card-row">
+            <div class="card-field small">MM / AA</div>
+            <div class="card-field small">CVC</div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" style="font-size:16px;padding:16px;" onclick="goStep(7)">
+          🔒 Payer 94,50€
+        </button>
+
+        <div class="secure-note">🔒 Paiement chiffré SSL · Données non conservées · Conforme PCI DSS</div>
+      </div>
+
+      <div style="text-align:center;margin-top:16px;">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='24'%3E%3Ctext x='0' y='16' font-family='Lato' font-size='11' fill='%239CA3AF'%3EVisa · Mastercard · Apple Pay · Google Pay%3C/text%3E%3C/svg%3E" alt="Moyens de paiement">
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-ghost" onclick="goStep(5)">← Retour</button>
+        <span></span>
+      </div>
+    </div>
+
+    <!-- ===== STEP 7: Confirmation ===== -->
+    <div class="step-view" id="step-7">
+      <div class="confirmation">
+        <div class="conf-icon">✨</div>
+        <h2 class="conf-title">Réservation <em>confirmée</em> !</h2>
+        <p class="conf-subtitle">Merci Sophie ! Votre séance est réservée. Vous allez recevoir un email de confirmation avec tous les détails.</p>
+
+        <div class="conf-email">📧 Confirmation envoyée à sophie.m@email.fr</div>
+
+        <div class="conf-card">
+          <h4>Votre réservation</h4>
+          <div class="cd-row"><span class="cd-l">Référence</span><span class="cd-v">#FDL-2026-0148</span></div>
+          <div class="cd-row"><span class="cd-l">Formule</span><span class="cd-v">Signature — Famille</span></div>
+          <div class="cd-row"><span class="cd-l">Date</span><span class="cd-v">Samedi 14 mars 2026</span></div>
+          <div class="cd-row"><span class="cd-l">Heure</span><span class="cd-v">17h30 — Heure Dorée ☀️</span></div>
+          <div class="cd-row"><span class="cd-l">Options</span><span class="cd-v">Boîte Souvenir « L'Écrin »</span></div>
+          <div class="cd-row"><span class="cd-l">Total</span><span class="cd-v" style="color:var(--or);">315€</span></div>
+          <div class="cd-row"><span class="cd-l">Acompte réglé</span><span class="cd-v" style="color:var(--sauge);">94,50€ ✓</span></div>
+          <div class="cd-row"><span class="cd-l">Solde restant</span><span class="cd-v">220,50€</span></div>
+        </div>
+
+        <div class="conf-next">
+          <h4>Et maintenant ?</h4>
+          <ul class="next-steps">
+            <li>
+              <span class="next-step-num nsn-1">1</span>
+              <div class="next-step-text">
+                <div class="nst-title">Email de confirmation</div>
+                <div class="nst-desc">Vous recevez un email avec votre récapitulatif, la facture d'acompte et un rappel J-3.</div>
+              </div>
+            </li>
+            <li>
+              <span class="next-step-num nsn-2">2</span>
+              <div class="next-step-text">
+                <div class="nst-title">Rappel J-3 + météo</div>
+                <div class="nst-desc">3 jours avant, je vous envoie un rappel avec les prévisions météo et des conseils tenues.</div>
+              </div>
+            </li>
+            <li>
+              <span class="next-step-num nsn-3">3</span>
+              <div class="next-step-text">
+                <div class="nst-title">Jour J — On se retrouve !</div>
+                <div class="nst-desc">Rendez-vous au lieu convenu à l'heure prévue. Je m'occupe de tout, vous n'avez qu'à profiter !</div>
+              </div>
+            </li>
+            <li>
+              <span class="next-step-num nsn-4">4</span>
+              <div class="next-step-text">
+                <div class="nst-title">Votre galerie sous 2-3 semaines</div>
+                <div class="nst-desc">Vous recevez un email avec l'accès à votre galerie privée. Solde à régler avant livraison.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="conf-actions" style="margin-top:32px;">
+          <a href="#" class="btn btn-primary">📅 Ajouter à mon calendrier</a>
+          <a href="#" class="btn btn-secondary">👤 Mon espace client</a>
+        </div>
+
+        <p style="font-size:13px;color:var(--gris);margin-top:24px;">Des questions ? <a href="#" style="color:var(--rose);font-weight:700;">Contactez-moi</a> — je vous réponds sous 24h.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="booking-sidebar">
+    <h3 class="sidebar-title">📋 Récapitulatif</h3>
+    <div class="recap-section">
+      <div class="recap-label">Spécialité</div>
+      <div class="recap-value">👨‍👩‍👧‍👦 Famille & Portraits</div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Formule</div>
+      <div class="recap-value">Signature</div>
+      <div class="recap-value light">1h · 25 photos retouchées</div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Options</div>
+      <div class="recap-price-row"><span class="rp-l">Boîte Souvenir « L'Écrin »</span><span class="rp-v">+35€</span></div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Créneau</div>
+      <div class="recap-value">Sam. 14 mars 2026</div>
+      <div class="recap-value light">17h30 — Heure Dorée ☀️</div>
+    </div>
+    <div class="recap-section">
+      <div class="recap-label">Client</div>
+      <div class="recap-value">Sophie Mercier</div>
+      <div class="recap-value light">sophie.m@email.fr</div>
+    </div>
+
+    <div class="recap-price-row"><span class="rp-l">Formule Signature</span><span class="rp-v">280€</span></div>
+    <div class="recap-price-row"><span class="rp-l">Boîte Souvenir</span><span class="rp-v">+35€</span></div>
+    <div class="recap-total"><span class="rp-l">Total</span><span class="rp-v">315€</span></div>
+    <div class="recap-deposit">Acompte (30%) : <strong>94,50€</strong><br><span style="font-size:11px;color:var(--gris);">Solde : 220,50€ avant livraison</span></div>
+
+    <div class="sidebar-secure">🔒 Paiement sécurisé Stripe</div>
+    <div class="sidebar-secure">↩️ Report gratuit si météo</div>
+    <div class="sidebar-secure">✅ Annulation > 7 jours</div>
+    <div class="sidebar-secure">📧 Facture Factur-X conforme</div>
+  </div>
+</div>
+
+<script>
+  function goStep(n) {
+    document.querySelectorAll('.step-view').forEach(v => v.classList.remove('active'));
+    const el = document.getElementById('step-' + n);
+    if (el) el.classList.add('active');
+
+    for (let i = 1; i <= 7; i++) {
+      const dot = document.getElementById('dot-' + i);
+      if (!dot) continue;
+      dot.className = 'step-dot';
+      if (i < n) dot.classList.add('done');
+      else if (i === n) dot.classList.add('active');
+    }
+    for (let i = 1; i <= 6; i++) {
+      const line = document.getElementById('line-' + i);
+      if (line) line.className = i < n ? 'step-line done' : 'step-line';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCheck(row) {
+    row.classList.toggle('checked');
+    const box = row.querySelector('.checkbox-box');
+    box.textContent = row.classList.contains('checked') ? '✓' : '';
+  }
+</script>
+</body>
+</html>

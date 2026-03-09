@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Mood Board Collaboratif</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--charcoal)}
+.tag{display:inline-block;background:#D4BBFF;color:#3A1D6E;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.divider{background:var(--prune);padding:20px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.divider span{background:rgba(255,255,255,.08);padding:6px 20px;border-radius:20px}
+
+/* NAV */
+.nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:10}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--prune)}.nav-logo span{color:var(--rose)}
+.nav-bc{font-size:13px;color:var(--warm-gray)}.nav-bc strong{color:var(--prune);font-weight:600}
+
+/* PAGE */
+.page{max-width:960px;margin:0 auto;padding:36px 24px}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.pt{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--prune)}
+.ps{font-size:14px;color:var(--warm-gray);margin-top:4px;max-width:500px;line-height:1.5}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--rose);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 2px 8px rgba(194,114,126,.2)}
+.btn-o{background:var(--white);color:var(--prune);border:1.5px solid var(--border);box-shadow:none}
+
+/* PROGRESS */
+.prog{display:flex;align-items:center;gap:14px;background:var(--white);border-radius:12px;padding:14px 20px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:24px}
+.prog-t{font-size:13px;font-weight:500;color:var(--charcoal);flex-shrink:0}
+.prog-bar{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--rose));border-radius:3px}
+.prog-pct{font-size:13px;font-weight:700;color:var(--prune);flex-shrink:0}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--white);padding:4px;border-radius:12px;margin-bottom:24px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.tab{flex:1;padding:10px;text-align:center;font-size:12.5px;font-weight:500;color:var(--warm-gray);border-radius:9px;cursor:pointer}
+.tab.on{background:var(--rose);color:#fff;font-weight:600}
+.tab .c{display:inline-block;background:rgba(255,255,255,.25);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:4px}
+
+/* PHOTOGRAPHER BANNER */
+.ph-banner{background:linear-gradient(135deg,var(--prune),#5A3A4D);border-radius:16px;padding:18px 22px;display:flex;align-items:center;gap:14px;margin-bottom:24px;color:#fff}
+.ph-banner-icon{font-size:26px}.ph-banner-text{flex:1}.ph-banner-title{font-size:14px;font-weight:600;margin-bottom:2px}.ph-banner-sub{font-size:12px;opacity:.6;line-height:1.4}
+
+/* BOARD GRID */
+.sec{margin-bottom:28px}
+.sec-t{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--prune);margin-bottom:4px}
+.sec-s{font-size:13px;color:var(--warm-gray);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.item{border-radius:14px;overflow:hidden;position:relative;cursor:pointer;transition:all .25s;box-shadow:var(--shadow);border:2px solid transparent}
+.item:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.item.liked{border-color:var(--rose)}
+.item-img{width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.5)}
+.i1{background:linear-gradient(135deg,#D4B8A0,#C0A088,#B89078)}.i2{background:linear-gradient(135deg,#C8D8C0,#A8C098,#90B080)}.i3{background:linear-gradient(135deg,#E8D0C8,#D4B8B0)}.i4{background:linear-gradient(135deg,#D0C8E0,#B8A8D0)}
+.i5{background:linear-gradient(135deg,#E0D4C0,#D0C4A8)}.i6{background:linear-gradient(135deg,#C8C0B0,#B8B0A0)}.i7{background:linear-gradient(135deg,#E0C8B8,#D0B8A8)}.i8{background:linear-gradient(135deg,#B8C8D0,#A0B8C8)}
+.heart{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.3);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.7)}
+.item.liked .heart{background:var(--rose);color:#fff}
+.badge{position:absolute;bottom:8px;left:8px;font-size:10px;font-weight:600;padding:3px 8px;border-radius:6px;backdrop-filter:blur(6px)}
+.badge.sug{background:rgba(194,114,126,.8);color:#fff}.badge.cli{background:rgba(255,255,255,.85);color:var(--prune)}
+.note-overlay{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.6));font-size:11px;color:rgba(255,255,255,.9);line-height:1.3}
+.upload{border:2px dashed var(--border);border-radius:14px;padding:28px;text-align:center;cursor:pointer;background:var(--white);transition:all .2s;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.upload:hover{border-color:var(--rose);background:var(--rose-pale)}
+.upload-icon{font-size:28px;color:var(--warm-gray);margin-bottom:6px}.upload-t{font-size:12px;color:var(--warm-gray)}.upload-t strong{color:var(--rose)}
+
+/* OUTFITS */
+.o-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.o-card{background:var(--white);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden}
+.o-img{height:130px;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.5);position:relative}
+.o1{background:linear-gradient(135deg,#E8DCC8,#D4C8B0)}.o2{background:linear-gradient(135deg,#D0E0D0,#B8D0B8)}.o3{background:linear-gradient(135deg,#E0D0D8,#D0C0C8)}
+.o-badge{position:absolute;top:8px;left:8px;font-size:10px;font-weight:600;background:rgba(255,255,255,.9);color:var(--prune);padding:3px 8px;border-radius:6px}
+.o-body{padding:12px 14px}.o-who{font-size:12px;font-weight:600;color:var(--prune);margin-bottom:3px}.o-desc{font-size:12px;color:var(--warm-gray);line-height:1.4}
+.o-add{border:2px dashed var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;cursor:pointer;background:var(--white);transition:all .2s}
+.o-add:hover{border-color:var(--rose);background:var(--rose-pale)}
+
+/* COLOR PALETTE */
+.palette-card{background:linear-gradient(135deg,var(--rose-pale),var(--cream));border-radius:14px;padding:18px;margin-top:14px}
+.palette-t{font-size:13px;font-weight:600;color:var(--prune);margin-bottom:10px}
+.palette-row{display:flex;gap:10px;flex-wrap:wrap}
+.swatch{display:flex;flex-direction:column;align-items:center;gap:4px}
+.swatch-dot{width:42px;height:42px;border-radius:50%;border:3px solid var(--white);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.swatch-name{font-size:10px;color:var(--warm-gray)}
+
+/* NOTES CHAT */
+.chat-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);padding:20px;margin-bottom:24px}
+.chat-t{font-size:14px;font-weight:600;color:var(--prune);margin-bottom:14px}
+.bubble{display:flex;gap:10px;margin-bottom:12px}
+.bav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+.bav.ph{background:linear-gradient(135deg,var(--rose-light),var(--rose))}.bav.cl{background:linear-gradient(135deg,#5B8FA8,#7AAFBF)}
+.bcontent{flex:1;border-radius:12px;padding:10px 14px;font-size:12.5px;line-height:1.5}
+.bcontent.from-ph{background:var(--rose-pale);color:var(--charcoal)}.bcontent.from-cl{background:var(--cream);color:var(--charcoal)}
+.bname{font-size:11px;font-weight:600;color:var(--charcoal);margin-bottom:2px}
+.btime{font-size:10px;color:var(--border);margin-top:4px}
+.chat-input{display:flex;gap:8px;margin-top:10px}
+.chat-input input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;background:var(--cream)}
+.chat-send{width:40px;height:40px;border-radius:10px;background:var(--rose);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer}
+
+/* ADMIN */
+.admin{background:var(--bg);padding:40px}.admin-c{max-width:800px;margin:0 auto}
+.at{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--prune);margin-bottom:6px}
+.as{font-size:13px;color:var(--warm-gray);margin-bottom:24px}
+.acard{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.acard-h{padding:14px 20px;background:var(--rose-pale);border-bottom:1px solid var(--border);font-size:14px;font-weight:600;color:var(--prune);display:flex;align-items:center;gap:8px}
+.acard-b{padding:20px}
+.sgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sitem{border-radius:10px;overflow:hidden;position:relative;border:2px solid var(--border);cursor:pointer;transition:all .2s}
+.sitem.sel{border-color:var(--rose)}
+.sitem:hover{transform:scale(1.03)}
+.sthumb{width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.5)}
+.scheck{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:var(--rose);color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px}
+.trow{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}.trow:last-child{border-bottom:none}
+.trow-l{flex:1}.trow-t{font-size:13px;font-weight:500;color:var(--charcoal)}.trow-h{font-size:11px;color:var(--warm-gray);margin-top:2px}
+.tog{width:40px;height:22px;background:#E0D6D9;border-radius:11px;cursor:pointer;position:relative;flex-shrink:0}.tog.on{background:var(--success)}
+.tog::after{content:'';position:absolute;top:2.5px;left:2.5px;width:17px;height:17px;background:#fff;border-radius:50%;transition:all .3s;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tog.on::after{left:20.5px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Fleur de <span>Lumière</span></div>
+  <div class="nav-bc">Mon parcours › Préparer ma séance › <strong>Mood Board</strong></div>
+</nav>
+
+<div class="page">
+  <div class="ph">
+    <div>
+      <div class="pt">Mon Mood Board <span class="tag">V1.5</span></div>
+      <div class="ps">Partagez vos inspirations, vos envies de tenues et d'ambiance. Capucine préparera votre séance en s'en inspirant.</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-o">📌 Import Pinterest</button>
+      <button class="btn">💾 Enregistrer</button>
+    </div>
+  </div>
+
+  <div class="prog">
+    <div class="prog-t">Complétion</div>
+    <div class="prog-bar"><div class="prog-fill" style="width:65%"></div></div>
+    <div class="prog-pct">65%</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on">🎨 Inspirations <span class="c">8</span></div>
+    <div class="tab">👗 Tenues <span class="c">3</span></div>
+    <div class="tab">🎭 Poses <span class="c">4</span></div>
+    <div class="tab">💬 Notes</div>
+  </div>
+
+  <div class="ph-banner">
+    <div class="ph-banner-icon">💡</div>
+    <div class="ph-banner-text">
+      <div class="ph-banner-title">Suggestions de Capucine pour votre séance famille en automne</div>
+      <div class="ph-banner-sub">J'ai pré-sélectionné des inspirations qui fonctionnent au Parc de la Maourine en cette saison. Cochez celles qui vous plaisent !</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">🎨 Mes inspirations</div>
+    <div class="sec-s">Ajoutez des photos qui vous inspirent — ambiance, poses, décors, couleurs.</div>
+    <div class="grid">
+      <div class="item liked"><div class="item-img i1"></div><div class="heart">♥</div><div class="badge sug">Suggestion Capucine</div><div class="note-overlay">Famille dans les feuilles</div></div>
+      <div class="item liked"><div class="item-img i2"></div><div class="heart">♥</div><div class="badge sug">Suggestion Capucine</div><div class="note-overlay">Golden Hour parc</div></div>
+      <div class="item"><div class="item-img i3"></div><div class="heart">♡</div><div class="badge sug">Suggestion Capucine</div></div>
+      <div class="item liked"><div class="item-img i4"></div><div class="heart">♥</div><div class="badge cli">Ajouté par Sophie</div><div class="note-overlay">J'adore cette ambiance !</div></div>
+      <div class="item liked"><div class="item-img i5"></div><div class="heart">♥</div><div class="badge cli">Ajouté par Sophie</div></div>
+      <div class="item"><div class="item-img i7"></div><div class="heart">♡</div><div class="badge sug">Suggestion</div><div class="note-overlay">Portrait mère-fille</div></div>
+      <div class="item liked"><div class="item-img i8"></div><div class="heart">♥</div><div class="badge cli">Ajouté par Sophie</div><div class="note-overlay">Vu sur Pinterest !</div></div>
+      <div class="upload"><div class="upload-icon">📎</div><div class="upload-t"><strong>Ajouter</strong><br>ou glisser-déposer</div></div>
+    </div>
+    <div class="palette-card">
+      <div class="palette-t">🎨 Palette suggérée pour le parc en automne</div>
+      <div class="palette-row">
+        <div class="swatch"><div class="swatch-dot" style="background:#C8A882"></div><div class="swatch-name">Caramel</div></div>
+        <div class="swatch"><div class="swatch-dot" style="background:#F5F0E8"></div><div class="swatch-name">Crème</div></div>
+        <div class="swatch"><div class="swatch-dot" style="background:#8B9E7E"></div><div class="swatch-name">Sauge</div></div>
+        <div class="swatch"><div class="swatch-dot" style="background:#C4856A"></div><div class="swatch-name">Terracotta</div></div>
+        <div class="swatch"><div class="swatch-dot" style="background:#4A3728"></div><div class="swatch-name">Chocolat</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec-t">👗 Nos tenues prévues</div>
+    <div class="sec-s">Photographiez vos tenues pour que je voie les couleurs et le style.</div>
+    <div class="o-grid">
+      <div class="o-card"><div class="o-img o1"><div class="o-badge">Sophie</div></div><div class="o-body"><div class="o-who">Maman — Sophie</div><div class="o-desc">Robe longue terracotta + bottes camel</div></div></div>
+      <div class="o-card"><div class="o-img o2"><div class="o-badge">Léa</div></div><div class="o-body"><div class="o-who">Fille — Léa (4 ans)</div><div class="o-desc">Robe crème + bandeau floral</div></div></div>
+      <div class="o-card"><div class="o-img o3"><div class="o-badge">Thomas</div></div><div class="o-body"><div class="o-who">Papa — Thomas</div><div class="o-desc">Chino beige + chemise lin</div></div></div>
+      <div class="o-add"><div style="font-size:24px;color:var(--warm-gray);margin-bottom:6px">+</div><div style="font-size:12px;color:var(--warm-gray)">Ajouter une tenue</div></div>
+    </div>
+  </div>
+
+  <div class="chat-card">
+    <div class="chat-t">💬 Échanges sur le mood board</div>
+    <div class="bubble"><div class="bav ph">C</div><div class="bcontent from-ph"><div class="bname">Capucine</div>J'adore vos choix Sophie ! Les tons terracotta + crème vont magnifiquement se marier avec les feuilles d'automne. Je vous suggère un chino beige pour Thomas plutôt que le jean foncé.<div class="btime">Hier à 14:30</div></div></div>
+    <div class="bubble"><div class="bav cl">S</div><div class="bcontent from-cl"><div class="bname">Sophie</div>Merci pour le conseil ! Thomas va mettre un chino beige. J'ai ajouté une photo Pinterest avec du contre-jour — c'est possible au parc ?<div class="btime">Hier à 16:45</div></div></div>
+    <div class="bubble"><div class="bav ph">C</div><div class="bcontent from-ph"><div class="bname">Capucine</div>Oui absolument ! Il y a un grand chêne qui donne un contre-jour sublime vers 18h 🌅<div class="btime">Aujourd'hui à 9:15</div></div></div>
+    <div class="chat-input"><input type="text" placeholder="Écrire un message..."><button class="chat-send">→</button></div>
+  </div>
+</div>
+
+<div class="divider"><span>↓ Vue Admin — Suggestions par type de séance ↓</span></div>
+
+<div class="admin">
+  <div class="admin-c">
+    <div class="at">Mood Board — Suggestions <span class="tag">Admin</span></div>
+    <div class="as">Pré-remplissez des inspirations par type de séance. Le client les voit et coche celles qu'il aime.</div>
+    <div class="acard">
+      <div class="acard-h">👨‍👩‍👧 Suggestions — Séance Famille (Automne)</div>
+      <div class="acard-b">
+        <div style="font-size:12px;color:var(--warm-gray);margin-bottom:12px">8 inspirations pré-sélectionnées</div>
+        <div class="sgrid">
+          <div class="sitem sel"><div class="sthumb i1"></div><div class="scheck">✓</div></div>
+          <div class="sitem sel"><div class="sthumb i2"></div><div class="scheck">✓</div></div>
+          <div class="sitem sel"><div class="sthumb i3"></div><div class="scheck">✓</div></div>
+          <div class="sitem sel"><div class="sthumb i7"></div><div class="scheck">✓</div></div>
+          <div class="sitem"><div class="sthumb i5"></div></div>
+          <div class="sitem"><div class="sthumb i6"></div></div>
+          <div class="sitem"><div class="sthumb i8"></div></div>
+          <div style="border:2px dashed var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;aspect-ratio:3/4;cursor:pointer;font-size:18px;color:var(--border)">+</div>
+        </div>
+      </div>
+    </div>
+    <div class="acard">
+      <div class="acard-h">⚙️ Paramètres</div>
+      <div class="acard-b">
+        <div class="trow"><div class="trow-l"><div class="trow-t">Pré-remplir avec suggestions par type de séance</div><div class="trow-h">Le client voit vos inspirations dès l'ouverture</div></div><div class="tog on"></div></div>
+        <div class="trow"><div class="trow-l"><div class="trow-t">Permettre l'import depuis Pinterest</div></div><div class="tog on"></div></div>
+        <div class="trow"><div class="trow-l"><div class="trow-t">Activer la section Tenues</div></div><div class="tog on"></div></div>
+        <div class="trow"><div class="trow-l"><div class="trow-t">Activer les échanges en direct</div></div><div class="tog on"></div></div>
+        <div class="trow"><div class="trow-l"><div class="trow-t">Me notifier quand le client modifie son mood board</div></div><div class="tog on"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio &amp; Témoignages — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border);
+    transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto;
+    padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); letter-spacing: 0.3px; }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+
+  /* ===== HERO ===== */
+  .port-hero { padding: 96px 0 56px; text-align: center; background: var(--fl-bg); }
+  .port-hero h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); color: var(--fl-prune); margin-bottom: 16px; }
+  .port-hero h1 em { font-style: italic; color: var(--fl-rose); }
+  .port-hero p { font-size: 1.0625rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+  .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px auto; border-radius: 1px; }
+
+  /* ===== FILTERS ===== */
+  .port-filters { padding: 20px 0; border-bottom: 1px solid var(--fl-border); margin-bottom: 48px; background: var(--fl-bg); }
+  .filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .filter-tab {
+    padding: 10px 22px; border-radius: var(--fl-radius-full); font-size: 0.8125rem; font-weight: 600;
+    border: 2px solid var(--fl-border); background: var(--fl-bg); color: var(--fl-warm-gray);
+    cursor: pointer; transition: all var(--fl-transition);
+  }
+  .filter-tab:hover { border-color: var(--fl-rose); color: var(--fl-rose); }
+  .filter-tab.active { background: var(--fl-prune); color: #fff; border-color: var(--fl-prune); }
+
+  /* ===== MASONRY GALLERY ===== */
+  .gallery-section { padding: 0 0 64px; }
+  .masonry { display: grid; gap: 12px; }
+  .masonry-4 { grid-template-columns: repeat(4, 1fr); }
+  .masonry-3 { grid-template-columns: repeat(3, 1fr); }
+  .gallery-item { border-radius: var(--fl-radius); overflow: hidden; position: relative; cursor: pointer; transition: transform var(--fl-transition), box-shadow var(--fl-transition); }
+  .gallery-item:hover { transform: scale(1.02); box-shadow: var(--fl-shadow-md); }
+  .gallery-item .ph { width: 100%; transition: transform 0.5s ease; }
+  .gallery-item:hover .ph { transform: scale(1.06); }
+  .gi-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(74,46,61,0.5)); opacity: 0; transition: opacity var(--fl-transition); display: flex; align-items: flex-end; padding: 16px; }
+  .gallery-item:hover .gi-overlay { opacity: 1; }
+  .gi-caption { color: #fff; font-size: 0.75rem; font-style: italic; }
+
+  /* Aspect ratios */
+  .h-sm .ph { aspect-ratio: 4/3; }
+  .h-md .ph { aspect-ratio: 3/4; }
+  .h-lg .ph { aspect-ratio: 2/3; }
+  .h-sq .ph { aspect-ratio: 1; }
+  .h-wide .ph { aspect-ratio: 16/9; }
+  .h-pano { grid-column: span 2; }
+  .h-pano .ph { aspect-ratio: 21/9; }
+
+  /* Photo placeholder colors */
+  .pc1 { background: linear-gradient(135deg,#e8d5c4,#d0bba6); }
+  .pc2 { background: linear-gradient(145deg,#d4cfc5,#b8b0a0); }
+  .pc3 { background: linear-gradient(130deg,#c8bfac,#a69c85); }
+  .pc4 { background: linear-gradient(140deg,#f0d9a8,#dfc080); }
+  .pc5 { background: linear-gradient(155deg,#d5c8b8,#bbad9a); }
+  .pc6 { background: linear-gradient(135deg,#cec3ad,#b0a58f); }
+  .pc7 { background: linear-gradient(145deg,#e0d5c0,#c0b49c); }
+  .pc8 { background: linear-gradient(130deg,#d8ccb8,#b8ac96); }
+  .pc9 { background: linear-gradient(135deg,#f5ede6,#e2d5c8); }
+  .pc10 { background: linear-gradient(140deg,#ddd0bc,#c8bba8); }
+  .pc11 { background: linear-gradient(135deg,#e5dcd0,#d2c8b8); }
+  .pc12 { background: linear-gradient(145deg,#d0c5b5,#bbb0a0); }
+
+  /* ===== STATS BAR ===== */
+  .stats-bar { background: var(--fl-prune); padding: 40px 0; }
+  .stats-inner { display: flex; gap: 0; justify-content: center; }
+  .stat-item { text-align: center; padding: 0 56px; border-right: 1px solid rgba(255,255,255,0.12); }
+  .stat-item:last-child { border: none; }
+  .stat-value { font-family: var(--fl-font-heading); font-size: 2rem; font-weight: 700; color: var(--fl-or); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 0.875rem; color: rgba(255,255,255,0.65); }
+
+  /* ===== TESTIMONIALS ===== */
+  .temoignages-section { padding: 96px 0; background: var(--fl-bg-alt); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .temoignages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px; }
+  .temo-card { background: white; border-radius: var(--fl-radius); padding: 32px 28px; box-shadow: var(--fl-shadow-sm); border: 1px solid var(--fl-border); transition: transform var(--fl-transition), box-shadow var(--fl-transition); }
+  .temo-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .temo-quote-mark { font-family: var(--fl-font-heading); font-size: 3.5rem; line-height: 1; color: var(--fl-or); opacity: 0.35; margin-bottom: -8px; }
+  .temo-stars { color: var(--fl-or); letter-spacing: 3px; font-size: 0.875rem; margin-bottom: 14px; }
+  .temo-text { font-size: 0.9375rem; color: var(--fl-charcoal); line-height: 1.75; font-style: italic; margin-bottom: 20px; }
+  .temo-author { display: flex; align-items: center; gap: 12px; }
+  .temo-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--fl-font-heading); font-size: 1.125rem; font-weight: 600; color: white; flex-shrink: 0; }
+  .temo-name { font-family: var(--fl-font-heading); font-size: 0.9375rem; font-style: italic; color: var(--fl-prune); }
+  .temo-type { font-size: 0.75rem; color: var(--fl-warm-gray); }
+
+  /* Google reviews block */
+  .google-block {
+    background: white; border: 1.5px solid var(--fl-border); border-radius: var(--fl-radius);
+    padding: 32px; display: flex; align-items: center; justify-content: center;
+    gap: 40px; max-width: 720px; margin: 0 auto; box-shadow: var(--fl-shadow-sm);
+  }
+  .gb-logo-wrap { display: flex; align-items: center; gap: 12px; }
+  .gb-logo-text { font-size: 1.625rem; font-weight: 700; font-family: var(--fl-font-heading); color: var(--fl-prune); }
+  .gb-logo-badge { background: var(--fl-or); color: var(--fl-prune); font-size: 0.6875rem; font-weight: 700; padding: 4px 10px; border-radius: var(--fl-radius-full); letter-spacing: 0.5px; }
+  .gb-divider { width: 1px; height: 56px; background: var(--fl-border); }
+  .gb-rating { text-align: center; }
+  .gb-stars { color: var(--fl-or); font-size: 1.375rem; letter-spacing: 2px; }
+  .gb-score { font-family: var(--fl-font-heading); font-size: 2.25rem; font-weight: 700; color: var(--fl-prune); line-height: 1.1; }
+  .gb-count { font-size: 0.8125rem; color: var(--fl-warm-gray); }
+  .gb-cta .fl-btn { font-size: 0.8125rem; }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-rose); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .masonry-4 { grid-template-columns: repeat(3, 1fr); }
+    .temoignages-grid { grid-template-columns: repeat(2, 1fr); }
+    .google-block { flex-direction: column; gap: 20px; text-align: center; }
+    .gb-divider { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .masonry-4, .masonry-3 { grid-template-columns: repeat(2, 1fr); }
+    .h-pano { grid-column: span 1; }
+    .h-pano .ph { aspect-ratio: 4/3; }
+    .temoignages-grid { grid-template-columns: 1fr; }
+    .stats-inner { flex-direction: column; gap: 24px; }
+    .stat-item { border: none; padding: 0; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="port-hero">
+  <div class="fl-container">
+    <div class="section-label">Galerie</div>
+    <h1>Portfolio &amp; <em>Témoignages</em></h1>
+    <div class="gold-rule"></div>
+    <p>Plus de 240 familles photographiées dans le Tarn et Toulouse. Chaque image raconte une histoire capturée dans la lumière dorée qui fait ma signature.</p>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="port-filters">
+  <div class="fl-container">
+    <div class="filter-tabs">
+      <span class="filter-tab active" onclick="filterPort(this,'all')">Tous</span>
+      <span class="filter-tab" onclick="filterPort(this,'famille')">Famille</span>
+      <span class="filter-tab" onclick="filterPort(this,'equestre')">Équestre</span>
+      <span class="filter-tab" onclick="filterPort(this,'evenement')">Événementiel</span>
+      <span class="filter-tab" onclick="filterPort(this,'maternite')">Maternité</span>
+      <span class="filter-tab" onclick="filterPort(this,'scolaire')">Scolaire</span>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="fl-container">
+
+  <section class="gallery-section" data-cat="famille">
+    <div class="masonry masonry-4 reveal">
+      <div class="gallery-item h-md"><div class="ph pc1"></div><div class="gi-overlay"><span class="gi-caption">Famille Martin · Automne 2025</span></div></div>
+      <div class="gallery-item h-sm"><div class="ph pc9"></div><div class="gi-overlay"><span class="gi-caption">Portraits fratrie · Gaillac</span></div></div>
+      <div class="gallery-item h-lg"><div class="ph pc5"></div><div class="gi-overlay"><span class="gi-caption">Golden hour · Septembre</span></div></div>
+      <div class="gallery-item h-sq"><div class="ph pc7"></div><div class="gi-overlay"><span class="gi-caption">Grands-parents &amp; petits-enfants</span></div></div>
+      <div class="gallery-item h-pano"><div class="ph pc4"></div><div class="gi-overlay"><span class="gi-caption">Famille au coucher du soleil · Champ de blé</span></div></div>
+      <div class="gallery-item h-sm"><div class="ph pc11"></div><div class="gi-overlay"><span class="gi-caption">Portrait enfant · Lumière dorée</span></div></div>
+      <div class="gallery-item h-md"><div class="ph pc2"></div><div class="gi-overlay"><span class="gi-caption">Couple · 10 ans de mariage</span></div></div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-cat="equestre">
+    <div class="masonry masonry-4 reveal">
+      <div class="gallery-item h-lg"><div class="ph pc3"></div><div class="gi-overlay"><span class="gi-caption">Cavalière &amp; son cheval · Heure Dorée</span></div></div>
+      <div class="gallery-item h-sm"><div class="ph pc6"></div><div class="gi-overlay"><span class="gi-caption">Galop en liberté · Écurie des Chênes</span></div></div>
+      <div class="gallery-item h-sq"><div class="ph pc10"></div><div class="gi-overlay"><span class="gi-caption">Portrait cheval · Lumière rasante</span></div></div>
+      <div class="gallery-item h-md"><div class="ph pc8"></div><div class="gi-overlay"><span class="gi-caption">Complicité cavalier-cheval</span></div></div>
+      <div class="gallery-item h-pano"><div class="ph pc12"></div><div class="gi-overlay"><span class="gi-caption">Panoramique · Champ route de Cahuzac</span></div></div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-cat="evenement">
+    <div class="masonry masonry-3 reveal">
+      <div class="gallery-item h-md"><div class="ph pc2"></div><div class="gi-overlay"><span class="gi-caption">Mariage · Cérémonie en extérieur</span></div></div>
+      <div class="gallery-item h-sm"><div class="ph pc5"></div><div class="gi-overlay"><span class="gi-caption">Baptême · Jardin familial</span></div></div>
+      <div class="gallery-item h-lg"><div class="ph pc9"></div><div class="gi-overlay"><span class="gi-caption">Mariage · Couple golden hour</span></div></div>
+      <div class="gallery-item h-pano"><div class="ph pc7"></div><div class="gi-overlay"><span class="gi-caption">Réception · Table d'honneur au soleil couchant</span></div></div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-cat="maternite">
+    <div class="masonry masonry-3 reveal">
+      <div class="gallery-item h-md"><div class="ph pc1"></div><div class="gi-overlay"><span class="gi-caption">Grossesse · 8ème mois</span></div></div>
+      <div class="gallery-item h-lg"><div class="ph pc6"></div><div class="gi-overlay"><span class="gi-caption">Nouveau-né · J+8</span></div></div>
+      <div class="gallery-item h-sm"><div class="ph pc10"></div><div class="gi-overlay"><span class="gi-caption">Famille · Premier regard</span></div></div>
+      <div class="gallery-item h-sq"><div class="ph pc3"></div><div class="gi-overlay"><span class="gi-caption">Détail · Petites mains</span></div></div>
+    </div>
+  </section>
+
+  <section class="gallery-section" data-cat="scolaire">
+    <div class="masonry masonry-4 reveal">
+      <div class="gallery-item h-sq"><div class="ph pc4"></div><div class="gi-overlay"><span class="gi-caption">École primaire · Portraits individuels</span></div></div>
+      <div class="gallery-item h-sq"><div class="ph pc11"></div><div class="gi-overlay"><span class="gi-caption">Portrait naturel · Lumière matinale</span></div></div>
+      <div class="gallery-item h-sq"><div class="ph pc8"></div><div class="gi-overlay"><span class="gi-caption">Fratrie scolaire · Sourires authentiques</span></div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="fl-container">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-value">5 ★</div>
+        <div class="stat-label">Moyenne Google</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">240+</div>
+        <div class="stat-label">Clients satisfaits</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">98%</div>
+        <div class="stat-label">Taux de satisfaction</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TÉMOIGNAGES -->
+<section class="temoignages-section" id="temoignages">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Témoignages</div>
+      <h2>Ce qu'ils en disent</h2>
+      <div class="gold-rule"></div>
+      <p>La plus belle récompense, ce sont vos mots après la séance.</p>
+    </div>
+
+    <div class="temoignages-grid">
+      <div class="temo-card reveal reveal-delay-1">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Des photos magnifiques, Capucine a su capter notre complicité avec le cheval. La lumière dorée rend les images absolument magiques !</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #C2727E, #d4a0a8);">S</div>
+          <div>
+            <div class="temo-name">Sophie M.</div>
+            <div class="temo-type">Séance Équestre</div>
+          </div>
+        </div>
+      </div>
+      <div class="temo-card reveal reveal-delay-2">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">On a passé un moment incroyable en famille. Capucine nous a mis à l'aise tout de suite, les enfants étaient naturels. Les photos sont un trésor.</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #6B7F5A, #8fa876);">L</div>
+          <div>
+            <div class="temo-name">Laura &amp; Thomas</div>
+            <div class="temo-type">Séance Famille</div>
+          </div>
+        </div>
+      </div>
+      <div class="temo-card reveal reveal-delay-3">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Je cherchais quelqu'un pour immortaliser ma grossesse. Le résultat a dépassé toutes mes attentes, des images douces et pleines d'émotion.</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #D4A03C, #e8c56d); color: #4A2E3D;">M</div>
+          <div>
+            <div class="temo-name">Marie P.</div>
+            <div class="temo-type">Séance Maternité</div>
+          </div>
+        </div>
+      </div>
+      <div class="temo-card reveal reveal-delay-1">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Capucine est venue à l'école avec une discrétion et un professionnalisme remarquables. Les enfants sont naturels, les photos ne ressemblent pas à des photos scolaires classiques !</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #4A2E3D, #6B4A5C);">A</div>
+          <div>
+            <div class="temo-name">Amandine R.</div>
+            <div class="temo-type">Séance Scolaire</div>
+          </div>
+        </div>
+      </div>
+      <div class="temo-card reveal reveal-delay-2">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Capucine a couvert notre mariage avec une discrétion incroyable. On revit notre journée à chaque fois qu'on regarde les photos. Sublimes.</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #8A7A7E, #a09098);">C</div>
+          <div>
+            <div class="temo-name">Céline &amp; Marc</div>
+            <div class="temo-type">Mariage Événementiel</div>
+          </div>
+        </div>
+      </div>
+      <div class="temo-card reveal reveal-delay-3">
+        <div class="temo-quote-mark">"</div>
+        <div class="temo-stars">★★★★★</div>
+        <p class="temo-text">Un portrait qui me ressemble enfin ! La lumière dorée, l'ambiance naturelle, l'aisance que Capucine crée… C'est une artiste dans l'âme.</p>
+        <div class="temo-author">
+          <div class="temo-avatar" style="background: linear-gradient(135deg, #C2727E, #c8909a);">J</div>
+          <div>
+            <div class="temo-name">Julie D.</div>
+            <div class="temo-type">Séance Portrait</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Google Reviews -->
+    <div class="google-block reveal">
+      <div class="gb-logo-wrap">
+        <div class="gb-logo-text">Google</div>
+        <div class="gb-logo-badge">Avis vérifiés</div>
+      </div>
+      <div class="gb-divider"></div>
+      <div class="gb-rating">
+        <div class="gb-stars">★★★★★</div>
+        <div class="gb-score">5.0</div>
+        <div class="gb-count">sur 28 avis</div>
+      </div>
+      <div class="gb-divider"></div>
+      <div class="gb-cta">
+        <a href="#" class="fl-btn fl-btn-outline-prune">Voir sur Google →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="reserver">
+  <div class="fl-container">
+    <h2>Envie de votre propre <em>galerie</em> ?</h2>
+    <p>Réservez votre séance et créons ensemble vos plus beaux souvenirs dans la lumière dorée.</p>
+    <div class="cta-actions">
+      <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance →</a>
+      <a href="05-tarifs.html" class="fl-btn fl-btn-ghost fl-btn-lg">Voir les formules</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  function filterPort(el, cat) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.gallery-section').forEach(s => {
+      s.style.display = (cat === 'all' || s.dataset.cat === cat) ? '' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

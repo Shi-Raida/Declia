@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Campagnes Avancées</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .campaign-card { background:var(--fl-bg-card); border:1px solid var(--fl-border); border-radius:var(--fl-radius); box-shadow:var(--fl-shadow-sm); overflow:hidden; transition:box-shadow var(--fl-transition); }
+  .campaign-card:hover { box-shadow:var(--fl-shadow-md); }
+  .campaign-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+  .segment-filter { display:flex; align-items:center; gap:var(--fl-space-sm); padding:10px var(--fl-space-md); background:var(--fl-bg-alt); border-radius:var(--fl-radius-sm); }
+  .cal-day { padding:8px 6px; border-radius:var(--fl-radius-sm); text-align:center; font-size:0.75rem; border:1px solid var(--fl-border); background:var(--fl-bg-card); }
+  .cal-day.has-campaign { background:var(--fl-rose-light); border-color:var(--fl-rose); color:var(--fl-rose-hover); }
+  .cal-day.today { border-color:var(--fl-prune); font-weight:700; }
+  .ab-bar { height:28px; border-radius:var(--fl-radius-sm); display:flex; align-items:center; padding:0 var(--fl-space-sm); font-size:0.75rem; font-weight:600; color:white; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="01-dashboard.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="02-facturation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Facturation
+    </a>
+    <a href="10-export-comptable.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export Comptable
+    </a>
+    <a href="19-statistiques.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="15-campagnes-avancees.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5,3 19,12 5,21 5,3"/></svg>
+      Campagnes Avancées
+    </a>
+    <a href="16-reseau-prestataires.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Réseau Prestataires
+    </a>
+    <a href="17-blog-seo.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog & SEO
+    </a>
+    <a href="14-referral-proof.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Fidélité & Parrainage
+    </a>
+
+    <div class="fl-sidebar-section">Opérations</div>
+    <a href="11-mini-sessions.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Mini-Sessions
+    </a>
+    <a href="12-session-recap.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      Récap de Séance
+    </a>
+    <a href="13-education-hub.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      Hub Éducation
+    </a>
+    <a href="18-meteo-video-forecast.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+      Météo & Prévisions
+    </a>
+
+    <div class="fl-sidebar-section">Scolaire</div>
+    <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Scolaire Admin
+    </a>
+    <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      École & Parents
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="../ia/01-hub-ia.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="../ia/02-intel-crm.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="05-personnalisation.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Personnalisation
+    </a>
+    <a href="03-parametres-1.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>Admin</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Campagnes Avancées</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header fl-flex-between">
+        <div>
+          <div class="fl-page-title">Campagnes Avancées</div>
+          <div class="fl-page-subtitle">Pilotez vos campagnes email avec segmentation et tests A/B</div>
+        </div>
+        <button class="fl-btn fl-btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvelle campagne
+        </button>
+      </div>
+
+      <!-- Dashboard KPIs -->
+      <div class="fl-grid-3 fl-mb-lg">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Campagnes actives</div>
+          <div class="fl-kpi-value">3</div>
+          <div class="fl-kpi-trend up">En cours d'envoi</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Portée totale</div>
+          <div class="fl-kpi-value">1 240</div>
+          <div class="fl-kpi-trend">destinataires</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Taux d'ouverture moyen</div>
+          <div class="fl-kpi-value" style="color:var(--fl-sauge);">34%</div>
+          <div class="fl-kpi-trend up">+8% vs secteur</div>
+        </div>
+      </div>
+
+      <!-- Campaign Cards -->
+      <div class="fl-card fl-mb-lg">
+        <div class="fl-card-body">
+          <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Campagnes en cours</h3>
+          <div style="display:flex;flex-direction:column;gap:var(--fl-space-md);">
+
+            <!-- Campaign 1 -->
+            <div class="campaign-card">
+              <div style="padding:var(--fl-space-md);">
+                <div class="fl-flex fl-gap-md" style="align-items:flex-start;">
+                  <div class="campaign-icon" style="background:var(--fl-warning-light);">🌸</div>
+                  <div style="flex:1;">
+                    <div class="fl-flex-between">
+                      <span class="fl-h4">Printemps 2026</span>
+                      <span class="fl-badge fl-badge-success">Actif</span>
+                    </div>
+                    <div class="fl-text-sm fl-text-muted fl-mb-sm">Séances outdoor — offre printemps · Envoyé le 1 mars</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--fl-space-md);">
+                      <div>
+                        <div class="fl-flex-between" style="font-size:0.75rem;margin-bottom:4px;">
+                          <span class="fl-text-muted">Ouvertures</span><span style="font-weight:600;">38%</span>
+                        </div>
+                        <div class="fl-progress"><div class="fl-progress-bar" style="width:38%;background:var(--fl-success);"></div></div>
+                      </div>
+                      <div>
+                        <div class="fl-flex-between" style="font-size:0.75rem;margin-bottom:4px;">
+                          <span class="fl-text-muted">Clics</span><span style="font-weight:600;">12%</span>
+                        </div>
+                        <div class="fl-progress"><div class="fl-progress-bar" style="width:12%;background:var(--fl-info);"></div></div>
+                      </div>
+                    </div>
+                    <div class="fl-text-xs fl-text-muted fl-mt-sm">420 destinataires · 3 réservations générées</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campaign 2 -->
+            <div class="campaign-card">
+              <div style="padding:var(--fl-space-md);">
+                <div class="fl-flex fl-gap-md" style="align-items:flex-start;">
+                  <div class="campaign-icon" style="background:var(--fl-info-light);">😴</div>
+                  <div style="flex:1;">
+                    <div class="fl-flex-between">
+                      <span class="fl-h4">Réengagement inactifs</span>
+                      <span class="fl-badge fl-badge-success">Actif</span>
+                    </div>
+                    <div class="fl-text-sm fl-text-muted fl-mb-sm">Clients sans séance depuis 12 mois · Envoyé le 5 mars</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--fl-space-md);">
+                      <div>
+                        <div class="fl-flex-between" style="font-size:0.75rem;margin-bottom:4px;">
+                          <span class="fl-text-muted">Ouvertures</span><span style="font-weight:600;">28%</span>
+                        </div>
+                        <div class="fl-progress"><div class="fl-progress-bar" style="width:28%;background:var(--fl-warning);"></div></div>
+                      </div>
+                      <div>
+                        <div class="fl-flex-between" style="font-size:0.75rem;margin-bottom:4px;">
+                          <span class="fl-text-muted">Clics</span><span style="font-weight:600;">7%</span>
+                        </div>
+                        <div class="fl-progress"><div class="fl-progress-bar" style="width:7%;background:var(--fl-info);"></div></div>
+                      </div>
+                    </div>
+                    <div class="fl-text-xs fl-text-muted fl-mt-sm">380 destinataires · 5 réactivations</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campaign 3 -->
+            <div class="campaign-card">
+              <div style="padding:var(--fl-space-md);">
+                <div class="fl-flex fl-gap-md" style="align-items:flex-start;">
+                  <div class="campaign-icon" style="background:#F0E8F8;">🎂</div>
+                  <div style="flex:1;">
+                    <div class="fl-flex-between">
+                      <span class="fl-h4">Anniversaires clients</span>
+                      <span class="fl-badge fl-badge-success">Automatique</span>
+                    </div>
+                    <div class="fl-text-sm fl-text-muted fl-mb-sm">Envoi automatique J-7 avant l'anniversaire · En continu</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--fl-space-md);">
+                      <div>
+                        <div class="fl-flex-between" style="font-size:0.75rem;margin-bottom:4px;">
+                          <span class="fl-text-muted">Ouvertures</span><span style="font-weight:600;">52%</span>
+                        </div>
+                        <div class="fl-progress"><div class="fl-progress-bar" style="width:52%;background:var(--fl-success);"></div></div>
+                      </div>
+                      <div>
+                        <div class="fl-flex-between" style="font-size:0.75rem;margin-bottom:4px;">
+                          <span class="fl-text-muted">Clics</span><span style="font-weight:600;">24%</span>
+                        </div>
+                        <div class="fl-progress"><div class="fl-progress-bar" style="width:24%;background:var(--fl-info);"></div></div>
+                      </div>
+                    </div>
+                    <div class="fl-text-xs fl-text-muted fl-mt-sm">440 destinataires · Envoi mensuel</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-grid-2 fl-gap-lg fl-mb-lg">
+        <!-- Audience Segmentation -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Segmentation de l'audience</h3>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="segment-filter">
+                <span class="fl-text-sm fl-text-muted" style="width:120px;">Spécialité</span>
+                <div class="fl-flex fl-gap-sm" style="flex-wrap:wrap;">
+                  <span style="padding:3px 10px;border-radius:var(--fl-radius-full);font-size:0.75rem;background:var(--fl-rose-light);color:var(--fl-rose-hover);font-weight:600;">Famille</span>
+                  <span style="padding:3px 10px;border-radius:var(--fl-radius-full);font-size:0.75rem;background:var(--fl-bg-card);color:var(--fl-warm-gray);border:1px solid var(--fl-border);">Équestre</span>
+                  <span style="padding:3px 10px;border-radius:var(--fl-radius-full);font-size:0.75rem;background:var(--fl-bg-card);color:var(--fl-warm-gray);border:1px solid var(--fl-border);">Maternité</span>
+                </div>
+              </div>
+              <div class="segment-filter">
+                <span class="fl-text-sm fl-text-muted" style="width:120px;">Dernière séance</span>
+                <select class="fl-select" style="flex:1;font-size:0.8125rem;">
+                  <option>Il y a plus de 6 mois</option>
+                  <option>Il y a plus de 12 mois</option>
+                  <option>Dans les 3 derniers mois</option>
+                </select>
+              </div>
+              <div class="segment-filter">
+                <span class="fl-text-sm fl-text-muted" style="width:120px;">Ville</span>
+                <select class="fl-select" style="flex:1;font-size:0.8125rem;">
+                  <option>Toutes les villes</option>
+                  <option>Parisot / Tarn</option>
+                  <option>Toulouse</option>
+                </select>
+              </div>
+              <div class="segment-filter">
+                <span class="fl-text-sm fl-text-muted" style="width:120px;">Panier moyen</span>
+                <select class="fl-select" style="flex:1;font-size:0.8125rem;">
+                  <option>Tous</option>
+                  <option>Plus de 200€</option>
+                  <option>Plus de 500€</option>
+                </select>
+              </div>
+              <div style="padding:10px var(--fl-space-md);background:var(--fl-rose-pale);border-radius:var(--fl-radius-sm);font-size:0.8125rem;color:var(--fl-prune);font-weight:500;">
+                Audience estimée : <strong>224 contacts</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- A/B Test Results -->
+        <div class="fl-card">
+          <div class="fl-card-body">
+            <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Test A/B — Printemps 2026</h3>
+            <div style="font-size:0.8125rem;color:var(--fl-warm-gray);margin-bottom:var(--fl-space-md);">Comparaison des objets d'email</div>
+
+            <div style="margin-bottom:var(--fl-space-md);">
+              <div class="fl-flex-between" style="margin-bottom:6px;">
+                <div>
+                  <span style="font-size:0.75rem;font-weight:700;color:var(--fl-prune);">VERSION A</span>
+                  <span class="fl-badge fl-badge-success fl-ml-sm" style="font-size:0.625rem;margin-left:8px;">Gagnant</span>
+                </div>
+                <span style="font-weight:700;color:var(--fl-success);">42%</span>
+              </div>
+              <div class="fl-text-sm fl-text-muted" style="margin-bottom:6px;">"La magie du printemps en photos — réservez votre séance"</div>
+              <div class="ab-bar" style="background:var(--fl-success);width:85%;">42% d'ouverture</div>
+            </div>
+
+            <div>
+              <div class="fl-flex-between" style="margin-bottom:6px;">
+                <span style="font-size:0.75rem;font-weight:700;color:var(--fl-warm-gray);">VERSION B</span>
+                <span style="font-weight:700;color:var(--fl-warm-gray);">31%</span>
+              </div>
+              <div class="fl-text-sm fl-text-muted" style="margin-bottom:6px;">"Offre spéciale printemps — séances famille en plein air"</div>
+              <div class="ab-bar" style="background:var(--fl-warm-gray);width:63%;">31% d'ouverture</div>
+            </div>
+
+            <div style="margin-top:var(--fl-space-md);padding:10px;background:var(--fl-success-light);border-radius:var(--fl-radius-sm);font-size:0.8125rem;color:var(--fl-success);">
+              Version A sélectionnée automatiquement · +11 points d'avantage
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="fl-card">
+        <div class="fl-card-body">
+          <h3 class="fl-h3" style="font-size:1.125rem;margin-bottom:var(--fl-space-md);">Calendrier des prochaines campagnes — Mars 2026</h3>
+          <div style="display:grid;grid-template-columns:repeat(14,1fr);gap:4px;">
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Lun</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Mar</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Mer</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Jeu</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Ven</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Sam</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Dim</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Lun</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Mar</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Mer</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Jeu</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Ven</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Sam</div>
+            <div class="cal-day fl-text-muted" style="font-size:0.625rem;font-weight:700;text-transform:uppercase;border:none;background:none;">Dim</div>
+            <div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day">12</div><div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day has-campaign" title="Campagne printemps">15</div><div class="cal-day">16</div>
+            <div class="cal-day today">17</div><div class="cal-day">18</div><div class="cal-day has-campaign" title="Relance panier">19</div><div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+            <div class="cal-day">24</div><div class="cal-day has-campaign" title="Campagne Pâques">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div>
+          </div>
+          <div class="fl-flex fl-gap-md fl-mt-md" style="font-size:0.75rem;">
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;background:var(--fl-rose-light);display:inline-block;"></span> Campagne planifiée</span>
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;border-radius:2px;border:2px solid var(--fl-prune);display:inline-block;"></span> Aujourd'hui</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

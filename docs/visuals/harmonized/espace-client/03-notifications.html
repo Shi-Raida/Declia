@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications — Espace Client — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== SHELL C — CLIENT PORTAL ===== */
+  .cp-nav {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 0 var(--fl-space-xl);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .cp-nav-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    white-space: nowrap;
+  }
+
+  .cp-nav-logo em { color: var(--fl-rose); font-style: normal; }
+
+  .cp-nav-links {
+    display: flex;
+    gap: var(--fl-space-xl);
+    align-items: center;
+  }
+
+  .cp-nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fl-warm-gray);
+    text-decoration: none;
+    padding: 20px 0;
+    border-bottom: 2px solid transparent;
+    transition: all var(--fl-transition);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cp-nav-link:hover { color: var(--fl-charcoal); }
+  .cp-nav-link.active { color: var(--fl-prune); border-bottom-color: var(--fl-rose); font-weight: 600; }
+
+  .cp-nav-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  /* ===== PAGE ===== */
+  .cp-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--fl-space-2xl) var(--fl-space-lg);
+  }
+
+  /* ===== PAGE HEADER ===== */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .page-title-group {}
+
+  .page-title {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    color: var(--fl-prune);
+    margin-bottom: 4px;
+  }
+
+  .page-title em { color: var(--fl-rose); font-style: italic; }
+
+  .page-subtitle {
+    font-size: 0.875rem;
+    color: var(--fl-warm-gray);
+  }
+
+  .page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    flex-shrink: 0;
+  }
+
+  /* ===== FILTER TABS ===== */
+  .filter-bar {
+    display: flex;
+    gap: var(--fl-space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .filter-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--fl-radius-full);
+    border: 1.5px solid var(--fl-border-dark);
+    background: var(--fl-bg-card);
+    color: var(--fl-warm-gray);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    font-family: var(--fl-font-body);
+  }
+
+  .filter-tab:hover {
+    border-color: var(--fl-prune);
+    color: var(--fl-prune);
+  }
+
+  .filter-tab.active {
+    background: var(--fl-prune);
+    border-color: var(--fl-prune);
+    color: #fff;
+  }
+
+  .filter-count {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.625rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .filter-tab:not(.active) .filter-count {
+    background: var(--fl-border);
+    color: var(--fl-warm-gray);
+  }
+
+  /* ===== NOTIFICATIONS LIST ===== */
+  .notif-section {
+    margin-bottom: var(--fl-space-xl);
+  }
+
+  .notif-group-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--fl-warm-gray);
+    margin-bottom: var(--fl-space-md);
+    padding-bottom: var(--fl-space-sm);
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    padding: var(--fl-space-md) var(--fl-space-lg);
+    border-radius: var(--fl-radius);
+    margin-bottom: var(--fl-space-sm);
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    position: relative;
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+  }
+
+  .notif-item:hover {
+    box-shadow: var(--fl-shadow);
+    transform: translateY(-1px);
+    border-color: var(--fl-border-dark);
+  }
+
+  .notif-item.unread {
+    background: var(--fl-rose-pale);
+    border-color: var(--fl-rose-light);
+    border-left: 3px solid var(--fl-rose);
+  }
+
+  .notif-unread-dot {
+    position: absolute;
+    top: var(--fl-space-md);
+    right: var(--fl-space-md);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--fl-rose);
+    flex-shrink: 0;
+  }
+
+  .notif-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .ni-green   { background: var(--fl-success-light); }
+  .ni-rose    { background: var(--fl-rose-light); }
+  .ni-or      { background: var(--fl-or-light); }
+  .ni-info    { background: var(--fl-info-light); }
+  .ni-sauge   { background: var(--fl-sauge-light); }
+  .ni-warning { background: var(--fl-warning-light); }
+
+  .notif-content { flex: 1; padding-right: var(--fl-space-lg); }
+
+  .notif-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--fl-charcoal);
+    margin-bottom: 3px;
+  }
+
+  .notif-desc {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .notif-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--fl-rose);
+    cursor: pointer;
+    transition: color var(--fl-transition);
+  }
+
+  .notif-cta:hover { color: var(--fl-rose-hover); }
+
+  .notif-time {
+    font-size: 0.6875rem;
+    color: var(--fl-warm-gray);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* ===== PREFERENCES SECTION ===== */
+  .prefs-card {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    overflow: hidden;
+    margin-top: var(--fl-space-3xl);
+  }
+
+  .prefs-header {
+    padding: var(--fl-space-lg) var(--fl-space-xl);
+    border-bottom: 1px solid var(--fl-border);
+    background: var(--fl-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .prefs-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+  }
+
+  .pref-row {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-md);
+    padding: var(--fl-space-md) var(--fl-space-xl);
+    border-bottom: 1px solid var(--fl-border);
+    transition: background var(--fl-transition);
+  }
+
+  .pref-row:last-child { border-bottom: none; }
+  .pref-row:hover { background: var(--fl-bg); }
+
+  .pref-icon {
+    font-size: 1.125rem;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .pref-info { flex: 1; }
+
+  .pref-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--fl-charcoal);
+    margin-bottom: 2px;
+  }
+
+  .pref-desc {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+  }
+
+  /* Toggle switch */
+  .pref-toggle {
+    width: 44px;
+    height: 24px;
+    background: var(--fl-border-dark);
+    border-radius: var(--fl-radius-full);
+    position: relative;
+    cursor: pointer;
+    transition: background var(--fl-transition);
+    flex-shrink: 0;
+  }
+
+  .pref-toggle::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: transform var(--fl-transition);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  .pref-toggle.on {
+    background: var(--fl-rose);
+  }
+
+  .pref-toggle.on::after {
+    transform: translateX(20px);
+  }
+
+  /* ===== EMPTY STATE ===== */
+  .empty-state {
+    text-align: center;
+    padding: var(--fl-space-3xl) 0;
+    color: var(--fl-warm-gray);
+  }
+
+  .empty-state-icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--fl-space-md);
+    opacity: 0.5;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .cp-nav-links { display: none; }
+    .page-header { flex-direction: column; gap: var(--fl-space-md); }
+    .cp-page { padding: var(--fl-space-lg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="cp-nav">
+  <div class="cp-nav-logo">Fleur de <em>Lumière</em></div>
+  <div class="cp-nav-links">
+    <a class="cp-nav-link" href="01-client-journey.html">Mon Parcours</a>
+    <a class="cp-nav-link" href="#">Mes Photos</a>
+    <a class="cp-nav-link" href="#">Ma Réservation</a>
+    <a class="cp-nav-link active" href="03-notifications.html">Notifications</a>
+    <a class="cp-nav-link" href="02-chatbot-client.html">Messages</a>
+  </div>
+  <div class="cp-nav-avatar" title="Sophie Mercier">S</div>
+</nav>
+
+<!-- PAGE -->
+<main class="cp-page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1 class="page-title">Mes <em>notifications</em></h1>
+      <p class="page-subtitle">Toutes vos alertes et mises à jour en un seul endroit</p>
+    </div>
+    <div class="page-header-actions">
+      <span class="fl-badge fl-badge-error">3 non lues</span>
+      <button class="fl-btn fl-btn-ghost fl-btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Tout marquer lu
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-bar">
+    <button class="filter-tab active" onclick="filterTab(this)">
+      Toutes
+      <span class="filter-count">12</span>
+    </button>
+    <button class="filter-tab" onclick="filterTab(this)">
+      Non lues
+      <span class="filter-count">3</span>
+    </button>
+    <button class="filter-tab" onclick="filterTab(this)">
+      &#128197; Réservations
+      <span class="filter-count">4</span>
+    </button>
+    <button class="filter-tab" onclick="filterTab(this)">
+      &#128247; Photos
+      <span class="filter-count">2</span>
+    </button>
+    <button class="filter-tab" onclick="filterTab(this)">
+      &#128172; Messages
+      <span class="filter-count">3</span>
+    </button>
+    <button class="filter-tab" onclick="filterTab(this)">
+      &#128176; Paiements
+      <span class="filter-count">3</span>
+    </button>
+  </div>
+
+  <!-- AUJOURD'HUI -->
+  <div class="notif-section">
+    <div class="notif-group-title">Aujourd'hui</div>
+
+    <!-- Unread: Galerie prête -->
+    <div class="notif-item unread">
+      <div class="notif-unread-dot"></div>
+      <div class="notif-icon ni-green">&#127881;</div>
+      <div class="notif-content">
+        <div class="notif-title">Votre galerie est prête !</div>
+        <div class="notif-desc">25 photos de votre séance Famille du 15 mars sont disponibles dans votre espace privé. Réglez le solde pour les télécharger.</div>
+        <a class="notif-cta" href="#">
+          Voir ma galerie
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">Il y a 2h</div>
+    </div>
+
+    <!-- Unread: Rappel séance -->
+    <div class="notif-item unread">
+      <div class="notif-unread-dot"></div>
+      <div class="notif-icon ni-rose">&#128336;</div>
+      <div class="notif-content">
+        <div class="notif-title">Rappel : votre séance dans 7 jours</div>
+        <div class="notif-desc">Le dimanche 15 mars approche ! Consultez nos conseils de préparation pour vivre le moment parfaitement.</div>
+        <a class="notif-cta" href="01-client-journey.html">
+          Guide de préparation
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">Il y a 4h</div>
+    </div>
+
+    <!-- Unread: Message de Capucine -->
+    <div class="notif-item unread">
+      <div class="notif-unread-dot"></div>
+      <div class="notif-icon ni-info">&#128172;</div>
+      <div class="notif-content">
+        <div class="notif-title">Message de Capucine</div>
+        <div class="notif-desc">« Je vous enverrai un lien Google Maps précis J-2 &#128205; Le point de rendez-vous est près de l'entrée principale... »</div>
+        <a class="notif-cta" href="02-chatbot-client.html">
+          Voir le message
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">Il y a 38 min</div>
+    </div>
+
+  </div>
+
+  <!-- CETTE SEMAINE -->
+  <div class="notif-section">
+    <div class="notif-group-title">Cette semaine</div>
+
+    <!-- Read: Confirmation réservation -->
+    <div class="notif-item">
+      <div class="notif-icon ni-sauge">&#10003;</div>
+      <div class="notif-content">
+        <div class="notif-title">Confirmation de réservation</div>
+        <div class="notif-desc">Votre séance Signature Famille a été confirmée. Référence : <strong>#FL2026-0847</strong>. Acompte de 92,70€ reçu.</div>
+        <a class="notif-cta" href="#">
+          Voir ma réservation
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">5 mars</div>
+    </div>
+
+    <!-- Read: Questionnaire disponible -->
+    <div class="notif-item">
+      <div class="notif-icon ni-or">&#128203;</div>
+      <div class="notif-content">
+        <div class="notif-title">Questionnaire de préparation disponible</div>
+        <div class="notif-desc">Capucine vous a envoyé un questionnaire personnalisé pour préparer votre séance au mieux. Il prend 3 minutes.</div>
+        <a class="notif-cta" href="#">
+          Compléter le questionnaire
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">6 mars</div>
+    </div>
+
+    <!-- Read: Questionnaire complété -->
+    <div class="notif-item">
+      <div class="notif-icon ni-sauge">&#127775;</div>
+      <div class="notif-content">
+        <div class="notif-title">Questionnaire complété — Merci !</div>
+        <div class="notif-desc">Vos réponses ont bien été reçues. Capucine prépare votre séance sur mesure.</div>
+      </div>
+      <div class="notif-time">7 mars</div>
+    </div>
+
+    <!-- Read: Acompte reçu -->
+    <div class="notif-item">
+      <div class="notif-icon ni-sauge">&#128176;</div>
+      <div class="notif-content">
+        <div class="notif-title">Votre acompte a été reçu</div>
+        <div class="notif-desc">Paiement de 92,70€ confirmé. Votre réservation est maintenant officiellement confirmée. Solde de 216,30€ dû avant livraison.</div>
+        <a class="notif-cta" href="#">
+          Télécharger la facture
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">5 mars</div>
+    </div>
+
+  </div>
+
+  <!-- CE MOIS -->
+  <div class="notif-section">
+    <div class="notif-group-title">Ce mois-ci</div>
+
+    <!-- Read: Bienvenue -->
+    <div class="notif-item">
+      <div class="notif-icon ni-rose">&#127800;</div>
+      <div class="notif-content">
+        <div class="notif-title">Bienvenue dans votre espace client !</div>
+        <div class="notif-desc">Bonjour Sophie ! Votre espace personnel Fleur de Lumière est maintenant actif. Retrouvez ici toutes les informations de votre séance.</div>
+      </div>
+      <div class="notif-time">5 mars</div>
+    </div>
+
+    <!-- Read: Guide d'inspiration -->
+    <div class="notif-item">
+      <div class="notif-icon ni-or">&#127981;</div>
+      <div class="notif-content">
+        <div class="notif-title">Guide d'inspiration tenues disponible</div>
+        <div class="notif-desc">Capucine vous a partagé son guide de suggestions tenues spécial "Famille Golden Hour". 15 pages d'inspiration.</div>
+        <a class="notif-cta" href="#">
+          Télécharger le guide
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">6 mars</div>
+    </div>
+
+    <!-- Read: Message de bienvenue -->
+    <div class="notif-item">
+      <div class="notif-icon ni-info">&#128172;</div>
+      <div class="notif-content">
+        <div class="notif-title">Premier message de Capucine</div>
+        <div class="notif-desc">« Bonjour Sophie ! Je suis ravie de vous accompagner pour cette séance famille. N'hésitez pas à me poser toutes vos questions... »</div>
+        <a class="notif-cta" href="02-chatbot-client.html">
+          Voir la conversation
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+      <div class="notif-time">5 mars</div>
+    </div>
+
+  </div>
+
+  <!-- PRÉFÉRENCES DE NOTIFICATIONS -->
+  <div class="prefs-card">
+    <div class="prefs-header">
+      <div class="prefs-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Préférences de notifications
+      </div>
+    </div>
+
+    <div class="pref-row">
+      <div class="pref-icon">&#128231;</div>
+      <div class="pref-info">
+        <div class="pref-name">Notifications par email</div>
+        <div class="pref-desc">Recevez les alertes importantes sur sophie@email.fr</div>
+      </div>
+      <div class="pref-toggle on" onclick="togglePref(this)"></div>
+    </div>
+
+    <div class="pref-row">
+      <div class="pref-icon">&#128247;</div>
+      <div class="pref-info">
+        <div class="pref-name">Rappels séance</div>
+        <div class="pref-desc">Rappels J-7, J-3 et J-1 avant votre séance</div>
+      </div>
+      <div class="pref-toggle on" onclick="togglePref(this)"></div>
+    </div>
+
+    <div class="pref-row">
+      <div class="pref-icon">&#128444;&#65039;</div>
+      <div class="pref-info">
+        <div class="pref-name">Galerie et photos</div>
+        <div class="pref-desc">Alertes quand votre galerie est disponible ou expire</div>
+      </div>
+      <div class="pref-toggle on" onclick="togglePref(this)"></div>
+    </div>
+
+    <div class="pref-row">
+      <div class="pref-icon">&#128172;</div>
+      <div class="pref-info">
+        <div class="pref-name">Messages de Capucine</div>
+        <div class="pref-desc">Notifications instantanées pour les nouveaux messages</div>
+      </div>
+      <div class="pref-toggle on" onclick="togglePref(this)"></div>
+    </div>
+
+    <div class="pref-row">
+      <div class="pref-icon">&#128176;</div>
+      <div class="pref-info">
+        <div class="pref-name">Paiements et factures</div>
+        <div class="pref-desc">Confirmations de paiement et rappels de solde</div>
+      </div>
+      <div class="pref-toggle on" onclick="togglePref(this)"></div>
+    </div>
+
+    <div class="pref-row">
+      <div class="pref-icon">&#127873;</div>
+      <div class="pref-info">
+        <div class="pref-name">Offres et promotions</div>
+        <div class="pref-desc">Offres spéciales sur les tirages et produits photo</div>
+      </div>
+      <div class="pref-toggle" onclick="togglePref(this)"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  function filterTab(el) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function togglePref(el) {
+    el.classList.toggle('on');
+  }
+</script>
+</body>
+</html>

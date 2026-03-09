@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads &amp; Social — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--fl-space-md); margin-bottom: var(--fl-space-xl); }
+  .kanban-col { background: var(--fl-bg-alt); border-radius: var(--fl-radius); padding: 12px; min-height: 200px; }
+  .kanban-col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--fl-border); }
+  .kanban-col-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .kanban-count { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.6875rem; font-weight: 700; color: white; }
+  .lead-card { background: var(--fl-bg-card); border-radius: var(--fl-radius-sm); padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--fl-border); box-shadow: var(--fl-shadow-sm); }
+  .lead-card-name { font-size: 0.875rem; font-weight: 600; color: var(--fl-charcoal); }
+  .lead-card-detail { font-size: 0.75rem; color: var(--fl-warm-gray); margin-top: 2px; }
+  .lead-card-value { font-family: var(--fl-font-heading); font-size: 0.9375rem; font-weight: 700; color: var(--fl-or); margin-top: 4px; }
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--fl-space-lg); margin-bottom: var(--fl-space-xl); }
+  .dm-box { background: var(--fl-bg-alt); border-radius: var(--fl-radius-sm); padding: 12px 14px; border-left: 3px solid var(--fl-or); font-size: 0.875rem; color: var(--fl-charcoal); font-style: italic; margin: 12px 0; }
+  .response-suggestion { background: var(--fl-bg-card); border: 1px solid var(--fl-border); border-radius: var(--fl-radius-sm); padding: 10px 12px; margin-bottom: 8px; font-size: 0.8125rem; color: var(--fl-charcoal); line-height: 1.5; cursor: pointer; transition: border-color var(--fl-transition); }
+  .response-suggestion:hover { border-color: var(--fl-rose); }
+  .response-suggestion.selected { border-color: var(--fl-sauge); background: var(--fl-sauge-light); }
+  .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .photo-thumb { border-radius: var(--fl-radius-sm); overflow: hidden; aspect-ratio: 1; position: relative; }
+  .photo-img { width: 100%; height: 100%; }
+  .photo-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .photo-tag { font-size: 0.625rem; font-weight: 600; padding: 2px 6px; border-radius: var(--fl-radius-full); background: var(--fl-border); color: var(--fl-warm-gray); }
+  .photo-tag.ai { background: rgba(124,92,252,0.1); color: #7C5CFC; }
+  .social-stat { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--fl-border); }
+  .social-stat:last-child { border-bottom: none; }
+  .social-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="../admin/01-dashboard.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="../admin/02-facturation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      Facturation
+    </a>
+    <a href="../admin/19-statistiques.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="../admin/09-marketing-automation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="../admin/17-blog-seo.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog &amp; SEO
+    </a>
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="01-hub-ia.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="02-intel-crm.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+    <a href="03-leads-social-tri.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      Leads &amp; Social
+    </a>
+    <a href="04-reconnaissance-faciale.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="17" y="1" width="6" height="6" rx="1"/></svg>
+      Recog. Faciale
+    </a>
+    <a href="05-lightroom.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Lightroom / C1
+    </a>
+    <a href="06-print-preview-ar.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+      Aperçu AR
+    </a>
+    <a href="07-smart-pricing-vault.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Smart Pricing
+    </a>
+    <a href="08-social-planning-style.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Planning Social
+    </a>
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="../admin/03-parametres-1.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="../admin/06-assistant-admin.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>IA</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Leads &amp; Social</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <div class="fl-page-header">
+        <h1 class="fl-page-title">Leads &amp; Social</h1>
+        <p class="fl-page-subtitle">Pipeline commercial · Monitoring social · Tri assisté galeries</p>
+      </div>
+
+      <!-- Lead Pipeline Kanban -->
+      <div style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;">
+        <h2 style="font-family:var(--fl-font-heading);font-size:1.25rem;color:var(--fl-prune);">Pipeline Leads</h2>
+        <span class="fl-badge fl-badge-error">7 leads chauds</span>
+      </div>
+      <div class="kanban">
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <span class="kanban-col-title" style="color:var(--fl-info);">Nouveau</span>
+            <div class="kanban-count" style="background:var(--fl-info);">8</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Emma L.</div>
+            <div class="lead-card-detail">Équestre · Score 87</div>
+            <div class="lead-card-value">280€</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Lucas M.</div>
+            <div class="lead-card-detail">Famille · Score 72</div>
+            <div class="lead-card-value">150€</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Sarah P.</div>
+            <div class="lead-card-detail">Maternité · Score 58</div>
+            <div class="lead-card-value">220€</div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <span class="kanban-col-title" style="color:var(--fl-or);">Qualifié</span>
+            <div class="kanban-count" style="background:var(--fl-or);">5</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Claire D.</div>
+            <div class="lead-card-detail">Famille Signature · Chat démarré</div>
+            <div class="lead-card-value">280€</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Thomas R.</div>
+            <div class="lead-card-detail">Mariage · Devis demandé</div>
+            <div class="lead-card-value">Sur devis</div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <span class="kanban-col-title" style="color:var(--fl-rose);">En discussion</span>
+            <div class="kanban-count" style="background:var(--fl-rose);">3</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Amélie V.</div>
+            <div class="lead-card-detail">Équestre · Propose date</div>
+            <div class="lead-card-value">260€</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Céline B.</div>
+            <div class="lead-card-detail">Scolaire · Choix formule</div>
+            <div class="lead-card-value">150€</div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-header">
+            <span class="kanban-col-title" style="color:var(--fl-sauge);">Converti</span>
+            <div class="kanban-count" style="background:var(--fl-sauge);">4</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Sophie M.</div>
+            <div class="lead-card-detail">Famille · 14 mars</div>
+            <div class="lead-card-value">315€</div>
+          </div>
+          <div class="lead-card">
+            <div class="lead-card-name">Marie D.</div>
+            <div class="lead-card-detail">Équestre · 7 mars</div>
+            <div class="lead-card-value">280€</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social + Auto-response -->
+      <div class="content-grid">
+
+        <!-- Social monitoring -->
+        <div class="fl-card">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--fl-border);">
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Monitoring Social</h3>
+          </div>
+          <div style="padding:16px 20px;">
+            <div class="social-stat">
+              <div class="social-icon" style="background:linear-gradient(135deg,#833AB4,#E1306C);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></div>
+              <div style="flex:1;"><div style="font-size:0.875rem;font-weight:600;color:var(--fl-charcoal);">Instagram</div><div style="font-size:0.75rem;color:var(--fl-warm-gray);">14 mentions · 4.2% engagement</div></div>
+              <span class="fl-badge fl-badge-success">+3 ce soir</span>
+            </div>
+            <div class="social-stat">
+              <div class="social-icon" style="background:#1877F2;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+              <div style="flex:1;"><div style="font-size:0.875rem;font-weight:600;color:var(--fl-charcoal);">Facebook</div><div style="font-size:0.75rem;color:var(--fl-warm-gray);">6 partages · 2.8% engagement</div></div>
+              <span class="fl-badge fl-badge-info">Stable</span>
+            </div>
+            <div class="social-stat">
+              <div class="social-icon" style="background:#000;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></div>
+              <div style="flex:1;"><div style="font-size:0.875rem;font-weight:600;color:var(--fl-charcoal);">TikTok</div><div style="font-size:0.75rem;color:var(--fl-warm-gray);">1 reel · 1 240 vues</div></div>
+              <span class="fl-badge fl-badge-or">Viral</span>
+            </div>
+            <hr class="fl-divider">
+            <div style="font-size:0.8125rem;font-weight:600;color:var(--fl-prune);margin-bottom:8px;">Messages entrants à traiter</div>
+            <div style="background:var(--fl-bg-alt);border-radius:var(--fl-radius-sm);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#833AB4,#E1306C);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.625rem;font-weight:700;color:white;">IG</div>
+              <div style="flex:1;">
+                <div style="font-size:0.8125rem;font-weight:600;color:var(--fl-charcoal);">@marie.photo81</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">"Bonjour ! Combien ça coûte pour une séance famille ?"</div>
+              </div>
+              <button class="fl-btn fl-btn-primary fl-btn-sm">Répondre</button>
+            </div>
+            <div style="background:var(--fl-bg-alt);border-radius:var(--fl-radius-sm);padding:10px 12px;display:flex;align-items:center;gap:10px;">
+              <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#833AB4,#E1306C);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.625rem;font-weight:700;color:white;">IG</div>
+              <div style="flex:1;">
+                <div style="font-size:0.8125rem;font-weight:600;color:var(--fl-charcoal);">@cavaliere_du_tarn</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">"Vos photos équestres sont magnifiques !"</div>
+              </div>
+              <button class="fl-btn fl-btn-ghost fl-btn-sm">Répondre</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auto-response suggestions -->
+        <div class="fl-card">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--fl-border);">
+            <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Suggestions de réponse IA</h3>
+          </div>
+          <div style="padding:16px 20px;">
+            <div style="background:var(--fl-or-light);border-radius:var(--fl-radius-sm);padding:10px 14px;margin-bottom:12px;font-size:0.8125rem;color:var(--fl-charcoal);">
+              <strong style="color:var(--fl-or);">Message reçu :</strong> "combien ça coûte pour une séance famille ?"
+            </div>
+            <div style="font-size:0.75rem;font-weight:600;color:var(--fl-warm-gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">L'IA suggère 3 réponses :</div>
+            <div class="response-suggestion selected">
+              Bonjour ! Merci pour votre message Mes séances famille démarrent à 150€ (Essentiel, 30 min, 10 photos) et 280€ pour la Signature (1h, 25 photos). Je vous envoie le lien vers mes formules complètes !
+            </div>
+            <div class="response-suggestion">
+              Bonjour ! Super question Je serais ravie de capturer votre famille. Ma formule la plus populaire est la Signature à 280€ — 1h à l'Heure Dorée, 25 photos retouchées. Envie d'en savoir plus ?
+            </div>
+            <div class="response-suggestion">
+              Bonjour ! Mes tarifs famille vont de 150€ à 280€ selon la durée. Je vous propose un appel de 10 min pour trouver la formule idéale — quand êtes-vous disponible cette semaine ?
+            </div>
+            <button class="fl-btn fl-btn-primary" style="width:100%;justify-content:center;margin-top:12px;">Envoyer la réponse sélectionnée</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Photo sorting -->
+      <div class="fl-card">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--fl-border);display:flex;align-items:center;justify-content:space-between;">
+          <h3 style="font-family:var(--fl-font-heading);font-size:1.125rem;font-weight:600;color:var(--fl-prune);">Tri Assisté — Auto-tags IA</h3>
+          <span class="fl-badge fl-badge-prune">48 photos analysées</span>
+        </div>
+        <div style="padding:16px 20px;">
+          <p style="font-size:0.875rem;color:var(--fl-warm-gray);margin-bottom:16px;">L'IA a automatiquement catégorisé vos dernières photos importées :</p>
+          <div class="photo-grid">
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#C89878,#D4A888);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">portrait</span><span class="photo-tag ai">golden hour</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#d8d2c8,#c0b8ac);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">équestre</span><span class="photo-tag">extérieur</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#f2e0d4,#dcc0a8);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">famille</span><span class="photo-tag ai">golden hour</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#a8c098,#90b080);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">nature</span><span class="photo-tag">paysage</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#f0d9a8,#e0c580);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">golden hour</span><span class="photo-tag ai">portrait</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#e0d5c0,#c0b49c);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">famille</span><span class="photo-tag">enfants</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#b8a8c0,#a898b0);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">maternité</span><span class="photo-tag ai">douceur</span></div>
+            </div>
+            <div>
+              <div class="photo-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg,#c8a090,#b89080);"></div></div>
+              <div class="photo-tags"><span class="photo-tag ai">équestre</span><span class="photo-tag">complicité</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

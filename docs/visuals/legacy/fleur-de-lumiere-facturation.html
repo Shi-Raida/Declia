@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facturation & Comptabilité — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--bg-shell:#F8F6F4;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg-shell);font-size:14px;line-height:1.5}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+button{font-family:var(--font);cursor:pointer}
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}
+.sw-btn{padding:9px 18px;border-radius:var(--radius-full);font-size:12px;font-weight:700;border:2px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}.sw-btn:hover{border-color:rgba(255,255,255,.3);color:#fff}.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+.page-header{background:var(--bg);border-bottom:1px solid var(--gris-border);padding:18px 24px}
+.ph-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ph-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.ph-info h1{font-size:20px;color:var(--prune)}.ph-info h1 em{color:var(--rose);font-style:italic}.ph-info p{font-size:12px;color:var(--gris)}
+.ph-badge{margin-left:auto;font-size:11px;font-weight:700;padding:6px 14px;border-radius:var(--radius-full)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.card{background:var(--bg);border-radius:var(--radius-md);border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:18px}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--gris-border);display:flex;align-items:center;gap:8px}
+.card-h h3{font-size:14px;color:var(--prune);flex:1}
+.card-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);background:var(--or-light);color:#92750c}
+.card-b{padding:16px 18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:none}
+.btn-primary{background:var(--rose);color:#fff}.btn-primary:hover{background:var(--rose-hover)}
+.btn-secondary{background:transparent;color:var(--prune);border:1.5px solid var(--gris-border)}.btn-secondary:hover{background:var(--prune-light)}
+.btn-sauge{background:var(--sauge);color:#fff}.btn-sauge:hover{background:#5a6e4b}
+.btn-sm{padding:6px 12px;font-size:11px}
+/* KPI */
+.kpi{background:var(--bg);border-radius:var(--radius-md);padding:18px;border:1px solid var(--gris-border);text-align:center;box-shadow:var(--shadow-sm)}
+.kpi-icon{font-size:22px;margin-bottom:6px}.kpi-val{font-family:var(--font-titre);font-size:26px;font-weight:700;color:var(--prune)}.kpi-label{font-size:10px;color:var(--gris);text-transform:uppercase;letter-spacing:1px;margin-top:2px}.kpi-sub{font-size:11px;font-weight:700;margin-top:4px}
+.k-up{color:var(--sauge)}.k-alert{color:#DC2626}.k-neutral{color:var(--or)}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:10px 12px;font-size:12px;text-align:left;border-bottom:1px solid var(--gris-border)}
+.tbl th{background:var(--bg-alt);font-weight:700;color:var(--prune);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{color:var(--gris)}.tbl tr:hover td{background:var(--bg-alt)}
+.sb{font-size:10px;font-weight:700;padding:3px 10px;border-radius:var(--radius-full);display:inline-block}
+.sb-paid{background:var(--sauge-light);color:var(--sauge)}.sb-partial{background:var(--or-light);color:#92750c}.sb-pending{background:rgba(220,38,38,.08);color:#DC2626}.sb-draft{background:var(--prune-light);color:var(--prune)}
+/* INVOICE PREVIEW */
+.invoice-preview{background:var(--bg);border:1px solid var(--gris-border);border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-sm);max-width:600px}
+.inv-header{display:flex;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--prune)}
+.inv-logo{font-family:var(--font-titre);font-size:18px;color:var(--prune);font-weight:700}.inv-logo span{color:var(--or)}
+.inv-num{text-align:right;font-size:12px;color:var(--gris)}.inv-num strong{display:block;font-size:16px;color:var(--prune)}
+.inv-parties{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;font-size:12px;color:var(--gris)}
+.inv-parties strong{color:var(--prune);display:block;margin-bottom:4px}
+.inv-table{width:100%;border-collapse:collapse;margin-bottom:16px}
+.inv-table th{padding:8px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;background:var(--bg-alt);color:var(--prune);text-align:left;border-bottom:1px solid var(--gris-border)}
+.inv-table td{padding:8px 10px;font-size:12px;color:var(--gris);border-bottom:1px solid var(--gris-border)}
+.inv-totals{text-align:right;font-size:13px}
+.inv-totals .inv-row{display:flex;justify-content:flex-end;gap:40px;padding:4px 0}
+.inv-totals .inv-total{font-family:var(--font-titre);font-size:20px;font-weight:700;color:var(--prune);padding-top:8px;margin-top:4px;border-top:2px solid var(--prune)}
+.inv-footer{margin-top:16px;padding-top:12px;border-top:1px solid var(--gris-border);font-size:10px;color:var(--gris-light);text-align:center}
+/* CHART */
+.chart-bar{display:flex;gap:4px;align-items:flex-end;height:120px;margin:12px 0}
+.cb{flex:1;text-align:center}
+.cb-fill{border-radius:4px 4px 0 0;margin:0 auto 4px;width:80%;transition:var(--tr)}
+.cb-v{font-size:10px;font-weight:700;color:var(--prune)}
+.cb-l{font-size:9px;color:var(--gris-light)}
+/* URSSAF */
+.urssaf-box{background:linear-gradient(135deg,rgba(59,130,246,.04),rgba(59,130,246,.08));border:1px solid rgba(59,130,246,.15);border-radius:var(--radius);padding:14px;margin-bottom:14px}
+.urssaf-box .ub-title{font-size:12px;font-weight:700;color:#3B82F6;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.urssaf-box .ub-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
+.urssaf-box .ub-l{color:var(--gris)}.urssaf-box .ub-v{font-weight:700;color:var(--prune)}
+@media(max-width:1024px){.grid-2{grid-template-columns:1fr}.grid-4{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('dashboard',this)">📊 Vue d'ensemble</button>
+  <button class="sw-btn" onclick="switchView('factures',this)">🧾 Factures</button>
+  <button class="sw-btn" onclick="switchView('paiements',this)">💳 Suivi paiements</button>
+  <button class="sw-btn" onclick="switchView('cotisations',this)">🏛️ URSSAF & Cotisations</button>
+  <button class="sw-btn" onclick="switchView('modele',this)">📄 Modèle facture</button>
+</div>
+
+<!-- DASHBOARD FACTURATION -->
+<div class="page-view active" id="view-dashboard">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--or-light)">💰</div><div class="ph-info"><h1>Facturation & <em>Comptabilité</em></h1><p>Suivi financier, factures et obligations auto-entrepreneur</p></div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn btn-primary">+ Nouvelle facture</button><button class="btn btn-secondary">📥 Export comptable</button></div></div></div>
+<div class="container">
+
+<div class="grid-4">
+  <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-val">8 060€</div><div class="kpi-label">CA 2026 (YTD)</div><div class="kpi-sub k-up">↑ +22% vs N-1</div></div>
+  <div class="kpi"><div class="kpi-icon">🧾</div><div class="kpi-val">34</div><div class="kpi-label">Factures émises</div><div class="kpi-sub k-neutral">2026</div></div>
+  <div class="kpi"><div class="kpi-icon">⏳</div><div class="kpi-val">756€</div><div class="kpi-label">En attente</div><div class="kpi-sub k-alert">3 factures</div></div>
+  <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-val">268€</div><div class="kpi-label">Panier moyen</div><div class="kpi-sub k-up">↑ +8%</div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-h"><h3>📈 Chiffre d'affaires mensuel 2026</h3></div><div class="card-b">
+    <div class="chart-bar">
+      <div class="cb"><div class="cb-v">2 580€</div><div class="cb-fill" style="height:55%;background:var(--sauge)"></div><div class="cb-l">Jan</div></div>
+      <div class="cb"><div class="cb-v">3 240€</div><div class="cb-fill" style="height:70%;background:var(--sauge)"></div><div class="cb-l">Fév</div></div>
+      <div class="cb"><div class="cb-v">2 240€</div><div class="cb-fill" style="height:48%;background:var(--rose)"></div><div class="cb-l">Mars*</div></div>
+      <div class="cb"><div class="cb-v">—</div><div class="cb-fill" style="height:0%;background:var(--gris-border)"></div><div class="cb-l">Avr</div></div>
+      <div class="cb"><div class="cb-v">—</div><div class="cb-fill" style="height:0%;background:var(--gris-border)"></div><div class="cb-l">Mai</div></div>
+      <div class="cb"><div class="cb-v">—</div><div class="cb-fill" style="height:0%;background:var(--gris-border)"></div><div class="cb-l">Jun</div></div>
+    </div>
+    <p style="font-size:11px;color:var(--gris);text-align:center">* Mars en cours · Plafond AE : 77 700€/an</p>
+  </div></div>
+
+  <div class="card"><div class="card-h"><h3>💰 Répartition du CA</h3></div><div class="card-b">
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>📸 Séances (B2C)</span><span style="font-weight:700">4 120€ — 51%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:51%;background:var(--rose);border-radius:4px"></div></div></div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>🎓 Scolaire (B2B)</span><span style="font-weight:700">2 380€ — 30%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:30%;background:var(--or);border-radius:4px"></div></div></div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>🛒 Boutique</span><span style="font-weight:700">1 060€ — 13%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:13%;background:var(--sauge);border-radius:4px"></div></div></div>
+    <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>🎁 Cartes cadeaux</span><span style="font-weight:700">500€ — 6%</span></div><div style="height:8px;background:var(--gris-border);border-radius:4px"><div style="height:100%;width:6%;background:var(--prune);border-radius:4px;opacity:.5"></div></div></div>
+  </div></div>
+</div>
+</div></div>
+
+<!-- FACTURES -->
+<div class="page-view" id="view-factures">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--or-light)">🧾</div><div class="ph-info"><h1>Mes <em>factures</em></h1><p>Toutes vos factures générées automatiquement</p></div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn btn-primary">+ Nouvelle facture</button><button class="btn btn-secondary">📥 Exporter CSV</button></div></div></div>
+<div class="container">
+<div class="card"><div class="card-b" style="padding:0">
+<table class="tbl">
+  <tr><th>N°</th><th>Date</th><th>Client</th><th>Prestation</th><th>Montant</th><th>Statut</th><th>Actions</th></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-034</td><td>04/03/2026</td><td>Claire Dupont</td><td>Signature Famille</td><td style="font-weight:700">280€</td><td><span class="sb sb-partial">Acompte 84€</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-secondary">📥</button></td></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-033</td><td>03/03/2026</td><td>Famille Rousseau</td><td>Signature Famille</td><td style="font-weight:700">280€</td><td><span class="sb sb-paid">✅ Payée</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-secondary">📥</button></td></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-032</td><td>01/03/2026</td><td>Marie Delcourt</td><td>Boutique — Tirages + Boîte</td><td style="font-weight:700">85€</td><td><span class="sb sb-paid">✅ Payée</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-secondary">📥</button></td></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-031</td><td>28/02/2026</td><td>Maternelle Hugo</td><td>Scolaire — 58 pochettes</td><td style="font-weight:700">1 740€</td><td><span class="sb sb-paid">✅ Payée</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-secondary">📥</button></td></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-030</td><td>25/02/2026</td><td>Sophie Mercier</td><td>Signature Famille + tirages</td><td style="font-weight:700">315€</td><td><span class="sb sb-partial">Acompte 95€</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-secondary">📥</button></td></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-029</td><td>22/02/2026</td><td>Centre aéré Gaillac</td><td>Scolaire — 32 pochettes</td><td style="font-weight:700">640€</td><td><span class="sb sb-pending">⏳ En attente</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-primary">📧 Relancer</button></td></tr>
+  <tr><td style="font-weight:700;color:var(--prune)">FDL-2026-028</td><td>20/02/2026</td><td>Léa Fournier</td><td>Essentiel Équestre</td><td style="font-weight:700">150€</td><td><span class="sb sb-paid">✅ Payée</span></td><td><button class="btn btn-sm btn-secondary">👁️</button> <button class="btn btn-sm btn-secondary">📥</button></td></tr>
+</table>
+</div></div>
+</div></div>
+
+<!-- SUIVI PAIEMENTS -->
+<div class="page-view" id="view-paiements">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--sauge-light)">💳</div><div class="ph-info"><h1>Suivi des <em>paiements</em></h1><p>Acomptes, soldes et relances impayés</p></div><span class="ph-badge" style="background:rgba(220,38,38,.08);color:#DC2626">756€ en attente</span></div></div>
+<div class="container">
+<div class="grid-2">
+  <div class="card"><div class="card-h"><h3>⏳ Paiements en attente</h3><span class="card-badge">3 factures</span></div><div class="card-b">
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(74,46,61,.04)"><div style="width:36px;height:36px;border-radius:50%;background:var(--or-light);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">CD</div><div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--prune)">Claire Dupont</div><div style="font-size:11px;color:var(--gris)">Solde Signature Famille · Séance 21 mars</div></div><div style="text-align:right"><div style="font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--or)">196€</div><div style="font-size:10px;color:var(--gris)">Acompte 84€ reçu</div></div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(74,46,61,.04)"><div style="width:36px;height:36px;border-radius:50%;background:var(--or-light);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">SM</div><div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--prune)">Sophie Mercier</div><div style="font-size:11px;color:var(--gris)">Solde Signature + tirages · Séance 14 mars</div></div><div style="text-align:right"><div style="font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--or)">220€</div><div style="font-size:10px;color:var(--gris)">Acompte 95€ reçu</div></div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0"><div style="width:36px;height:36px;border-radius:50%;background:rgba(220,38,38,.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:#DC2626;font-weight:700">CG</div><div style="flex:1"><div style="font-weight:700;font-size:13px;color:var(--prune)">Centre aéré Gaillac</div><div style="font-size:11px;color:#DC2626;font-weight:700">⚠️ En retard — 10 jours</div></div><div style="text-align:right"><div style="font-family:var(--font-titre);font-size:16px;font-weight:700;color:#DC2626">640€</div><div style="font-size:10px;color:var(--gris)">Échéance dépassée</div></div><button class="btn btn-sm btn-primary">📧 Relancer</button></div>
+  </div></div>
+
+  <div class="card"><div class="card-h"><h3>✅ Derniers paiements reçus</h3></div><div class="card-b">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(74,46,61,.04)"><div style="font-size:16px">💳</div><div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--prune)">Famille Rousseau — Solde</div><div style="font-size:10px;color:var(--gris)">Stripe · Carte · 3 mars</div></div><div style="font-family:var(--font-titre);font-weight:700;color:var(--sauge)">+196€</div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(74,46,61,.04)"><div style="font-size:16px">💳</div><div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--prune)">Claire Dupont — Acompte</div><div style="font-size:10px;color:var(--gris)">Stripe · Carte · 4 mars</div></div><div style="font-family:var(--font-titre);font-weight:700;color:var(--sauge)">+84€</div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(74,46,61,.04)"><div style="font-size:16px">💳</div><div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--prune)">Marie Delcourt — Boutique</div><div style="font-size:10px;color:var(--gris)">Stripe · Carte · 1 mars</div></div><div style="font-family:var(--font-titre);font-weight:700;color:var(--sauge)">+85€</div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(74,46,61,.04)"><div style="font-size:16px">🏦</div><div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--prune)">Maternelle Hugo — Scolaire</div><div style="font-size:10px;color:var(--gris)">Virement · 28 fév.</div></div><div style="font-family:var(--font-titre);font-weight:700;color:var(--sauge)">+1 740€</div></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0"><div style="font-size:16px">💳</div><div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--prune)">Sophie Mercier — Acompte</div><div style="font-size:10px;color:var(--gris)">Stripe · Carte · 25 fév.</div></div><div style="font-family:var(--font-titre);font-weight:700;color:var(--sauge)">+95€</div></div>
+  </div></div>
+</div>
+</div></div>
+
+<!-- URSSAF & COTISATIONS -->
+<div class="page-view" id="view-cotisations">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:rgba(59,130,246,.08)">🏛️</div><div class="ph-info"><h1>URSSAF & <em>Cotisations</em></h1><p>Suivi des obligations auto-entrepreneur</p></div><span class="ph-badge" style="background:rgba(59,130,246,.08);color:#3B82F6">Régime micro-BNC</span></div></div>
+<div class="container">
+
+<div class="urssaf-box">
+  <div class="ub-title">📊 Résumé fiscal 2026</div>
+  <div class="ub-row"><span class="ub-l">Chiffre d'affaires YTD</span><span class="ub-v">8 060€</span></div>
+  <div class="ub-row"><span class="ub-l">Plafond auto-entrepreneur (BNC)</span><span class="ub-v">77 700€</span></div>
+  <div class="ub-row"><span class="ub-l">Utilisation du plafond</span><span class="ub-v">10,4%</span></div>
+  <div style="height:6px;background:var(--gris-border);border-radius:3px;margin-top:8px"><div style="height:100%;width:10.4%;background:#3B82F6;border-radius:3px"></div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card"><div class="card-h"><h3>📅 Déclarations URSSAF</h3></div><div class="card-b">
+    <table class="tbl">
+      <tr><th>Période</th><th>CA déclaré</th><th>Cotisations (21,1%)</th><th>Statut</th></tr>
+      <tr><td style="font-weight:700">T1 2026 (Jan-Mars)</td><td>8 060€</td><td style="font-weight:700;color:var(--or)">1 701€</td><td><span class="sb sb-draft">📝 À déclarer (15 avril)</span></td></tr>
+      <tr><td>T4 2025 (Oct-Déc)</td><td>6 420€</td><td>1 355€</td><td><span class="sb sb-paid">✅ Déclaré & payé</span></td></tr>
+      <tr><td>T3 2025 (Jul-Sep)</td><td>7 890€</td><td>1 665€</td><td><span class="sb sb-paid">✅ Déclaré & payé</span></td></tr>
+    </table>
+    <p style="font-size:11px;color:var(--gris);margin-top:10px">💡 Prochaine échéance : <strong>15 avril 2026</strong> — Déclaration T1 sur autoentrepreneur.urssaf.fr</p>
+  </div></div>
+
+  <div class="card"><div class="card-h"><h3>💰 Estimation cotisations</h3></div><div class="card-b">
+    <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>CA T1 2026</span><span style="font-weight:700">8 060€</span></div></div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(74,46,61,.04)"><span style="color:var(--gris)">Cotisations sociales (21,1%)</span><span style="font-weight:700">1 701€</span></div></div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(74,46,61,.04)"><span style="color:var(--gris)">CFP (0,2%)</span><span style="font-weight:700">16€</span></div></div>
+    <div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(74,46,61,.04)"><span style="color:var(--gris)">Versement libératoire IR (2,2%)</span><span style="font-weight:700">177€</span></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:14px;padding:10px 0;border-top:2px solid var(--prune);font-weight:700"><span>Total à provisionner</span><span style="font-family:var(--font-titre);font-size:18px;color:var(--or)">1 894€</span></div>
+    <div style="padding:10px;background:var(--sauge-light);border-radius:var(--radius);margin-top:12px"><p style="font-size:11px;color:var(--texte)">💡 <strong>Revenu net estimé T1 :</strong> 8 060€ - 1 894€ = <strong>6 166€</strong> (76,5% du CA)</p></div>
+  </div></div>
+</div>
+
+<div class="card"><div class="card-h"><h3>📥 Exports comptables</h3></div><div class="card-b" style="display:flex;gap:10px;flex-wrap:wrap">
+  <button class="btn btn-secondary">📥 Export factures 2026 (PDF)</button>
+  <button class="btn btn-secondary">📥 Livre des recettes (CSV)</button>
+  <button class="btn btn-secondary">📥 Registre des achats (CSV)</button>
+  <button class="btn btn-secondary">📥 Rapport CA mensuel (PDF)</button>
+</div></div>
+
+</div></div>
+
+<!-- MODÈLE FACTURE -->
+<div class="page-view" id="view-modele">
+<div class="page-header"><div class="ph-inner"><div class="ph-icon" style="background:var(--or-light)">📄</div><div class="ph-info"><h1>Modèle de <em>facture</em></h1><p>Aperçu de la facture auto-générée</p></div><div style="margin-left:auto;display:flex;gap:6px"><button class="btn btn-secondary">✏️ Personnaliser</button><button class="btn btn-primary">📥 Télécharger PDF</button></div></div></div>
+<div class="container" style="display:flex;justify-content:center">
+
+<div class="invoice-preview">
+  <div class="inv-header">
+    <div><div class="inv-logo">Fleur de <span>L</span>umière</div><div style="font-size:11px;color:var(--gris);margin-top:4px">Capucine [Nom]<br>Auto-entrepreneur · SIRET : [À compléter]<br>Parisot (81310), Tarn<br>contact@fleurdelumiere.fr</div></div>
+    <div class="inv-num"><strong>FDL-2026-033</strong>Date : 03/03/2026<br>Échéance : 03/03/2026</div>
+  </div>
+  <div class="inv-parties">
+    <div><strong>Facturé à :</strong>Thomas & Sophie Rousseau<br>14 rue des Jardins<br>81370 Saint-Sulpice-la-Pointe</div>
+    <div><strong>Prestation :</strong>Séance photo Signature Famille<br>Date de la séance : 01/03/2026<br>Lieu : Parc Rochegude</div>
+  </div>
+  <table class="inv-table">
+    <tr><th>Description</th><th>Qté</th><th>Prix unit.</th><th style="text-align:right">Total</th></tr>
+    <tr><td>Séance Signature Famille (1h, 25 photos retouchées)</td><td>1</td><td>280,00€</td><td style="text-align:right">280,00€</td></tr>
+    <tr><td>Tirage 20×30 cm (offert dans la formule)</td><td>3</td><td>0,00€</td><td style="text-align:right;color:var(--sauge)">Offert</td></tr>
+  </table>
+  <div class="inv-totals">
+    <div class="inv-row"><span style="color:var(--gris)">Total HT</span><span>280,00€</span></div>
+    <div class="inv-row"><span style="color:var(--gris)">TVA non applicable (art. 293B CGI)</span><span>—</span></div>
+    <div class="inv-row"><span style="color:var(--gris)">Acompte versé le 15/02/2026</span><span>- 84,00€</span></div>
+    <div class="inv-row inv-total"><span>Net à payer</span><span>196,00€</span></div>
+  </div>
+  <div style="margin-top:12px;padding:8px 12px;background:var(--sauge-light);border-radius:var(--radius);font-size:11px;color:var(--sauge);font-weight:700;text-align:center">✅ Solde réglé le 03/03/2026 — Paiement Stripe</div>
+  <div class="inv-footer">TVA non applicable, art. 293 B du CGI · Dispensé d'immatriculation au RCS<br>Fleur de Lumière — Capucine [Nom] · SIRET : [À compléter]</div>
+</div>
+
+</div></div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+</script>
+</body>
+</html>

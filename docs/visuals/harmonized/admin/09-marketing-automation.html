@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Automatisation Marketing — Fleur de Lumière Admin</title>
+  <link rel="stylesheet" href="../design-system.css" />
+  <style>
+    /* ── Sequence card ── */
+    .seq-card {
+      background: var(--fl-bg-card);
+      border: 1px solid var(--fl-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+    .seq-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    .seq-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .seq-title { font-weight: 600; font-size: 0.9rem; color: var(--fl-charcoal); }
+    .seq-subtitle { font-size: 0.77rem; color: var(--fl-warm-gray); margin-top: 0.1rem; }
+    /* ── Email step ── */
+    .email-steps { display: flex; flex-direction: column; gap: 0; }
+    .email-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      position: relative;
+    }
+    .email-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 38px;
+      bottom: -4px;
+      width: 2px;
+      background: var(--fl-border);
+    }
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      border: 2px solid var(--fl-border);
+      background: var(--fl-bg-card);
+      color: var(--fl-warm-gray);
+      z-index: 1;
+    }
+    .step-circle.active {
+      background: var(--fl-prune);
+      border-color: var(--fl-prune);
+      color: #fff;
+    }
+    .step-circle.done {
+      background: var(--fl-sauge);
+      border-color: var(--fl-sauge);
+      color: #fff;
+    }
+    .step-circle.paused {
+      background: var(--fl-bg);
+      border-color: var(--fl-or);
+      color: var(--fl-or);
+    }
+    .step-info { flex: 1; padding-top: 0.2rem; }
+    .step-name { font-size: 0.83rem; font-weight: 500; color: var(--fl-charcoal); }
+    .step-delay { font-size: 0.72rem; color: var(--fl-warm-gray); margin-top: 0.1rem; }
+    .step-stats {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.3rem;
+    }
+    .step-stat { font-size: 0.7rem; color: var(--fl-warm-gray); }
+    .step-stat strong { color: var(--fl-prune); font-weight: 600; }
+    /* ── Seq footer ── */
+    .seq-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--fl-border);
+    }
+    /* ── Stats pill row ── */
+    .stat-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 0.5rem 0 1rem;
+    }
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 99px;
+      font-size: 0.76rem;
+      background: var(--fl-bg);
+      border: 1px solid var(--fl-border);
+      color: var(--fl-charcoal);
+    }
+    .stat-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+    /* ── Trigger table ── */
+    .trigger-row td { vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+<div class="fl-admin-layout">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-brand">
+      <div class="fl-sidebar-logo">FL</div>
+      <div>
+        <div class="fl-sidebar-name">Fleur de Lumière</div>
+        <div class="fl-sidebar-role">Administration</div>
+      </div>
+    </div>
+
+    <nav class="fl-sidebar-nav">
+      <div class="fl-sidebar-section">Général</div>
+
+      <a href="01-dashboard.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Tableau de bord
+      </a>
+
+      <a href="02-facturation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        Facturation
+      </a>
+
+      <div class="fl-sidebar-section">Outils</div>
+
+      <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Assistant Admin
+      </a>
+
+      <a href="09-marketing-automation.html" class="fl-sidebar-item active">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Automatisation
+      </a>
+
+      <a href="10-export-comptable.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Comptable
+      </a>
+
+      <div class="fl-sidebar-section">Scolaire</div>
+
+      <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Scolaire Admin
+      </a>
+
+      <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        École &amp; Parents
+      </a>
+
+      <div class="fl-sidebar-section">Configuration</div>
+
+      <a href="03-parametres-1.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </a>
+
+      <a href="05-personnalisation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        Personnalisation
+      </a>
+    </nav>
+
+    <div class="fl-sidebar-footer">
+      <div class="fl-sidebar-user">
+        <div class="fl-sidebar-avatar">M</div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal)">Marie Lefèvre</div>
+          <div style="font-size:0.72rem;color:var(--fl-warm-gray)">Administratrice</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main class="fl-admin-main">
+
+    <!-- Topbar -->
+    <div class="fl-topbar">
+      <nav class="fl-breadcrumb">
+        <span>Admin</span>
+        <span>›</span>
+        <span class="current">Automatisation Marketing</span>
+      </nav>
+      <div style="display:flex;gap:0.75rem">
+        <button class="fl-btn fl-btn-outline" style="font-size:0.82rem;padding:0.4rem 0.9rem">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Rapport de performance
+        </button>
+        <button class="fl-btn fl-btn-primary" style="font-size:0.82rem;padding:0.4rem 0.9rem">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvelle séquence
+        </button>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+
+      <!-- ── KPI overview ── -->
+      <div class="fl-grid-4" style="margin-bottom:2rem">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Séquences actives</div>
+          <div class="fl-kpi-value">3</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">1 en pause</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Emails envoyés (30j)</div>
+          <div class="fl-kpi-value">247</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">+12 % vs mois passé</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Taux d'ouverture moyen</div>
+          <div class="fl-kpi-value">58 %</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">Secteur : 28 %</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">CA attribué (30j)</div>
+          <div class="fl-kpi-value">1 340 €</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">via automatisations</div>
+        </div>
+      </div>
+
+      <!-- ══ Séquences ══ -->
+      <h2 style="font-family:var(--fl-font-heading);font-size:1.25rem;color:var(--fl-prune);margin-bottom:1rem">Séquences d'emails</h2>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:2rem">
+
+        <!-- SÉQUENCE 1 : Bienvenue -->
+        <div class="seq-card">
+          <div class="seq-header">
+            <div class="seq-icon" style="background:rgba(74,46,61,0.1)">
+              <svg width="20" height="20" fill="none" stroke="var(--fl-prune)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div>
+              <div class="seq-title">Bienvenue &amp; Onboarding</div>
+              <div class="seq-subtitle">Déclencheur : nouveau contact inscrit</div>
+            </div>
+            <div style="margin-left:auto">
+              <label class="fl-toggle">
+                <input type="checkbox" checked />
+                <span class="fl-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="stat-pills">
+            <div class="stat-pill"><div class="stat-pill-dot" style="background:var(--fl-sauge)"></div>42 contacts actifs</div>
+            <div class="stat-pill">63 % ouverture</div>
+            <div class="stat-pill">18 % clic</div>
+          </div>
+
+          <div class="email-steps">
+            <div class="email-step">
+              <div class="step-circle done">✓</div>
+              <div class="step-info">
+                <div class="step-name">Email 1 — "Bienvenue chez Fleur de Lumière"</div>
+                <div class="step-delay">Envoi immédiat à l'inscription</div>
+                <div class="step-stats">
+                  <span class="step-stat">Ouvertures : <strong>78 %</strong></span>
+                  <span class="step-stat">Clics : <strong>24 %</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle done">✓</div>
+              <div class="step-info">
+                <div class="step-name">Email 2 — "Comment se passe une séance ?"</div>
+                <div class="step-delay">J+3 après inscription</div>
+                <div class="step-stats">
+                  <span class="step-stat">Ouvertures : <strong>61 %</strong></span>
+                  <span class="step-stat">Clics : <strong>15 %</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle active">3</div>
+              <div class="step-info">
+                <div class="step-name">Email 3 — "Votre première séance à -10 %"</div>
+                <div class="step-delay">J+7 après inscription</div>
+                <div class="step-stats">
+                  <span class="step-stat">En cours d'envoi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="seq-footer">
+            <span style="font-size:0.78rem;color:var(--fl-warm-gray)">3 emails · 7 jours</span>
+            <div style="display:flex;gap:0.5rem">
+              <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Modifier</button>
+              <button class="fl-btn fl-btn-outline" style="font-size:0.75rem;padding:0.3rem 0.7rem">Rapport</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SÉQUENCE 2 : Post-séance -->
+        <div class="seq-card">
+          <div class="seq-header">
+            <div class="seq-icon" style="background:rgba(194,114,126,0.1)">
+              <svg width="20" height="20" fill="none" stroke="var(--fl-rose)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            </div>
+            <div>
+              <div class="seq-title">Post-séance</div>
+              <div class="seq-subtitle">Déclencheur : séance marquée "terminée"</div>
+            </div>
+            <div style="margin-left:auto">
+              <label class="fl-toggle">
+                <input type="checkbox" checked />
+                <span class="fl-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="stat-pills">
+            <div class="stat-pill"><div class="stat-pill-dot" style="background:var(--fl-rose)"></div>8 contacts actifs</div>
+            <div class="stat-pill">71 % ouverture</div>
+            <div class="stat-pill">34 % clic</div>
+          </div>
+
+          <div class="email-steps">
+            <div class="email-step">
+              <div class="step-circle done">✓</div>
+              <div class="step-info">
+                <div class="step-name">Email 1 — "Merci pour votre confiance"</div>
+                <div class="step-delay">J+1 après la séance</div>
+                <div class="step-stats">
+                  <span class="step-stat">Ouvertures : <strong>82 %</strong></span>
+                  <span class="step-stat">Clics : <strong>41 %</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle active">2</div>
+              <div class="step-info">
+                <div class="step-name">Email 2 — "Vos photos sont prêtes !"</div>
+                <div class="step-delay">J+5 (galerie mise en ligne)</div>
+                <div class="step-stats">
+                  <span class="step-stat">Ouvertures : <strong>68 %</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle">3</div>
+              <div class="step-info">
+                <div class="step-name">Email 3 — "Laissez-nous un avis Google"</div>
+                <div class="step-delay">J+10 si pas d'avis déposé</div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle">4</div>
+              <div class="step-info">
+                <div class="step-name">Email 4 — "Profitez de 15 % pour votre prochaine séance"</div>
+                <div class="step-delay">J+30 après la séance</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="seq-footer">
+            <span style="font-size:0.78rem;color:var(--fl-warm-gray)">4 emails · 30 jours</span>
+            <div style="display:flex;gap:0.5rem">
+              <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Modifier</button>
+              <button class="fl-btn fl-btn-outline" style="font-size:0.75rem;padding:0.3rem 0.7rem">Rapport</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SÉQUENCE 3 : Réengagement -->
+        <div class="seq-card">
+          <div class="seq-header">
+            <div class="seq-icon" style="background:rgba(212,160,60,0.1)">
+              <svg width="20" height="20" fill="none" stroke="var(--fl-or)" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.32"/></svg>
+            </div>
+            <div>
+              <div class="seq-title">Réengagement</div>
+              <div class="seq-subtitle">Déclencheur : inactif depuis 90 jours</div>
+            </div>
+            <div style="margin-left:auto">
+              <label class="fl-toggle">
+                <input type="checkbox" />
+                <span class="fl-toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="stat-pills">
+            <div class="stat-pill"><div class="stat-pill-dot" style="background:var(--fl-warm-gray)"></div>En pause</div>
+            <div class="stat-pill">44 % ouverture (historique)</div>
+          </div>
+
+          <div class="email-steps">
+            <div class="email-step">
+              <div class="step-circle paused">⏸</div>
+              <div class="step-info">
+                <div class="step-name">Email 1 — "On pense à vous !"</div>
+                <div class="step-delay">J+90 sans activité</div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle paused">⏸</div>
+              <div class="step-info">
+                <div class="step-name">Email 2 — "Offre de retour exclusive"</div>
+                <div class="step-delay">J+7 si pas d'ouverture</div>
+              </div>
+            </div>
+            <div class="email-step">
+              <div class="step-circle paused">⏸</div>
+              <div class="step-info">
+                <div class="step-name">Email 3 — "Dernière chance avant désabonnement"</div>
+                <div class="step-delay">J+14 si toujours inactif</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="seq-footer">
+            <span style="font-size:0.78rem;color:var(--fl-or)">Séquence en pause</span>
+            <div style="display:flex;gap:0.5rem">
+              <button class="fl-btn fl-btn-ghost" style="font-size:0.75rem;padding:0.3rem 0.7rem">Modifier</button>
+              <button class="fl-btn fl-btn-primary" style="font-size:0.75rem;padding:0.3rem 0.7rem">Activer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Automatisations déclenchées ══ -->
+      <div class="fl-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+          <h3 class="fl-card-title">Automatisations déclenchées — derniers 30 jours</h3>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <input type="text" placeholder="Rechercher…" style="border:1px solid var(--fl-border);border-radius:8px;padding:0.35rem 0.75rem;font-size:0.82rem;outline:none;color:var(--fl-charcoal);width:180px" />
+            <button class="fl-btn fl-btn-outline" style="font-size:0.8rem;padding:0.35rem 0.75rem">Filtrer</button>
+          </div>
+        </div>
+        <table class="fl-table">
+          <thead>
+            <tr>
+              <th>Contact</th>
+              <th>Séquence</th>
+              <th>Email</th>
+              <th>Date d'envoi</th>
+              <th>Ouvert</th>
+              <th>Cliqué</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="trigger-row">
+              <td><strong>Sophie Martin</strong></td>
+              <td>Post-séance</td>
+              <td>Email 2 — Vos photos sont prêtes</td>
+              <td>5 mars 2026</td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-success">Converti</span></td>
+            </tr>
+            <tr class="trigger-row">
+              <td><strong>Claire Dubois</strong></td>
+              <td>Bienvenue</td>
+              <td>Email 3 — Offre -10 %</td>
+              <td>6 mars 2026</td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-error">Non</span></td>
+              <td><span class="fl-badge fl-badge-info">En attente</span></td>
+            </tr>
+            <tr class="trigger-row">
+              <td><strong>Emma Leroy</strong></td>
+              <td>Post-séance</td>
+              <td>Email 1 — Merci</td>
+              <td>7 mars 2026</td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-success">Avis déposé</span></td>
+            </tr>
+            <tr class="trigger-row">
+              <td><strong>Lucie Bernard</strong></td>
+              <td>Bienvenue</td>
+              <td>Email 1 — Bienvenue</td>
+              <td>7 mars 2026</td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-error">Non</span></td>
+              <td><span class="fl-badge fl-badge-info">Séquence en cours</span></td>
+            </tr>
+            <tr class="trigger-row">
+              <td><strong>Isabelle Roux</strong></td>
+              <td>Post-séance</td>
+              <td>Email 3 — Avis Google</td>
+              <td>6 mars 2026</td>
+              <td><span class="fl-badge fl-badge-error">Non</span></td>
+              <td><span class="fl-badge fl-badge-error">Non</span></td>
+              <td><span class="fl-badge fl-badge-warning">Relance J+7</span></td>
+            </tr>
+            <tr class="trigger-row">
+              <td><strong>Nathalie Petit</strong></td>
+              <td>Bienvenue</td>
+              <td>Email 2 — La séance en détail</td>
+              <td>4 mars 2026</td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-success">Oui</span></td>
+              <td><span class="fl-badge fl-badge-success">Réservation créée</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--fl-border)">
+          <span style="font-size:0.8rem;color:var(--fl-warm-gray)">247 déclenchements ce mois · Page 1 / 12</span>
+          <div style="display:flex;gap:0.4rem">
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.7rem">‹</button>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.7rem;background:var(--fl-prune);color:#fff">1</button>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.7rem">2</button>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.7rem">3</button>
+            <button class="fl-btn fl-btn-ghost" style="font-size:0.78rem;padding:0.3rem 0.7rem">›</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fl-admin-content -->
+  </main>
+</div><!-- /fl-admin-layout -->
+
+</body>
+</html>

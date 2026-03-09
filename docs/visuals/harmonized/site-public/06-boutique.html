@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boutique — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border);
+    transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto; padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+  .cart-btn {
+    position: relative; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--fl-border); background: var(--fl-bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.125rem; cursor: pointer; transition: all var(--fl-transition);
+  }
+  .cart-btn:hover { background: var(--fl-bg-alt); border-color: var(--fl-rose); }
+  .cart-count {
+    position: absolute; top: -4px; right: -4px; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--fl-rose); color: white;
+    font-size: 0.625rem; font-weight: 700; display: flex; align-items: center;
+    justify-content: center; border: 2px solid var(--fl-bg);
+  }
+
+  /* ===== PROMO BANNER ===== */
+  .promo-banner {
+    background: linear-gradient(90deg, var(--fl-or) 0%, #e8c56d 50%, var(--fl-or) 100%);
+    padding: 10px 24px; text-align: center;
+  }
+  .promo-banner p { font-size: 0.875rem; font-weight: 500; color: var(--fl-prune); }
+  .promo-banner strong { font-weight: 700; }
+
+  /* ===== HERO ===== */
+  .shop-hero { padding: 80px 0 56px; text-align: center; background: var(--fl-bg); }
+  .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .shop-hero h1 { font-size: clamp(2.25rem, 5vw, 3.25rem); color: var(--fl-prune); margin-bottom: 16px; }
+  .shop-hero h1 em { font-style: italic; color: var(--fl-rose); }
+  .shop-hero p { font-size: 1.0625rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px auto; border-radius: 1px; }
+
+  /* ===== CATEGORY TABS ===== */
+  .cat-bar { padding: 20px 0; border-bottom: 1px solid var(--fl-border); background: var(--fl-bg); }
+  .cat-tabs { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .cat-tab {
+    padding: 10px 20px; border-radius: var(--fl-radius-full); font-size: 0.8125rem; font-weight: 600;
+    border: 2px solid var(--fl-border); background: var(--fl-bg); color: var(--fl-warm-gray);
+    cursor: pointer; transition: all var(--fl-transition);
+  }
+  .cat-tab:hover { border-color: var(--fl-rose); color: var(--fl-rose); }
+  .cat-tab.active { background: var(--fl-prune); color: #fff; border-color: var(--fl-prune); }
+
+  /* ===== SHOP LAYOUT ===== */
+  .shop-layout { padding: 48px 0 80px; background: var(--fl-bg-alt); }
+  .shop-inner { display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: start; }
+  .shop-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+  .shop-top h2 { font-family: var(--fl-font-heading); font-size: 1.125rem; color: var(--fl-prune); }
+  .shop-count { font-size: 0.875rem; color: var(--fl-warm-gray); }
+
+  /* ===== PRODUCT GRID ===== */
+  .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .product-card {
+    background: white; border-radius: var(--fl-radius); overflow: hidden;
+    box-shadow: var(--fl-shadow-sm); border: 1px solid var(--fl-border);
+    transition: transform var(--fl-transition), box-shadow var(--fl-transition); position: relative;
+  }
+  .product-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .product-img { position: relative; overflow: hidden; aspect-ratio: 1; }
+  .product-img .ph { width: 100%; height: 100%; transition: transform 0.5s ease; }
+  .product-card:hover .ph { transform: scale(1.05); }
+  .product-badge { position: absolute; top: 10px; left: 10px; font-size: 0.6875rem; font-weight: 700; padding: 4px 12px; border-radius: var(--fl-radius-full); z-index: 2; }
+  .pb-best { background: var(--fl-rose); color: white; }
+  .pb-new { background: var(--fl-sauge); color: white; }
+  .pb-promo { background: var(--fl-or); color: var(--fl-charcoal); }
+  .quick-add { position: absolute; bottom: 10px; left: 10px; right: 10px; z-index: 2; opacity: 0; transform: translateY(6px); transition: all var(--fl-transition); }
+  .product-card:hover .quick-add { opacity: 1; transform: translateY(0); }
+  .product-body { padding: 16px 18px 20px; }
+  .product-cat { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--fl-warm-gray); margin-bottom: 4px; }
+  .product-name { font-family: var(--fl-font-heading); font-size: 1rem; color: var(--fl-prune); margin-bottom: 6px; line-height: 1.3; }
+  .product-desc { font-size: 0.8125rem; color: var(--fl-warm-gray); line-height: 1.5; margin-bottom: 10px; }
+  .product-price { font-family: var(--fl-font-heading); font-size: 1.25rem; font-weight: 700; color: var(--fl-or); }
+  .product-old { font-size: 0.875rem; color: var(--fl-warm-gray); text-decoration: line-through; margin-left: 6px; }
+
+  /* Placeholder colors */
+  .ph-1 { background: linear-gradient(135deg,#f5ede6,#e8ddd2); }
+  .ph-2 { background: linear-gradient(135deg,#e2d5c8,#d0c0ae); }
+  .ph-3 { background: linear-gradient(135deg,#d8ccb8,#c5b8a2); }
+  .ph-4 { background: linear-gradient(140deg,#f0e4d4,#ddd0bc); }
+  .ph-5 { background: linear-gradient(130deg,#e8ddd2,#d5c8b8); }
+  .ph-6 { background: linear-gradient(145deg,#f2e6d8,#e5d8c8); }
+  .ph-7 { background: linear-gradient(135deg,#ebe0d2,#ddd0be); }
+  .ph-8 { background: linear-gradient(135deg,#cec5b8,#bfb5a5); }
+  .ph-9 { background: linear-gradient(140deg,#dce8d8,#c8d8c2); }
+
+  /* ===== CART SIDEBAR ===== */
+  .cart-sidebar {
+    position: sticky; top: 84px;
+    background: white; border-radius: var(--fl-radius); border: 1px solid var(--fl-border);
+    box-shadow: var(--fl-shadow-sm); overflow: hidden;
+  }
+  .cart-head { padding: 20px 20px 16px; border-bottom: 1px solid var(--fl-border); }
+  .cart-head h3 { font-family: var(--fl-font-heading); font-size: 1.0625rem; color: var(--fl-prune); }
+  .cart-empty { padding: 32px 20px; text-align: center; }
+  .cart-empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.4; }
+  .cart-empty p { font-size: 0.875rem; color: var(--fl-warm-gray); }
+  .cart-total-row { padding: 16px 20px; border-top: 1px solid var(--fl-border); background: var(--fl-bg-alt); display: flex; justify-content: space-between; align-items: center; }
+  .cart-total-label { font-weight: 600; color: var(--fl-prune); }
+  .cart-total-value { font-family: var(--fl-font-heading); font-size: 1.5rem; font-weight: 700; color: var(--fl-or); }
+  .cart-actions { padding: 16px 20px; }
+  .cart-note { font-size: 0.75rem; color: var(--fl-warm-gray); text-align: center; margin-top: 10px; }
+
+  /* ===== INFO BAR ===== */
+  .info-bar { padding: 56px 0; background: var(--fl-bg); border-top: 1px solid var(--fl-border); }
+  .info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; text-align: center; }
+  .info-item .info-icon { font-size: 1.625rem; margin-bottom: 12px; }
+  .info-item h4 { font-family: var(--fl-font-heading); font-size: 0.9375rem; color: var(--fl-prune); margin-bottom: 4px; }
+  .info-item p { font-size: 0.8125rem; color: var(--fl-warm-gray); line-height: 1.55; }
+
+  /* ===== HOW TO ORDER ===== */
+  .how-section { padding: 80px 0; background: var(--fl-bg-alt); border-top: 1px solid var(--fl-border); }
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head h2 em { font-style: italic; color: var(--fl-rose); }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; max-width: 820px; margin: 0 auto; text-align: center; }
+  .how-num { width: 48px; height: 48px; border-radius: 50%; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-family: var(--fl-font-heading); font-size: 1.25rem; font-weight: 700; }
+  .hn1 { background: rgba(194,114,126,0.1); color: var(--fl-rose); }
+  .hn2 { background: rgba(212,160,60,0.1); color: var(--fl-or); }
+  .hn3 { background: rgba(107,127,90,0.1); color: var(--fl-sauge); }
+  .how-step h4 { font-family: var(--fl-font-heading); font-size: 1.0625rem; color: var(--fl-prune); margin-bottom: 8px; }
+  .how-step p { font-size: 0.9rem; color: var(--fl-warm-gray); line-height: 1.65; }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-or); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+
+  @media (max-width: 1024px) {
+    .shop-inner { grid-template-columns: 1fr; }
+    .cart-sidebar { position: relative; top: auto; }
+    .info-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+    .how-grid { grid-template-columns: 1fr; gap: 24px; }
+    .info-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="03-portfolio-temoignages.html#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+    <button class="cart-btn" onclick="toggleCart()" aria-label="Panier">
+      🛒<span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- PROMO BANNER -->
+<div class="promo-banner">
+  <p>Livraison offerte dès 80€ avec le code <strong>LUMIERE</strong> — Papier Fine Art qualité musée</p>
+</div>
+
+<!-- HERO -->
+<section class="shop-hero">
+  <div class="fl-container">
+    <div class="section-label">Boutique</div>
+    <h1>La <em>Boutique</em></h1>
+    <div class="gold-rule"></div>
+    <p>Tirages Fine Art, albums, objets personnalisés… Transformez vos plus belles photos en souvenirs à toucher, à offrir, à chérir.</p>
+  </div>
+</section>
+
+<!-- CATEGORY TABS -->
+<div class="cat-bar">
+  <div class="fl-container">
+    <div class="cat-tabs">
+      <span class="cat-tab active" onclick="filterCat(this,'all')">Tous</span>
+      <span class="cat-tab" onclick="filterCat(this,'tirages')">Tirages</span>
+      <span class="cat-tab" onclick="filterCat(this,'albums')">Albums</span>
+      <span class="cat-tab" onclick="filterCat(this,'cadeaux')">Cadeaux</span>
+      <span class="cat-tab" onclick="filterCat(this,'accessoires')">Accessoires</span>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP CONTENT -->
+<section class="shop-layout">
+  <div class="fl-container">
+    <div class="shop-inner">
+
+      <!-- PRODUCT GRID -->
+      <div class="shop-main">
+        <div class="shop-top">
+          <h2>Nos produits</h2>
+          <span class="shop-count" id="product-count">9 produits</span>
+        </div>
+        <div class="products-grid">
+
+          <!-- TIRAGES -->
+          <div class="product-card reveal" data-cat="tirages">
+            <div class="product-img">
+              <div class="ph ph-1"></div>
+              <span class="product-badge pb-best">★ Best-seller</span>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Tirage 20×30',29)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Tirages</div>
+              <div class="product-name">Tirage 20×30</div>
+              <div class="product-desc">Papier Hahnemühle Photo Rag 308g. Rendu musée, mat et profond.</div>
+              <div><span class="product-price">29€</span><span class="product-unit" style="font-size:0.8125rem;color:var(--fl-warm-gray);"> / tirage</span></div>
+            </div>
+          </div>
+
+          <div class="product-card reveal reveal-delay-1" data-cat="tirages">
+            <div class="product-img">
+              <div class="ph ph-3"></div>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Tirage 30×45',45)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Tirages</div>
+              <div class="product-name">Tirage 30×45</div>
+              <div class="product-desc">Grand format parfait pour encadrer. Papier premium Fine Art.</div>
+              <div><span class="product-price">45€</span></div>
+            </div>
+          </div>
+
+          <div class="product-card reveal reveal-delay-2" data-cat="tirages">
+            <div class="product-img">
+              <div class="ph ph-2"></div>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Tirage 40×60',69)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Tirages</div>
+              <div class="product-name">Tirage 40×60</div>
+              <div class="product-desc">Format XXL pour un impact visuel maximal. Toile d'exception.</div>
+              <div><span class="product-price">69€</span></div>
+            </div>
+          </div>
+
+          <!-- ALBUMS -->
+          <div class="product-card reveal" data-cat="albums">
+            <div class="product-img">
+              <div class="ph ph-4"></div>
+              <span class="product-badge pb-best">★ Best-seller</span>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Album Mariage',189)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Albums</div>
+              <div class="product-name">Album Mariage (20 pages)</div>
+              <div class="product-desc">Couverture cuir souple, pages lay-flat 25×25 cm. Un trésor.</div>
+              <div><span class="product-price">189€</span></div>
+            </div>
+          </div>
+
+          <div class="product-card reveal reveal-delay-1" data-cat="albums">
+            <div class="product-img">
+              <div class="ph ph-5"></div>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Album Famille',149)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Albums</div>
+              <div class="product-name">Album Famille</div>
+              <div class="product-desc">Album relié 20×20 cm, 20 pages lay-flat. Idéal pour les familles.</div>
+              <div><span class="product-price">149€</span></div>
+            </div>
+          </div>
+
+          <div class="product-card reveal reveal-delay-2" data-cat="albums">
+            <div class="product-img">
+              <div class="ph ph-6"></div>
+              <span class="product-badge pb-new">Nouveau</span>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Mini-album',79)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Albums</div>
+              <div class="product-name">Mini-album</div>
+              <div class="product-desc">Petit format 15×15 cm, 12 pages. Parfait à glisser dans un sac.</div>
+              <div><span class="product-price">79€</span></div>
+            </div>
+          </div>
+
+          <!-- CADEAUX / ACCESSOIRES -->
+          <div class="product-card reveal" data-cat="cadeaux">
+            <div class="product-img">
+              <div class="ph ph-7"></div>
+              <span class="product-badge pb-promo">-10%</span>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Tasse photo',19)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Cadeaux</div>
+              <div class="product-name">Tasse photo</div>
+              <div class="product-desc">Tasse personnalisée avec votre photo préférée. Cadeau parfait.</div>
+              <div><span class="product-price">19€</span><span class="product-old">21€</span></div>
+            </div>
+          </div>
+
+          <div class="product-card reveal reveal-delay-1" data-cat="cadeaux">
+            <div class="product-img">
+              <div class="ph ph-8"></div>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Coussin photo',34)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Cadeaux</div>
+              <div class="product-name">Coussin photo</div>
+              <div class="product-desc">Coussin 40×40 cm avec votre photo. Impression haute résolution.</div>
+              <div><span class="product-price">34€</span></div>
+            </div>
+          </div>
+
+          <div class="product-card reveal reveal-delay-2" data-cat="accessoires">
+            <div class="product-img">
+              <div class="ph ph-9"></div>
+              <div class="quick-add"><button class="fl-btn fl-btn-primary fl-btn-sm" style="width:100%;justify-content:center;" onclick="addToCart(event,'Calendrier',24)">+ Ajouter au panier</button></div>
+            </div>
+            <div class="product-body">
+              <div class="product-cat">Accessoires</div>
+              <div class="product-name">Calendrier</div>
+              <div class="product-desc">Calendrier mural 12 mois avec vos plus belles photos. Format A3.</div>
+              <div><span class="product-price">24€</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CART SIDEBAR -->
+      <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-head">
+          <h3>🛒 Mon panier</h3>
+        </div>
+        <div class="cart-empty" id="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <p>Votre panier est vide.<br>Ajoutez des produits depuis la galerie.</p>
+        </div>
+        <div id="cart-items-list" style="display:none; padding: 8px 0;"></div>
+        <div class="cart-total-row">
+          <span class="cart-total-label">Total</span>
+          <span class="cart-total-value" id="cart-total">0€</span>
+        </div>
+        <div class="cart-actions">
+          <button class="fl-btn fl-btn-primary" style="width:100%;justify-content:center;" onclick="alert('Fonctionnalité disponible bientôt !')">Valider mon panier →</button>
+        </div>
+        <div class="cart-note">Livraison offerte dès 80€ · Code LUMIERE</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- INFO BAR -->
+<section class="info-bar">
+  <div class="fl-container">
+    <div class="info-grid">
+      <div class="info-item reveal">
+        <div class="info-icon">🖨️</div>
+        <h4>Qualité musée</h4>
+        <p>Papier Hahnemühle Fine Art, standard galerie d'art.</p>
+      </div>
+      <div class="info-item reveal reveal-delay-1">
+        <div class="info-icon">📦</div>
+        <h4>Livraison soignée</h4>
+        <p>Emballage protecteur, suivi. Offerte dès 80€ d'achat.</p>
+      </div>
+      <div class="info-item reveal reveal-delay-2">
+        <div class="info-icon">✓</div>
+        <h4>Vérifié par Capucine</h4>
+        <p>Chaque produit contrôlé avant expédition.</p>
+      </div>
+      <div class="info-item reveal reveal-delay-3">
+        <div class="info-icon">↩️</div>
+        <h4>Satisfait ou refait</h4>
+        <p>Un défaut de fabrication ? On refait gratuitement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO ORDER -->
+<section class="how-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Comment commander</div>
+      <h2>Comment <em>commander</em> ?</h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="how-grid">
+      <div class="how-step reveal reveal-delay-1">
+        <div class="how-num hn1">1</div>
+        <h4>Choisissez vos photos</h4>
+        <p>Depuis votre galerie privée, sélectionnez les photos à imprimer. Chaque photo est retouchée à la main.</p>
+      </div>
+      <div class="how-step reveal reveal-delay-2">
+        <div class="how-num hn2">2</div>
+        <h4>Choisissez le support</h4>
+        <p>Tirage, album, objet personnalisé… choisissez le format et les options qui vous correspondent.</p>
+      </div>
+      <div class="how-step reveal reveal-delay-3">
+        <div class="how-num hn3">3</div>
+        <h4>Recevez chez vous</h4>
+        <p>Contrôlé par Capucine, livré sous 7-10 jours ouvrés dans un emballage protecteur.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="reserver">
+  <div class="fl-container">
+    <h2>Pas encore de <em>galerie</em> ?</h2>
+    <p>Réservez une séance photo et vos images deviendront des souvenirs à toucher, à offrir, à chérir.</p>
+    <div class="cta-actions">
+      <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance →</a>
+      <a href="05-tarifs.html" class="fl-btn fl-btn-ghost fl-btn-lg">Voir les formules</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+
+  function filterCat(el, cat) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const cards = document.querySelectorAll('.product-card');
+    let count = 0;
+    cards.forEach(c => {
+      const show = cat === 'all' || c.dataset.cat === cat;
+      c.style.display = show ? '' : 'none';
+      if (show) count++;
+    });
+    document.getElementById('product-count').textContent = count + ' produits';
+  }
+
+  // Simple cart state
+  let cart = [];
+  let cartTotal = 0;
+
+  function addToCart(e, name, price) {
+    if (e) e.stopPropagation();
+    cart.push({ name, price });
+    cartTotal += price;
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const countEl = document.getElementById('cart-count');
+    const totalEl = document.getElementById('cart-total');
+    const emptyEl = document.getElementById('cart-empty');
+    const listEl = document.getElementById('cart-items-list');
+    countEl.textContent = cart.length;
+    totalEl.textContent = cartTotal + '€';
+    if (cart.length > 0) {
+      emptyEl.style.display = 'none';
+      listEl.style.display = 'block';
+      listEl.innerHTML = cart.map(item => `
+        <div style="display:flex;justify-content:space-between;padding:10px 20px;font-size:0.875rem;border-bottom:1px solid var(--fl-border);">
+          <span style="color:var(--fl-prune);font-weight:500;">${item.name}</span>
+          <span style="color:var(--fl-or);font-weight:700;">${item.price}€</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  function toggleCart() {
+    const sidebar = document.getElementById('cart-sidebar');
+    sidebar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Export Comptable — Fleur de Lumière Admin</title>
+  <link rel="stylesheet" href="../design-system.css" />
+  <style>
+    /* ── Revenue chart (CSS-only bars) ── */
+    .chart-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      height: 140px;
+      padding: 0 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .chart-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .chart-bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--fl-rose), var(--fl-prune));
+      opacity: 0.85;
+      transition: opacity 0.2s;
+      min-height: 4px;
+    }
+    .chart-bar:hover { opacity: 1; }
+    .chart-bar.current { background: linear-gradient(180deg, var(--fl-or), #B8860B); opacity: 1; }
+    .chart-label { font-size: 0.68rem; color: var(--fl-warm-gray); white-space: nowrap; }
+    .chart-amount { font-size: 0.7rem; font-weight: 600; color: var(--fl-prune); }
+    /* ── Export option card ── */
+    .export-opt {
+      border: 1.5px solid var(--fl-border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+    .export-opt:hover { border-color: var(--fl-prune); background: rgba(74,46,61,0.03); }
+    .export-opt.selected { border-color: var(--fl-prune); background: rgba(74,46,61,0.04); }
+    .export-opt-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .export-opt-title { font-weight: 600; font-size: 0.87rem; color: var(--fl-charcoal); }
+    .export-opt-desc { font-size: 0.75rem; color: var(--fl-warm-gray); margin-top: 0.1rem; }
+    /* ── Quick export button ── */
+    .quick-export {
+      border: 1px solid var(--fl-border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      background: var(--fl-bg-card);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .quick-export:hover { border-color: var(--fl-prune); }
+    /* ── TVA table ── */
+    .tva-row { background: rgba(74,46,61,0.02); }
+    /* ── Revenue breakdown ── */
+    .revenue-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--fl-border);
+    }
+    .revenue-item:last-child { border-bottom: none; }
+    .revenue-bar-wrap { flex: 1; }
+    .revenue-bar-bg { height: 8px; background: var(--fl-bg); border-radius: 99px; overflow: hidden; }
+    .revenue-bar-fill { height: 100%; border-radius: 99px; }
+  </style>
+</head>
+<body>
+
+<div class="fl-admin-layout">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-brand">
+      <div class="fl-sidebar-logo">FL</div>
+      <div>
+        <div class="fl-sidebar-name">Fleur de Lumière</div>
+        <div class="fl-sidebar-role">Administration</div>
+      </div>
+    </div>
+
+    <nav class="fl-sidebar-nav">
+      <div class="fl-sidebar-section">Général</div>
+
+      <a href="01-dashboard.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Tableau de bord
+      </a>
+
+      <a href="02-facturation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        Facturation
+      </a>
+
+      <div class="fl-sidebar-section">Outils</div>
+
+      <a href="06-assistant-admin.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Assistant Admin
+      </a>
+
+      <a href="09-marketing-automation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Automatisation
+      </a>
+
+      <a href="10-export-comptable.html" class="fl-sidebar-item active">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Comptable
+      </a>
+
+      <div class="fl-sidebar-section">Scolaire</div>
+
+      <a href="07-scolaire-admin.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Scolaire Admin
+      </a>
+
+      <a href="08-scolaire-ecole-parent.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        École &amp; Parents
+      </a>
+
+      <div class="fl-sidebar-section">Configuration</div>
+
+      <a href="03-parametres-1.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Paramètres
+      </a>
+
+      <a href="05-personnalisation.html" class="fl-sidebar-item ">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+        Personnalisation
+      </a>
+    </nav>
+
+    <div class="fl-sidebar-footer">
+      <div class="fl-sidebar-user">
+        <div class="fl-sidebar-avatar">M</div>
+        <div>
+          <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal)">Marie Lefèvre</div>
+          <div style="font-size:0.72rem;color:var(--fl-warm-gray)">Administratrice</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <main class="fl-admin-main">
+
+    <!-- Topbar -->
+    <div class="fl-topbar">
+      <nav class="fl-breadcrumb">
+        <span>Admin</span>
+        <span>›</span>
+        <span class="current">Export Comptable</span>
+      </nav>
+      <div style="display:flex;gap:0.75rem;align-items:center">
+        <span style="font-size:0.78rem;color:var(--fl-warm-gray)">Exercice :</span>
+        <select style="font-size:0.82rem;border:1px solid var(--fl-border);border-radius:8px;padding:0.35rem 0.7rem;color:var(--fl-charcoal);background:var(--fl-bg-card);outline:none">
+          <option>2025 (01/01 → 31/12)</option>
+          <option selected>2026 (01/01 → 31/12)</option>
+        </select>
+        <button class="fl-btn fl-btn-primary" style="font-size:0.82rem;padding:0.4rem 1rem">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exporter la sélection
+        </button>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+
+      <!-- ── KPI row ── -->
+      <div class="fl-grid-4" style="margin-bottom:2rem">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">CA 2026 (cumulé)</div>
+          <div class="fl-kpi-value">12 840 €</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">vs 9 640 € en 2025</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Recettes encaissées</div>
+          <div class="fl-kpi-value">11 420 €</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-warm-gray)">1 420 € en attente</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Cotisations URSSAF</div>
+          <div class="fl-kpi-value">2 284 €</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-warm-gray)">Prochaine échéance : 30 mars</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Bénéfice estimé</div>
+          <div class="fl-kpi-value">10 556 €</div>
+          <div class="fl-kpi-sub" style="color:var(--fl-sauge)">+33 % vs 2025</div>
+        </div>
+      </div>
+
+      <div class="fl-grid-2" style="margin-bottom:2rem">
+
+        <!-- Graphique CA mensuel -->
+        <div class="fl-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+            <h3 class="fl-card-title">CA mensuel 2026</h3>
+            <span class="fl-badge" style="background:rgba(212,160,60,0.1);color:#8B6A1A">Mois en cours : mars</span>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-col">
+              <div class="chart-amount">2 180 €</div>
+              <div class="chart-bar" style="height:75%"></div>
+              <div class="chart-label">Jan</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount">1 960 €</div>
+              <div class="chart-bar" style="height:67%"></div>
+              <div class="chart-label">Fév</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount">4 280 €</div>
+              <div class="chart-bar current" style="height:100%"></div>
+              <div class="chart-label">Mar</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Avr</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Mai</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Juin</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Juil</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Août</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Sep</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Oct</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Nov</div>
+            </div>
+            <div class="chart-col">
+              <div class="chart-amount"></div>
+              <div class="chart-bar" style="height:4%;opacity:0.25"></div>
+              <div class="chart-label">Déc</div>
+            </div>
+          </div>
+          <div style="font-size:0.73rem;color:var(--fl-warm-gray);text-align:center">Barres en doré = mois en cours · Grisées = projections nulles (données non disponibles)</div>
+        </div>
+
+        <!-- Répartition CA par type -->
+        <div class="fl-card">
+          <h3 class="fl-card-title" style="margin-bottom:1.25rem">Répartition par type de prestation</h3>
+
+          <div class="revenue-item">
+            <div style="width:120px;font-size:0.82rem;color:var(--fl-charcoal);font-weight:500">Portrait</div>
+            <div class="revenue-bar-wrap">
+              <div class="revenue-bar-bg"><div class="revenue-bar-fill" style="width:52%;background:var(--fl-prune)"></div></div>
+            </div>
+            <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal);min-width:60px;text-align:right">6 677 €</div>
+          </div>
+          <div class="revenue-item">
+            <div style="width:120px;font-size:0.82rem;color:var(--fl-charcoal);font-weight:500">Famille</div>
+            <div class="revenue-bar-wrap">
+              <div class="revenue-bar-bg"><div class="revenue-bar-fill" style="width:23%;background:var(--fl-rose)"></div></div>
+            </div>
+            <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal);min-width:60px;text-align:right">2 953 €</div>
+          </div>
+          <div class="revenue-item">
+            <div style="width:120px;font-size:0.82rem;color:var(--fl-charcoal);font-weight:500">Scolaire</div>
+            <div class="revenue-bar-wrap">
+              <div class="revenue-bar-bg"><div class="revenue-bar-fill" style="width:16%;background:var(--fl-or)"></div></div>
+            </div>
+            <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal);min-width:60px;text-align:right">2 054 €</div>
+          </div>
+          <div class="revenue-item">
+            <div style="width:120px;font-size:0.82rem;color:var(--fl-charcoal);font-weight:500">Événementiel</div>
+            <div class="revenue-bar-wrap">
+              <div class="revenue-bar-bg"><div class="revenue-bar-fill" style="width:9%;background:var(--fl-sauge)"></div></div>
+            </div>
+            <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal);min-width:60px;text-align:right">1 156 €</div>
+          </div>
+
+          <div style="margin-top:1.25rem;padding:0.85rem;background:var(--fl-bg);border-radius:10px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:0.77rem;color:var(--fl-warm-gray)">Plafond micro-entreprise 2026</div>
+              <div style="font-size:0.82rem;font-weight:600;color:var(--fl-charcoal);margin-top:0.2rem">77 700 € — Statut : sécurisé</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:0.77rem;color:var(--fl-warm-gray)">Utilisé</div>
+              <div style="font-family:var(--fl-font-heading);font-size:1.3rem;color:var(--fl-sauge);font-weight:600">16,5 %</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ URSSAF ══ -->
+      <div class="fl-card" style="margin-bottom:2rem;border-left:4px solid var(--fl-or)">
+        <div style="display:flex;align-items:center;gap:1rem">
+          <div style="width:48px;height:48px;border-radius:12px;background:rgba(212,160,60,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" fill="none" stroke="var(--fl-or)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-weight:600;color:var(--fl-charcoal)">Déclaration URSSAF — Trimestre 1 · 2026</div>
+            <div style="font-size:0.8rem;color:var(--fl-warm-gray);margin-top:0.2rem">CA à déclarer : <strong>8 420 €</strong> · Cotisations estimées : <strong>2 284 €</strong> · Taux : 22,2 %</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:0.75rem;color:var(--fl-warm-gray)">Échéance</div>
+            <div style="font-weight:700;color:var(--fl-or)">30 mars 2026</div>
+          </div>
+          <button class="fl-btn fl-btn-primary" style="font-size:0.82rem;padding:0.45rem 1rem;background:var(--fl-or);border-color:var(--fl-or)">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exporter la déclaration
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ Options d'export + Rapports rapides ══ -->
+      <div class="fl-grid-2" style="margin-bottom:2rem">
+
+        <!-- Format d'export -->
+        <div class="fl-card">
+          <h3 class="fl-card-title" style="margin-bottom:1rem">Format d'export</h3>
+          <div style="display:flex;flex-direction:column;gap:0.6rem">
+            <div class="export-opt selected">
+              <div class="export-opt-icon" style="background:rgba(74,46,61,0.08)">
+                <svg width="20" height="20" fill="none" stroke="var(--fl-prune)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+              <div>
+                <div class="export-opt-title">CSV — Tableur universel</div>
+                <div class="export-opt-desc">Compatible Excel, Numbers, LibreOffice</div>
+              </div>
+              <svg width="16" height="16" fill="none" stroke="var(--fl-prune)" stroke-width="2.5" viewBox="0 0 24 24" style="margin-left:auto"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 16 9"/></svg>
+            </div>
+            <div class="export-opt">
+              <div class="export-opt-icon" style="background:rgba(194,114,126,0.08)">
+                <svg width="20" height="20" fill="none" stroke="var(--fl-rose)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+              </div>
+              <div>
+                <div class="export-opt-title">PDF — Livre des recettes</div>
+                <div class="export-opt-desc">Format légal pour auto-entrepreneur</div>
+              </div>
+            </div>
+            <div class="export-opt">
+              <div class="export-opt-icon" style="background:rgba(107,127,90,0.08)">
+                <svg width="20" height="20" fill="none" stroke="var(--fl-sauge)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
+              <div>
+                <div class="export-opt-title">Pennylane</div>
+                <div class="export-opt-desc">Synchronisation automatique avec votre comptable</div>
+              </div>
+            </div>
+            <div class="export-opt">
+              <div class="export-opt-icon" style="background:rgba(212,160,60,0.08)">
+                <svg width="20" height="20" fill="none" stroke="var(--fl-or)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div>
+                <div class="export-opt-title">URSSAF — Déclaration directe</div>
+                <div class="export-opt-desc">Fichier pré-rempli pour le portail URSSAF</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Exports rapides -->
+        <div class="fl-card">
+          <h3 class="fl-card-title" style="margin-bottom:1rem">Exports rapides</h3>
+          <div style="display:flex;flex-direction:column;gap:0.6rem">
+            <div class="quick-export">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(74,46,61,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="17" height="17" fill="none" stroke="var(--fl-prune)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:0.85rem;font-weight:600;color:var(--fl-charcoal)">Livre des recettes 2026</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray)">PDF — toutes les transactions</div>
+              </div>
+              <button class="fl-btn fl-btn-primary" style="font-size:0.75rem;padding:0.3rem 0.75rem">Télécharger</button>
+            </div>
+            <div class="quick-export">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(194,114,126,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="17" height="17" fill="none" stroke="var(--fl-rose)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:0.85rem;font-weight:600;color:var(--fl-charcoal)">Déclaration URSSAF T1 2026</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray)">Pré-remplie · Échéance 30 mars</div>
+              </div>
+              <button class="fl-btn fl-btn-outline" style="font-size:0.75rem;padding:0.3rem 0.75rem">Générer</button>
+            </div>
+            <div class="quick-export">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(107,127,90,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="17" height="17" fill="none" stroke="var(--fl-sauge)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:0.85rem;font-weight:600;color:var(--fl-charcoal)">Bilan comparatif 2025–2026</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray)">CSV — données par mois et type</div>
+              </div>
+              <button class="fl-btn fl-btn-outline" style="font-size:0.75rem;padding:0.3rem 0.75rem">Exporter</button>
+            </div>
+            <div class="quick-export">
+              <div style="width:36px;height:36px;border-radius:9px;background:rgba(212,160,60,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="17" height="17" fill="none" stroke="var(--fl-or)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:0.85rem;font-weight:600;color:var(--fl-charcoal)">Synchroniser Pennylane</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray)">Dernière sync : 5 mars 2026</div>
+              </div>
+              <button class="fl-btn fl-btn-outline" style="font-size:0.75rem;padding:0.3rem 0.75rem">Sync</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ Livre des recettes ══ -->
+      <div class="fl-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem">
+          <div>
+            <h3 class="fl-card-title">Livre des recettes 2026</h3>
+            <div style="font-size:0.78rem;color:var(--fl-warm-gray);margin-top:0.2rem">Toutes les recettes encaissées · Auto-entrepreneur</div>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <input type="date" value="2026-01-01" style="font-size:0.8rem;border:1px solid var(--fl-border);border-radius:8px;padding:0.35rem 0.6rem;outline:none;color:var(--fl-charcoal)" />
+            <span style="font-size:0.8rem;color:var(--fl-warm-gray)">→</span>
+            <input type="date" value="2026-03-08" style="font-size:0.8rem;border:1px solid var(--fl-border);border-radius:8px;padding:0.35rem 0.6rem;outline:none;color:var(--fl-charcoal)" />
+            <button class="fl-btn fl-btn-outline" style="font-size:0.8rem;padding:0.35rem 0.75rem">Filtrer</button>
+          </div>
+        </div>
+
+        <table class="fl-table">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Date</th>
+              <th>Client</th>
+              <th>Prestation</th>
+              <th>Mode de paiement</th>
+              <th>Montant TTC</th>
+              <th>Nature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-001</td>
+              <td>03 jan. 2026</td>
+              <td>Sophie Martin</td>
+              <td>Séance Portrait 1h</td>
+              <td>Virement</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">170,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(74,46,61,0.08);color:var(--fl-prune);font-size:0.72rem">Portrait</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-002</td>
+              <td>07 jan. 2026</td>
+              <td>Claire Dubois</td>
+              <td>Pack Famille Premium</td>
+              <td>Carte bancaire</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">420,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(194,114,126,0.1);color:var(--fl-rose);font-size:0.72rem">Famille</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-003</td>
+              <td>15 jan. 2026</td>
+              <td>Emma Leroy</td>
+              <td>Séance Portrait 1h</td>
+              <td>Stripe</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">170,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(74,46,61,0.08);color:var(--fl-prune);font-size:0.72rem">Portrait</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-004</td>
+              <td>22 jan. 2026</td>
+              <td>École Ste-Marie</td>
+              <td>Session scolaire CP-A</td>
+              <td>Virement</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">680,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(212,160,60,0.1);color:#8B6A1A;font-size:0.72rem">Scolaire</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-005</td>
+              <td>02 fév. 2026</td>
+              <td>Lucie Bernard</td>
+              <td>Séance Portrait 1h</td>
+              <td>Carte bancaire</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">170,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(74,46,61,0.08);color:var(--fl-prune);font-size:0.72rem">Portrait</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-006</td>
+              <td>12 fév. 2026</td>
+              <td>Isabelle Roux</td>
+              <td>Pack Famille Standard</td>
+              <td>Stripe</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">290,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(194,114,126,0.1);color:var(--fl-rose);font-size:0.72rem">Famille</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-007</td>
+              <td>28 fév. 2026</td>
+              <td>Nathalie Petit</td>
+              <td>Séance Portrait 1h</td>
+              <td>Virement</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">170,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(74,46,61,0.08);color:var(--fl-prune);font-size:0.72rem">Portrait</span></td>
+            </tr>
+            <tr>
+              <td style="font-family:monospace;font-size:0.8rem;color:var(--fl-warm-gray)">REC-2026-008</td>
+              <td>05 mar. 2026</td>
+              <td>Collège Jean Moulin</td>
+              <td>Session scolaire 6e-A</td>
+              <td>Virement</td>
+              <td style="font-weight:600;color:var(--fl-charcoal)">840,00 €</td>
+              <td><span class="fl-badge" style="background:rgba(212,160,60,0.1);color:#8B6A1A;font-size:0.72rem">Scolaire</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Total bar -->
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0 0;border-top:2px solid var(--fl-border);margin-top:1rem">
+          <span style="font-size:0.85rem;color:var(--fl-warm-gray)">8 recettes affichées sur 47 au total</span>
+          <div style="display:flex;align-items:center;gap:1.5rem">
+            <div style="text-align:right">
+              <div style="font-size:0.75rem;color:var(--fl-warm-gray)">Total filtré</div>
+              <div style="font-family:var(--fl-font-heading);font-size:1.3rem;color:var(--fl-prune);font-weight:600">2 910,00 €</div>
+            </div>
+            <button class="fl-btn fl-btn-primary" style="font-size:0.82rem;padding:0.45rem 1.1rem">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Télécharger le livre complet
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fl-admin-content -->
+  </main>
+</div><!-- /fl-admin-layout -->
+
+</body>
+</html>

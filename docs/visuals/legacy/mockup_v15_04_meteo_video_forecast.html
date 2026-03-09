@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Météo + Témoignage Vidéo + Revenue Forecast</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #C2727E; --rose-light: #F5E1E4; --rose-pale: #FFF5F7;
+    --prune: #4A2E3D; --charcoal: #2D2226; --warm-gray: #8A7A7E;
+    --bg: #FDFBFC; --white: #FFFFFF; --cream: #FDF9F7;
+    --success: #4CAF7C; --success-bg: #E8F5EE;
+    --warning: #E8985E; --warning-bg: #FFF3EB;
+    --info: #5B8FA8; --info-bg: #E8F0F4;
+    --border: #F0E8EB;
+    --shadow: 0 2px 16px rgba(74,46,61,0.06);
+    --shadow-lg: 0 8px 32px rgba(74,46,61,0.08);
+    --gold: #C9A96E;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Outfit', sans-serif; color: var(--charcoal); }
+  .mockup-tag { display: inline-block; background: #FFE066; color: #5D4E00; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 8px; }
+  .screen-divider { background: var(--prune); padding: 20px; text-align: center; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 2px; text-transform: uppercase; }
+  .screen-divider span { background: rgba(255,255,255,0.08); padding: 6px 20px; border-radius: 20px; }
+
+  .section-screen { padding: 40px; min-height: 60vh; }
+  .section-screen.light { background: var(--bg); }
+  .section-screen.cream { background: var(--cream); }
+  .section-container { max-width: 800px; margin: 0 auto; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--prune); margin-bottom: 6px; }
+  .section-sub { font-size: 13px; color: var(--warm-gray); margin-bottom: 28px; }
+
+  .card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; }
+  .card-header { padding: 16px 22px; background: var(--rose-pale); border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; color: var(--prune); display: flex; align-items: center; gap: 8px; }
+  .card-body { padding: 22px; }
+
+  /* ===== METEO INTELLIGENTE ===== */
+  .meteo-session { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--cream); border-radius: 12px; margin-bottom: 16px; }
+  .meteo-session-icon { font-size: 24px; }
+  .meteo-session-info { flex: 1; }
+  .meteo-session-name { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+  .meteo-session-detail { font-size: 12px; color: var(--warm-gray); }
+
+  .meteo-forecast { display: flex; gap: 12px; margin-bottom: 20px; }
+  .meteo-day { flex: 1; background: var(--cream); border-radius: 12px; padding: 14px; text-align: center; border: 1.5px solid var(--border); }
+  .meteo-day.today { border-color: var(--rose); background: var(--rose-pale); }
+  .meteo-day.shooting { border-color: var(--success); background: var(--success-bg); }
+  .meteo-day-name { font-size: 11px; font-weight: 600; color: var(--warm-gray); text-transform: uppercase; letter-spacing: 0.5px; }
+  .meteo-day-icon { font-size: 26px; margin: 6px 0; }
+  .meteo-day-temp { font-size: 16px; font-weight: 700; color: var(--prune); }
+  .meteo-day-badge { font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 4px; margin-top: 4px; display: inline-block; }
+  .meteo-day-badge.good { background: var(--success-bg); color: var(--success); }
+  .meteo-day-badge.warn { background: var(--warning-bg); color: var(--warning); }
+
+  .golden-hour { background: linear-gradient(135deg, #FFF3EB, #F8E8D8); border-radius: 14px; padding: 18px 20px; border: 1px solid #F0D8C0; margin-bottom: 16px; }
+  .golden-hour-title { font-size: 14px; font-weight: 600; color: var(--warning); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .golden-hour-timeline { display: flex; align-items: center; gap: 0; position: relative; height: 40px; }
+  .gh-segment { flex: 1; height: 8px; border-radius: 4px; position: relative; }
+  .gh-segment.harsh { background: #F0D4B8; }
+  .gh-segment.soft { background: #E8C8A0; }
+  .gh-segment.golden { background: linear-gradient(90deg, var(--gold), var(--warning)); }
+  .gh-segment.blue { background: #A0B8D0; }
+  .gh-label { position: absolute; bottom: -18px; font-size: 9px; color: var(--warm-gray); white-space: nowrap; }
+  .gh-label.start { left: 0; }
+  .gh-label.end { right: 0; }
+  .gh-time { display: flex; justify-content: space-between; font-size: 10px; color: var(--warm-gray); margin-top: 22px; }
+
+  .meteo-recommendation { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; }
+  .meteo-recommendation.good { background: var(--success-bg); border: 1px solid #B8D8B4; }
+  .meteo-recommendation.warn { background: var(--warning-bg); border: 1px solid #F0D4B8; }
+  .meteo-recommendation-icon { font-size: 24px; }
+  .meteo-recommendation-text { flex: 1; font-size: 13px; line-height: 1.4; }
+  .meteo-recommendation-text strong { font-weight: 600; }
+  .meteo-recommendation.good .meteo-recommendation-text { color: #2E6E3E; }
+  .meteo-recommendation.warn .meteo-recommendation-text { color: #8B5E2F; }
+
+  .meteo-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--white); border: 1.5px solid var(--border); padding: 8px 16px; border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: 12px; color: var(--prune); cursor: pointer; margin-top: 12px; }
+
+  /* ===== TEMOIGNAGE VIDEO ===== */
+  .video-record-area { background: var(--charcoal); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .video-record-area::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(194,114,126,0.1), transparent 70%); }
+  .video-preview { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 20px; background: linear-gradient(135deg, #555, #444, #3A3A3A); border: 4px solid rgba(194,114,126,0.3); display: flex; align-items: center; justify-content: center; font-size: 48px; position: relative; z-index: 1; }
+  .video-rec-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #E85D5D; font-weight: 600; margin-bottom: 8px; position: relative; z-index: 1; }
+  .video-rec-dot { width: 10px; height: 10px; border-radius: 50%; background: #E85D5D; animation: recblink 1s infinite; }
+  @keyframes recblink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .video-timer { font-size: 28px; font-weight: 700; color: white; font-family: 'Outfit', sans-serif; position: relative; z-index: 1; }
+  .video-max { font-size: 11px; color: rgba(255,255,255,0.35); position: relative; z-index: 1; }
+
+  .video-controls { display: flex; justify-content: center; gap: 16px; margin-top: 20px; position: relative; z-index: 1; }
+  .video-ctrl-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; border: none; cursor: pointer; }
+  .video-ctrl-btn.stop { background: #E85D5D; color: white; }
+  .video-ctrl-btn.restart { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border: 1.5px solid rgba(255,255,255,0.15); }
+  .video-ctrl-btn.validate { background: var(--success); color: white; }
+
+  .video-questions { margin-top: 16px; }
+  .video-question-label { font-size: 12px; font-weight: 600; color: var(--prune); margin-bottom: 8px; }
+  .video-questions-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .video-question-chip { padding: 6px 14px; border-radius: 20px; font-size: 12px; background: var(--rose-pale); color: var(--rose); border: 1px solid var(--rose-light); cursor: pointer; }
+
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .testimonial-thumb { border-radius: 12px; overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 9/16; max-height: 200px; }
+  .testimonial-thumb-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .testimonial-thumb-img.v1 { background: linear-gradient(135deg, #D0B8A8, #C0A898); }
+  .testimonial-thumb-img.v2 { background: linear-gradient(135deg, #B8C8B0, #A8B8A0); }
+  .testimonial-thumb-img.v3 { background: linear-gradient(135deg, #C8B8D0, #B8A8C0); }
+  .testimonial-thumb-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); }
+  .testimonial-thumb-play span { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--prune); }
+  .testimonial-thumb-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); }
+  .testimonial-thumb-name { font-size: 11px; font-weight: 600; color: white; }
+  .testimonial-thumb-type { font-size: 9px; color: rgba(255,255,255,0.6); }
+
+  /* ===== REVENUE FORECAST ===== */
+  .forecast-chart { background: var(--cream); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .forecast-months { display: flex; gap: 8px; align-items: flex-end; height: 180px; }
+  .forecast-month { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .forecast-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; justify-content: center; }
+  .forecast-bar { width: 32px; border-radius: 6px 6px 0 0; transition: height 0.5s; min-height: 4px; }
+  .forecast-bar.actual { background: var(--rose); }
+  .forecast-bar.predicted { background: var(--rose-light); border: 1.5px dashed var(--rose); background: repeating-linear-gradient(45deg, var(--rose-pale), var(--rose-pale) 2px, var(--rose-light) 2px, var(--rose-light) 4px); }
+  .forecast-label { font-size: 10px; color: var(--warm-gray); font-weight: 500; }
+  .forecast-value { font-size: 11px; font-weight: 600; color: var(--prune); }
+
+  .forecast-legend { display: flex; gap: 16px; justify-content: center; margin-top: 12px; font-size: 11px; color: var(--warm-gray); }
+  .forecast-legend-item { display: flex; align-items: center; gap: 5px; }
+  .fl-dot { width: 12px; height: 12px; border-radius: 3px; }
+  .fl-dot.actual { background: var(--rose); }
+  .fl-dot.predicted { background: var(--rose-light); border: 1px dashed var(--rose); }
+
+  .forecast-insights { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .forecast-insight { background: var(--cream); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+  .forecast-insight-icon { font-size: 20px; margin-bottom: 6px; }
+  .forecast-insight-title { font-size: 13px; font-weight: 600; color: var(--charcoal); margin-bottom: 3px; }
+  .forecast-insight-text { font-size: 12px; color: var(--warm-gray); line-height: 1.4; }
+
+  .alert-card { border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 13px; }
+  .alert-card.warn { background: var(--warning-bg); border: 1px solid #F0D4B8; color: #8B5E2F; }
+  .alert-card.good { background: var(--success-bg); border: 1px solid #B8D8B4; color: #2E6E3E; }
+  .alert-card-icon { font-size: 20px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- ===== SECTION 1: MÉTÉO INTELLIGENTE ===== -->
+<div class="section-screen light">
+  <div class="section-container">
+    <div class="section-title">Météo Intelligente <span class="mockup-tag">V1.5 — Admin</span></div>
+    <div class="section-sub">Prévisions météo et Golden Hour pour vos séances extérieures à venir</div>
+
+    <div class="card">
+      <div class="card-header">🌤️ Prochaine séance extérieure</div>
+      <div class="card-body">
+        <div class="meteo-session">
+          <div class="meteo-session-icon">👨‍👩‍👧</div>
+          <div class="meteo-session-info">
+            <div class="meteo-session-name">Sophie Dupont — Séance Famille</div>
+            <div class="meteo-session-detail">📍 Parc de la Maourine · 📅 Samedi 22 février · 🕐 17h30</div>
+          </div>
+        </div>
+
+        <!-- 5-day forecast -->
+        <div class="meteo-forecast">
+          <div class="meteo-day today">
+            <div class="meteo-day-name">Mer 19</div>
+            <div class="meteo-day-icon">☀️</div>
+            <div class="meteo-day-temp">14°</div>
+            <div class="meteo-day-badge good">Auj.</div>
+          </div>
+          <div class="meteo-day">
+            <div class="meteo-day-name">Jeu 20</div>
+            <div class="meteo-day-icon">⛅</div>
+            <div class="meteo-day-temp">12°</div>
+          </div>
+          <div class="meteo-day">
+            <div class="meteo-day-name">Ven 21</div>
+            <div class="meteo-day-icon">🌤️</div>
+            <div class="meteo-day-temp">13°</div>
+          </div>
+          <div class="meteo-day shooting">
+            <div class="meteo-day-name">Sam 22</div>
+            <div class="meteo-day-icon">☀️</div>
+            <div class="meteo-day-temp">15°</div>
+            <div class="meteo-day-badge good">Séance ✓</div>
+          </div>
+          <div class="meteo-day">
+            <div class="meteo-day-name">Dim 23</div>
+            <div class="meteo-day-icon">🌧️</div>
+            <div class="meteo-day-temp">10°</div>
+            <div class="meteo-day-badge warn">Pluie</div>
+          </div>
+        </div>
+
+        <!-- Golden Hour timeline -->
+        <div class="golden-hour">
+          <div class="golden-hour-title">🌅 Planning lumière — Samedi 22 février</div>
+          <div class="golden-hour-timeline">
+            <div class="gh-segment harsh" style="flex: 3;">
+              <span class="gh-label start">12h</span>
+            </div>
+            <div class="gh-segment soft" style="flex: 2;">
+              <span class="gh-label start">15h</span>
+            </div>
+            <div class="gh-segment golden" style="flex: 1.5;">
+              <span class="gh-label start" style="color: var(--warning); font-weight: 600;">17h20 ★</span>
+            </div>
+            <div class="gh-segment blue" style="flex: 0.5;">
+              <span class="gh-label end">18h50</span>
+            </div>
+          </div>
+          <div class="gh-time">
+            <span>Lumière dure</span>
+            <span>Lumière douce</span>
+            <span style="color: var(--warning); font-weight: 600;">Golden Hour 17h20–18h30</span>
+            <span>Blue Hour</span>
+          </div>
+        </div>
+
+        <div class="meteo-recommendation good">
+          <div class="meteo-recommendation-icon">✅</div>
+          <div class="meteo-recommendation-text">
+            <strong>Conditions parfaites pour samedi !</strong> Ciel dégagé, 15°C, Golden Hour idéale entre 17h20 et 18h30. Votre créneau de 17h30 est pile dans la lumière dorée.
+          </div>
+        </div>
+
+        <button class="meteo-btn">📩 Envoyer un message météo à Sophie</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Témoignage Vidéo ↓</span></div>
+
+<!-- ===== SECTION 2: TEMOIGNAGE VIDEO ===== -->
+<div class="section-screen cream">
+  <div class="section-container">
+    <div class="section-title">Témoignage Vidéo <span class="mockup-tag">V1.5</span></div>
+    <div class="section-sub">Collectez des témoignages vidéo authentiques de vos clients pour votre site vitrine</div>
+
+    <!-- Recording interface (client side) -->
+    <div class="card">
+      <div class="card-header">🎥 Enregistrement — Vue client</div>
+      <div class="card-body" style="padding: 0;">
+        <div class="video-record-area">
+          <div class="video-preview">📹</div>
+          <div class="video-rec-indicator"><div class="video-rec-dot"></div> Enregistrement en cours</div>
+          <div class="video-timer">0:18</div>
+          <div class="video-max">Maximum 60 secondes</div>
+          <div class="video-controls">
+            <button class="video-ctrl-btn restart">↺</button>
+            <button class="video-ctrl-btn stop">■</button>
+            <button class="video-ctrl-btn validate">✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question prompts -->
+    <div class="card">
+      <div class="card-body">
+        <div class="video-question-label">💬 Questions guides pour aider le client</div>
+        <div class="video-questions-list">
+          <div class="video-question-chip">Comment avez-vous trouvé l'expérience ?</div>
+          <div class="video-question-chip">Quel moment avez-vous préféré ?</div>
+          <div class="video-question-chip">Recommanderiez-vous à vos proches ?</div>
+          <div class="video-question-chip">Comment décririez-vous votre photographe ?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: collected testimonials -->
+    <div class="card">
+      <div class="card-header">📹 Témoignages collectés — Admin</div>
+      <div class="card-body">
+        <div class="testimonials-grid">
+          <div class="testimonial-thumb">
+            <div class="testimonial-thumb-img v1"></div>
+            <div class="testimonial-thumb-play"><span>▶</span></div>
+            <div class="testimonial-thumb-info">
+              <div class="testimonial-thumb-name">Sophie D.</div>
+              <div class="testimonial-thumb-type">Famille · 0:42</div>
+            </div>
+          </div>
+          <div class="testimonial-thumb">
+            <div class="testimonial-thumb-img v2"></div>
+            <div class="testimonial-thumb-play"><span>▶</span></div>
+            <div class="testimonial-thumb-info">
+              <div class="testimonial-thumb-name">Marie F.</div>
+              <div class="testimonial-thumb-type">Maternité · 0:38</div>
+            </div>
+          </div>
+          <div class="testimonial-thumb">
+            <div class="testimonial-thumb-img v3"></div>
+            <div class="testimonial-thumb-play"><span>▶</span></div>
+            <div class="testimonial-thumb-info">
+              <div class="testimonial-thumb-name">Lucas G.</div>
+              <div class="testimonial-thumb-type">Équestre · 0:55</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DIVIDER -->
+<div class="screen-divider"><span>↓ Revenue Forecast ↓</span></div>
+
+<!-- ===== SECTION 3: REVENUE FORECAST ===== -->
+<div class="section-screen light">
+  <div class="section-container">
+    <div class="section-title">Prévisions de Revenus <span class="mockup-tag">V1.5 — Admin</span></div>
+    <div class="section-sub">Projection basée sur vos réservations confirmées, galeries en cours et tendances saisonnières</div>
+
+    <div class="alert-card good">
+      <div class="alert-card-icon">📈</div>
+      <strong>Tendance positive !</strong> Vos réservations pour avril sont 25% au-dessus de la même période l'an dernier.
+    </div>
+
+    <div class="alert-card warn">
+      <div class="alert-card-icon">⚠️</div>
+      <strong>Mai s'annonce calme</strong> — seulement 2 réservations confirmées. C'est le bon moment pour lancer une offre mini-sessions ou relancer vos anciens clients.
+    </div>
+
+    <div class="card">
+      <div class="card-header">📊 Projection 6 mois</div>
+      <div class="card-body">
+        <div class="forecast-chart">
+          <div class="forecast-months">
+            <div class="forecast-month">
+              <div class="forecast-value">1 840€</div>
+              <div class="forecast-bar-wrap"><div class="forecast-bar actual" style="height: 85px;"></div></div>
+              <div class="forecast-label">Jan</div>
+            </div>
+            <div class="forecast-month">
+              <div class="forecast-value">2 120€</div>
+              <div class="forecast-bar-wrap"><div class="forecast-bar actual" style="height: 98px;"></div></div>
+              <div class="forecast-label">Fév</div>
+            </div>
+            <div class="forecast-month">
+              <div class="forecast-value">2 340€</div>
+              <div class="forecast-bar-wrap"><div class="forecast-bar actual" style="height: 108px;"></div></div>
+              <div class="forecast-label">Mars</div>
+            </div>
+            <div class="forecast-month">
+              <div class="forecast-value">~2 800€</div>
+              <div class="forecast-bar-wrap"><div class="forecast-bar predicted" style="height: 130px;"></div></div>
+              <div class="forecast-label">Avr</div>
+            </div>
+            <div class="forecast-month">
+              <div class="forecast-value">~1 600€</div>
+              <div class="forecast-bar-wrap"><div class="forecast-bar predicted" style="height: 74px;"></div></div>
+              <div class="forecast-label">Mai</div>
+            </div>
+            <div class="forecast-month">
+              <div class="forecast-value">~3 200€</div>
+              <div class="forecast-bar-wrap"><div class="forecast-bar predicted" style="height: 148px;"></div></div>
+              <div class="forecast-label">Juin</div>
+            </div>
+          </div>
+          <div class="forecast-legend">
+            <div class="forecast-legend-item"><div class="fl-dot actual"></div> Réalisé</div>
+            <div class="forecast-legend-item"><div class="fl-dot predicted"></div> Prévisionnel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">💡 Insights & Recommandations</div>
+      <div class="card-body">
+        <div class="forecast-insights">
+          <div class="forecast-insight">
+            <div class="forecast-insight-icon">🔥</div>
+            <div class="forecast-insight-title">Juin sera votre meilleur mois</div>
+            <div class="forecast-insight-text">5 mariages confirmés + saison des séances extérieures. Prévoyez votre charge de travail en retouche.</div>
+          </div>
+          <div class="forecast-insight">
+            <div class="forecast-insight-icon">💡</div>
+            <div class="forecast-insight-title">Lancez des mini-sessions en mai</div>
+            <div class="forecast-insight-text">Mai est traditionnellement calme. Une offre mini-sessions "Fête des Mères" pourrait combler le creux.</div>
+          </div>
+          <div class="forecast-insight">
+            <div class="forecast-insight-icon">📦</div>
+            <div class="forecast-insight-title">Tirages en hausse</div>
+            <div class="forecast-insight-text">Vos ventes de tirages représentent 18% du CA, en hausse grâce aux campagnes Avant-Première. Continuez !</div>
+          </div>
+          <div class="forecast-insight">
+            <div class="forecast-insight-icon">🔄</div>
+            <div class="forecast-insight-title">12 clients à relancer</div>
+            <div class="forecast-insight-text">12 clients de l'an dernier n'ont pas rebooké. Une campagne anniversaire pourrait les réactiver.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

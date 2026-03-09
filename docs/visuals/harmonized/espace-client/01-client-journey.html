@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Parcours — Espace Client — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== SHELL C — CLIENT PORTAL ===== */
+  .cp-nav {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 0 var(--fl-space-xl);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .cp-nav-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .cp-nav-logo em { color: var(--fl-rose); font-style: normal; }
+
+  .cp-nav-links {
+    display: flex;
+    gap: var(--fl-space-xl);
+    align-items: center;
+  }
+
+  .cp-nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fl-warm-gray);
+    text-decoration: none;
+    padding: 20px 0;
+    border-bottom: 2px solid transparent;
+    transition: all var(--fl-transition);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cp-nav-link:hover { color: var(--fl-charcoal); }
+  .cp-nav-link.active { color: var(--fl-prune); border-bottom-color: var(--fl-rose); font-weight: 600; }
+
+  .cp-nav-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  /* ===== PAGE CONTENT ===== */
+  .cp-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--fl-space-2xl) var(--fl-space-lg);
+  }
+
+  /* ===== HERO ===== */
+  .cp-hero {
+    margin-bottom: var(--fl-space-2xl);
+  }
+
+  .cp-hero-greeting {
+    font-size: 0.875rem;
+    color: var(--fl-warm-gray);
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .cp-hero-name {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 600;
+    color: var(--fl-prune);
+    line-height: 1.15;
+  }
+
+  .cp-hero-msg {
+    font-size: 0.9375rem;
+    color: var(--fl-warm-gray);
+    margin-top: var(--fl-space-sm);
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  /* ===== COUNTDOWN BANNER ===== */
+  .cp-countdown {
+    background: linear-gradient(135deg, var(--fl-prune), var(--fl-prune-light));
+    border-radius: var(--fl-radius-lg);
+    padding: var(--fl-space-xl) var(--fl-space-2xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--fl-space-2xl);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .cp-countdown::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(194,114,126,0.15);
+    border-radius: 50%;
+  }
+
+  .cp-countdown::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: 20%;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .cp-countdown-info {
+    position: relative;
+    z-index: 2;
+  }
+
+  .cp-countdown-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.65;
+    margin-bottom: 6px;
+  }
+
+  .cp-countdown-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.375rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .cp-countdown-sub {
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  .cp-countdown-timer {
+    display: flex;
+    gap: var(--fl-space-md);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .cp-timer-unit {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--fl-radius-sm);
+    padding: var(--fl-space-md) var(--fl-space-lg);
+    min-width: 64px;
+  }
+
+  .cp-timer-val {
+    font-family: var(--fl-font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--fl-or);
+  }
+
+  .cp-timer-lbl {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.65;
+    margin-top: 4px;
+  }
+
+  /* ===== SECTION TITLE ===== */
+  .cp-section-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-lg);
+  }
+
+  /* ===== JOURNEY PROGRESS ===== */
+  .journey-card {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--fl-space-xl);
+    box-shadow: var(--fl-shadow);
+  }
+
+  .journey-card-header {
+    padding: var(--fl-space-xl) var(--fl-space-xl) var(--fl-space-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .journey-session-type {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--fl-rose);
+    margin-bottom: 4px;
+  }
+
+  .journey-session-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+  }
+
+  .journey-date {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    text-align: right;
+  }
+
+  .journey-date strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--fl-charcoal);
+    font-weight: 600;
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .journey-track {
+    padding: var(--fl-space-lg) var(--fl-space-xl) var(--fl-space-xl);
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 4px;
+    background: var(--fl-border);
+    border-radius: 2px;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--fl-success) 0%, var(--fl-rose) 100%);
+    position: relative;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: -3px;
+    width: 10px;
+    height: 10px;
+    background: var(--fl-rose);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(194,114,126,0.25);
+  }
+
+  .journey-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    top: -14px;
+  }
+
+  .js-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    cursor: pointer;
+  }
+
+  .js-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: all var(--fl-transition);
+    position: relative;
+    z-index: 2;
+    border: 2px solid var(--fl-border-dark);
+    background: var(--fl-bg-card);
+    color: var(--fl-border-dark);
+  }
+
+  .js-step.done .js-dot {
+    background: var(--fl-success);
+    border-color: var(--fl-success);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(76,175,124,0.3);
+  }
+
+  .js-step.active .js-dot {
+    background: var(--fl-bg-card);
+    border: 3px solid var(--fl-rose);
+    color: var(--fl-rose);
+    box-shadow: 0 2px 12px rgba(194,114,126,0.25);
+    animation: stepPulse 2s infinite;
+  }
+
+  @keyframes stepPulse {
+    0%, 100% { box-shadow: 0 2px 12px rgba(194,114,126,0.2); }
+    50%       { box-shadow: 0 2px 20px rgba(194,114,126,0.4); }
+  }
+
+  .js-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-align: center;
+    max-width: 72px;
+    line-height: 1.3;
+    color: var(--fl-border-dark);
+  }
+
+  .js-step.done .js-label  { color: var(--fl-success); font-weight: 600; }
+  .js-step.active .js-label { color: var(--fl-rose); font-weight: 700; }
+  .js-step.upcoming .js-label { color: var(--fl-warm-gray); }
+
+  .js-step.upcoming .js-dot {
+    border-color: var(--fl-border-dark);
+    color: var(--fl-warm-gray);
+  }
+
+  /* ===== JOURNEY STEP CARDS ===== */
+  .journey-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fl-space-md);
+    margin-bottom: var(--fl-space-2xl);
+  }
+
+  .jstep-card {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-lg);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    transition: all var(--fl-transition);
+  }
+
+  .jstep-card.completed {
+    background: var(--fl-sauge-light);
+    border-color: rgba(107,127,90,0.25);
+  }
+
+  .jstep-card.current {
+    background: var(--fl-rose-pale);
+    border-color: var(--fl-rose-light);
+    border-left: 4px solid var(--fl-rose);
+    box-shadow: var(--fl-shadow);
+  }
+
+  .jstep-card.upcoming {
+    opacity: 0.7;
+  }
+
+  .jstep-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--fl-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .jstep-icon.green  { background: var(--fl-success-light); }
+  .jstep-icon.rose   { background: var(--fl-rose-light); }
+  .jstep-icon.gray   { background: var(--fl-border); }
+
+  .jstep-content { flex: 1; }
+
+  .jstep-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .jstep-title {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--fl-charcoal);
+  }
+
+  .jstep-desc {
+    font-size: 0.875rem;
+    color: var(--fl-warm-gray);
+    line-height: 1.5;
+  }
+
+  .jstep-meta {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    margin-top: var(--fl-space-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    flex-wrap: wrap;
+  }
+
+  .jstep-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ===== PREP CARD ===== */
+  .prep-card {
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    overflow: hidden;
+    margin-bottom: var(--fl-space-xl);
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .prep-card-header {
+    background: linear-gradient(135deg, var(--fl-rose-pale), var(--fl-or-light));
+    padding: var(--fl-space-lg) var(--fl-space-xl);
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .prep-card-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    margin-bottom: 4px;
+  }
+
+  .prep-card-sub {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+  }
+
+  .prep-tips {
+    padding: var(--fl-space-lg) var(--fl-space-xl);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--fl-space-lg);
+  }
+
+  .prep-tip {
+    text-align: center;
+  }
+
+  .prep-tip-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--fl-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.375rem;
+    margin: 0 auto var(--fl-space-sm);
+  }
+
+  .prep-tip-icon.sun  { background: var(--fl-or-light); }
+  .prep-tip-icon.wear { background: var(--fl-rose-light); }
+  .prep-tip-icon.time { background: var(--fl-sauge-light); }
+
+  .prep-tip-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--fl-charcoal);
+    margin-bottom: 4px;
+  }
+
+  .prep-tip-val {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    line-height: 1.5;
+  }
+
+  /* ===== CONTACT CTA ===== */
+  .contact-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--fl-bg-card);
+    border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius);
+    padding: var(--fl-space-lg) var(--fl-space-xl);
+    box-shadow: var(--fl-shadow-sm);
+    margin-bottom: var(--fl-space-2xl);
+  }
+
+  .contact-cta-info {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-md);
+  }
+
+  .contact-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.375rem;
+    flex-shrink: 0;
+  }
+
+  .contact-cta-name {
+    font-weight: 600;
+    color: var(--fl-charcoal);
+    font-size: 0.9375rem;
+  }
+
+  .contact-cta-sub {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    margin-top: 2px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .cp-nav-links { display: none; }
+    .cp-countdown { flex-direction: column; gap: var(--fl-space-lg); }
+    .prep-tips { grid-template-columns: 1fr; }
+    .cp-page { padding: var(--fl-space-lg); }
+    .contact-cta { flex-direction: column; gap: var(--fl-space-md); align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="cp-nav">
+  <div class="cp-nav-logo">Fleur de <em>Lumière</em></div>
+  <div class="cp-nav-links">
+    <a class="cp-nav-link active" href="01-client-journey.html">Mon Parcours</a>
+    <a class="cp-nav-link" href="#">Mes Photos</a>
+    <a class="cp-nav-link" href="#">Ma Réservation</a>
+    <a class="cp-nav-link" href="03-notifications.html">Notifications</a>
+    <a class="cp-nav-link" href="02-chatbot-client.html">Messages</a>
+  </div>
+  <div class="cp-nav-avatar" title="Sophie Mercier">S</div>
+</nav>
+
+<!-- PAGE -->
+<main class="cp-page">
+
+  <!-- HERO -->
+  <div class="cp-hero">
+    <div class="cp-hero-greeting">Mon espace personnel</div>
+    <h1 class="cp-hero-name">Bienvenue Sophie !</h1>
+    <p class="cp-hero-msg">Votre séance Famille se prépare dans la douceur. Retrouvez ici toutes les informations pour vivre un moment inoubliable.</p>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="cp-countdown">
+    <div class="cp-countdown-info">
+      <div class="cp-countdown-label">Votre prochaine séance</div>
+      <div class="cp-countdown-title">Forêt de Grésigne, Tarn</div>
+      <div class="cp-countdown-sub">Dimanche 15 mars 2026 — 19h45 · Heure Dorée</div>
+    </div>
+    <div class="cp-countdown-timer">
+      <div class="cp-timer-unit">
+        <div class="cp-timer-val">7</div>
+        <div class="cp-timer-lbl">Jours</div>
+      </div>
+      <div class="cp-timer-unit">
+        <div class="cp-timer-val">14</div>
+        <div class="cp-timer-lbl">Heures</div>
+      </div>
+      <div class="cp-timer-unit">
+        <div class="cp-timer-val">32</div>
+        <div class="cp-timer-lbl">Min</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNEY PROGRESS -->
+  <div class="cp-section-title">Votre parcours</div>
+
+  <div class="journey-card">
+    <div class="journey-card-header">
+      <div>
+        <div class="journey-session-type">Séance Famille — Formule Signature</div>
+        <div class="journey-session-title">Session Golden Hour au Tarn</div>
+      </div>
+      <div class="journey-date">
+        <strong>15 mars 2026</strong>
+        Réf. FL-2026-0847
+      </div>
+    </div>
+
+    <div class="journey-track">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" style="width: 48%;"></div>
+      </div>
+      <div class="journey-steps">
+        <div class="js-step done">
+          <div class="js-dot">&#10003;</div>
+          <div class="js-label">Réservation</div>
+        </div>
+        <div class="js-step done">
+          <div class="js-dot">&#10003;</div>
+          <div class="js-label">Questionnaire</div>
+        </div>
+        <div class="js-step active">
+          <div class="js-dot">3</div>
+          <div class="js-label">Préparation</div>
+        </div>
+        <div class="js-step upcoming">
+          <div class="js-dot">4</div>
+          <div class="js-label">Séance photo</div>
+        </div>
+        <div class="js-step upcoming">
+          <div class="js-dot">5</div>
+          <div class="js-label">Livraison galerie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAILED STEPS -->
+  <div class="journey-steps-list">
+
+    <!-- Step 1: Completed -->
+    <div class="jstep-card completed">
+      <div class="jstep-icon green">&#10003;</div>
+      <div class="jstep-content">
+        <div class="jstep-header">
+          <div class="jstep-title">Réservation confirmée</div>
+          <span class="fl-badge fl-badge-sauge">Terminé</span>
+        </div>
+        <div class="jstep-desc">Votre séance Signature Famille a été confirmée. Acompte de 92,70€ réglé.</div>
+        <div class="jstep-meta">
+          <span class="jstep-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            5 mars 2026
+          </span>
+          <span class="jstep-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Confirmation envoyée
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Completed -->
+    <div class="jstep-card completed">
+      <div class="jstep-icon green">&#10003;</div>
+      <div class="jstep-content">
+        <div class="jstep-header">
+          <div class="jstep-title">Questionnaire complété</div>
+          <span class="fl-badge fl-badge-sauge">Terminé</span>
+        </div>
+        <div class="jstep-desc">Merci pour vos réponses ! J'ai toutes les informations pour préparer une séance qui vous ressemble.</div>
+        <div class="jstep-meta">
+          <span class="jstep-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            7 mars 2026
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Current -->
+    <div class="jstep-card current">
+      <div class="jstep-icon rose">&#128247;</div>
+      <div class="jstep-content">
+        <div class="jstep-header">
+          <div class="jstep-title">Préparation en cours</div>
+          <span class="fl-badge fl-badge-rose">Étape actuelle</span>
+        </div>
+        <div class="jstep-desc">C'est le moment de préparer votre séance ! Consultez les conseils ci-dessous pour arriver serein(e) le jour J.</div>
+        <div class="jstep-meta">
+          <span class="jstep-meta-item" style="color: var(--fl-rose); font-weight: 600;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Dans 7 jours
+          </span>
+          <span class="jstep-meta-item">Forêt de Grésigne, Tarn</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Upcoming -->
+    <div class="jstep-card upcoming">
+      <div class="jstep-icon gray">&#128337;</div>
+      <div class="jstep-content">
+        <div class="jstep-header">
+          <div class="jstep-title">Séance photo</div>
+          <span class="fl-badge" style="background: var(--fl-border); color: var(--fl-warm-gray);">À venir</span>
+        </div>
+        <div class="jstep-desc">Rendez-vous le dimanche 15 mars à 19h45 dans la Forêt de Grésigne. La magie de l'Heure Dorée vous attend !</div>
+        <div class="jstep-meta">
+          <span class="jstep-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Dim. 15 mars 2026 — 19h45
+          </span>
+          <span class="jstep-meta-item">&#127749; Coucher à 20h02</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Upcoming -->
+    <div class="jstep-card upcoming">
+      <div class="jstep-icon gray">&#128444;&#65039;</div>
+      <div class="jstep-content">
+        <div class="jstep-header">
+          <div class="jstep-title">Livraison de votre galerie</div>
+          <span class="fl-badge" style="background: var(--fl-border); color: var(--fl-warm-gray);">En attente</span>
+        </div>
+        <div class="jstep-desc">Après la séance, je retouche chaque photo avec soin. Votre galerie privée vous sera livrée sous 2-3 semaines.</div>
+        <div class="jstep-meta">
+          <span class="jstep-meta-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Estimée fin mars 2026
+          </span>
+          <span class="jstep-meta-item">25 photos retouchées</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PREPARATION TIPS -->
+  <div class="cp-section-title">Préparez votre séance</div>
+
+  <div class="prep-card">
+    <div class="prep-card-header">
+      <div class="prep-card-title">&#127749; Conseils pour le 15 mars</div>
+      <div class="prep-card-sub">Forêt de Grésigne · Coucher de soleil 20h02 · Heure Dorée dès 19h00</div>
+    </div>
+    <div class="prep-tips">
+      <div class="prep-tip">
+        <div class="prep-tip-icon sun">&#9728;&#65039;</div>
+        <div class="prep-tip-label">Météo</div>
+        <div class="prep-tip-val">Ciel dégagé prévu. Lumière dorée idéale à partir de 19h30. Température : 14°C.</div>
+      </div>
+      <div class="prep-tip">
+        <div class="prep-tip-icon wear">&#128140;</div>
+        <div class="prep-tip-label">Tenues conseillées</div>
+        <div class="prep-tip-val">Tons naturels, beige, terracotta. Évitez le noir et les motifs trop chargés.</div>
+      </div>
+      <div class="prep-tip">
+        <div class="prep-tip-icon time">&#128336;</div>
+        <div class="prep-tip-label">Heure de rendez-vous</div>
+        <div class="prep-tip-val">Arrivez à 19h30 pour vous installer. La lumière sera parfaite à 19h45.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-cta">
+    <div class="contact-cta-info">
+      <div class="contact-avatar">&#127800;</div>
+      <div>
+        <div class="contact-cta-name">Capucine — Fleur de Lumière</div>
+        <div class="contact-cta-sub">Une question ? Je réponds sous 24h, souvent bien plus vite !</div>
+      </div>
+    </div>
+    <a href="02-chatbot-client.html" class="fl-btn fl-btn-primary fl-btn-lg">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Contacter Capucine
+    </a>
+  </div>
+
+</main>
+
+</body>
+</html>

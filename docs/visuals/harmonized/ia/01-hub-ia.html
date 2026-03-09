@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub IA — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  .ia-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--fl-space-lg); margin-bottom: var(--fl-space-xl); }
+  .ia-card { background: var(--fl-bg-card); border: 1px solid var(--fl-border); border-radius: var(--fl-radius); padding: var(--fl-space-lg); box-shadow: var(--fl-shadow-sm); transition: transform var(--fl-transition), box-shadow var(--fl-transition); display: flex; flex-direction: column; gap: var(--fl-space-md); }
+  .ia-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .ia-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--fl-space-md); }
+  .ia-card-icon { width: 48px; height: 48px; border-radius: var(--fl-radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .ia-card-icon svg { width: 24px; height: 24px; }
+  .ia-card-title { font-family: var(--fl-font-heading); font-size: 1.25rem; font-weight: 600; color: var(--fl-prune); }
+  .ia-card-desc { font-size: 0.875rem; color: var(--fl-warm-gray); line-height: 1.65; }
+  .ia-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: var(--fl-space-sm); border-top: 1px solid var(--fl-border); }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--fl-space-lg); margin-bottom: var(--fl-space-xl); }
+  .claude-banner { background: linear-gradient(135deg, var(--fl-prune) 0%, #6B3A55 100%); border-radius: var(--fl-radius); padding: var(--fl-space-lg) var(--fl-space-xl); display: flex; align-items: center; justify-content: space-between; gap: var(--fl-space-lg); }
+  .claude-banner-text h3 { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: white; margin-bottom: 4px; }
+  .claude-banner-text p { font-size: 0.875rem; color: rgba(255,255,255,0.6); }
+  .claude-logo { display: flex; align-items: center; gap: var(--fl-space-md); flex-shrink: 0; }
+  .claude-logo-mark { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--fl-rose), #D4889A); display: flex; align-items: center; justify-content: center; }
+  .claude-logo-text { font-family: var(--fl-font-heading); font-size: 1.125rem; font-weight: 600; color: white; }
+  .claude-logo-sub { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+  .page-header-flex { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--fl-space-xl); }
+</style>
+</head>
+<body>
+<div class="fl-admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="fl-sidebar">
+    <div class="fl-sidebar-logo">Fleur de <span>L</span>umière<div style="font-size:0.625rem;color:rgba(255,255,255,0.35);font-family:var(--fl-font-body);margin-top:2px;letter-spacing:1px;">ADMINISTRATION</div></div>
+
+    <div class="fl-sidebar-section">Général</div>
+    <a href="../admin/01-dashboard.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </a>
+
+    <div class="fl-sidebar-section">Finances</div>
+    <a href="../admin/02-facturation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      Facturation
+    </a>
+    <a href="../admin/19-statistiques.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Statistiques
+    </a>
+
+    <div class="fl-sidebar-section">Marketing</div>
+    <a href="../admin/09-marketing-automation.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Automatisation
+    </a>
+    <a href="../admin/17-blog-seo.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Blog &amp; SEO
+    </a>
+
+    <div class="fl-sidebar-section">Intelligence IA</div>
+    <a href="01-hub-ia.html" class="fl-sidebar-item active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      Hub IA
+    </a>
+    <a href="02-intel-crm.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      Intel CRM
+    </a>
+    <a href="03-leads-social-tri.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+      Leads &amp; Social
+    </a>
+    <a href="04-reconnaissance-faciale.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="17" y="1" width="6" height="6" rx="1"/></svg>
+      Recog. Faciale
+    </a>
+    <a href="05-lightroom.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      Lightroom / C1
+    </a>
+    <a href="06-print-preview-ar.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+      Aperçu AR
+    </a>
+    <a href="07-smart-pricing-vault.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Smart Pricing
+    </a>
+    <a href="08-social-planning-style.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Planning Social
+    </a>
+
+    <div class="fl-sidebar-section">Paramètres</div>
+    <a href="../admin/03-parametres-1.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M1 12h2M21 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M12 1v2M12 21v2"/></svg>
+      Paramètres
+    </a>
+    <a href="../admin/06-assistant-admin.html" class="fl-sidebar-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Assistant Admin
+    </a>
+
+    <div class="fl-sidebar-footer">
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1.125rem;color:white;flex-shrink:0;">C</div>
+      <div>
+        <div class="fl-sidebar-footer-name">Capucine</div>
+        <div class="fl-sidebar-footer-role">Photographe · Admin</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="fl-admin-main">
+    <div class="fl-topbar">
+      <div class="fl-breadcrumb">
+        <span>IA</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9,18 15,12 9,6"/></svg>
+        <span class="fl-breadcrumb-current">Hub IA</span>
+      </div>
+      <div class="fl-topbar-actions">
+        <span class="fl-badge fl-badge-success" style="font-size:0.75rem;">● En ligne</span>
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--fl-rose),#d4a0a8);display:flex;align-items:center;justify-content:center;font-family:var(--fl-font-heading);font-size:1rem;color:white;">C</div>
+      </div>
+    </div>
+
+    <div class="fl-admin-content">
+      <!-- Page header -->
+      <div class="page-header-flex">
+        <div>
+          <h1 class="fl-page-title">Intelligence Artificielle</h1>
+          <p class="fl-page-subtitle">Centre de commande — 8 modules IA actifs</p>
+        </div>
+        <span class="fl-badge fl-badge-rose" style="font-size:0.875rem;padding:8px 16px;">Alimenté par Claude</span>
+      </div>
+
+      <!-- Usage stats -->
+      <div class="stats-row">
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Appels API ce mois</div>
+          <div class="fl-kpi-value" style="color:var(--fl-prune);">1 247</div>
+          <div class="fl-kpi-trend up">+23% vs mois dernier</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Temps économisé</div>
+          <div class="fl-kpi-value" style="color:var(--fl-prune);">14h</div>
+          <div class="fl-kpi-trend up">Ce mois</div>
+        </div>
+        <div class="fl-kpi">
+          <div class="fl-kpi-label">Photos traitées</div>
+          <div class="fl-kpi-value" style="color:var(--fl-prune);">3 890</div>
+          <div class="fl-kpi-trend up">+847 cette semaine</div>
+        </div>
+      </div>
+
+      <!-- IA Feature cards -->
+      <div class="ia-feature-grid">
+
+        <!-- Intel CRM -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:var(--fl-or-light);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--fl-or)" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Intel CRM</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Analyse prédictive client</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-success">Actif</span>
+          </div>
+          <p class="ia-card-desc">Segmentation intelligente, score de fidélité, prédictions de rebooking et recommandations d'actions personnalisées pour chaque client.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">5 relances suggérées</span>
+            <a href="02-intel-crm.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Leads & Social -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:var(--fl-sauge-light);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--fl-sauge)" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Leads &amp; Social</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Pipeline &amp; tri assisté</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-success">Actif</span>
+          </div>
+          <p class="ia-card-desc">Qualification automatique des leads, scoring d'intention, réponses suggérées aux DMs Instagram et tri assisté des galeries client.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">7 leads chauds</span>
+            <a href="03-leads-social-tri.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Reconnaissance Faciale -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:rgba(91,143,168,0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--fl-info)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Recog. Faciale</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Recherche par visage</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-success">Actif</span>
+          </div>
+          <p class="ia-card-desc">Indexation automatique des visages dans vos galeries. Vos clients retrouvent instantanément toutes leurs photos parmi des milliers de clichés.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">1 247 photos indexées</span>
+            <a href="04-reconnaissance-faciale.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Lightroom / C1 -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:rgba(49,168,255,0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#31A8FF" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Lightroom / C1</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Intégrations logiciels</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-success">Actif</span>
+          </div>
+          <p class="ia-card-desc">Synchronisation bidirectionnelle avec Lightroom Classic et Capture One. Export automatique, sync des sélections clients et presets IA.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">2 apps connectées</span>
+            <a href="05-lightroom.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Aperçu AR -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:rgba(124,92,252,0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#7C5CFC" stroke-width="1.5"><path d="M1 4.5h3M20 4.5h3M1 19.5h3M20 19.5h3M4 1.5v3M4 20.5v3M20 1.5v3M20 20.5v3M7 7.5h10v9H7z"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Aperçu AR</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Visualisation dans votre intérieur</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-warning">Bêta</span>
+          </div>
+          <p class="ia-card-desc">Vos clients visualisent leurs photos encadrées chez eux en réalité augmentée avant de commander. Configurateur de format, cadre et finition.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">+35% de commandes tirages</span>
+            <a href="06-print-preview-ar.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Smart Pricing -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:var(--fl-or-light);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--fl-or)" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Smart Pricing</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Optimisation tarifaire</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-or">4 suggestions</span>
+          </div>
+          <p class="ia-card-desc">Recommandations de prix basées sur votre taux de remplissage, la saisonnalité et le benchmark régional. Simulateur de revenu intégré.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">+1 440€/an estimé</span>
+            <a href="07-smart-pricing-vault.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Vault Mémoire -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:var(--fl-rose-light);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--fl-rose)" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Vault Mémoire</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Archivage &amp; personnalisation</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-success">Actif</span>
+          </div>
+          <p class="ia-card-desc">Conservez les préférences, poses favorites et souvenirs personnels de chaque client. La mémoire longue durée pour personnaliser chaque séance.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">23 clients archivés</span>
+            <a href="07-smart-pricing-vault.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+        <!-- Planning Social -->
+        <div class="ia-card">
+          <div class="ia-card-top">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="ia-card-icon" style="background:rgba(225,48,108,0.08);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#E1306C" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </div>
+              <div>
+                <div class="ia-card-title">Planning Social</div>
+                <div style="font-size:0.75rem;color:var(--fl-warm-gray);">Contenu &amp; cohérence de feed</div>
+              </div>
+            </div>
+            <span class="fl-badge fl-badge-success">Actif</span>
+          </div>
+          <p class="ia-card-desc">Générateur de légendes, planning éditorial IA et analyse de cohérence de feed Instagram. Meilleurs horaires de publication calculés.</p>
+          <div class="ia-card-footer">
+            <span style="font-size:0.8125rem;color:var(--fl-warm-gray);">3 posts prêts à publier</span>
+            <a href="08-social-planning-style.html" class="fl-btn fl-btn-primary fl-btn-sm">Accéder</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Claude banner -->
+      <div class="claude-banner">
+        <div class="claude-logo">
+          <div class="claude-logo-mark">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          <div>
+            <div class="claude-logo-text">Propulsé par Claude</div>
+            <div class="claude-logo-sub">Anthropic · Modèle de langage avancé</div>
+          </div>
+        </div>
+        <div class="claude-banner-text" style="text-align:right;">
+          <h3>Intelligence artificielle de confiance</h3>
+          <p>Toutes les analyses et suggestions sont générées par Claude d'Anthropic · RGPD compliant</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleur de Lumière — Contactez-moi</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border);
+    transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto;
+    padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); letter-spacing: 0.3px; }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+  .site-nav a.active { color: var(--fl-rose); }
+  .site-nav a.active::after { width: 100%; }
+
+  /* ===== HERO CONTACT ===== */
+  .contact-hero {
+    padding: 72px 0 56px;
+    background: linear-gradient(160deg, var(--fl-bg) 0%, #fdf5f7 100%);
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .contact-hero::before {
+    content: ''; position: absolute; top: -120px; right: -180px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(194,114,126,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .contact-hero::after {
+    content: ''; position: absolute; bottom: -100px; left: -150px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.05) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .contact-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--fl-or); margin-bottom: 16px;
+  }
+  .contact-eyebrow::before,
+  .contact-eyebrow::after { content: ''; width: 28px; height: 1px; background: var(--fl-or); }
+  .contact-hero h1 {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 600; color: var(--fl-prune); line-height: 1.15;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .contact-hero h1 em { font-style: italic; color: var(--fl-rose); }
+  .contact-hero-desc {
+    font-size: 1.0625rem; color: var(--fl-warm-gray); line-height: 1.75;
+    max-width: 520px; margin: 0 auto 32px; position: relative; z-index: 1;
+  }
+  .gold-rule {
+    width: 48px; height: 2px; background: var(--fl-or);
+    margin: 0 auto 0; border-radius: 2px;
+  }
+
+  /* ===== CONTACT SECTION ===== */
+  .contact-section { padding: 72px 0 96px; }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1.4fr;
+    gap: 56px; align-items: start;
+  }
+
+  /* ===== CONTACT INFO ===== */
+  .contact-info h2 {
+    font-family: var(--fl-font-heading);
+    font-size: 1.625rem; font-weight: 600; color: var(--fl-prune);
+    margin-bottom: 8px;
+  }
+  .contact-info > p {
+    font-size: 0.9375rem; color: var(--fl-warm-gray); line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .contact-card {
+    display: flex; align-items: flex-start; gap: 16px;
+    background: white; border: 1px solid var(--fl-border); border-radius: var(--fl-radius);
+    padding: 20px 24px; margin-bottom: 14px;
+    box-shadow: var(--fl-shadow-sm);
+    transition: transform var(--fl-transition), box-shadow var(--fl-transition);
+  }
+  .contact-card:hover { transform: translateY(-2px); box-shadow: var(--fl-shadow-md); }
+  .contact-card-icon {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.125rem;
+  }
+  .contact-card-icon.rose { background: rgba(194,114,126,0.1); color: var(--fl-rose); }
+  .contact-card-icon.or { background: rgba(212,160,60,0.1); color: var(--fl-or); }
+  .contact-card-icon.sauge { background: rgba(107,127,90,0.1); color: var(--fl-sauge); }
+  .contact-card-title { font-family: var(--fl-font-heading); font-size: 0.9375rem; font-weight: 600; color: var(--fl-prune); margin-bottom: 2px; }
+  .contact-card-value { font-size: 0.9375rem; color: var(--fl-charcoal); font-weight: 500; }
+  .contact-card-note { font-size: 0.8125rem; color: var(--fl-warm-gray); margin-top: 2px; }
+
+  /* Social links */
+  .contact-socials-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1rem; font-weight: 600; color: var(--fl-prune);
+    margin: 28px 0 14px;
+  }
+  .contact-socials { display: flex; gap: 10px; }
+  .social-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 8px;
+    border: 1px solid var(--fl-border); background: white;
+    font-size: 0.8125rem; font-weight: 500; color: var(--fl-charcoal);
+    transition: all var(--fl-transition); cursor: pointer; text-decoration: none;
+  }
+  .social-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .social-btn:hover { border-color: var(--fl-rose); color: var(--fl-rose); background: rgba(194,114,126,0.05); }
+  .social-btn.instagram:hover { border-color: #e1306c; color: #e1306c; background: rgba(225,48,108,0.05); }
+  .social-btn.tiktok:hover { border-color: #010101; color: #010101; background: rgba(0,0,0,0.05); }
+  .social-btn.facebook:hover { border-color: #1877f2; color: #1877f2; background: rgba(24,119,242,0.05); }
+  .social-btn.pinterest:hover { border-color: #e60023; color: #e60023; background: rgba(230,0,35,0.05); }
+
+  /* Direct booking CTA */
+  .booking-cta {
+    margin-top: 28px; padding: 22px 24px;
+    background: linear-gradient(135deg, rgba(74,46,61,0.04) 0%, rgba(194,114,126,0.08) 100%);
+    border: 1px solid rgba(194,114,126,0.2); border-radius: var(--fl-radius);
+    text-align: center;
+  }
+  .booking-cta p { font-size: 0.875rem; color: var(--fl-warm-gray); margin-bottom: 12px; line-height: 1.5; }
+  .booking-cta strong { color: var(--fl-prune); }
+
+  /* ===== CONTACT FORM ===== */
+  .contact-form-wrap {
+    background: white; border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius-lg); padding: 40px 36px;
+    box-shadow: var(--fl-shadow-md);
+  }
+  .contact-form-wrap h3 {
+    font-family: var(--fl-font-heading);
+    font-size: 1.375rem; font-weight: 600; color: var(--fl-prune);
+    margin-bottom: 4px;
+  }
+  .contact-form-wrap > p {
+    font-size: 0.875rem; color: var(--fl-warm-gray); margin-bottom: 28px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0; }
+  .form-success {
+    display: none; background: rgba(107,127,90,0.08); border: 1px solid rgba(107,127,90,0.25);
+    border-radius: 8px; padding: 16px 20px; margin-top: 16px;
+    font-size: 0.9375rem; color: var(--fl-sauge); font-weight: 500; text-align: center;
+  }
+  .rgpd-label {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.8125rem; color: var(--fl-warm-gray); cursor: pointer; line-height: 1.5;
+  }
+  .rgpd-label input[type="checkbox"] {
+    width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;
+    accent-color: var(--fl-rose); cursor: pointer;
+  }
+  .rgpd-label a { color: var(--fl-rose); }
+  .form-submit-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; margin-top: 24px; flex-wrap: wrap;
+  }
+  .form-submit-note { font-size: 0.8125rem; color: var(--fl-warm-gray); }
+
+  /* ===== FAQ ===== */
+  .faq-section { padding: 72px 0 96px; background: var(--fl-bg-alt); }
+  .section-head { text-align: center; margin-bottom: 48px; }
+  .section-label {
+    display: inline-block; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--fl-or);
+    margin-bottom: 10px;
+  }
+  .section-head h2 {
+    font-family: var(--fl-font-heading);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: 600; color: var(--fl-prune); margin-bottom: 12px;
+  }
+  .gold-rule-center {
+    width: 48px; height: 2px; background: var(--fl-or);
+    margin: 0 auto; border-radius: 2px;
+  }
+  .faq-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 960px; margin: 0 auto; }
+  .faq-card {
+    background: white; border: 1px solid var(--fl-border);
+    border-radius: var(--fl-radius); padding: 28px 24px;
+    box-shadow: var(--fl-shadow-sm);
+    transition: transform var(--fl-transition), box-shadow var(--fl-transition);
+  }
+  .faq-card:hover { transform: translateY(-3px); box-shadow: var(--fl-shadow-md); }
+  .faq-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(194,114,126,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; margin-bottom: 16px;
+  }
+  .faq-question {
+    font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600;
+    color: var(--fl-prune); margin-bottom: 10px; line-height: 1.4;
+  }
+  .faq-answer { font-size: 0.875rem; color: var(--fl-warm-gray); line-height: 1.7; }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .faq-grid { grid-template-columns: 1fr; max-width: 480px; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .contact-socials { flex-wrap: wrap; }
+  }
+  @media (max-width: 480px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .contact-form-wrap { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="01-accueil.html#tarifs">Formules</a>
+      <a href="01-accueil.html#portfolio">Portfolio</a>
+      <a href="01-accueil.html#apropos">À propos</a>
+      <a href="01-accueil.html#temoignages">Avis</a>
+      <a href="09-contact.html" class="active">Contact</a>
+      <a href="01-accueil.html#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO CONTACT -->
+<section class="contact-hero">
+  <div class="fl-container">
+    <div class="contact-eyebrow">Restons en contact</div>
+    <h1>Contactez-<em>moi</em></h1>
+    <div class="gold-rule" style="margin-bottom: 20px;"></div>
+    <p class="contact-hero-desc">
+      Une question, un projet, une envie de capturer un moment ? Je serai ravie de vous répondre et de construire votre séance idéale ensemble.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section class="contact-section">
+  <div class="fl-container">
+    <div class="contact-grid">
+
+      <!-- LEFT: Contact info -->
+      <div class="contact-info">
+        <h2>On se parle ?</h2>
+        <p>Retrouvez toutes les façons de me joindre. Je réponds à chaque message personnellement, dans les 48 heures.</p>
+
+        <div class="contact-card">
+          <div class="contact-card-icon rose">✉</div>
+          <div>
+            <div class="contact-card-title">Email</div>
+            <div class="contact-card-value"><a href="mailto:contact@fleurdelumiere.fr" style="color: var(--fl-rose);">contact@fleurdelumiere.fr</a></div>
+            <div class="contact-card-note">Réponse garantie en 48 h</div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon or">📍</div>
+          <div>
+            <div class="contact-card-title">Zone d'intervention</div>
+            <div class="contact-card-value">Tarn, Aveyron & Toulouse</div>
+            <div class="contact-card-note">Déplacement possible partout en Occitanie</div>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon sauge">⏱</div>
+          <div>
+            <div class="contact-card-title">Délai de réponse</div>
+            <div class="contact-card-value">Sous 48 heures</div>
+            <div class="contact-card-note">Souvent bien plus tôt !</div>
+          </div>
+        </div>
+
+        <div class="contact-socials-title">Suivez-moi sur les réseaux</div>
+        <div class="contact-socials">
+          <a href="#" class="social-btn instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+            Instagram
+          </a>
+          <a href="#" class="social-btn tiktok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+            TikTok
+          </a>
+          <a href="#" class="social-btn facebook">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            Facebook
+          </a>
+          <a href="#" class="social-btn pinterest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg>
+            Pinterest
+          </a>
+        </div>
+
+        <div class="booking-cta">
+          <p><strong>Vous préférez réserver directement ?</strong><br>
+          Accédez à mon calendrier en ligne pour choisir votre créneau sans attendre.</p>
+          <a href="01-accueil.html#reserver" class="fl-btn fl-btn-primary">Réserver ma séance →</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Contact form -->
+      <div class="contact-form-wrap">
+        <h3>Envoyez-moi un message</h3>
+        <p>Décrivez votre projet, je vous réponds sous 48 h avec toutes les informations.</p>
+
+        <form id="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="fl-form-group">
+              <label class="fl-label" for="prenom">Prénom <span style="color:var(--fl-rose)">*</span></label>
+              <input class="fl-input" type="text" id="prenom" name="prenom" placeholder="Camille" required>
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label" for="nom">Nom <span style="color:var(--fl-rose)">*</span></label>
+              <input class="fl-input" type="text" id="nom" name="nom" placeholder="Dupont" required>
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top: 0;">
+            <div class="fl-form-group">
+              <label class="fl-label" for="email">Email <span style="color:var(--fl-rose)">*</span></label>
+              <input class="fl-input" type="email" id="email" name="email" placeholder="camille@exemple.fr" required>
+            </div>
+            <div class="fl-form-group">
+              <label class="fl-label" for="telephone">Téléphone</label>
+              <input class="fl-input" type="tel" id="telephone" name="telephone" placeholder="06 12 34 56 78">
+            </div>
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label" for="objet">Objet de votre demande <span style="color:var(--fl-rose)">*</span></label>
+            <select class="fl-select" id="objet" name="objet" required>
+              <option value="" disabled selected>Sélectionnez un objet…</option>
+              <option value="reservation">Réservation d'une séance</option>
+              <option value="devis">Demande de devis</option>
+              <option value="question">Question générale</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+
+          <div class="fl-form-group">
+            <label class="fl-label" for="message">Votre message <span style="color:var(--fl-rose)">*</span></label>
+            <textarea class="fl-input" id="message" name="message" rows="5"
+              style="resize: vertical; min-height: 120px;"
+              placeholder="Parlez-moi de votre projet, de vos envies, du type de séance que vous souhaitez… Plus vous êtes précis(e), mieux je peux vous aider !"
+              required></textarea>
+          </div>
+
+          <div class="fl-form-group" style="margin-bottom: 0;">
+            <label class="rgpd-label">
+              <input type="checkbox" required>
+              J'accepte que mes données soient utilisées pour répondre à ma demande, conformément à la
+              <a href="#" onclick="return false;">politique de confidentialité</a>. Aucun démarchage, promis.
+            </label>
+          </div>
+
+          <div class="form-submit-row">
+            <span class="form-submit-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 4px; color: var(--fl-sauge);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Données sécurisées — jamais partagées
+            </span>
+            <button type="submit" class="fl-btn fl-btn-primary">Envoyer le message →</button>
+          </div>
+
+          <div class="form-success" id="form-success">
+            ✓ Message envoyé avec succès ! Je vous réponds dans les 48 heures.
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="fl-container">
+    <div class="section-head">
+      <div class="section-label">Questions fréquentes</div>
+      <h2>Quelques réponses rapides</h2>
+      <div class="gold-rule-center"></div>
+    </div>
+    <div class="faq-grid">
+
+      <div class="faq-card">
+        <div class="faq-icon">📅</div>
+        <div class="faq-question">Combien de temps à l'avance faut-il réserver ?</div>
+        <div class="faq-answer">Je recommande de réserver 3 à 6 semaines à l'avance, surtout pour les week-ends et la belle saison (avril-octobre). Certains créneaux en semaine sont disponibles plus rapidement.</div>
+      </div>
+
+      <div class="faq-card">
+        <div class="faq-icon">🌤</div>
+        <div class="faq-question">Que se passe-t-il en cas de mauvais temps ?</div>
+        <div class="faq-answer">La météo étant capricieuse, je reste flexible. Nous pouvons reporter la séance sans frais jusqu'à 48 h avant. Certaines lumières nuageuses sont même magnifiques pour la photographie !</div>
+      </div>
+
+      <div class="faq-card">
+        <div class="faq-icon">🖼</div>
+        <div class="faq-question">Quand vais-je recevoir mes photos ?</div>
+        <div class="faq-answer">La galerie en ligne est accessible sous 3 à 4 semaines après la séance. Vous recevrez un lien privé pour sélectionner vos photos préférées et commander des tirages.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="#">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="#">Tarifs &amp; Formules</a></li>
+          <li><a href="#">Portfolio</a></li>
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="01-accueil.html#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+        <a href="#">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Envoi en cours…';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('form-success').style.display = 'block';
+      btn.style.display = 'none';
+      e.target.reset();
+    }, 1200);
+  }
+</script>
+</body>
+</html>

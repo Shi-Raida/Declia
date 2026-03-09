@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carte Cadeau & FAQ — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--shadow-cta:0 4px 12px rgba(194,114,126,.3);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button{font-family:var(--font);cursor:pointer}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.or-line{width:60px;height:2px;background:var(--or);margin:12px auto;border-radius:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);font-size:14px;font-weight:700;padding:12px 28px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:2px solid transparent}
+.btn-primary{background:var(--rose);color:#fff;border-color:var(--rose);box-shadow:var(--shadow-cta)}
+.btn-primary:hover{background:var(--rose-hover);border-color:var(--rose-hover);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--prune);border:2px solid var(--prune)}
+.btn-secondary:hover{background:var(--prune);color:#fff}
+.btn-or{background:var(--or);color:var(--texte);border-color:var(--or)}
+.btn-or:hover{background:#B8882F;border-color:#B8882F}
+.btn-full{width:100%}
+.btn-sm{padding:10px 20px;font-size:13px}
+
+/* SWITCHER */
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sw-btn{padding:10px 24px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);cursor:pointer;transition:var(--tr)}
+.sw-btn:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+
+/* HEADER */
+.header{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,46,61,.06);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;max-width:100%}
+.logo{font-family:var(--font-titre);font-size:20px;font-weight:700;color:var(--prune)}
+.logo span{color:var(--or)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{font-size:14px;color:var(--prune);transition:var(--tr)}
+.nav-links a:hover{color:var(--rose)}
+
+/* ============================== */
+/* CARTE CADEAU                   */
+/* ============================== */
+.gc-hero{padding:80px 0 60px;text-align:center;background:var(--bg);position:relative;overflow:hidden}
+.gc-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,60,.06) 0%,transparent 70%)}
+.gc-hero h1{font-size:clamp(30px,5vw,44px);color:var(--prune)}
+.gc-hero h1 em{color:var(--or);font-style:italic}
+.gc-hero p{font-size:16px;color:var(--gris);max-width:500px;margin:0 auto;line-height:1.7}
+
+.gc-section{padding:60px 0 80px;background:var(--bg-alt)}
+.gc-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+
+/* Card visual */
+.gc-card-visual{position:relative}
+.gc-card{width:100%;aspect-ratio:1.6;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--prune) 0%,#6a4a5d 50%,var(--prune) 100%);box-shadow:var(--shadow-md);padding:36px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;position:relative;overflow:hidden}
+.gc-card::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;border-radius:50%;background:rgba(212,160,60,.1)}
+.gc-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:150px;height:150px;border-radius:50%;background:rgba(194,114,126,.08)}
+.gc-card-logo{font-family:var(--font-titre);font-size:22px;font-weight:700;position:relative;z-index:1}
+.gc-card-logo span{color:var(--or)}
+.gc-card-amount{font-family:var(--font-titre);font-size:52px;font-weight:700;color:var(--or);position:relative;z-index:1}
+.gc-card-bottom{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:1}
+.gc-card-to{font-size:13px;opacity:.7}
+.gc-card-to strong{display:block;font-size:16px;opacity:1;color:#fff}
+.gc-card-code{font-family:monospace;font-size:14px;letter-spacing:2px;opacity:.5}
+
+.gc-card-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(212,160,60,.12) 0%,transparent 60%);pointer-events:none;z-index:-1}
+
+/* Form side */
+.gc-form{background:var(--bg);border-radius:var(--radius-md);padding:32px;box-shadow:var(--shadow-sm);border:1px solid var(--gris-border)}
+.gc-form h2{font-size:22px;color:var(--prune);margin-bottom:20px}
+.gc-form h2 em{color:var(--rose);font-style:italic}
+
+.amount-selector{margin-bottom:24px}
+.amount-selector label{display:block;font-size:13px;font-weight:700;color:var(--prune);margin-bottom:8px}
+.amounts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.amt{padding:12px 22px;border-radius:var(--radius);border:2px solid var(--gris-border);font-size:16px;font-weight:700;color:var(--gris);cursor:pointer;transition:var(--tr);background:var(--bg);font-family:var(--font-titre)}
+.amt:hover{border-color:var(--or);color:var(--or)}
+.amt.active{background:var(--or);color:var(--texte);border-color:var(--or)}
+.custom-amt{display:flex;align-items:center;gap:8px}
+.custom-amt input{width:120px;padding:10px 14px;border:2px solid var(--gris-border);border-radius:var(--radius);font-size:16px;font-family:var(--font-titre);font-weight:700;color:var(--prune);outline:none;text-align:center}
+.custom-amt input:focus{border-color:var(--or)}
+.custom-amt span{font-size:13px;color:var(--gris)}
+
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:700;color:var(--prune);margin-bottom:5px}
+.form-group label .req{color:var(--rose)}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px 14px;border:2px solid var(--gris-border);border-radius:var(--radius);font-family:var(--font);font-size:14px;color:var(--texte);background:var(--bg);transition:var(--tr);outline:none}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(194,114,126,.12)}
+.form-group textarea{min-height:80px;resize:vertical}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--gris-light)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-hint{font-size:11px;color:var(--gris);margin-top:4px}
+
+.gc-delivery{margin:20px 0;padding:16px;background:var(--bg-alt);border-radius:var(--radius);border:1px solid var(--gris-border)}
+.gc-delivery h4{font-size:14px;color:var(--prune);margin-bottom:10px}
+.delivery-opts{display:flex;gap:10px}
+.del-opt{flex:1;padding:14px;border-radius:var(--radius);border:2px solid var(--gris-border);text-align:center;cursor:pointer;transition:var(--tr)}
+.del-opt:hover{border-color:var(--or)}
+.del-opt.active{border-color:var(--or);background:var(--or-light)}
+.del-opt .del-icon{font-size:20px;margin-bottom:4px}
+.del-opt .del-title{font-weight:700;font-size:13px;color:var(--prune)}
+.del-opt .del-desc{font-size:11px;color:var(--gris)}
+
+.gc-total{display:flex;justify-content:space-between;align-items:center;padding:16px 0;margin:16px 0;border-top:2px solid var(--gris-border)}
+.gc-total .gt-label{font-weight:700;color:var(--prune);font-size:15px}
+.gc-total .gt-value{font-family:var(--font-titre);font-size:26px;font-weight:700;color:var(--or)}
+
+/* How it works */
+.gc-how{padding:60px 0;background:var(--bg)}
+.gc-how-header{text-align:center;margin-bottom:40px}
+.gc-how-header h2{font-size:clamp(22px,3vw,30px);color:var(--prune)}
+.gc-how-header h2 em{color:var(--rose);font-style:italic}
+.gc-how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;max-width:900px;margin:0 auto}
+.gc-how-step{text-align:center}
+.gc-how-num{width:44px;height:44px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-titre);font-size:18px;font-weight:700}
+.ghn1{background:var(--or-light);color:var(--or)}
+.ghn2{background:var(--rose-light);color:var(--rose)}
+.ghn3{background:var(--sauge-light);color:var(--sauge)}
+.ghn4{background:var(--prune-light);color:var(--prune)}
+.gc-how-step h4{font-size:14px;color:var(--prune);margin-bottom:4px}
+.gc-how-step p{font-size:12px;color:var(--gris);line-height:1.5}
+
+/* ============================== */
+/* FAQ                            */
+/* ============================== */
+.faq-hero{padding:80px 0 48px;text-align:center;background:var(--bg)}
+.faq-hero h1{font-size:clamp(30px,5vw,44px);color:var(--prune)}
+.faq-hero h1 em{color:var(--rose);font-style:italic}
+.faq-hero p{font-size:16px;color:var(--gris);max-width:480px;margin:0 auto;line-height:1.7}
+
+.faq-search{max-width:520px;margin:0 auto 40px;position:relative}
+.faq-search input{width:100%;padding:14px 20px 14px 48px;border:2px solid var(--gris-border);border-radius:var(--radius-full);font-size:15px;font-family:var(--font);color:var(--texte);outline:none;transition:var(--tr)}
+.faq-search input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(194,114,126,.12)}
+.faq-search input::placeholder{color:var(--gris-light)}
+.faq-search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--gris-light);pointer-events:none}
+
+.faq-section{padding:0 0 80px;background:var(--bg)}
+.faq-cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:36px}
+.faq-cat{padding:9px 20px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--tr)}
+.faq-cat:hover{border-color:var(--rose);color:var(--rose)}
+.faq-cat.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+
+.faq-grid{max-width:760px;margin:0 auto}
+.faq-category-title{font-size:18px;color:var(--prune);margin:32px 0 16px;padding-top:24px;border-top:1px solid var(--gris-border);display:flex;align-items:center;gap:10px}
+.faq-category-title:first-child{border:none;padding-top:0;margin-top:0}
+.faq-item{border-bottom:1px solid rgba(74,46,61,.06)}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:18px 0;font-family:var(--font);font-size:15px;font-weight:700;color:var(--prune);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:var(--tr)}
+.faq-q:hover{color:var(--rose)}
+.faq-chevron{width:18px;height:18px;flex-shrink:0;transition:transform .3s;color:var(--or)}
+.faq-item.open .faq-chevron{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-item.open .faq-a{max-height:300px}
+.faq-a p{padding-bottom:18px;font-size:14px;color:var(--gris);line-height:1.7}
+
+.faq-cta{text-align:center;padding:60px 0;background:var(--bg-alt);border-top:1px solid var(--gris-border)}
+.faq-cta h2{font-size:24px;color:var(--prune);margin-bottom:8px}
+.faq-cta h2 em{color:var(--rose);font-style:italic}
+.faq-cta p{font-size:15px;color:var(--gris);margin-bottom:24px}
+
+/* FOOTER */
+.footer{background:var(--prune);color:#fff;padding:40px 0 24px;text-align:center}
+.footer .logo{color:#fff;font-size:20px;margin-bottom:8px;display:block}
+.footer .logo span{color:var(--or)}
+.footer p{font-size:12px;color:rgba(255,255,255,.4)}
+
+@media(max-width:1024px){.gc-grid{grid-template-columns:1fr;max-width:560px;margin:0 auto}.gc-how-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.form-row{grid-template-columns:1fr}.delivery-opts{flex-direction:column}.gc-how-grid{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('carte-cadeau',this)">🎁 Carte Cadeau</button>
+  <button class="sw-btn" onclick="switchView('faq',this)">❓ FAQ</button>
+</div>
+
+<!-- ================================ -->
+<!-- CARTE CADEAU                     -->
+<!-- ================================ -->
+<div class="page-view active" id="view-carte-cadeau">
+
+<div class="header"><a class="logo">Fleur de <span>L</span>umière</a><div class="nav-links"><a href="#">Spécialités</a><a href="#">Formules</a><a href="#">Boutique</a><a href="#" class="btn btn-primary btn-sm">Réserver</a></div></div>
+
+<section class="gc-hero"><div class="container">
+  <h1>Offrez de la <em>Lumière</em></h1><div class="or-line"></div>
+  <p>Une carte cadeau Fleur de Lumière, c'est offrir un moment magique à l'Heure Dorée. Le cadeau parfait pour toutes les occasions.</p>
+</div></section>
+
+<section class="gc-section"><div class="container">
+  <div class="gc-grid">
+
+    <!-- Card visual -->
+    <div class="gc-card-visual">
+      <div class="gc-card">
+        <div class="gc-card-logo">Fleur de <span>L</span>umière</div>
+        <div class="gc-card-amount" id="card-amount">150€</div>
+        <div class="gc-card-bottom">
+          <div class="gc-card-to">Pour<br><strong id="card-to">Sophie</strong></div>
+          <div class="gc-card-code">FDL-XXXX-XXXX</div>
+        </div>
+      </div>
+      <div class="gc-card-glow"></div>
+      <p style="text-align:center;font-size:13px;color:var(--gris);margin-top:16px;font-style:italic;">Aperçu de la carte — le design final sera personnalisé ✨</p>
+    </div>
+
+    <!-- Form -->
+    <div class="gc-form">
+      <h2>Personnalisez votre <em>carte</em></h2>
+
+      <div class="amount-selector">
+        <label>Montant de la carte</label>
+        <div class="amounts">
+          <span class="amt" onclick="selectAmt(this,50)">50€</span>
+          <span class="amt" onclick="selectAmt(this,100)">100€</span>
+          <span class="amt active" onclick="selectAmt(this,150)">150€</span>
+          <span class="amt" onclick="selectAmt(this,200)">200€</span>
+          <span class="amt" onclick="selectAmt(this,280)">280€</span>
+        </div>
+        <div class="custom-amt">
+          <input type="number" placeholder="Autre" min="30" max="500" oninput="customAmt(this.value)">
+          <span>€ · min 30€ / max 500€</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group"><label>Prénom du destinataire <span class="req">*</span></label><input type="text" placeholder="Sophie" oninput="document.getElementById('card-to').textContent=this.value||'Sophie'"></div>
+        <div class="form-group"><label>Email du destinataire <span class="req">*</span></label><input type="email" placeholder="sophie@email.fr"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Votre prénom <span class="req">*</span></label><input type="text" placeholder="Votre prénom"></div>
+        <div class="form-group"><label>Votre email <span class="req">*</span></label><input type="email" placeholder="vous@email.fr"></div>
+      </div>
+      <div class="form-group">
+        <label>Message personnel</label>
+        <textarea placeholder="Un petit mot pour accompagner la carte... (optionnel)"></textarea>
+        <div class="form-hint">Max 200 caractères</div>
+      </div>
+
+      <div class="gc-delivery">
+        <h4>Mode d'envoi</h4>
+        <div class="delivery-opts">
+          <div class="del-opt active" onclick="selectDel(this)"><div class="del-icon">📧</div><div class="del-title">Par email</div><div class="del-desc">Envoi immédiat ou date programmée</div></div>
+          <div class="del-opt" onclick="selectDel(this)"><div class="del-icon">📮</div><div class="del-title">Par courrier</div><div class="del-desc">Carte imprimée + enveloppe · +5€</div></div>
+        </div>
+      </div>
+
+      <div class="form-group"><label>Date d'envoi</label><input type="date" value="2026-03-01"><div class="form-hint">Laissez la date du jour pour un envoi immédiat</div></div>
+
+      <div class="gc-total"><span class="gt-label">Total</span><span class="gt-value" id="gc-total">150€</span></div>
+      <button class="btn btn-or btn-full" style="font-size:16px;padding:16px;">🎁 Offrir cette carte cadeau</button>
+      <p style="font-size:12px;color:var(--gris);text-align:center;margin-top:10px;">🔒 Paiement sécurisé Stripe · Valable 12 mois</p>
+    </div>
+
+  </div>
+</div></section>
+
+<section class="gc-how"><div class="container">
+  <div class="gc-how-header"><h2>Comment ça <em>marche</em> ?</h2><div class="or-line"></div></div>
+  <div class="gc-how-grid">
+    <div class="gc-how-step"><div class="gc-how-num ghn1">1</div><h4>Choisissez le montant</h4><p>De 30€ à 500€, adaptez le montant à votre envie.</p></div>
+    <div class="gc-how-step"><div class="gc-how-num ghn2">2</div><h4>Personnalisez</h4><p>Ajoutez un message et choisissez la date d'envoi.</p></div>
+    <div class="gc-how-step"><div class="gc-how-num ghn3">3</div><h4>Offrez</h4><p>Le destinataire reçoit sa carte par email ou courrier.</p></div>
+    <div class="gc-how-step"><div class="gc-how-num ghn4">4</div><h4>Il/Elle réserve</h4><p>Le code est utilisable sur toutes les formules et la boutique.</p></div>
+  </div>
+</div></section>
+
+<footer class="footer"><span class="logo">Fleur de <span>L</span>umière</span><p>© 2026 Fleur de Lumière — Tarn & Toulouse</p></footer>
+</div>
+
+<!-- ================================ -->
+<!-- FAQ                              -->
+<!-- ================================ -->
+<div class="page-view" id="view-faq">
+
+<div class="header"><a class="logo">Fleur de <span>L</span>umière</a><div class="nav-links"><a href="#">Spécialités</a><a href="#">Formules</a><a href="#">Boutique</a><a href="#" class="btn btn-primary btn-sm">Réserver</a></div></div>
+
+<section class="faq-hero"><div class="container">
+  <h1>Questions <em>fréquentes</em></h1><div class="or-line"></div>
+  <p>Tout ce que vous devez savoir avant, pendant et après votre séance photo.</p>
+</div></section>
+
+<section class="faq-section"><div class="container">
+
+  <div class="faq-search"><span class="faq-search-icon">🔍</span><input type="text" placeholder="Rechercher une question..." oninput="searchFaq(this.value)"></div>
+
+  <div class="faq-cats">
+    <span class="faq-cat active" onclick="filterFaqCat(this,'all')">Toutes</span>
+    <span class="faq-cat" onclick="filterFaqCat(this,'reservation')">📅 Réservation</span>
+    <span class="faq-cat" onclick="filterFaqCat(this,'seance')">📷 La séance</span>
+    <span class="faq-cat" onclick="filterFaqCat(this,'galerie')">🖼️ Galerie & photos</span>
+    <span class="faq-cat" onclick="filterFaqCat(this,'boutique')">🛒 Boutique</span>
+    <span class="faq-cat" onclick="filterFaqCat(this,'paiement')">💰 Paiement</span>
+  </div>
+
+  <div class="faq-grid" id="faq-grid">
+
+    <h3 class="faq-category-title" data-cat="reservation">📅 Réservation & organisation</h3>
+
+    <div class="faq-item open" data-cat="reservation">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment réserver une séance ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>C'est très simple ! Choisissez votre formule, sélectionnez un créneau disponible à l'Heure Dorée, remplissez le questionnaire pré-shooting et réglez l'acompte de 30%. Vous recevez une confirmation par email immédiatement.</p></div>
+    </div>
+    <div class="faq-item" data-cat="reservation">
+      <button class="faq-q" onclick="toggleFaq(this)">Puis-je reporter ma séance ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Oui ! Plus de 7 jours avant : report gratuit (1 fois) ou remboursement intégral. Moins de 7 jours : report uniquement. Moins de 48h : ni report ni remboursement, sauf force majeure. En cas de météo défavorable, je vous propose systématiquement un report gratuit.</p></div>
+    </div>
+    <div class="faq-item" data-cat="reservation">
+      <button class="faq-q" onclick="toggleFaq(this)">Quel acompte faut-il verser ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Un acompte de 30% du montant total est demandé à la réservation pour confirmer votre créneau. Le solde est à régler avant la livraison de votre galerie en ligne.</p></div>
+    </div>
+    <div class="faq-item" data-cat="reservation">
+      <button class="faq-q" onclick="toggleFaq(this)">Que se passe-t-il si la météo est mauvaise ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>La lumière est ma signature — je ne fais pas de compromis dessus. Si les conditions ne permettent pas la belle lumière promise, je vous propose un report gratuit à une date qui vous convient.</p></div>
+    </div>
+
+    <h3 class="faq-category-title" data-cat="seance">📷 Le jour de la séance</h3>
+
+    <div class="faq-item" data-cat="seance">
+      <button class="faq-q" onclick="toggleFaq(this)">Qu'est-ce que l'Heure Dorée ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>C'est la période juste avant le coucher du soleil (ou juste après le lever). La lumière y est chaude, dorée, douce — parfaite pour sublimer les visages, les paysages et les émotions. C'est ma signature et toutes mes séances sont programmées à ce moment magique.</p></div>
+    </div>
+    <div class="faq-item" data-cat="seance">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment se préparer pour la séance ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Privilégiez des tenues dans des tons naturels (beige, crème, terracotta, sauge). Évitez les motifs trop chargés et les logos. Je vous envoie un guide complet avec des conseils tenues 3 jours avant la séance.</p></div>
+    </div>
+    <div class="faq-item" data-cat="seance">
+      <button class="faq-q" onclick="toggleFaq(this)">Où se déroulent les séances ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Toujours en extérieur, en lumière naturelle ! Dans le Tarn et la région toulousaine : champs, forêts, bords de rivière, écuries, parcs… Si vous n'avez pas d'idée, je vous proposerai mes spots préférés selon la saison.</p></div>
+    </div>
+    <div class="faq-item" data-cat="seance">
+      <button class="faq-q" onclick="toggleFaq(this)">Puis-je changer de tenue pendant la séance ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Oui, avec les formules Signature et Sur-Mesure ! Vous pouvez prévoir 2 tenues. Je vous laisse le temps de vous changer tranquillement pendant la séance.</p></div>
+    </div>
+
+    <h3 class="faq-category-title" data-cat="galerie">🖼️ Galerie & photos</h3>
+
+    <div class="faq-item" data-cat="galerie">
+      <button class="faq-q" onclick="toggleFaq(this)">Combien de temps ai-je accès à ma galerie ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Votre galerie est accessible pendant 90 jours. Vous recevez un rappel avant l'expiration. Pensez à télécharger vos photos et passer vos commandes avant la fin !</p></div>
+    </div>
+    <div class="faq-item" data-cat="galerie">
+      <button class="faq-q" onclick="toggleFaq(this)">Quel est le délai de livraison des photos ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Comptez 2 à 3 semaines après la séance pour la livraison de votre galerie. Si vous avez la formule Signature, vous recevez d'abord une galerie de sélection, puis les photos finales retouchées.</p></div>
+    </div>
+    <div class="faq-item" data-cat="galerie">
+      <button class="faq-q" onclick="toggleFaq(this)">Quel type de retouche faites-vous ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Retouche naturelle uniquement : correction lumière, harmonie des couleurs, tons chauds dorés. Je ne fais pas de retouche beauté excessive — l'authenticité est ma philosophie. Pas de peau lissée artificielle ni de filtres dénaturants.</p></div>
+    </div>
+
+    <h3 class="faq-category-title" data-cat="boutique">🛒 Boutique & tirages</h3>
+
+    <div class="faq-item" data-cat="boutique">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment commander des tirages ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Directement depuis votre galerie privée ! Sélectionnez une photo, choisissez le support (tirage, toile, album…) et commandez. Je vérifie chaque produit avant envoi. Livraison sous 7-10 jours ouvrés.</p></div>
+    </div>
+    <div class="faq-item" data-cat="boutique">
+      <button class="faq-q" onclick="toggleFaq(this)">Quel papier utilisez-vous pour les tirages ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Papier Hahnemühle Photo Rag 308g — c'est le standard des galeries d'art et des musées. Rendu mat, couleurs profondes, durabilité exceptionnelle. Vos tirages dureront des décennies.</p></div>
+    </div>
+
+    <h3 class="faq-category-title" data-cat="paiement">💰 Paiement & fidélité</h3>
+
+    <div class="faq-item" data-cat="paiement">
+      <button class="faq-q" onclick="toggleFaq(this)">Quels moyens de paiement acceptez-vous ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Carte bancaire (Visa, Mastercard), Apple Pay et Google Pay via Stripe. Le paiement est 100% sécurisé et chiffré. Je propose aussi le virement bancaire sur demande.</p></div>
+    </div>
+    <div class="faq-item" data-cat="paiement">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne le Passeport Équestre ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Chaque séance équestre vous donne un tampon sur votre Passeport. Au 5ème tampon, vous recevez un tirage grand format offert ! Le suivi est visible dans votre espace client.</p></div>
+    </div>
+    <div class="faq-item" data-cat="paiement">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne le parrainage ?<svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div class="faq-a"><p>Partagez votre code parrainage à vos proches. Ils reçoivent -10% sur leur première séance, et vous recevez -15% sur votre prochaine. Au 3ème parrainage réussi, une mini-séance offerte !</p></div>
+    </div>
+
+  </div>
+</div></section>
+
+<section class="faq-cta"><div class="container">
+  <h2>Pas trouvé votre <em>réponse</em> ?</h2>
+  <p>N'hésitez pas à me contacter, je vous réponds sous 24h !</p>
+  <a href="#" class="btn btn-primary">📬 Me contacter</a>
+</div></section>
+
+<footer class="footer"><span class="logo">Fleur de <span>L</span>umière</span><p>© 2026 Fleur de Lumière — Tarn & Toulouse</p></footer>
+</div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+
+function selectAmt(el,val){document.querySelectorAll('.amt').forEach(a=>a.classList.remove('active'));el.classList.add('active');document.getElementById('card-amount').textContent=val+'€';document.getElementById('gc-total').textContent=val+'€'}
+function customAmt(val){if(val>=30&&val<=500){document.querySelectorAll('.amt').forEach(a=>a.classList.remove('active'));document.getElementById('card-amount').textContent=val+'€';document.getElementById('gc-total').textContent=val+'€'}}
+function selectDel(el){document.querySelectorAll('.del-opt').forEach(d=>d.classList.remove('active'));el.classList.add('active')}
+
+function toggleFaq(btn){const item=btn.parentElement;const wasOpen=item.classList.contains('open');item.classList.toggle('open')}
+
+function filterFaqCat(el,cat){document.querySelectorAll('.faq-cat').forEach(c=>c.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.faq-item, .faq-category-title').forEach(i=>{i.style.display=(cat==='all'||i.dataset.cat===cat)?'':'none'})}
+
+function searchFaq(q){q=q.toLowerCase();document.querySelectorAll('.faq-item').forEach(i=>{const text=i.textContent.toLowerCase();i.style.display=text.includes(q)?'':'none'});document.querySelectorAll('.faq-category-title').forEach(t=>t.style.display=q?'none':'')}
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Print Preview AR</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#EDEAEB;color:var(--charcoal);display:flex;justify-content:center;gap:32px;padding:40px;flex-wrap:wrap;align-items:flex-start}
+.tag{display:inline-block;background:#7C5CFC;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.screen-label{text-align:center;margin-bottom:14px}
+.sl-t{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--prune)}
+.sl-s{font-size:11px;color:var(--warm-gray);margin-top:2px}
+
+/* Phone frame */
+.phone{width:375px;background:var(--charcoal);border-radius:44px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.05)}
+.phone-s{background:#1A1216;border-radius:34px;overflow:hidden;min-height:780px;position:relative}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:28px;background:var(--charcoal);border-radius:0 0 20px 20px;z-index:10}
+.status{display:flex;justify-content:space-between;padding:10px 24px 0;font-size:12px;font-weight:600;color:rgba(255,255,255,.7)}
+
+/* Camera view */
+.camera-view{position:relative;width:100%;height:480px;overflow:hidden}
+.camera-bg{width:100%;height:100%;background:linear-gradient(180deg,#D8D0C8 0%,#C8C0B8 40%,#B8B0A8 60%,#8A8078 100%);position:relative}
+/* Simulated wall */
+.wall{position:absolute;top:0;left:0;right:0;height:70%;background:linear-gradient(180deg,#E8E0D8,#DCD4CC)}
+.floor{position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(180deg,#B8A898,#A89888)}
+/* Furniture hint */
+.sofa{position:absolute;bottom:30%;left:50%;transform:translateX(-50%);width:260px;height:60px;background:linear-gradient(180deg,#8A7A6A,#7A6A5A);border-radius:10px 10px 4px 4px;opacity:.4}
+
+/* AR print on wall */
+.ar-print{position:absolute;top:15%;left:50%;transform:translateX(-50%);border:4px solid #fff;box-shadow:0 4px 24px rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.3);transition:all .3s}
+.ar-print.format-60x80{width:180px;height:240px}
+.ar-print.canvas{border:0;box-shadow:0 6px 24px rgba(0,0,0,.25);border-radius:2px}
+.ar-print-img{width:100%;height:100%;background:linear-gradient(135deg,#C89878,#D4A888,#B88868)}
+.ar-print-label{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,.6);background:rgba(0,0,0,.5);padding:3px 10px;border-radius:4px;white-space:nowrap;backdrop-filter:blur(4px)}
+
+/* AR overlay elements */
+.ar-crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border:1.5px solid rgba(255,255,255,.3);border-radius:50%;display:none}
+.ar-corners{position:absolute;top:14%;left:17%;right:17%;bottom:52%}
+.ar-corner{position:absolute;width:16px;height:16px;border-color:rgba(124,92,252,.6);border-style:solid}
+.ar-corner.tl{top:0;left:0;border-width:2px 0 0 2px;border-radius:3px 0 0 0}
+.ar-corner.tr{top:0;right:0;border-width:2px 2px 0 0;border-radius:0 3px 0 0}
+.ar-corner.bl{bottom:0;left:0;border-width:0 0 2px 2px;border-radius:0 0 0 3px}
+.ar-corner.br{bottom:0;right:0;border-width:0 2px 2px 0;border-radius:0 0 3px 0}
+
+.ar-badge{position:absolute;top:12px;left:12px;background:rgba(124,92,252,.85);color:#fff;font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;backdrop-filter:blur(6px);display:flex;align-items:center;gap:4px}
+.ar-measure{position:absolute;right:12px;top:50%;transform:translateY(-50%);writing-mode:vertical-lr;font-size:10px;color:rgba(255,255,255,.5);background:rgba(0,0,0,.4);padding:4px 6px;border-radius:4px;backdrop-filter:blur(4px)}
+
+/* Bottom controls */
+.ar-controls{padding:16px 20px;background:rgba(0,0,0,.6);backdrop-filter:blur(12px)}
+
+.ar-format-row{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.ar-format{padding:8px 14px;border-radius:10px;font-size:12px;font-weight:500;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);cursor:pointer;white-space:nowrap;border:1.5px solid rgba(255,255,255,.06);transition:all .2s}
+.ar-format.on{background:rgba(194,114,126,.2);color:var(--rose);border-color:var(--rose)}
+
+.ar-finish-row{display:flex;gap:6px;margin-bottom:14px}
+.ar-finish{flex:1;padding:8px;border-radius:10px;text-align:center;font-size:11px;font-weight:500;background:rgba(255,255,255,.04);color:rgba(255,255,255,.4);cursor:pointer;border:1.5px solid rgba(255,255,255,.04);transition:all .2s}
+.ar-finish.on{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.15)}
+
+.ar-price{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(255,255,255,.06);border-radius:12px}
+.ar-price-left{display:flex;flex-direction:column}
+.ar-price-format{font-size:12px;color:rgba(255,255,255,.5)}.ar-price-amount{font-size:22px;font-weight:700;color:#fff}
+.ar-buy-btn{background:var(--rose);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 16px rgba(194,114,126,.3)}
+
+/* Desktop panel — product config */
+.desktop-panel{width:420px}
+.dp-card{background:var(--white);border-radius:20px;box-shadow:var(--shadow-lg);border:1px solid var(--border);overflow:hidden}
+.dp-h{padding:18px 22px;background:var(--rose-pale);border-bottom:1px solid var(--border)}
+.dp-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--prune)}
+.dp-sub{font-size:12px;color:var(--warm-gray);margin-top:2px}
+.dp-b{padding:22px}
+
+.preview-room{width:100%;height:200px;border-radius:14px;overflow:hidden;position:relative;margin-bottom:18px}
+.room-wall{width:100%;height:65%;background:linear-gradient(180deg,#F0EAE4,#E8E0D8)}
+.room-floor{width:100%;height:35%;background:linear-gradient(180deg,#D4C8B8,#C8BCA8)}
+.room-print{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:120px;height:160px;border:3px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.room-print-img{width:100%;height:100%;background:linear-gradient(135deg,#C89878,#D4A888)}
+.room-furniture{position:absolute;bottom:35%;left:50%;transform:translateX(-50%);width:180px;height:35px;background:#C8BCA8;border-radius:6px 6px 2px 2px;opacity:.3}
+
+.size-options{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.size-opt{padding:12px;border-radius:12px;border:2px solid var(--border);cursor:pointer;transition:all .2s;text-align:center}
+.size-opt:hover{border-color:var(--rose-light)}
+.size-opt.on{border-color:var(--rose);background:var(--rose-pale)}
+.size-opt-name{font-size:13px;font-weight:600;color:var(--charcoal)}.size-opt-dim{font-size:11px;color:var(--warm-gray)}.size-opt-price{font-size:14px;font-weight:700;color:var(--prune);margin-top:4px}
+
+.finish-options{display:flex;gap:8px;margin-bottom:18px}
+.finish-opt{flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);cursor:pointer;text-align:center;transition:all .2s}
+.finish-opt.on{border-color:var(--rose);background:var(--rose-pale)}
+.finish-opt-icon{font-size:18px;margin-bottom:4px}.finish-opt-name{font-size:12px;font-weight:500;color:var(--charcoal)}
+
+.ar-trigger{width:100%;padding:14px;background:linear-gradient(135deg,#7C5CFC,#9B7FFF);color:#fff;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(124,92,252,.3);margin-bottom:10px}
+.add-cart{width:100%;padding:14px;background:var(--rose);color:#fff;border:none;border-radius:12px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(194,114,126,.3)}
+</style>
+</head>
+<body>
+
+<!-- ===== MOBILE — AR Camera View ===== -->
+<div>
+  <div class="screen-label">
+    <div class="sl-t">Vue Mobile — Caméra AR <span class="tag">V2</span></div>
+    <div class="sl-s">Le client pointe sa caméra vers son mur</div>
+  </div>
+  <div class="phone">
+    <div class="phone-s">
+      <div class="notch"></div>
+      <div class="status"><span>18:32</span><span>📶 🔋 87%</span></div>
+
+      <div class="camera-view">
+        <div class="camera-bg">
+          <div class="wall"></div>
+          <div class="floor"></div>
+          <div class="sofa"></div>
+
+          <!-- AR print projected -->
+          <div class="ar-print format-60x80">
+            <div class="ar-print-img"></div>
+            <div class="ar-print-label">Tirage 60×80 cm — Cadre blanc</div>
+          </div>
+
+          <!-- AR overlay -->
+          <div class="ar-corners">
+            <div class="ar-corner tl"></div>
+            <div class="ar-corner tr"></div>
+            <div class="ar-corner bl"></div>
+            <div class="ar-corner br"></div>
+          </div>
+
+          <div class="ar-badge">📐 AR actif · Mur détecté</div>
+          <div class="ar-measure">80 cm ↕</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="ar-controls">
+        <div class="ar-format-row">
+          <div class="ar-format">20×30</div>
+          <div class="ar-format">30×40</div>
+          <div class="ar-format">40×60</div>
+          <div class="ar-format on">60×80</div>
+          <div class="ar-format">80×120</div>
+        </div>
+        <div class="ar-finish-row">
+          <div class="ar-finish">Mat</div>
+          <div class="ar-finish on">Cadre blanc</div>
+          <div class="ar-finish">Toile</div>
+          <div class="ar-finish">Alu</div>
+        </div>
+        <div class="ar-price">
+          <div class="ar-price-left">
+            <div class="ar-price-format">Tirage 60×80 cm · Cadre blanc</div>
+            <div class="ar-price-amount">89 €</div>
+          </div>
+          <button class="ar-buy-btn">Ajouter au panier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DESKTOP — Product config with preview ===== -->
+<div class="desktop-panel">
+  <div class="screen-label">
+    <div class="sl-t">Vue Desktop — Configurateur <span class="tag">V2</span></div>
+    <div class="sl-s">Alternative desktop avec prévisualisation en situation</div>
+  </div>
+  <div class="dp-card">
+    <div class="dp-h">
+      <div class="dp-title">Visualiser chez vous</div>
+      <div class="dp-sub">Photo 12 — Léa et les feuilles d'automne</div>
+    </div>
+    <div class="dp-b">
+      <!-- Room preview -->
+      <div class="preview-room">
+        <div class="room-wall"></div>
+        <div class="room-floor"></div>
+        <div class="room-print"><div class="room-print-img"></div></div>
+        <div class="room-furniture"></div>
+      </div>
+
+      <!-- Size options -->
+      <div style="font-size:12px;font-weight:600;color:var(--prune);margin-bottom:8px">Format</div>
+      <div class="size-options">
+        <div class="size-opt"><div class="size-opt-name">Petit</div><div class="size-opt-dim">20 × 30 cm</div><div class="size-opt-price">25 €</div></div>
+        <div class="size-opt"><div class="size-opt-name">Moyen</div><div class="size-opt-dim">30 × 40 cm</div><div class="size-opt-price">39 €</div></div>
+        <div class="size-opt on"><div class="size-opt-name">Grand</div><div class="size-opt-dim">60 × 80 cm</div><div class="size-opt-price">89 €</div></div>
+        <div class="size-opt"><div class="size-opt-name">XL</div><div class="size-opt-dim">80 × 120 cm</div><div class="size-opt-price">149 €</div></div>
+      </div>
+
+      <!-- Finish -->
+      <div style="font-size:12px;font-weight:600;color:var(--prune);margin-bottom:8px">Finition</div>
+      <div class="finish-options">
+        <div class="finish-opt"><div class="finish-opt-icon">🖼</div><div class="finish-opt-name">Mat</div></div>
+        <div class="finish-opt on"><div class="finish-opt-icon">🪟</div><div class="finish-opt-name">Cadre blanc</div></div>
+        <div class="finish-opt"><div class="finish-opt-icon">🎨</div><div class="finish-opt-name">Toile</div></div>
+        <div class="finish-opt"><div class="finish-opt-icon">✨</div><div class="finish-opt-name">Alu brossé</div></div>
+      </div>
+
+      <button class="ar-trigger">📱 Voir sur mon mur en AR</button>
+      <button class="add-cart">🛒 Ajouter au panier — 89 €</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

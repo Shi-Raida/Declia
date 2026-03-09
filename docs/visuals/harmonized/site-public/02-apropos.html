@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>À propos — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== HEADER ===== */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(253,251,252,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--fl-border);
+    transition: box-shadow var(--fl-transition);
+  }
+  .site-header.scrolled { box-shadow: var(--fl-shadow-sm); }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: var(--fl-container); margin: 0 auto;
+    padding: 0 24px; height: 68px;
+  }
+  .logo { font-family: var(--fl-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--fl-prune); letter-spacing: 0.3px; }
+  .logo-accent { color: var(--fl-or); }
+  .site-nav { display: flex; align-items: center; gap: 32px; }
+  .site-nav a { font-size: 0.875rem; color: var(--fl-charcoal); position: relative; transition: color var(--fl-transition); }
+  .site-nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--fl-rose); transition: width var(--fl-transition); }
+  .site-nav a:hover { color: var(--fl-rose); }
+  .site-nav a:hover::after { width: 100%; }
+
+  /* ===== HERO ===== */
+  .about-hero { padding: 96px 0 0; position: relative; overflow: hidden; background: var(--fl-bg); }
+  .about-hero::before {
+    content: ''; position: absolute; top: -150px; right: -200px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .about-hero-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
+    min-height: 65vh; position: relative; z-index: 1;
+  }
+  .about-hero-text { padding-bottom: 80px; }
+  .about-hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--fl-or); margin-bottom: 20px;
+  }
+  .about-hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--fl-or); }
+  .about-hero-text h1 { font-size: clamp(2.25rem, 4vw, 3.25rem); font-weight: 600; color: var(--fl-prune); line-height: 1.15; margin-bottom: 24px; }
+  .about-hero-text h1 em { font-style: italic; color: var(--fl-rose); }
+  .about-hero-intro { font-size: 1.0625rem; color: var(--fl-warm-gray); line-height: 1.8; max-width: 480px; }
+  .about-hero-intro strong { color: var(--fl-charcoal); font-weight: 600; }
+
+  /* Photo */
+  .about-hero-photo { position: relative; }
+  .photo-main {
+    width: 100%; aspect-ratio: 3/4;
+    border-radius: 16px 16px 0 0; overflow: hidden; position: relative;
+  }
+  .ph-capucine {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #f0d9c8 0%, #e2c4b0 30%, #d8b8a2 60%, #c5a48e 100%);
+  }
+  .ph-capucine-label {
+    position: absolute; bottom: 20px; left: 20px;
+    font-family: var(--fl-font-heading); font-size: 0.8125rem; font-style: italic;
+    color: rgba(74,46,61,0.45);
+  }
+
+  /* Floating quote */
+  .hero-quote-float {
+    position: absolute; top: 48px; left: -56px; z-index: 2;
+    background: white; border-radius: 14px;
+    padding: 24px 28px; box-shadow: 0 12px 40px rgba(74,46,61,0.16); max-width: 276px;
+    animation: floatBadge 4s ease-in-out infinite;
+  }
+  .hero-quote-float .q-mark {
+    font-family: var(--fl-font-heading); font-size: 3rem; line-height: 1;
+    color: var(--fl-or); opacity: 0.35;
+  }
+  .hero-quote-float p {
+    font-family: var(--fl-font-heading); font-size: 0.9375rem; font-style: italic;
+    color: var(--fl-prune); line-height: 1.55; margin-top: -4px;
+  }
+  .hero-quote-float .q-author {
+    font-size: 0.8125rem; color: var(--fl-warm-gray); margin-top: 8px;
+  }
+  @keyframes floatBadge { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  /* ===== STORY SECTION ===== */
+  .story-section { padding: 96px 0; background: var(--fl-bg-alt); position: relative; }
+  .story-section::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--fl-or), transparent); opacity: 0.4;
+  }
+  .story-content { max-width: 760px; margin: 0 auto; text-align: center; }
+  .story-content h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .story-content h2 em { font-style: italic; color: var(--fl-rose); }
+  .gold-rule { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px auto; border-radius: 1px; }
+  .story-text { margin-top: 32px; text-align: left; }
+  .story-text p { font-size: 1.0625rem; color: var(--fl-charcoal); line-height: 1.85; margin-bottom: 24px; }
+  .story-text p:last-child { margin-bottom: 0; }
+  .highlight-line {
+    font-family: var(--fl-font-heading); font-size: 1.3125rem; font-style: italic;
+    color: var(--fl-rose); text-align: center;
+    padding: 32px 0; line-height: 1.5;
+    border-top: 1px solid rgba(212,160,60,0.2);
+    border-bottom: 1px solid rgba(212,160,60,0.2); margin: 40px 0;
+  }
+
+  /* ===== VALUES ===== */
+  .values-section { padding: 96px 0; background: var(--fl-bg); }
+  .section-head { text-align: center; margin-bottom: 56px; }
+  .section-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--fl-rose); margin-bottom: 12px; }
+  .section-head h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .section-head h2 em { font-style: italic; color: var(--fl-or); }
+  .section-head p { font-size: 1rem; color: var(--fl-warm-gray); max-width: 520px; margin: 0 auto; line-height: 1.75; }
+  .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .value-card { text-align: center; padding: 20px; }
+  .value-icon {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.75rem; position: relative;
+  }
+  .value-icon::after {
+    content: ''; position: absolute; inset: -4px; border-radius: 50%;
+    border: 1.5px dashed var(--fl-or); opacity: 0.3;
+  }
+  .vi-lumiere { background: rgba(212,160,60,0.1); }
+  .vi-emotion { background: rgba(194,114,126,0.1); }
+  .vi-nature { background: rgba(107,127,90,0.1); }
+  .value-card h3 { font-family: var(--fl-font-heading); font-size: 1.25rem; color: var(--fl-prune); margin-bottom: 12px; }
+  .value-card p { font-size: 0.9375rem; color: var(--fl-warm-gray); line-height: 1.7; }
+
+  /* ===== DIFFERENCE ===== */
+  .difference-section { padding: 96px 0; background: var(--fl-prune); position: relative; overflow: hidden; }
+  .difference-section::before {
+    content: ''; position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(194,114,126,0.08) 0%, transparent 70%);
+  }
+  .difference-section::after {
+    content: ''; position: absolute; bottom: -150px; left: -100px;
+    width: 400px; height: 400px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,160,60,0.06) 0%, transparent 70%);
+  }
+  .difference-inner { position: relative; z-index: 1; }
+  .difference-head { text-align: center; margin-bottom: 60px; }
+  .difference-head h2 { color: white; margin-bottom: 8px; }
+  .difference-head h2 em { font-style: italic; color: var(--fl-or); }
+  .difference-head p { font-size: 1rem; color: rgba(255,255,255,0.6); max-width: 480px; margin: 0 auto; line-height: 1.75; }
+  .diff-items { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+  .diff-item {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--fl-radius); padding: 32px 28px;
+    transition: background var(--fl-transition), border-color var(--fl-transition), transform var(--fl-transition);
+  }
+  .diff-item:hover { background: rgba(255,255,255,0.08); border-color: rgba(212,160,60,0.2); transform: translateY(-2px); }
+  .diff-item-icon { font-size: 1.5rem; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .diff-item-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--fl-or); }
+  .diff-item h3 { font-family: var(--fl-font-heading); font-size: 1.1875rem; color: white; margin-bottom: 10px; }
+  .diff-item p { font-size: 0.9375rem; color: rgba(255,255,255,0.6); line-height: 1.7; }
+
+  /* ===== BEHIND THE SCENES ===== */
+  .behind-section { padding: 96px 0; background: var(--fl-bg-alt); }
+  .behind-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .behind-img { border-radius: var(--fl-radius); overflow: hidden; position: relative; cursor: pointer; }
+  .behind-img .ph { aspect-ratio: 1; width: 100%; transition: transform 0.5s ease; }
+  .behind-img:hover .ph { transform: scale(1.05); }
+  .behind-img:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .behind-img:nth-child(1) .ph { aspect-ratio: 1; }
+  .behind-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 16px; background: linear-gradient(to top, rgba(74,46,61,0.7), transparent);
+    font-family: var(--fl-font-heading); font-size: 0.875rem; font-style: italic;
+    color: #fff; opacity: 0; transition: opacity var(--fl-transition);
+  }
+  .behind-img:hover .behind-caption { opacity: 1; }
+  .ph-behind { background: linear-gradient(135deg, #e8d5c4 0%, #dcc8b5 50%, #d0bba6 100%); }
+  .ph-action { background: linear-gradient(135deg, #d5c8b8 0%, #c8baa8 50%, #bbad9a 100%); }
+  .ph-golden-bg { background: linear-gradient(135deg, #f0d9a8 0%, #e8cc94 40%, #dfc080 100%); }
+  .ph-nature { background: linear-gradient(135deg, #d4cfc5 0%, #c5bfb2 40%, #b8b0a0 100%); }
+
+  /* ===== NUMBERS ===== */
+  .numbers-section {
+    padding: 80px 0; background: var(--fl-bg);
+    border-top: 1px solid var(--fl-border); border-bottom: 1px solid var(--fl-border);
+  }
+  .numbers-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center; }
+  .number-value { font-family: var(--fl-font-heading); font-size: clamp(2.25rem, 4vw, 3rem); font-weight: 700; color: var(--fl-or); line-height: 1.1; }
+  .number-label { font-size: 0.9375rem; color: var(--fl-warm-gray); margin-top: 8px; line-height: 1.4; }
+
+  /* ===== GEAR ===== */
+  .gear-section { padding: 80px 0; background: var(--fl-bg); }
+  .gear-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 960px; margin: 0 auto; }
+  .gear-text h2 { color: var(--fl-prune); margin-bottom: 8px; }
+  .gear-text h2 em { font-style: italic; color: var(--fl-or); }
+  .gear-text > p { font-size: 1rem; color: var(--fl-warm-gray); line-height: 1.7; margin-bottom: 28px; }
+  .gear-list { list-style: none; }
+  .gear-list li { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--fl-border); font-size: 0.9375rem; }
+  .gear-list li:last-child { border: none; }
+  .gear-icon { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1rem; background: rgba(212,160,60,0.1); }
+  .gear-name { font-weight: 600; color: var(--fl-prune); }
+  .gear-desc { font-size: 0.8125rem; color: var(--fl-warm-gray); margin-top: 2px; }
+  .gear-photo { border-radius: var(--fl-radius); overflow: hidden; box-shadow: var(--fl-shadow-md); }
+  .gear-photo .ph-gear { aspect-ratio: 4/5; background: linear-gradient(135deg, #d5c8b8 0%, #c8baa8 50%, #bbad9a 100%); }
+  .gold-rule-left { width: 48px; height: 1.5px; background: var(--fl-or); margin: 16px 0 28px; border-radius: 1px; }
+
+  /* ===== FULL QUOTE ===== */
+  .fullquote-section { padding: 80px 0; background: var(--fl-bg-alt); text-align: center; position: relative; }
+  .fullquote-section::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--fl-or), transparent); opacity: 0.4;
+  }
+  .fullquote { max-width: 700px; margin: 0 auto; }
+  .fullquote .q-mark { font-family: var(--fl-font-heading); font-size: 4.5rem; line-height: 1; color: var(--fl-or); opacity: 0.3; }
+  .fullquote blockquote { font-family: var(--fl-font-heading); font-size: clamp(1.375rem, 3vw, 1.875rem); font-style: italic; color: var(--fl-prune); line-height: 1.5; margin-top: -12px; }
+  .fullquote .q-signature { font-size: 0.9375rem; color: var(--fl-rose); margin-top: 24px; font-weight: 600; }
+
+  /* ===== CTA ===== */
+  .cta-final { padding: 96px 0; background: var(--fl-prune); text-align: center; position: relative; overflow: hidden; }
+  .cta-final::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(194,114,126,0.12) 0%, transparent 65%); }
+  .cta-final h2 { color: white; position: relative; z-index: 1; margin-bottom: 14px; }
+  .cta-final h2 em { font-style: italic; color: var(--fl-rose); }
+  .cta-final p { color: rgba(255,255,255,0.65); font-size: 1.0625rem; margin-bottom: 36px; position: relative; z-index: 1; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-actions { position: relative; z-index: 1; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-final .fl-btn-ghost { border-color: rgba(255,255,255,0.3); color: white; }
+  .cta-final .fl-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
+
+  /* ===== FOOTER ===== */
+  .site-footer { background: var(--fl-charcoal); color: white; padding: 72px 0 40px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+  .footer-brand .logo { font-size: 1.375rem; color: white; display: block; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 20px; }
+  .footer-socials { display: flex; gap: 12px; }
+  .footer-socials a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); transition: all var(--fl-transition); }
+  .footer-socials a:hover { background: var(--fl-or); border-color: var(--fl-or); color: var(--fl-prune); }
+  .footer-col h4 { font-family: var(--fl-font-heading); font-size: 1rem; font-weight: 600; color: white; margin-bottom: 18px; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a { font-size: 0.875rem; color: rgba(255,255,255,0.5); transition: color var(--fl-transition); }
+  .footer-links a:hover { color: var(--fl-or); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-bottom p { font-size: 0.8125rem; color: rgba(255,255,255,0.35); }
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { font-size: 0.8125rem; color: rgba(255,255,255,0.35); transition: color var(--fl-transition); }
+  .footer-legal a:hover { color: var(--fl-or); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.08s; }
+  .reveal-delay-2 { transition-delay: 0.16s; }
+  .reveal-delay-3 { transition-delay: 0.24s; }
+  .reveal-delay-4 { transition-delay: 0.32s; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .about-hero-inner { grid-template-columns: 1fr; gap: 48px; }
+    .about-hero-text { padding-bottom: 0; text-align: center; }
+    .about-hero-intro { margin: 0 auto; }
+    .about-hero-photo { max-width: 480px; margin: 0 auto; }
+    .hero-quote-float { left: auto; right: -16px; top: 20px; }
+    .diff-items { grid-template-columns: 1fr; }
+    .gear-inner { grid-template-columns: 1fr; gap: 48px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .site-nav { display: none; }
+    .values-grid { grid-template-columns: 1fr; gap: 32px; }
+    .behind-grid { grid-template-columns: 1fr 1fr; }
+    .behind-img:nth-child(1) { grid-column: span 2; }
+    .numbers-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .hero-quote-float { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+    <nav class="site-nav">
+      <a href="01-accueil.html#specialites">Spécialités</a>
+      <a href="05-tarifs.html">Formules</a>
+      <a href="03-portfolio-temoignages.html">Portfolio</a>
+      <a href="02-apropos.html">À propos</a>
+      <a href="03-portfolio-temoignages.html#temoignages">Avis</a>
+      <a href="01-accueil.html#contact">Contact</a>
+      <a href="#reserver" class="fl-btn fl-btn-primary fl-btn-sm">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO À PROPOS -->
+<section class="about-hero">
+  <div class="fl-container">
+    <div class="about-hero-inner">
+      <div class="about-hero-text">
+        <div class="about-hero-eyebrow">À propos</div>
+        <h1>Je suis Capucine,<br>et je chasse la <em>lumière</em></h1>
+        <p class="about-hero-intro">
+          Photographe passionnée installée dans le Tarn, je capture vos moments les plus précieux dans <strong>la lumière naturelle de l'Heure Dorée</strong>. Chaque séance est une histoire unique, la vôtre, sublimée par la magie du soleil couchant.
+        </p>
+      </div>
+      <div class="about-hero-photo">
+        <div class="photo-main">
+          <div class="ph-capucine"></div>
+          <span class="ph-capucine-label">Portrait de Capucine — photographe</span>
+        </div>
+        <div class="hero-quote-float">
+          <div class="q-mark">"</div>
+          <p>La photographie, c'est écrire avec la lumière. Je veux que chaque image raconte votre histoire.</p>
+          <div class="q-author">— Capucine</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MON HISTOIRE -->
+<section class="story-section">
+  <div class="fl-container">
+    <div class="story-content reveal">
+      <div class="section-label">Mon Histoire</div>
+      <h2>Mon <em>histoire</em></h2>
+      <div class="gold-rule"></div>
+      <div class="story-text">
+        <p>Aussi loin que je me souvienne, j'ai toujours été fascinée par la lumière. Cette façon qu'elle a de transformer un instant ordinaire en quelque chose de magique. Un rayon de soleil qui traverse les feuilles, une lueur dorée sur le visage d'un enfant qui rit, la silhouette d'un cavalier au crépuscule…</p>
+        <p>C'est cette fascination qui m'a poussée à prendre mon premier appareil photo. Et très vite, j'ai compris que la photographie n'était pas qu'une question de technique — c'est une question d'émotion. De connexion. De ces instants fugaces qu'on voudrait garder pour toujours.</p>
+        <div class="highlight-line">
+          « Je ne prends pas des photos. Je capture des émotions, des liens, des histoires. Les vôtres. »
+        </div>
+        <p>Maman, cavalière, coureuse de trail, passionnée de nature — ma vie est un tourbillon de moments intenses. Et c'est cette énergie que je mets dans chaque séance. Je sais ce que c'est que de vouloir figer un sourire, un regard complice, un éclat de rire spontané. Parce que ces moments passent trop vite.</p>
+        <p>Fleur de Lumière est née de cette conviction : <strong>vos plus beaux moments méritent la plus belle lumière</strong>. Celle du lever du soleil sur les collines du Tarn. Celle du coucher doré sur un champ de blé. Celle que je cherche, que je traque, que je vous offre.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MES VALEURS -->
+<section class="values-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Ma Philosophie</div>
+      <h2>Ma <em>philosophie</em></h2>
+      <div class="gold-rule"></div>
+      <p>Trois piliers qui guident chacune de mes séances et font de chaque image un souvenir unique.</p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card reveal reveal-delay-1">
+        <div class="value-icon vi-lumiere">☀</div>
+        <h3>La Lumière</h3>
+        <p>Jamais de flash, jamais d'éclairage artificiel. Je travaille exclusivement avec la lumière du soleil — en particulier l'Heure Dorée, cette fenêtre magique juste avant le coucher du soleil où tout devient or. C'est ma signature.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-2">
+        <div class="value-icon vi-emotion">♡</div>
+        <h3>L'Émotion</h3>
+        <p>Pas de poses forcées, pas de sourires figés. Je crée un cadre de confiance où les rires sont vrais, les regards complices, les câlins spontanés. Les plus belles photos naissent quand on oublie l'appareil.</p>
+      </div>
+      <div class="value-card reveal reveal-delay-3">
+        <div class="value-icon vi-nature">✿</div>
+        <h3>La Nature</h3>
+        <p>Le Tarn offre des paysages magnifiques — champs dorés, forêts de chênes, bords de rivière, collines ondulantes. La nature est mon studio. La simplicité, mon esthétique. Le vrai, mon obsession.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CE QUI ME DIFFÉRENCIE -->
+<section class="difference-section">
+  <div class="fl-container">
+    <div class="difference-inner">
+      <div class="difference-head reveal">
+        <div class="section-label" style="color: var(--fl-or);">Ma Différence</div>
+        <h2>Ce qui fait ma <em>différence</em></h2>
+        <div class="gold-rule"></div>
+        <p>Mon approche n'est pas celle d'un studio classique. Voici ce qui rend chaque séance Fleur de Lumière unique.</p>
+      </div>
+      <div class="diff-items">
+        <div class="diff-item reveal reveal-delay-1">
+          <div class="diff-item-icon">🌅 <span class="diff-item-label">Garantie</span></div>
+          <h3>L'Heure Dorée garantie</h3>
+          <p>Chaque séance est programmée pour coïncider avec les plus belles lumières de la journée. Si la météo ne le permet pas, je vous propose un report gratuit.</p>
+        </div>
+        <div class="diff-item reveal reveal-delay-2">
+          <div class="diff-item-icon">✦ <span class="diff-item-label">Lumière</span></div>
+          <h3>100 % lumière naturelle</h3>
+          <p>Des tons chauds légèrement dorés, un contraste modéré. Jamais de filtres lourds ni de retouche excessive. Vous êtes beaux comme vous êtes.</p>
+        </div>
+        <div class="diff-item reveal reveal-delay-3">
+          <div class="diff-item-icon">♡ <span class="diff-item-label">Approche</span></div>
+          <h3>Approche personnalisée</h3>
+          <p>Avant chaque séance, un questionnaire personnalisé me permet de comprendre vos envies, votre histoire, vos petites habitudes. Le jour J, on se retrouve comme de vieux amis.</p>
+        </div>
+        <div class="diff-item reveal reveal-delay-4">
+          <div class="diff-item-icon">✨ <span class="diff-item-label">Style</span></div>
+          <h3>Retouche douce & naturelle</h3>
+          <p>De la réservation à la livraison de votre galerie, chaque étape est pensée pour être un moment agréable. Galerie en ligne, Boîte Souvenir, carte de parrainage…</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEHIND THE SCENES -->
+<section class="behind-section">
+  <div class="fl-container">
+    <div class="section-head reveal">
+      <div class="section-label">Coulisses</div>
+      <h2>Dans les <em>coulisses</em></h2>
+      <div class="gold-rule"></div>
+    </div>
+    <div class="behind-grid reveal">
+      <div class="behind-img">
+        <div class="ph ph-behind" style="aspect-ratio:1;width:100%;"></div>
+        <div class="behind-caption">En séance — Lumière du soir dans le Tarn</div>
+      </div>
+      <div class="behind-img">
+        <div class="ph ph-action" style="aspect-ratio:1;width:100%;"></div>
+        <div class="behind-caption">Repérage d'un spot au coucher du soleil</div>
+      </div>
+      <div class="behind-img">
+        <div class="ph ph-golden-bg" style="aspect-ratio:1;width:100%;"></div>
+        <div class="behind-caption">Mon matériel prêt pour une séance équestre</div>
+      </div>
+      <div class="behind-img">
+        <div class="ph ph-nature" style="aspect-ratio:1;width:100%;"></div>
+        <div class="behind-caption">Les collines du Tarn — mon terrain de jeu</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHIFFRES CLÉS -->
+<section class="numbers-section">
+  <div class="fl-container">
+    <div class="numbers-grid reveal">
+      <div class="number-item">
+        <div class="number-value">+240</div>
+        <div class="number-label">familles capturées</div>
+      </div>
+      <div class="number-item">
+        <div class="number-value">5 ans</div>
+        <div class="number-label">d'expérience</div>
+      </div>
+      <div class="number-item">
+        <div class="number-value">+1200</div>
+        <div class="number-label">séances réalisées</div>
+      </div>
+      <div class="number-item">
+        <div class="number-value">5 ★</div>
+        <div class="number-label">Note Google</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MON MATÉRIEL -->
+<section class="gear-section">
+  <div class="fl-container">
+    <div class="gear-inner">
+      <div class="gear-text reveal">
+        <div class="section-label">Équipement</div>
+        <h2>Mon <em>matériel</em></h2>
+        <div class="gold-rule-left"></div>
+        <p>Du matériel professionnel au service de la lumière naturelle. Chaque objectif est choisi pour sublimer les portraits et capturer la magie de l'instant.</p>
+        <ul class="gear-list">
+          <li>
+            <div class="gear-icon">📷</div>
+            <div>
+              <div class="gear-name">Sony Alpha 7 IV</div>
+              <div class="gear-desc">Boîtier hybride plein format — excellence en basse lumière</div>
+            </div>
+          </li>
+          <li>
+            <div class="gear-icon">🔭</div>
+            <div>
+              <div class="gear-name">Tamron 70-180mm f/2.8</div>
+              <div class="gear-desc">Idéal portraits et séances équestres — bokeh crémeux</div>
+            </div>
+          </li>
+          <li>
+            <div class="gear-icon">✨</div>
+            <div>
+              <div class="gear-name">Sony 50mm f/1.8</div>
+              <div class="gear-desc">L'objectif roi du portrait — netteté et douceur</div>
+            </div>
+          </li>
+          <li>
+            <div class="gear-icon">🌄</div>
+            <div>
+              <div class="gear-name">Sony 24-70mm f/2.8 GM</div>
+              <div class="gear-desc">Polyvalent pour l'événementiel et les grands espaces</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="gear-photo reveal reveal-delay-2">
+        <div class="ph-gear"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CITATION PLEINE LARGEUR -->
+<section class="fullquote-section">
+  <div class="fl-container">
+    <div class="fullquote reveal">
+      <div class="q-mark">"</div>
+      <blockquote>Chaque famille a une lumière qui lui est propre. Mon rôle, c'est de la trouver et de la figer pour toujours.</blockquote>
+      <div class="q-signature">— Capucine, fondatrice de Fleur de Lumière</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="reserver">
+  <div class="fl-container">
+    <h2>Envie de capturer votre <em>histoire</em> ?</h2>
+    <p>Chaque moment est unique. Offrez-lui la lumière qu'il mérite. Réservez votre séance ou contactez-moi pour en discuter.</p>
+    <div class="cta-actions">
+      <a href="#" class="fl-btn fl-btn-primary fl-btn-lg">Réserver ma séance →</a>
+      <a href="01-accueil.html#contact" class="fl-btn fl-btn-ghost fl-btn-lg">Me contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="fl-container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="01-accueil.html" class="logo">Fleur de <span class="logo-accent">L</span>umière</a>
+        <p>Photographie en lumière naturelle<br>Tarn &amp; Toulouse · Par Capucine</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="TikTok"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.4s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.2 0-2.5-1.7-4.4-4.8-4.4-3.5 0-5.7 2.6-5.7 5.5 0 1 .3 1.7.7 2.3"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Spécialités</h4>
+        <ul class="footer-links">
+          <li><a href="#">Famille &amp; Portraits</a></li>
+          <li><a href="04-specialite-equestre.html">Équestre</a></li>
+          <li><a href="#">Événementiel</a></li>
+          <li><a href="#">Maternité &amp; Naissance</a></li>
+          <li><a href="#">Scolaire</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul class="footer-links">
+          <li><a href="05-tarifs.html">Tarifs &amp; Formules</a></li>
+          <li><a href="03-portfolio-temoignages.html">Portfolio</a></li>
+          <li><a href="02-apropos.html">À propos</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">FAQ</a></li>
+          <li><a href="07-cartes-cadeau-faq.html">Cartes cadeau</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:contact@fleurdelumiere.fr">contact@fleurdelumiere.fr</a></li>
+          <li><a href="#">Parisot (81) — Tarn</a></li>
+          <li><a href="#">Toulouse &amp; environs</a></li>
+          <li><a href="#reserver">Réserver une séance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Fleur de Lumière — Tous droits réservés</p>
+      <div class="footer-legal">
+        <a href="08-offres-legal.html">Mentions légales</a>
+        <a href="08-offres-legal.html">Confidentialité</a>
+        <a href="08-offres-legal.html">CGV</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 20);
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

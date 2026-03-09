@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FL — Album Proofing</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--rose-light:#F5E1E4;--rose-pale:#FFF5F7;--prune:#4A2E3D;--charcoal:#2D2226;--warm-gray:#8A7A7E;--bg:#FDFBFC;--white:#FFF;--cream:#FDF9F7;--success:#4CAF7C;--success-bg:#E8F5EE;--warning:#E8985E;--warning-bg:#FFF3EB;--border:#F0E8EB;--shadow:0 2px 16px rgba(74,46,61,.06);--shadow-lg:0 8px 32px rgba(74,46,61,.08)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Outfit',sans-serif;background:#1A1216;color:var(--charcoal)}
+.tag{display:inline-block;background:#D4BBFF;color:#3A1D6E;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-left:8px}
+.divider{background:var(--prune);padding:20px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase}
+.divider span{background:rgba(255,255,255,.08);padding:6px 20px;border-radius:20px}
+
+/* CLIENT ALBUM VIEWER */
+.viewer{min-height:100vh;background:#1A1216}
+.viewer-top{background:rgba(0,0,0,.4);backdrop-filter:blur(10px);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.vt-logo{font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(255,255,255,.7)}.vt-logo span{color:var(--rose)}
+.vt-info{text-align:center}
+.vt-title{font-size:14px;font-weight:600;color:rgba(255,255,255,.9)}
+.vt-sub{font-size:11px;color:rgba(255,255,255,.4)}
+.vt-right{display:flex;gap:8px}
+.vt-btn{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;border:none;font-family:'Outfit',sans-serif;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+.vt-btn.primary{background:var(--rose);color:#fff}
+
+/* Progress */
+.album-progress{max-width:700px;margin:16px auto;padding:0 32px;display:flex;align-items:center;gap:10px}
+.ap-bar{flex:1;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.ap-fill{height:100%;background:linear-gradient(90deg,var(--success),var(--rose));border-radius:2px}
+.ap-text{font-size:11px;color:rgba(255,255,255,.4)}
+
+/* Album spread */
+.spread-container{max-width:850px;margin:0 auto;padding:32px}
+.spread{display:flex;gap:4px;margin-bottom:20px;perspective:800px}
+.spread-page{flex:1;aspect-ratio:3/4;border-radius:4px;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.spread-page.left{border-radius:2px 4px 4px 2px;transform-origin:right center}
+.spread-page.right{border-radius:4px 2px 2px 4px;transform-origin:left center}
+
+.page-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;color:rgba(255,255,255,.3)}
+.pg1{background:linear-gradient(135deg,#C89878,#D4A888,#B88868)}.pg2{background:linear-gradient(135deg,#E8D0C8,#D4B8B0)}
+.pg3{background:linear-gradient(135deg,#D4C0A8,#C8B498)}.pg4{background:linear-gradient(135deg,#B8C8D0,#A0B8C8)}
+.pg5{background:linear-gradient(135deg,#C8A888,#B89878)}.pg6{background:linear-gradient(135deg,#D0C0D4,#C0B0C8)}
+
+/* Page status badge */
+.page-status{position:absolute;top:8px;right:8px;font-size:10px;font-weight:600;padding:3px 10px;border-radius:6px;backdrop-filter:blur(6px)}
+.page-status.approved{background:rgba(76,175,124,.8);color:#fff}
+.page-status.changes{background:rgba(232,152,94,.8);color:#fff}
+.page-status.pending{background:rgba(255,255,255,.2);color:rgba(255,255,255,.7)}
+
+/* Page number */
+.page-num{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,.4);background:rgba(0,0,0,.3);padding:2px 8px;border-radius:4px}
+
+/* Comment pin */
+.comment-pin{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--warning);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);z-index:2;animation:bounce .5s ease}
+@keyframes bounce{0%{transform:scale(0)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+
+/* Navigation */
+.spread-nav{display:flex;align-items:center;justify-content:center;gap:24px;padding:12px 0}
+.nav-arrow{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.nav-arrow:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)}
+.nav-pages{display:flex;gap:6px}
+.nav-dot{width:8px;height:8px;border-radius:50%;cursor:pointer;transition:all .2s}
+.nav-dot.approved{background:var(--success)}.nav-dot.changes{background:var(--warning)}.nav-dot.pending{background:rgba(255,255,255,.15)}.nav-dot.current{transform:scale(1.5);box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+
+/* Comment panel */
+.comment-panel{max-width:850px;margin:0 auto;padding:0 32px 32px}
+.cp-card{background:rgba(255,255,255,.04);border-radius:16px;border:1px solid rgba(255,255,255,.06);padding:20px 22px}
+.cp-title{font-size:14px;font-weight:600;color:rgba(255,255,255,.7);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+.comment-item{display:flex;gap:10px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.04)}
+.comment-item:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.ci-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+.ci-avatar.client{background:linear-gradient(135deg,#5B8FA8,#7AAFBF)}.ci-avatar.photo{background:linear-gradient(135deg,var(--rose-light),var(--rose))}
+.ci-content{flex:1}
+.ci-header{display:flex;justify-content:space-between;margin-bottom:3px}
+.ci-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.7)}
+.ci-time{font-size:10px;color:rgba(255,255,255,.25)}
+.ci-text{font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.5}
+.ci-resolved{font-size:10px;color:var(--success);margin-top:4px;font-weight:500}
+
+.cp-input{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
+.cp-input input{flex:1;padding:10px 14px;border:1px solid rgba(255,255,255,.08);border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.7)}
+.cp-input input::placeholder{color:rgba(255,255,255,.2)}
+.cp-send{padding:10px 18px;border-radius:10px;background:var(--rose);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer}
+
+/* Action buttons */
+.action-bar{max-width:850px;margin:0 auto;padding:0 32px 40px;display:flex;gap:10px;justify-content:center}
+.action-btn{padding:12px 28px;border-radius:12px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;gap:8px}
+.action-btn.approve{background:var(--success);color:#fff;box-shadow:0 4px 16px rgba(76,175,124,.3)}
+.action-btn.request{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.1)}
+
+/* ADMIN VIEW */
+.admin-view{background:var(--bg);padding:40px;min-height:50vh}
+.admin-c{max-width:800px;margin:0 auto}
+.at{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--prune);margin-bottom:6px}
+.as{font-size:13px;color:var(--warm-gray);margin-bottom:24px}
+
+.album-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.album-card{background:var(--white);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .2s}
+.album-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.album-cover{height:120px;display:flex;align-items:center;justify-content:center;position:relative}
+.ac1{background:linear-gradient(135deg,#D4B8A0,#C8A890,#B89878)}.ac2{background:linear-gradient(135deg,#C8D0D8,#B8C0C8,#A8B0B8)}
+.album-cover-badge{position:absolute;top:10px;right:10px;font-size:10px;font-weight:600;padding:4px 12px;border-radius:6px;backdrop-filter:blur(6px)}
+.album-cover-badge.review{background:rgba(232,152,94,.8);color:#fff}.album-cover-badge.done{background:rgba(76,175,124,.8);color:#fff}
+.album-body{padding:16px}
+.album-name{font-size:14px;font-weight:600;color:var(--charcoal);margin-bottom:3px}
+.album-detail{font-size:12px;color:var(--warm-gray);margin-bottom:8px}
+.album-stats{display:flex;gap:12px}
+.album-stat{font-size:11px;display:flex;align-items:center;gap:3px}
+.album-stat.green{color:var(--success)}.album-stat.orange{color:var(--warning)}.album-stat.gray{color:var(--warm-gray)}
+</style>
+</head>
+<body>
+
+<!-- CLIENT VIEW — Album proofing -->
+<div class="viewer">
+  <div class="viewer-top">
+    <div class="vt-logo">Fleur de <span>Lumière</span></div>
+    <div class="vt-info">
+      <div class="vt-title">Album Mariage — Marie & Thomas <span class="tag">V1.5</span></div>
+      <div class="vt-sub">30x30 cm · 40 pages · Version 2</div>
+    </div>
+    <div class="vt-right">
+      <div class="vt-btn">📋 Résumé</div>
+      <div class="vt-btn primary">✓ Valider l'album</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="album-progress">
+    <div class="ap-text">16/20 pages validées</div>
+    <div class="ap-bar"><div class="ap-fill" style="width:80%"></div></div>
+    <div class="ap-text">80%</div>
+  </div>
+
+  <!-- Album spread -->
+  <div class="spread-container">
+    <div class="spread">
+      <div class="spread-page left">
+        <div class="page-img pg5">Photo pleine page — Échange des alliances</div>
+        <div class="page-status approved">✓ Validée</div>
+        <div class="page-num">Page 12</div>
+      </div>
+      <div class="spread-page right">
+        <div class="page-img pg6">Mosaïque 4 photos — Détails cérémonie</div>
+        <div class="page-status changes">1 modification</div>
+        <div class="page-num">Page 13</div>
+        <div class="comment-pin" style="top:35%;left:25%">1</div>
+      </div>
+    </div>
+
+    <div class="spread-nav">
+      <div class="nav-arrow">←</div>
+      <div class="nav-pages">
+        <div class="nav-dot approved"></div>
+        <div class="nav-dot approved"></div>
+        <div class="nav-dot approved"></div>
+        <div class="nav-dot approved"></div>
+        <div class="nav-dot approved"></div>
+        <div class="nav-dot approved current"></div>
+        <div class="nav-dot changes"></div>
+        <div class="nav-dot pending"></div>
+        <div class="nav-dot pending"></div>
+        <div class="nav-dot pending"></div>
+      </div>
+      <div class="nav-arrow">→</div>
+    </div>
+  </div>
+
+  <!-- Comments -->
+  <div class="comment-panel">
+    <div class="cp-card">
+      <div class="cp-title">💬 Commentaires — Pages 12-13</div>
+
+      <div class="comment-item">
+        <div class="ci-avatar client">M</div>
+        <div class="ci-content">
+          <div class="ci-header"><div class="ci-name">Marie</div><div class="ci-time">Hier à 20:15</div></div>
+          <div class="ci-text">La page 12 est parfaite, j'adore la photo des alliances en pleine page ! Pour la page 13, est-ce qu'on pourrait remplacer la photo en bas à droite par la n°234 de la galerie ? Celle où ma grand-mère sourit.</div>
+        </div>
+      </div>
+
+      <div class="comment-item">
+        <div class="ci-avatar photo">C</div>
+        <div class="ci-content">
+          <div class="ci-header"><div class="ci-name">Capucine</div><div class="ci-time">Aujourd'hui à 9:30</div></div>
+          <div class="ci-text">Bien sûr Marie ! La photo de votre grand-mère est magnifique, elle ira parfaitement ici. Je fais la modification et je vous renvoie la maquette corrigée d'ici demain.</div>
+          <div class="ci-resolved">✓ Modification en cours</div>
+        </div>
+      </div>
+
+      <div class="cp-input">
+        <input type="text" placeholder="Ajouter un commentaire sur ces pages...">
+        <button class="cp-send">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action bar -->
+  <div class="action-bar">
+    <button class="action-btn request">📝 Demander des modifications</button>
+    <button class="action-btn approve">✓ Approuver ces pages</button>
+  </div>
+</div>
+
+<div class="divider"><span>↓ Vue Admin — Gestion des albums ↓</span></div>
+
+<!-- ADMIN VIEW -->
+<div class="admin-view">
+  <div class="admin-c">
+    <div class="at">Album Proofing <span class="tag">Admin</span></div>
+    <div class="as">Gérez vos maquettes d'albums, suivez les validations clients et exportez pour impression</div>
+
+    <div class="album-list">
+      <div class="album-card">
+        <div class="album-cover ac1">
+          <div class="album-cover-badge review">⏳ En révision</div>
+        </div>
+        <div class="album-body">
+          <div class="album-name">Album Mariage — Marie & Thomas</div>
+          <div class="album-detail">30x30 cm · 40 pages · Version 2 · Envoyé il y a 2 jours</div>
+          <div class="album-stats">
+            <div class="album-stat green">✓ 16 validées</div>
+            <div class="album-stat orange">✎ 3 modifications</div>
+            <div class="album-stat gray">○ 1 en attente</div>
+          </div>
+        </div>
+      </div>
+      <div class="album-card">
+        <div class="album-cover ac2">
+          <div class="album-cover-badge done">✓ Validé</div>
+        </div>
+        <div class="album-body">
+          <div class="album-name">Album Famille — Dupont</div>
+          <div class="album-detail">20x20 cm · 20 pages · Version 1 · Validé le 28 fév</div>
+          <div class="album-stats">
+            <div class="album-stat green">✓ 20/20 pages validées</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

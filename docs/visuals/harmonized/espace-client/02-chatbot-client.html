@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages — Espace Client — Fleur de Lumière</title>
+<link rel="stylesheet" href="../design-system.css">
+<style>
+  /* ===== SHELL C — CLIENT PORTAL ===== */
+  .cp-nav {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: 0 var(--fl-space-xl);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .cp-nav-logo {
+    font-family: var(--fl-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    white-space: nowrap;
+  }
+
+  .cp-nav-logo em { color: var(--fl-rose); font-style: normal; }
+
+  .cp-nav-links {
+    display: flex;
+    gap: var(--fl-space-xl);
+    align-items: center;
+  }
+
+  .cp-nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fl-warm-gray);
+    text-decoration: none;
+    padding: 20px 0;
+    border-bottom: 2px solid transparent;
+    transition: all var(--fl-transition);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .cp-nav-link:hover { color: var(--fl-charcoal); }
+  .cp-nav-link.active { color: var(--fl-prune); border-bottom-color: var(--fl-rose); font-weight: 600; }
+
+  .cp-nav-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  /* ===== CHAT LAYOUT ===== */
+  .chat-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+  }
+
+  /* ===== SIDEBAR ===== */
+  .chat-sidebar {
+    background: var(--fl-bg-card);
+    border-right: 1px solid var(--fl-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .chat-sidebar-header {
+    padding: var(--fl-space-lg);
+    border-bottom: 1px solid var(--fl-border);
+  }
+
+  .chat-sidebar-title {
+    font-family: var(--fl-font-heading);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--fl-prune);
+    margin-bottom: var(--fl-space-sm);
+  }
+
+  .chat-search {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    background: var(--fl-bg);
+    border: 1px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius-full);
+    padding: 8px 14px;
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+  }
+
+  .chat-history {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--fl-space-sm);
+  }
+
+  .chat-history-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fl-space-md);
+    padding: var(--fl-space-md);
+    border-radius: var(--fl-radius-sm);
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    position: relative;
+  }
+
+  .chat-history-item:hover { background: var(--fl-bg); }
+  .chat-history-item.active { background: var(--fl-rose-pale); }
+
+  .chi-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .chi-content { flex: 1; overflow: hidden; }
+
+  .chi-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--fl-charcoal);
+    margin-bottom: 2px;
+  }
+
+  .chi-preview {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chi-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .chi-time { font-size: 0.6875rem; color: var(--fl-warm-gray); }
+
+  .chi-unread {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--fl-rose);
+    color: #fff;
+    font-size: 0.625rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* CLIENT INFO CARD */
+  .chat-client-card {
+    border-top: 1px solid var(--fl-border);
+    padding: var(--fl-space-md) var(--fl-space-lg);
+  }
+
+  .ccc-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--fl-warm-gray);
+    margin-bottom: var(--fl-space-sm);
+  }
+
+  .ccc-name {
+    font-weight: 600;
+    color: var(--fl-charcoal);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .ccc-detail {
+    font-size: 0.8125rem;
+    color: var(--fl-warm-gray);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+  }
+
+  /* ===== CHAT MAIN ===== */
+  .chat-main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--fl-bg);
+  }
+
+  /* CHAT HEADER */
+  .chat-header {
+    background: var(--fl-bg-card);
+    border-bottom: 1px solid var(--fl-border);
+    padding: var(--fl-space-md) var(--fl-space-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-md);
+  }
+
+  .chat-header-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .chat-header-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--fl-success);
+    border: 2px solid var(--fl-bg-card);
+  }
+
+  .chat-header-name {
+    font-weight: 600;
+    color: var(--fl-charcoal);
+    font-size: 0.9375rem;
+  }
+
+  .chat-header-status {
+    font-size: 0.8125rem;
+    color: var(--fl-success);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .chat-header-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--fl-success);
+    display: inline-block;
+  }
+
+  .chat-header-actions {
+    display: flex;
+    gap: var(--fl-space-sm);
+    align-items: center;
+  }
+
+  .chat-header-actions .fl-badge {
+    cursor: default;
+  }
+
+  /* MESSAGES AREA */
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--fl-space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fl-space-md);
+  }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    max-width: 72%;
+    animation: msgIn 0.25s ease;
+  }
+
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-capucine {
+    align-self: flex-start;
+    flex-direction: row;
+    gap: var(--fl-space-sm);
+    max-width: 78%;
+  }
+
+  .msg-capucine .msg-inner { align-items: flex-start; }
+
+  .msg-client { align-self: flex-end; }
+
+  .msg-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .msg-avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--fl-rose-light), var(--fl-rose));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .bubble {
+    padding: 11px 16px;
+    border-radius: 18px;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .bubble-capucine {
+    background: var(--fl-bg-card);
+    color: var(--fl-charcoal);
+    border: 1px solid var(--fl-border);
+    border-bottom-left-radius: 5px;
+    box-shadow: var(--fl-shadow-sm);
+  }
+
+  .bubble-client {
+    background: var(--fl-rose);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+    align-self: flex-end;
+  }
+
+  .msg-time {
+    font-size: 0.6875rem;
+    color: var(--fl-warm-gray);
+    padding: 0 4px;
+  }
+
+  .msg-capucine .msg-time { text-align: left; }
+  .msg-client .msg-time { text-align: right; }
+
+  /* DATE SEPARATOR */
+  .chat-date-sep {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--fl-warm-gray);
+    font-weight: 500;
+    margin: var(--fl-space-sm) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+  }
+
+  .chat-date-sep::before,
+  .chat-date-sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--fl-border);
+  }
+
+  /* QUICK REPLIES */
+  .quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--fl-space-sm);
+    padding: 0 var(--fl-space-xl) var(--fl-space-sm);
+    flex-shrink: 0;
+  }
+
+  .qr-chip {
+    padding: 7px 14px;
+    border-radius: var(--fl-radius-full);
+    border: 1.5px solid var(--fl-rose-light);
+    background: var(--fl-bg-card);
+    color: var(--fl-rose);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    font-family: var(--fl-font-body);
+  }
+
+  .qr-chip:hover {
+    background: var(--fl-rose);
+    color: #fff;
+    border-color: var(--fl-rose);
+  }
+
+  /* INPUT */
+  .chat-input-area {
+    background: var(--fl-bg-card);
+    border-top: 1px solid var(--fl-border);
+    padding: var(--fl-space-md) var(--fl-space-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--fl-space-sm);
+    flex-shrink: 0;
+  }
+
+  .chat-attach-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--fl-radius-sm);
+    border: 1.5px solid var(--fl-border-dark);
+    background: var(--fl-bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--fl-warm-gray);
+    cursor: pointer;
+    transition: all var(--fl-transition);
+    flex-shrink: 0;
+  }
+
+  .chat-attach-btn:hover {
+    border-color: var(--fl-rose);
+    color: var(--fl-rose);
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1.5px solid var(--fl-border-dark);
+    border-radius: var(--fl-radius-full);
+    font-family: var(--fl-font-body);
+    font-size: 0.9rem;
+    color: var(--fl-charcoal);
+    background: var(--fl-bg);
+    outline: none;
+    transition: border-color var(--fl-transition);
+  }
+
+  .chat-input:focus {
+    border-color: var(--fl-rose);
+    box-shadow: 0 0 0 3px rgba(194,114,126,0.10);
+    background: var(--fl-bg-card);
+  }
+
+  .chat-input::placeholder { color: var(--fl-warm-gray); }
+
+  .chat-send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--fl-rose);
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--fl-transition);
+    flex-shrink: 0;
+    box-shadow: var(--fl-shadow-cta);
+  }
+
+  .chat-send-btn:hover {
+    background: var(--fl-rose-hover);
+    transform: scale(1.05);
+  }
+
+  .chat-powered {
+    text-align: center;
+    font-size: 0.6875rem;
+    color: var(--fl-warm-gray);
+    padding: 6px;
+    border-top: 1px solid var(--fl-border);
+    background: var(--fl-bg-card);
+    flex-shrink: 0;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .cp-nav-links { display: none; }
+    .chat-layout { grid-template-columns: 1fr; }
+    .chat-sidebar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="cp-nav">
+  <div class="cp-nav-logo">Fleur de <em>Lumière</em></div>
+  <div class="cp-nav-links">
+    <a class="cp-nav-link" href="01-client-journey.html">Mon Parcours</a>
+    <a class="cp-nav-link" href="#">Mes Photos</a>
+    <a class="cp-nav-link" href="#">Ma Réservation</a>
+    <a class="cp-nav-link" href="03-notifications.html">Notifications</a>
+    <a class="cp-nav-link active" href="02-chatbot-client.html">Messages</a>
+  </div>
+  <div class="cp-nav-avatar" title="Sophie Mercier">S</div>
+</nav>
+
+<!-- CHAT LAYOUT -->
+<div class="chat-layout">
+
+  <!-- SIDEBAR: HISTORY + CLIENT INFO -->
+  <aside class="chat-sidebar">
+    <div class="chat-sidebar-header">
+      <div class="chat-sidebar-title">Messages</div>
+      <div class="chat-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Rechercher...
+      </div>
+    </div>
+
+    <div class="chat-history">
+
+      <!-- Conversation 1: Active -->
+      <div class="chat-history-item active">
+        <div class="chi-avatar">&#127800;</div>
+        <div class="chi-content">
+          <div class="chi-name">Capucine — Fleur de Lumière</div>
+          <div class="chi-preview">Bien sûr, les tons naturels sont parfaits...</div>
+        </div>
+        <div class="chi-meta">
+          <div class="chi-time">14h38</div>
+          <div class="chi-unread">2</div>
+        </div>
+      </div>
+
+      <!-- Conversation 2 -->
+      <div class="chat-history-item">
+        <div class="chi-avatar" style="background: linear-gradient(135deg, var(--fl-sauge-light), var(--fl-sauge)); font-size: 1.125rem;">&#128203;</div>
+        <div class="chi-content">
+          <div class="chi-name">Questionnaire — Séance du 15/03</div>
+          <div class="chi-preview">Merci pour vos réponses !</div>
+        </div>
+        <div class="chi-meta">
+          <div class="chi-time">7 mars</div>
+        </div>
+      </div>
+
+      <!-- Conversation 3 -->
+      <div class="chat-history-item">
+        <div class="chi-avatar" style="background: linear-gradient(135deg, var(--fl-or-light), var(--fl-or)); font-size: 1.125rem;">&#10003;</div>
+        <div class="chi-content">
+          <div class="chi-name">Confirmation de réservation</div>
+          <div class="chi-preview">Votre réservation #FL2026-0847...</div>
+        </div>
+        <div class="chi-meta">
+          <div class="chi-time">5 mars</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Client info -->
+    <div class="chat-client-card">
+      <div class="ccc-label">Votre séance</div>
+      <div class="ccc-name">Sophie Mercier</div>
+      <div class="ccc-detail">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        15 mars 2026 — 19h45
+      </div>
+      <div class="ccc-detail">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Forêt de Grésigne
+      </div>
+      <div class="ccc-detail">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Formule Signature — 309€
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CHAT AREA -->
+  <div class="chat-main">
+
+    <!-- CHAT HEADER -->
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-header-avatar">&#127800;</div>
+        <div>
+          <div class="chat-header-name">Capucine — Fleur de Lumière</div>
+          <div class="chat-header-status">En ligne · Répond en ~30 min</div>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <span class="fl-badge fl-badge-or">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"/><path d="M11 11h2v6h-2zm0-4h2v2h-2z"/></svg>
+          Assisté par IA
+        </span>
+        <button class="fl-btn fl-btn-ghost fl-btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="chat-messages">
+
+      <div class="chat-date-sep">Aujourd'hui — 8 mars 2026</div>
+
+      <!-- Capucine message 1 -->
+      <div class="msg msg-capucine">
+        <div class="msg-avatar-sm">&#127800;</div>
+        <div class="msg-inner">
+          <div class="bubble bubble-capucine">
+            Bonjour Sophie ! &#127800; Je suis ravie de préparer votre séance avec vous. J'ai bien reçu votre questionnaire — vous avez des choix de tenues vraiment élégants ! Avez-vous des questions sur la préparation ?
+          </div>
+          <span class="msg-time">14h22</span>
+        </div>
+      </div>
+
+      <!-- Client message 1 -->
+      <div class="msg msg-client">
+        <div class="msg-inner">
+          <div class="bubble bubble-client">
+            Bonjour Capucine ! Merci :) J'hésite encore entre ma robe terracotta et une tenue en lin beige. Les deux iraient bien pour la forêt ?
+          </div>
+          <span class="msg-time">14h25</span>
+        </div>
+      </div>
+
+      <!-- Capucine message 2 -->
+      <div class="msg msg-capucine">
+        <div class="msg-avatar-sm">&#127800;</div>
+        <div class="msg-inner">
+          <div class="bubble bubble-capucine">
+            Les deux sont parfaites ! &#127811; La terracotta va créer un contraste chaleureux avec les verts de la forêt, très "Golden Hour". Le lin beige donnera quelque chose de plus épuré et intemporel.
+            <br><br>
+            Mon conseil : apportez les deux si possible — on peut faire un changement de tenue pendant la séance, c'est inclus dans la Signature !
+          </div>
+          <span class="msg-time">14h27</span>
+        </div>
+      </div>
+
+      <!-- Client message 2 -->
+      <div class="msg msg-client">
+        <div class="msg-inner">
+          <div class="bubble bubble-client">
+            Ah super idée ! Et pour les enfants, j'avais pensé à du blanc cassé — c'est bon ?
+          </div>
+          <span class="msg-time">14h30</span>
+        </div>
+      </div>
+
+      <!-- Capucine message 3 -->
+      <div class="msg msg-capucine">
+        <div class="msg-avatar-sm">&#127800;</div>
+        <div class="msg-inner">
+          <div class="bubble bubble-capucine">
+            Blanc cassé c'est magnifique pour les enfants &#10024; Ça créera une belle harmonie avec vos tenues. Quelques petits conseils :
+            <br><br>
+            &#8226; Évitez les vêtements trop neufs (ils peuvent faire "rigide" en photo)<br>
+            &#8226; Prévoyez des chaussures confortables — on marchera un peu dans la forêt<br>
+            &#8226; Un petit accessoire coloré pour les enfants peut apporter de la vie !
+          </div>
+          <span class="msg-time">14h33</span>
+        </div>
+      </div>
+
+      <!-- Client message 3 -->
+      <div class="msg msg-client">
+        <div class="msg-inner">
+          <div class="bubble bubble-client">
+            Merci beaucoup ! Et pour le lieu exactement, on se retrouve où dans la forêt ?
+          </div>
+          <span class="msg-time">14h35</span>
+        </div>
+      </div>
+
+      <!-- Capucine message 4 -->
+      <div class="msg msg-capucine">
+        <div class="msg-avatar-sm">&#127800;</div>
+        <div class="msg-inner">
+          <div class="bubble bubble-capucine">
+            Je vous enverrai un lien Google Maps précis J-2 &#128205; Le point de rendez-vous est près de l'entrée principale, parking gratuit à 2 min. Comptez 19h30 pour être installés avant la lumière parfaite à 19h45.
+            <br><br>
+            Hâte de vous retrouver ! &#127749;
+          </div>
+          <span class="msg-time">14h38</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- QUICK REPLIES -->
+    <div class="quick-replies">
+      <button class="qr-chip">&#128247; Conseils tenues</button>
+      <button class="qr-chip">&#128205; Comment accéder au lieu ?</button>
+      <button class="qr-chip">&#9728;&#65039; Météo prévue</button>
+      <button class="qr-chip">&#128336; Durée de la séance</button>
+      <button class="qr-chip">&#128231; Envoyer une inspiration</button>
+    </div>
+
+    <!-- INPUT -->
+    <div class="chat-input-area">
+      <button class="chat-attach-btn" title="Joindre une inspiration">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+      </button>
+      <input type="text" class="chat-input" placeholder="Écrivez votre message...">
+      <button class="chat-send-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+    <div class="chat-powered">
+      &#129302; Propulsé par Fleur de Lumière AI &mdash; vos conversations sont privées et sécurisées
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

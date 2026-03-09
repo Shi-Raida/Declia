@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot Client — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-lg:0 8px 32px rgba(74,46,61,.18);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg);font-size:14px;line-height:1.5}
+button{font-family:var(--font);cursor:pointer}
+.btn-primary{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:var(--radius);background:var(--rose);color:#fff;border:none;cursor:pointer;transition:var(--tr)}.btn-primary:hover{background:var(--rose-hover)}
+.fake-header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--gris-border);background:var(--bg)}
+.fake-logo{font-family:var(--font-titre);font-size:22px;font-weight:700;color:var(--prune)}.fake-logo span{color:var(--or)}
+.fake-nav{display:flex;gap:24px;font-size:14px;color:var(--gris)}
+.fake-page{padding:60px 24px;max-width:900px;margin:0 auto;min-height:100vh}
+.fp-hero{text-align:center;margin-bottom:40px}
+.fp-hero h1{font-family:var(--font-titre);font-size:clamp(28px,4vw,40px);color:var(--prune);margin-bottom:12px}.fp-hero h1 em{color:var(--rose);font-style:italic}
+.fp-hero p{color:var(--gris);font-size:16px;max-width:480px;margin:0 auto}
+.fp-block{height:220px;border-radius:var(--radius-md);margin-bottom:24px}
+.fp-b1{background:linear-gradient(135deg,#f0d9a8,#dfc080)}.fp-b2{background:linear-gradient(135deg,#e8d5c4,#d0bba6)}
+.fp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.fp-card{background:var(--bg-alt);border-radius:var(--radius-md);height:180px}
+.chat-trigger{position:fixed;bottom:24px;right:24px;z-index:50;width:64px;height:64px;border-radius:50%;background:var(--rose);color:#fff;border:none;font-size:28px;box-shadow:var(--shadow-lg);cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center}
+.chat-trigger:hover{transform:scale(1.08);box-shadow:0 8px 40px rgba(194,114,126,.4)}
+.chat-trigger .notif{position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-radius:50%;background:var(--or);border:3px solid var(--bg);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--texte)}
+.chat-window{position:fixed;bottom:100px;right:24px;z-index:60;width:380px;max-width:calc(100vw - 48px);height:580px;max-height:calc(100vh - 140px);background:var(--bg);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--gris-border);opacity:0;transform:translateY(20px) scale(.95);pointer-events:none;transition:var(--tr)}
+.chat-window.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
+.ch-header{background:var(--prune);padding:16px 18px;display:flex;align-items:center;gap:12px;color:#fff;flex-shrink:0}
+.ch-avatar{width:40px;height:40px;border-radius:50%;background:var(--rose);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ch-info h4{font-size:14px;font-family:var(--font)}.ch-info p{font-size:11px;color:rgba(255,255,255,.6)}.ch-info .online{color:#86efac;font-weight:700}
+.ch-close{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:14px;cursor:pointer;margin-left:auto;display:flex;align-items:center;justify-content:center}.ch-close:hover{background:rgba(255,255,255,.2)}
+.ch-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.ch-messages::-webkit-scrollbar{width:4px}.ch-messages::-webkit-scrollbar-thumb{background:var(--gris-border);border-radius:2px}
+.msg{max-width:85%;display:flex;flex-direction:column;gap:3px;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg-bot{align-self:flex-start}.msg-user{align-self:flex-end}
+.bubble{padding:11px 15px;border-radius:16px;font-size:13px;line-height:1.6}
+.msg-bot .bubble{background:var(--bg-alt);color:var(--texte);border-bottom-left-radius:4px}
+.msg-user .bubble{background:var(--rose);color:#fff;border-bottom-right-radius:4px}
+.msg-time{font-size:10px;color:var(--gris-light);padding:0 4px}.msg-bot .msg-time{text-align:left}.msg-user .msg-time{text-align:right}
+.quick-replies{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0}
+.qr{padding:8px 14px;border-radius:var(--radius-full);border:1.5px solid var(--rose);background:var(--bg);color:var(--rose);font-size:12px;font-weight:700;cursor:pointer;transition:var(--tr)}.qr:hover{background:var(--rose);color:#fff}
+.cc{background:var(--bg);border:1px solid var(--gris-border);border-radius:var(--radius);overflow:hidden;max-width:260px}
+.cc-img{height:90px;width:100%}.cc-body{padding:10px 12px}.cc-body h5{font-size:13px;color:var(--prune);margin-bottom:2px}.cc-body p{font-size:11px;color:var(--gris)}
+.cc-price{font-family:var(--font-titre);font-size:16px;font-weight:700;color:var(--or);margin-top:4px}
+.cc-cal{background:var(--bg);border:1px solid var(--gris-border);border-radius:var(--radius);padding:12px;max-width:260px}
+.cc-cal h5{font-size:12px;font-weight:700;color:var(--prune);margin-bottom:8px}
+.cc-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:11px}
+.cc-day{padding:6px 2px;border-radius:var(--radius);cursor:pointer;transition:var(--tr)}
+.cc-day.avail{font-weight:700;color:var(--sauge);background:rgba(107,127,90,.1)}.cc-day.avail:hover{background:var(--sauge);color:#fff}
+.cc-day.off{color:var(--gris-light)}.cc-day.head{font-weight:700;color:var(--gris);font-size:10px}
+.ch-input{padding:12px 14px;border-top:1px solid var(--gris-border);display:flex;gap:8px;flex-shrink:0}
+.ch-input input{flex:1;padding:10px 14px;border:2px solid var(--gris-border);border-radius:var(--radius-full);font-size:13px;font-family:var(--font);outline:none}.ch-input input:focus{border-color:var(--rose)}.ch-input input::placeholder{color:var(--gris-light)}
+.ch-input button{width:40px;height:40px;border-radius:50%;background:var(--rose);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--tr)}.ch-input button:hover{background:var(--rose-hover)}
+.ch-powered{text-align:center;padding:6px;font-size:10px;color:var(--gris-light);border-top:1px solid rgba(74,46,61,.04);flex-shrink:0}
+@media(max-width:768px){.chat-window{width:calc(100vw - 32px);right:16px;bottom:96px;height:calc(100vh - 130px)}.fp-cards{grid-template-columns:1fr}.fake-nav{display:none}}
+</style>
+</head>
+<body>
+<div class="fake-header"><span class="fake-logo">Fleur de <span>L</span>umière</span><div class="fake-nav"><span>Spécialités</span><span>Formules</span><span>Portfolio</span><span>Boutique</span></div></div>
+<div class="fake-page">
+  <div class="fp-hero"><h1>Vos souvenirs dans la <em>Lumière Dorée</em></h1><p>Photographie en lumière naturelle — Tarn & Toulouse</p></div>
+  <div class="fp-block fp-b1"></div>
+  <div class="fp-cards"><div class="fp-card"></div><div class="fp-card"></div><div class="fp-card"></div></div>
+  <div class="fp-block fp-b2"></div>
+</div>
+<button class="chat-trigger" onclick="toggleChat()">💬<span class="notif">1</span></button>
+<div class="chat-window open" id="chat-window">
+  <div class="ch-header"><div class="ch-avatar">🌸</div><div class="ch-info"><h4>Fleur de Lumière</h4><p><span class="online">● En ligne</span> · Répond en ~30s</p></div><button class="ch-close" onclick="toggleChat()">✕</button></div>
+  <div class="ch-messages">
+    <div class="msg msg-bot"><div class="bubble">Bonjour ! 🌸 Je suis l'assistante Fleur de Lumière. Je peux vous aider à trouver la formule idéale, vérifier les disponibilités ou répondre à vos questions. Comment puis-je vous aider ?</div><span class="msg-time">14:32</span></div>
+    <div class="quick-replies"><span class="qr">💰 Voir les tarifs</span><span class="qr">📅 Dispos mars</span><span class="qr">🐴 Séance équestre</span><span class="qr">🎁 Carte cadeau</span></div>
+    <div class="msg msg-user"><div class="bubble">Bonjour ! J'aimerais faire une séance photo en famille avec mes 2 enfants (4 et 7 ans) et notre chien. Quelle formule me conseillez-vous ?</div><span class="msg-time">14:33</span></div>
+    <div class="msg msg-bot"><div class="bubble">Quelle belle idée ! 🥰 Avec 2 enfants et un toutou, je vous recommande la formule <strong>Signature</strong> — 1 heure de séance, c'est parfait pour prendre le temps avec les petits et votre compagnon à 4 pattes !</div><span class="msg-time">14:33</span></div>
+    <div class="msg msg-bot"><div class="cc"><div class="cc-img" style="background:linear-gradient(135deg,#f0d9a8,#dfc080)"></div><div class="cc-body"><h5>Formule Signature — Famille</h5><p>1h · 25 photos retouchées · Changement de tenue · 3 tirages offerts</p><div class="cc-price">280€</div><button class="btn-primary" style="margin-top:8px;">Réserver →</button></div></div></div>
+    <div class="msg msg-bot"><div class="bubble">Pour le chien, aucun souci ! 🐕 Je vous conseille un lieu en extérieur — champ ou lisière de forêt — où il pourra se promener librement. Les meilleurs moments sont ceux où il joue avec les enfants !</div><span class="msg-time">14:34</span></div>
+    <div class="quick-replies"><span class="qr">📅 Voir les dispos</span><span class="qr">👗 Conseils tenues</span><span class="qr">📍 Lieux proposés</span></div>
+    <div class="msg msg-user"><div class="bubble">Oui, quels créneaux sont disponibles en mars ?</div><span class="msg-time">14:35</span></div>
+    <div class="msg msg-bot"><div class="bubble">Voici les créneaux Heure Dorée disponibles en mars pour une Signature famille :</div><span class="msg-time">14:35</span></div>
+    <div class="msg msg-bot"><div class="cc-cal"><h5>☀️ Mars 2026 — Créneaux Golden Hour</h5><div class="cc-cal-grid"><span class="cc-day head">L</span><span class="cc-day head">M</span><span class="cc-day head">M</span><span class="cc-day head">J</span><span class="cc-day head">V</span><span class="cc-day head">S</span><span class="cc-day head">D</span><span class="cc-day off"></span><span class="cc-day off"></span><span class="cc-day off"></span><span class="cc-day off"></span><span class="cc-day off"></span><span class="cc-day off"></span><span class="cc-day off">1</span><span class="cc-day off">2</span><span class="cc-day off">3</span><span class="cc-day off">4</span><span class="cc-day off">5</span><span class="cc-day off">6</span><span class="cc-day avail">7</span><span class="cc-day avail">8</span><span class="cc-day off">9</span><span class="cc-day off">10</span><span class="cc-day off">11</span><span class="cc-day off">12</span><span class="cc-day off">13</span><span class="cc-day avail">14</span><span class="cc-day avail">15</span><span class="cc-day off">16</span><span class="cc-day off">17</span><span class="cc-day off">18</span><span class="cc-day off">19</span><span class="cc-day off">20</span><span class="cc-day avail">21</span><span class="cc-day off">22</span><span class="cc-day off">23</span><span class="cc-day off">24</span><span class="cc-day off">25</span><span class="cc-day off">26</span><span class="cc-day off">27</span><span class="cc-day avail">28</span><span class="cc-day avail">29</span></div></div></div>
+    <div class="msg msg-bot"><div class="bubble">Les jours verts sont disponibles 🌿 Le <strong>samedi 14 mars</strong> est le plus demandé — je vous conseille de le réserver vite ! Coucher de soleil à 18h42, lumière parfaite dès 17h30.</div><span class="msg-time">14:35</span></div>
+    <div class="quick-replies"><span class="qr">✅ Réserver le 14 mars</span><span class="qr">📋 Autre date</span><span class="qr">❓ J'ai une question</span></div>
+  </div>
+  <div class="ch-input"><input type="text" placeholder="Écrivez votre message..."><button>➤</button></div>
+  <div class="ch-powered">Propulsé par 🤖 Fleur de Lumière AI</div>
+</div>
+<script>function toggleChat(){document.getElementById('chat-window').classList.toggle('open')}</script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio & Témoignages — Fleur de Lumière</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C2727E;--prune:#4A2E3D;--or:#D4A03C;--sauge:#6B7F5A;--bg:#FFF;--bg-alt:#FFF9F7;--texte:#2D2226;--gris:#6B7280;--gris-light:#9CA3AF;--gris-border:#E5E7EB;--rose-hover:#A85965;--rose-light:rgba(194,114,126,.08);--or-light:rgba(212,160,60,.1);--sauge-light:rgba(107,127,90,.1);--prune-light:rgba(74,46,61,.05);--font-titre:'Playfair Display',Georgia,serif;--font:'Lato',-apple-system,sans-serif;--radius:8px;--radius-md:12px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(74,46,61,.06);--shadow-md:0 4px 16px rgba(74,46,61,.12);--shadow-cta:0 4px 12px rgba(194,114,126,.3);--tr:.25s ease}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);color:var(--texte);background:var(--bg);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}button{font-family:var(--font);cursor:pointer}
+h1,h2,h3,h4{font-family:var(--font-titre);line-height:1.25}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.or-line{width:60px;height:2px;background:var(--or);margin:12px auto;border-radius:1px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font);font-size:14px;font-weight:700;padding:12px 28px;border-radius:var(--radius);cursor:pointer;transition:var(--tr);border:2px solid transparent}
+.btn-primary{background:var(--rose);color:#fff;border-color:var(--rose);box-shadow:var(--shadow-cta)}
+.btn-primary:hover{background:var(--rose-hover);border-color:var(--rose-hover);transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:var(--prune);border:2px solid var(--prune)}
+.btn-secondary:hover{background:var(--prune);color:#fff}
+.btn-sm{padding:10px 20px;font-size:13px}
+
+/* SWITCHER */
+.switcher{position:sticky;top:0;z-index:100;background:var(--prune);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:8px}
+.sw-btn{padding:10px 24px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.7);cursor:pointer;transition:var(--tr)}
+.sw-btn:hover{border-color:rgba(255,255,255,.4);color:#fff}
+.sw-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.page-view{display:none}.page-view.active{display:block}
+
+/* HEADER */
+.header{background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,46,61,.06);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--font-titre);font-size:20px;font-weight:700;color:var(--prune)}
+.logo span{color:var(--or)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{font-size:14px;color:var(--prune);transition:var(--tr)}
+.nav-links a:hover{color:var(--rose)}
+.nav-links a.active{color:var(--rose)}
+
+/* ============================== */
+/* PORTFOLIO                      */
+/* ============================== */
+.port-hero{padding:80px 0 48px;text-align:center}
+.port-hero h1{font-size:clamp(30px,5vw,44px);color:var(--prune)}
+.port-hero h1 em{color:var(--rose);font-style:italic}
+.port-hero p{font-size:16px;color:var(--gris);max-width:500px;margin:0 auto;line-height:1.7}
+
+.port-filters{padding:20px 0;border-bottom:1px solid var(--gris-border);margin-bottom:40px}
+.filter-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.filter-tab{padding:10px 22px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--tr)}
+.filter-tab:hover{border-color:var(--rose);color:var(--rose)}
+.filter-tab.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+
+.port-section{padding:0 0 60px}
+.port-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.port-section-header h2{font-size:22px;color:var(--prune);display:flex;align-items:center;gap:10px}
+.port-section-header h2 em{color:var(--rose);font-style:italic}
+.port-count{font-size:13px;color:var(--gris)}
+
+/* Masonry-style grid */
+.masonry{display:grid;gap:12px}
+.masonry-4{grid-template-columns:repeat(4,1fr)}
+.masonry-3{grid-template-columns:repeat(3,1fr)}
+.gallery-item{border-radius:var(--radius);overflow:hidden;position:relative;cursor:pointer;transition:var(--tr)}
+.gallery-item:hover{transform:scale(1.02);box-shadow:var(--shadow-md)}
+.gallery-item .ph{width:100%;height:100%;transition:transform .5s}
+.gallery-item:hover .ph{transform:scale(1.08)}
+.gi-overlay{position:absolute;inset:0;background:linear-gradient(transparent 50%,rgba(74,46,61,.5));opacity:0;transition:var(--tr);display:flex;align-items:flex-end;padding:16px}
+.gallery-item:hover .gi-overlay{opacity:1}
+.gi-overlay .gi-caption{color:#fff;font-size:12px}
+.gi-overlay .gi-share{position:absolute;top:12px;right:12px;display:flex;gap:6px}
+.gi-share button{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.85);border:none;font-size:14px;cursor:pointer;backdrop-filter:blur(4px);transition:var(--tr);display:flex;align-items:center;justify-content:center}
+.gi-share button:hover{background:#fff;transform:scale(1.1)}
+
+/* Heights for masonry look */
+.h-sm{aspect-ratio:4/3}.h-md{aspect-ratio:3/4}.h-lg{aspect-ratio:2/3}.h-sq{aspect-ratio:1}.h-wide{aspect-ratio:16/9}.h-pano{aspect-ratio:21/9;grid-column:span 2}
+
+/* Placeholder photo colors */
+.pc1{background:linear-gradient(135deg,#e8d5c4,#d0bba6)}
+.pc2{background:linear-gradient(145deg,#d4cfc5,#b8b0a0)}
+.pc3{background:linear-gradient(130deg,#c8bfac,#a69c85)}
+.pc4{background:linear-gradient(140deg,#f0d9a8,#dfc080)}
+.pc5{background:linear-gradient(155deg,#d5c8b8,#bbad9a)}
+.pc6{background:linear-gradient(135deg,#cec3ad,#b0a58f)}
+.pc7{background:linear-gradient(145deg,#e0d5c0,#c0b49c)}
+.pc8{background:linear-gradient(130deg,#d8ccb8,#b8ac96)}
+.pc9{background:linear-gradient(135deg,#f5ede6,#e2d5c8)}
+.pc10{background:linear-gradient(140deg,#ddd0bc,#c8bba8)}
+.pc11{background:linear-gradient(135deg,#e5dcd0,#d2c8b8)}
+.pc12{background:linear-gradient(145deg,#d0c5b5,#bbb0a0)}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(45,34,38,.95);z-index:500;display:none;align-items:center;justify-content:center;flex-direction:column}
+.lightbox.open{display:flex}
+.lb-close{position:absolute;top:20px;right:24px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.lb-close:hover{background:rgba(255,255,255,.2)}
+.lb-img{width:80vw;max-width:900px;aspect-ratio:3/2;border-radius:var(--radius-md);overflow:hidden}
+.lb-nav{display:flex;gap:16px;margin-top:20px}
+.lb-nav button{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.lb-nav button:hover{background:rgba(255,255,255,.2)}
+.lb-info{color:rgba(255,255,255,.5);font-size:13px;margin-top:12px}
+.lb-share{display:flex;gap:8px;margin-top:12px}
+.lb-share button{padding:8px 16px;border-radius:var(--radius-full);background:rgba(255,255,255,.1);border:none;color:#fff;font-size:12px;font-weight:700;cursor:pointer;transition:var(--tr)}
+.lb-share button:hover{background:rgba(255,255,255,.2)}
+
+/* ============================== */
+/* TÉMOIGNAGES                    */
+/* ============================== */
+.testi-hero{padding:80px 0 48px;text-align:center}
+.testi-hero h1{font-size:clamp(30px,5vw,44px);color:var(--prune)}
+.testi-hero h1 em{color:var(--rose);font-style:italic}
+.testi-hero p{font-size:16px;color:var(--gris);max-width:500px;margin:0 auto;line-height:1.7}
+
+/* Google rating banner */
+.google-banner{background:var(--bg-alt);border:1px solid var(--gris-border);border-radius:var(--radius-md);padding:24px 32px;display:flex;align-items:center;justify-content:center;gap:32px;max-width:700px;margin:0 auto 40px;box-shadow:var(--shadow-sm)}
+.gb-logo{font-size:32px}
+.gb-rating{text-align:center}
+.gb-stars{color:var(--or);font-size:22px;letter-spacing:2px}
+.gb-score{font-family:var(--font-titre);font-size:36px;font-weight:700;color:var(--prune)}
+.gb-count{font-size:13px;color:var(--gris)}
+.gb-cta .btn{font-size:13px;padding:10px 20px}
+
+.testi-filters{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:36px}
+.testi-filter{padding:9px 18px;border-radius:var(--radius-full);font-size:13px;font-weight:700;border:2px solid var(--gris-border);background:var(--bg);color:var(--gris);cursor:pointer;transition:var(--tr)}
+.testi-filter:hover{border-color:var(--rose);color:var(--rose)}
+.testi-filter.active{background:var(--prune);color:#fff;border-color:var(--prune)}
+
+/* Featured testimonial */
+.featured-testi{background:var(--prune);border-radius:var(--radius-md);padding:40px;margin-bottom:40px;display:grid;grid-template-columns:80px 1fr;gap:24px;align-items:start;color:#fff;position:relative;overflow:hidden}
+.featured-testi::before{content:'"';position:absolute;top:-10px;right:30px;font-family:var(--font-titre);font-size:160px;color:rgba(212,160,60,.1);line-height:1}
+.ft-avatar{width:80px;height:80px;border-radius:50%;border:3px solid var(--or);overflow:hidden}
+.ft-avatar .ph{width:100%;height:100%}
+.ft-content .ft-stars{color:var(--or);font-size:18px;letter-spacing:2px;margin-bottom:12px}
+.ft-content .ft-text{font-size:17px;line-height:1.7;color:rgba(255,255,255,.9);font-style:italic;margin-bottom:16px;position:relative;z-index:1}
+.ft-content .ft-author{font-weight:700;font-size:15px}
+.ft-content .ft-meta{font-size:13px;color:rgba(255,255,255,.5)}
+.ft-badge{position:absolute;top:20px;right:20px;background:var(--or);color:var(--texte);font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--radius-full)}
+
+/* Testimonial grid */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
+.testi-card{background:var(--bg);border-radius:var(--radius-md);padding:24px;border:1px solid var(--gris-border);box-shadow:var(--shadow-sm);transition:var(--tr);position:relative}
+.testi-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.tc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.tc-avatar{width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid var(--or-light)}
+.tc-avatar .ph{width:100%;height:100%}
+.tc-info .tc-name{font-weight:700;font-size:14px;color:var(--prune)}
+.tc-info .tc-type{font-size:11px;color:var(--gris)}
+.tc-stars{color:var(--or);font-size:14px;letter-spacing:1px;margin-bottom:10px}
+.tc-text{font-size:13px;color:var(--gris);line-height:1.7;font-style:italic;margin-bottom:12px}
+.tc-date{font-size:11px;color:var(--gris-light)}
+.tc-source{position:absolute;top:16px;right:16px;font-size:16px}
+.tc-photo{border-radius:var(--radius);overflow:hidden;margin-top:12px;aspect-ratio:16/9}
+
+/* CTA sections */
+.cta-section{padding:72px 0;text-align:center;position:relative;overflow:hidden}
+.cta-prune{background:var(--prune)}
+.cta-prune::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(194,114,126,.08) 0%,transparent 70%)}
+.cta-prune h2{color:#fff;font-size:clamp(22px,3vw,32px);margin-bottom:10px;position:relative;z-index:1}
+.cta-prune h2 em{color:var(--or);font-style:italic}
+.cta-prune p{color:rgba(255,255,255,.6);font-size:15px;margin-bottom:24px;position:relative;z-index:1}
+.cta-prune .btn{position:relative;z-index:1}
+
+.cta-light{background:var(--bg-alt);border-top:1px solid var(--gris-border)}
+.cta-light h2{color:var(--prune);font-size:clamp(22px,3vw,30px);margin-bottom:8px}
+.cta-light h2 em{color:var(--rose);font-style:italic}
+.cta-light p{color:var(--gris);font-size:15px;margin-bottom:24px}
+
+/* Leave review section */
+.review-cta{background:var(--bg);border:2px solid var(--or);border-radius:var(--radius-md);padding:32px;text-align:center;max-width:600px;margin:0 auto 40px}
+.review-cta h3{font-size:20px;color:var(--prune);margin-bottom:8px}
+.review-cta p{font-size:14px;color:var(--gris);margin-bottom:16px}
+.review-stars{display:flex;justify-content:center;gap:8px;margin-bottom:16px}
+.review-star{width:40px;height:40px;border-radius:50%;background:var(--or-light);border:none;font-size:20px;cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center}
+.review-star:hover,.review-star.active{background:var(--or);transform:scale(1.15)}
+
+/* FOOTER */
+.footer{background:var(--prune);color:#fff;padding:40px 0 24px;text-align:center}
+.footer .logo{color:#fff;font-size:20px;margin-bottom:8px;display:block}
+.footer .logo span{color:var(--or)}
+.footer p{font-size:12px;color:rgba(255,255,255,.4)}
+
+@media(max-width:1024px){.masonry-4{grid-template-columns:repeat(3,1fr)}.testi-grid{grid-template-columns:repeat(2,1fr)}.featured-testi{grid-template-columns:1fr}.ft-avatar{display:none}.google-banner{flex-direction:column;gap:16px;text-align:center}}
+@media(max-width:768px){.masonry-4,.masonry-3{grid-template-columns:repeat(2,1fr)}.h-pano{grid-column:span 1}.testi-grid{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<div class="switcher">
+  <button class="sw-btn active" onclick="switchView('portfolio',this)">📸 Portfolio</button>
+  <button class="sw-btn" onclick="switchView('temoignages',this)">⭐ Témoignages</button>
+</div>
+
+<!-- ================================ -->
+<!-- PORTFOLIO                        -->
+<!-- ================================ -->
+<div class="page-view active" id="view-portfolio">
+
+<div class="header"><a class="logo">Fleur de <span>L</span>umière</a><div class="nav-links"><a href="#">Spécialités</a><a href="#">Formules</a><a href="#" class="active">Portfolio</a><a href="#">À propos</a><a href="#" class="btn btn-primary btn-sm">Réserver</a></div></div>
+
+<section class="port-hero"><div class="container">
+  <h1>Mon <em>Portfolio</em></h1><div class="or-line"></div>
+  <p>Chaque image raconte une histoire, capturée dans la lumière dorée qui fait ma signature.</p>
+</div></section>
+
+<div class="port-filters"><div class="container">
+  <div class="filter-tabs">
+    <span class="filter-tab active" onclick="filterPort(this,'all')">Toutes les galeries</span>
+    <span class="filter-tab" onclick="filterPort(this,'famille')">👨‍👩‍👧‍👦 Famille</span>
+    <span class="filter-tab" onclick="filterPort(this,'equestre')">🐴 Équestre</span>
+    <span class="filter-tab" onclick="filterPort(this,'evenement')">💍 Événementiel</span>
+    <span class="filter-tab" onclick="filterPort(this,'maternite')">🤱 Maternité</span>
+  </div>
+</div></div>
+
+<div class="container">
+
+  <!-- FAMILLE -->
+  <section class="port-section" data-cat="famille">
+    <div class="port-section-header"><h2>👨‍👩‍👧‍👦 Famille & <em>Portraits</em></h2><span class="port-count">24 photos</span></div>
+    <div class="masonry masonry-4">
+      <div class="gallery-item h-md" onclick="openLightbox()"><div class="ph pc1"></div><div class="gi-overlay"><span class="gi-caption">Famille Martin · Automne 2025</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sm" onclick="openLightbox()"><div class="ph pc9"></div><div class="gi-overlay"><span class="gi-caption">Portraits fratrie · Gaillac</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-lg" onclick="openLightbox()"><div class="ph pc5"></div><div class="gi-overlay"><span class="gi-caption">Golden hour · Septembre</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sq" onclick="openLightbox()"><div class="ph pc7"></div><div class="gi-overlay"><span class="gi-caption">Grands-parents & petits-enfants</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-pano" onclick="openLightbox()"><div class="ph pc4"></div><div class="gi-overlay"><span class="gi-caption">Famille au coucher du soleil · Champ de blé</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sm" onclick="openLightbox()"><div class="ph pc11"></div><div class="gi-overlay"><span class="gi-caption">Portrait enfant · Lumière dorée</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-md" onclick="openLightbox()"><div class="ph pc2"></div><div class="gi-overlay"><span class="gi-caption">Couple · 10 ans de mariage</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+    </div>
+  </section>
+
+  <!-- ÉQUESTRE -->
+  <section class="port-section" data-cat="equestre">
+    <div class="port-section-header"><h2>🐴 <em>Équestre</em></h2><span class="port-count">18 photos</span></div>
+    <div class="masonry masonry-4">
+      <div class="gallery-item h-lg" onclick="openLightbox()"><div class="ph pc3"></div><div class="gi-overlay"><span class="gi-caption">Cavalière & son cheval · Heure Dorée</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sm" onclick="openLightbox()"><div class="ph pc6"></div><div class="gi-overlay"><span class="gi-caption">Galop en liberté · Écurie des Chênes</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sq" onclick="openLightbox()"><div class="ph pc10"></div><div class="gi-overlay"><span class="gi-caption">Portrait cheval · Lumière rasante</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-md" onclick="openLightbox()"><div class="ph pc8"></div><div class="gi-overlay"><span class="gi-caption">Complicité cavalier-cheval</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-pano" onclick="openLightbox()"><div class="ph pc12"></div><div class="gi-overlay"><span class="gi-caption">Panoramique · Champ route de Cahuzac</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sm" onclick="openLightbox()"><div class="ph pc4"></div><div class="gi-overlay"><span class="gi-caption">Détail · Mains sur l'encolure</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+    </div>
+  </section>
+
+  <!-- ÉVÉNEMENTIEL -->
+  <section class="port-section" data-cat="evenement">
+    <div class="port-section-header"><h2>💍 <em>Événementiel</em></h2><span class="port-count">12 photos</span></div>
+    <div class="masonry masonry-3">
+      <div class="gallery-item h-md" onclick="openLightbox()"><div class="ph pc2"></div><div class="gi-overlay"><span class="gi-caption">Mariage · Cérémonie en extérieur</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sm" onclick="openLightbox()"><div class="ph pc5"></div><div class="gi-overlay"><span class="gi-caption">Baptême · Jardin familial</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-lg" onclick="openLightbox()"><div class="ph pc9"></div><div class="gi-overlay"><span class="gi-caption">Mariage · Couple golden hour</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-pano" onclick="openLightbox()"><div class="ph pc7"></div><div class="gi-overlay"><span class="gi-caption">Réception · Table d'honneur au soleil couchant</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sq" onclick="openLightbox()"><div class="ph pc11"></div><div class="gi-overlay"><span class="gi-caption">Détails · Alliances & fleurs</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+    </div>
+  </section>
+
+  <!-- MATERNITÉ -->
+  <section class="port-section" data-cat="maternite">
+    <div class="port-section-header"><h2>🤱 <em>Maternité</em> & Naissance</h2><span class="port-count">10 photos</span></div>
+    <div class="masonry masonry-3">
+      <div class="gallery-item h-md" onclick="openLightbox()"><div class="ph pc1"></div><div class="gi-overlay"><span class="gi-caption">Grossesse · 8ème mois</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-lg" onclick="openLightbox()"><div class="ph pc6"></div><div class="gi-overlay"><span class="gi-caption">Nouveau-né · J+8</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sm" onclick="openLightbox()"><div class="ph pc10"></div><div class="gi-overlay"><span class="gi-caption">Famille · Premier regard</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+      <div class="gallery-item h-sq" onclick="openLightbox()"><div class="ph pc3"></div><div class="gi-overlay"><span class="gi-caption">Détail · Petites mains</span><div class="gi-share"><button>🔗</button><button>📸</button></div></div></div>
+    </div>
+  </section>
+
+</div>
+
+<section class="cta-section cta-prune"><div class="container">
+  <h2>Envie de votre propre <em>galerie</em> ?</h2>
+  <p>Réservez votre séance et créons ensemble vos plus beaux souvenirs.</p>
+  <a href="#" class="btn btn-primary" style="font-size:15px;padding:14px 36px;">Réserver ma séance →</a>
+</div></section>
+
+<footer class="footer"><span class="logo">Fleur de <span>L</span>umière</span><p>© 2026 Fleur de Lumière — Tarn & Toulouse</p></footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <div class="lb-img"><div class="ph pc1" style="border-radius:12px"></div></div>
+  <div class="lb-nav"><button>‹</button><button>›</button></div>
+  <div class="lb-info">Photo 3 / 24 — Famille Martin · Automne 2025</div>
+  <div class="lb-share"><button>🔗 Copier le lien</button><button>📸 Instagram</button><button>📘 Facebook</button></div>
+</div>
+
+</div>
+
+<!-- ================================ -->
+<!-- TÉMOIGNAGES                      -->
+<!-- ================================ -->
+<div class="page-view" id="view-temoignages">
+
+<div class="header"><a class="logo">Fleur de <span>L</span>umière</a><div class="nav-links"><a href="#">Spécialités</a><a href="#">Formules</a><a href="#">Portfolio</a><a href="#" class="active">Avis</a><a href="#" class="btn btn-primary btn-sm">Réserver</a></div></div>
+
+<section class="testi-hero"><div class="container">
+  <h1>Ce qu'ils <em>disent</em></h1><div class="or-line"></div>
+  <p>Des familles, cavalières et couples racontent leur expérience avec Fleur de Lumière.</p>
+</div></section>
+
+<div class="container">
+
+  <!-- Google rating -->
+  <div class="google-banner">
+    <div class="gb-logo">G</div>
+    <div class="gb-rating">
+      <div class="gb-stars">★★★★★</div>
+      <div class="gb-score">5.0</div>
+      <div class="gb-count">sur 28 avis Google</div>
+    </div>
+    <div class="gb-cta"><a href="#" class="btn btn-secondary btn-sm">Voir sur Google →</a></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="testi-filters">
+    <span class="testi-filter active" onclick="filterTesti(this,'all')">Tous</span>
+    <span class="testi-filter" onclick="filterTesti(this,'famille')">👨‍👩‍👧‍👦 Famille</span>
+    <span class="testi-filter" onclick="filterTesti(this,'equestre')">🐴 Équestre</span>
+    <span class="testi-filter" onclick="filterTesti(this,'evenement')">💍 Événement</span>
+    <span class="testi-filter" onclick="filterTesti(this,'maternite')">🤱 Maternité</span>
+  </div>
+
+  <!-- Featured -->
+  <div class="featured-testi">
+    <div class="ft-avatar"><div class="ph pc1"></div></div>
+    <div class="ft-content">
+      <div class="ft-stars">★★★★★</div>
+      <div class="ft-text">« Capucine a su capturer l'essence de notre famille avec une douceur et un talent incroyables. La lumière, les couleurs, l'émotion… tout est parfait. On a ri, on a joué, on ne s'est pas rendu compte que c'était une séance photo. Et le résultat est au-delà de nos espérances. »</div>
+      <div class="ft-author">Sophie & Thomas Mercier</div>
+      <div class="ft-meta">Séance Signature Famille · Octobre 2025</div>
+    </div>
+    <div class="ft-badge">⭐ Coup de cœur</div>
+  </div>
+
+  <!-- Grid -->
+  <div class="testi-grid">
+
+    <div class="testi-card" data-cat="equestre">
+      <div class="tc-top"><div class="tc-avatar"><div class="ph pc3"></div></div><div class="tc-info"><div class="tc-name">Marie Delcourt</div><div class="tc-type">Séance Équestre · Signature</div></div></div>
+      <span class="tc-source">G</span>
+      <div class="tc-stars">★★★★★</div>
+      <div class="tc-text">« Cavalière depuis 20 ans, je n'avais jamais eu de vraies belles photos avec mon cheval. Capucine comprend les chevaux, elle sait les mettre en valeur. Le résultat m'a fait pleurer de joie. »</div>
+      <div class="tc-photo"><div class="ph pc6"></div></div>
+      <div class="tc-date">Février 2026 · Google</div>
+    </div>
+
+    <div class="testi-card" data-cat="famille">
+      <div class="tc-top"><div class="tc-avatar"><div class="ph pc5"></div></div><div class="tc-info"><div class="tc-name">Julie Bonnet</div><div class="tc-type">Séance Essentiel Famille</div></div></div>
+      <span class="tc-source">G</span>
+      <div class="tc-stars">★★★★★</div>
+      <div class="tc-text">« Des photos naturelles et lumineuses. Mes enfants étaient à l'aise dès les premières minutes. Capucine a un don pour capter les moments spontanés. »</div>
+      <div class="tc-date">Janvier 2026 · Google</div>
+    </div>
+
+    <div class="testi-card" data-cat="maternite">
+      <div class="tc-top"><div class="tc-avatar"><div class="ph pc9"></div></div><div class="tc-info"><div class="tc-name">Camille Roux</div><div class="tc-type">Maternité · Première Lumière</div></div></div>
+      <span class="tc-source">G</span>
+      <div class="tc-stars">★★★★★</div>
+      <div class="tc-text">« Capucine est venue à la maternité le lendemain de la naissance. Discrète, douce, elle a capturé nos premiers moments en famille. Des photos d'une tendresse folle. »</div>
+      <div class="tc-date">Décembre 2025 · Google</div>
+    </div>
+
+    <div class="testi-card" data-cat="equestre">
+      <div class="tc-top"><div class="tc-avatar"><div class="ph pc8"></div></div><div class="tc-info"><div class="tc-name">Léa Fournier</div><div class="tc-type">Séance Équestre · Essentiel</div></div></div>
+      <span class="tc-source">G</span>
+      <div class="tc-stars">★★★★★</div>
+      <div class="tc-text">« Wow ! Les couleurs de l'heure dorée avec mon cheval… c'est magique. Je recommande à 200% ! Capucine est aussi cavalière, ça fait toute la différence. »</div>
+      <div class="tc-photo"><div class="ph pc4"></div></div>
+      <div class="tc-date">Novembre 2025 · Google</div>
+    </div>
+
+    <div class="testi-card" data-cat="evenement">
+      <div class="tc-top"><div class="tc-avatar"><div class="ph pc7"></div></div><div class="tc-info"><div class="tc-name">Pauline & Marc</div><div class="tc-type">Mariage · Événementiel</div></div></div>
+      <span class="tc-source">G</span>
+      <div class="tc-stars">★★★★★</div>
+      <div class="tc-text">« Capucine a couvert notre mariage avec une discrétion et un professionnalisme remarquables. Les photos sont sublimes, on revit notre journée à chaque fois qu'on les regarde. »</div>
+      <div class="tc-date">Octobre 2025 · Google</div>
+    </div>
+
+    <div class="testi-card" data-cat="famille">
+      <div class="tc-top"><div class="tc-avatar"><div class="ph pc12"></div></div><div class="tc-info"><div class="tc-name">Nathalie Durand</div><div class="tc-type">Abonnement 4 Saisons</div></div></div>
+      <span class="tc-source">G</span>
+      <div class="tc-stars">★★★★★</div>
+      <div class="tc-text">« L'abonnement 4 Saisons est une pépite ! On a vu nos enfants grandir au fil des saisons avec des photos magnifiques à chaque fois. Un album-souvenir inestimable. »</div>
+      <div class="tc-date">Septembre 2025 · Google</div>
+    </div>
+
+  </div>
+
+  <!-- Leave review -->
+  <div class="review-cta">
+    <h3>Vous êtes un(e) client(e) ?</h3>
+    <p>Votre avis compte ! Partagez votre expérience sur Google et aidez d'autres familles à me découvrir.</p>
+    <div class="review-stars">
+      <button class="review-star active">⭐</button>
+      <button class="review-star active">⭐</button>
+      <button class="review-star active">⭐</button>
+      <button class="review-star active">⭐</button>
+      <button class="review-star active">⭐</button>
+    </div>
+    <a href="#" class="btn btn-or">Laisser un avis Google →</a>
+  </div>
+
+</div>
+
+<section class="cta-section cta-light"><div class="container">
+  <h2>Prête à vivre votre <em>expérience</em> ?</h2>
+  <p>Rejoignez les dizaines de familles et cavalières qui ont confié leurs souvenirs à Fleur de Lumière.</p>
+  <a href="#" class="btn btn-primary" style="font-size:15px;padding:14px 36px;">Réserver ma séance →</a>
+</div></section>
+
+<footer class="footer"><span class="logo">Fleur de <span>L</span>umière</span><p>© 2026 Fleur de Lumière — Tarn & Toulouse</p></footer>
+
+</div>
+
+<script>
+function switchView(id,btn){document.querySelectorAll('.page-view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0})}
+
+function filterPort(el,cat){document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.port-section').forEach(s=>{s.style.display=(cat==='all'||s.dataset.cat===cat)?'':'none'})}
+
+function filterTesti(el,cat){document.querySelectorAll('.testi-filter').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.testi-card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none'})}
+
+function openLightbox(){document.getElementById('lightbox').classList.add('open')}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox()})
+</script>
+</body>
+</html>
