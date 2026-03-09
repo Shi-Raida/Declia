@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "language": "dart",
+  "layers": {
+    "entities": {
+      "paths": ["lib/domain", "lib/core"],
+      "allowedDependencies": []
+    },
+    "usecases": {
+      "paths": ["lib/usecases"],
+      "allowedDependencies": ["entities"]
+    },
+    "adapters": {
+      "paths": ["lib/presentation"],
+      "allowedDependencies": ["usecases", "entities"]
+    },
+    "infrastructure": {
+      "paths": ["lib/infrastructure", "lib/main.dart"],
+      "allowedDependencies": ["adapters", "usecases", "entities"]
+    }
+  },
+  "ignore": [
+    "build",
+    ".dart_tool",
+    ".flutter-plugins",
+    "**/*.g.dart",
+    "**/*.freezed.dart",
+    "**/*.mocks.dart",
+    "**/*_test.dart",
+    "**/test/**"
+  ],
+  "rules": {
+    "maxFileLines": 300,
+    "maxMethodsPerClass": 10,
+    "maxComponentDistance": 0.2,
+    "allowCircularDependencies": false
+  },
+  "ci": {
+    "failOn": "high",
+    "baselinePath": ".raida-arch-baseline.json"
+  }
+}
