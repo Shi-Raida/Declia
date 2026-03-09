@@ -21,19 +21,20 @@ class HomePage extends GetView<HomeController> {
             children: [
               Text(
                 'Declia',
-                style: AppTypography.heading1().copyWith(color: AppColors.prune),
+                style: AppTypography.heading1().copyWith(
+                  color: AppColors.prune,
+                ),
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
                 'La plateforme des photographes professionnels',
-                style: AppTypography.bodyLarge().copyWith(color: AppColors.warmGray),
+                style: AppTypography.bodyLarge().copyWith(
+                  color: AppColors.warmGray,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.xl),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text('Commencer'),
-              ),
+              ElevatedButton(onPressed: () {}, child: const Text('Commencer')),
             ],
           ),
         ),
