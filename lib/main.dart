@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import 'infrastructure/config/app_config.dart';
 import 'infrastructure/di/injection.dart';
+import 'presentation/di/presentation_injection.dart';
 import 'presentation/routes/app_pages.dart';
 import 'presentation/routes/app_routes.dart';
 import 'presentation/theme/app_theme.dart';
@@ -34,6 +35,7 @@ Future<void> _bootstrap() async {
           (throw StateError('SUPABASE_ANON_KEY not set')),
     );
     await Injection.init(config);
+    PresentationInjection.init();
     runApp(const DecliaApp());
   } catch (error, stack) {
     debugPrint('Bootstrap failed: $error\n$stack');
