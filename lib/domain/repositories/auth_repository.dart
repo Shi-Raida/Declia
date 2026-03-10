@@ -5,5 +5,4 @@ abstract interface class AuthRepository {
   Future<void> signOut();
   Future<AppUser?> getCurrentUser();
   bool get isAuthenticated;
-  AppUser? get cachedUser;
 }

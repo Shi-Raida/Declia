@@ -12,7 +12,6 @@ final class AuthRepositoryImpl implements AuthRepository {
   @override
   bool get isAuthenticated => _dataSource.isAuthenticated;
 
-  @override
   AppUser? get cachedUser => _cachedUser;
 
   @override
