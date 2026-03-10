@@ -1,34 +1,30 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/errors/app_exception.dart';
-import '../../usecases/auth/sign_in.dart';
-import '../routes/app_routes.dart';
+import '../../domain/entities/app_user.dart';
+import '../../usecases/auth/auth_params.dart';
+import '../../usecases/usecase.dart';
+import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
+import 'login_form_mixin.dart';
 
-class LoginController extends GetxController {
-  LoginController(this._signIn);
+class LoginController extends GetxController with LoginFormMixin {
+  LoginController(this._signIn, this._authState, this._nav);
 
-  final SignIn _signIn;
-
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final UseCase<AppUser, SignInParams> _signIn;
+  final AuthStateController _authState;
+  final NavigationService _nav;
 
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
-  final isPasswordVisible = false.obs;
 
   @override
   void onInit() {
     super.onInit();
     if (Get.arguments == 'unauthorized_role') {
       errorMessage.value = 'Accès réservé aux photographes';
+      _authState.signOut();
     }
-  }
-
-  void togglePasswordVisibility() {
-    isPasswordVisible.value = !isPasswordVisible.value;
   }
 
   Future<void> login() async {
@@ -42,8 +38,8 @@ class LoginController extends GetxController {
         email: emailController.text.trim(),
         password: passwordController.text,
       ));
-      Get.find<AuthStateController>().setUser(user);
-      Get.offAllNamed(AppRoutes.adminDashboard);
+      _authState.setUser(user);
+      _nav.toDashboard();
     } on InvalidCredentialsException {
       errorMessage.value = 'Email ou mot de passe incorrect';
     } on AppException catch (e) {
@@ -51,12 +47,5 @@ class LoginController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
   }
 }

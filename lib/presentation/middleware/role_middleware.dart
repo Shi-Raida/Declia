@@ -12,10 +12,8 @@ class RoleMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    final controller = Get.find<AuthStateController>();
-    final user = controller.currentUser.value;
+    final user = Get.find<AuthStateController>().currentUser.value;
     if (user == null || !allowedRoles.contains(user.role)) {
-      controller.signOut(); // fire-and-forget, clears session
       return const RouteSettings(
         name: AppRoutes.login,
         arguments: 'unauthorized_role',

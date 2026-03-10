@@ -1,13 +1,12 @@
 import 'package:get/get.dart';
 
 import '../../domain/entities/app_user.dart';
-import '../../usecases/auth/sign_out.dart';
 import '../../usecases/usecase.dart';
 
 class AuthStateController extends GetxController {
   AuthStateController(this._signOut);
 
-  final SignOut _signOut;
+  final UseCase<void, NoParams> _signOut;
   final currentUser = Rxn<AppUser>();
 
   bool get isAuthenticated => currentUser.value != null;

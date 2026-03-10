@@ -1,10 +1,15 @@
 import 'package:get/get.dart';
 
 import '../../domain/entities/app_user.dart';
-import '../routes/app_routes.dart';
+import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
 
 class DashboardController extends GetxController {
+  DashboardController(this._authState, this._nav);
+
+  final AuthStateController _authState;
+  final NavigationService _nav;
+
   final currentUser = Rxn<AppUser>();
 
   @override
@@ -14,11 +19,11 @@ class DashboardController extends GetxController {
   }
 
   void _loadUser() {
-    currentUser.value = Get.find<AuthStateController>().currentUser.value;
+    currentUser.value = _authState.currentUser.value;
   }
 
   Future<void> logout() async {
-    await Get.find<AuthStateController>().signOut();
-    Get.offAllNamed(AppRoutes.login);
+    await _authState.signOut();
+    _nav.toLogin();
   }
 }
