@@ -5,6 +5,7 @@
 - **Roles:** Photographer (admin/back-office), Client (end-user), Visitor (anonymous public), Guest (shared gallery access), Developer (tech)
 - **Traceability:** CDC.2 (March 2026, definitive version) section numbers
 - **Story format:** "As a [role], I want [action] so that [benefit]"
+- **Status values:** `Done` | `In progress` | `Not started` | `Blocked`
 - **Architecture:** Clean Architecture as defined in `.raida-arch.json`:
   - `lib/domain/`, `lib/core/` -- Entities, value objects, shared core (no dependencies)
   - `lib/usecases/` -- Application business rules (depends on entities)
@@ -61,6 +62,114 @@ M1 ──┬──> M2 ──┬──> M4 ──┐
 
 Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
+## Progress Tracking
+
+| Step | Description | Status |
+|------|-------------|--------|
+| **M1** | **Foundations & Admin Shell** | **In progress** |
+| M1-S1 | Flutter project initialization | Done |
+| M1-S2 | Supabase setup & database | Done |
+| M1-S3 | Multi-tenant architecture | Done |
+| M1-S4 | Photographer authentication | Not started |
+| M1-S5 | Client authentication | Not started |
+| M1-S6 | Admin shell & navigation | Not started |
+| M1-S7 | Role management & access control | Not started |
+| M1-S8 | Base security & GDPR foundations | Not started |
+| **M2** | **CRM & Planning** | **Not started** |
+| M2-S1 | Client CRM profiles | Not started |
+| M2-S2 | Client list & filtering | Not started |
+| M2-S3 | Client history | Not started |
+| M2-S4 | Calendar & planning view | Not started |
+| M2-S5 | Availability management | Not started |
+| M2-S6 | Google Calendar sync | Not started |
+| **M3** | **Public Showcase** | **Not started** |
+| M3-S1 | Home page with seasonal mode | Not started |
+| M3-S2 | Portfolio by specialty | Not started |
+| M3-S3 | Pricing & formulas page | Not started |
+| M3-S4 | About page | Not started |
+| M3-S5 | Testimonials page & Google Reviews | Not started |
+| M3-S6 | FAQ & Contact pages | Not started |
+| M3-S7 | Legal pages & social links | Not started |
+| M3-S8 | SEO & performance foundations | Not started |
+| **M4** | **Booking System** | **Not started** |
+| M4-S1 | Standard formula booking | Not started |
+| M4-S2 | Event booking via quote | Not started |
+| M4-S3 | Pre-shooting questionnaire | Not started |
+| M4-S4 | Booking automations | Not started |
+| M4-S5 | Stripe integration & payment | Not started |
+| **M5** | **Delivery Galleries** | **Not started** |
+| M5-S1 | Upload & gallery creation (admin) | Not started |
+| M5-S2 | Client gallery access | Not started |
+| M5-S3 | Gallery features (favorites, comments, download) | Not started |
+| M5-S4 | Gallery sharing with guests | Not started |
+| M5-S5 | Expiration & gallery management | Not started |
+| **M6** | **Client Space & Premium Experience** | **Not started** |
+| M6-S1 | Complete client space | Not started |
+| M6-S2 | Visual Client Journey | Not started |
+| M6-S3 | Coffret Numerique -- premium delivery | Not started |
+| M6-S4 | Before/After retouching | Not started |
+| M6-S5 | Selection galleries | Not started |
+| **M7** | **Integrated Shop** | **Not started** |
+| M7-S1 | Product catalog (admin) | Not started |
+| M7-S2 | Contextual purchase from gallery | Not started |
+| M7-S3 | Cart & shop payment | Not started |
+| M7-S4 | Order management (admin) | Not started |
+| **M8** | **Gift Cards, Loyalty & Promotions** | **Not started** |
+| M8-S1 | Gift cards | Not started |
+| M8-S2 | Gift card management center (admin) | Not started |
+| M8-S3 | Loyalty program | Not started |
+| M8-S4 | Referral system | Not started |
+| M8-S5 | 4 Seasons subscription | Not started |
+| M8-S6 | Promotional offers system | Not started |
+| **M9** | **Mini-Sessions & School Module** | **Not started** |
+| M9-S1 | Mini-session event creation (admin) | Not started |
+| M9-S2 | Mini-session public page | Not started |
+| M9-S3 | Mini-session booking & payment | Not started |
+| M9-S4 | Mini-session waitlist | Not started |
+| M9-S5 | Mini-session dashboard (admin) | Not started |
+| M9-S6 | School gallery creation (admin) | Not started |
+| M9-S7 | Parent journey -- school gallery | Not started |
+| M9-S8 | School order management | Not started |
+| **M10** | **Workflow & Task Automation** | **Not started** |
+| M10-S1 | Task management views | Not started |
+| M10-S2 | Detailed task management | Not started |
+| M10-S3 | Workflow templates per session type | Not started |
+| M10-S4 | Automatic task creation on booking | Not started |
+| M10-S5 | Workflow-Client Journey connection | Not started |
+| **M11** | **Emails, SMS & Education Hub** | **Not started** |
+| M11-S1 | Email template system | Not started |
+| M11-S2 | Booking-related emails | Not started |
+| M11-S3 | Gallery-related emails | Not started |
+| M11-S4 | Post-shooting emails | Not started |
+| M11-S5 | Automated SMS | Not started |
+| M11-S6 | Education Hub -- preparation guides | Not started |
+| **M12** | **Marketing Automation V1** | **Not started** |
+| M12-S1 | Avant-Premiere campaign | Not started |
+| M12-S2 | Abandoned Cart campaign | Not started |
+| M12-S3 | Last Chance campaign | Not started |
+| M12-S4 | Gallery Wake-up campaign | Not started |
+| M12-S5 | Session Recap (mobile form) | Not started |
+| M12-S6 | Referral Proof -- social proof | Not started |
+| M12-S7 | Marketing campaign dashboard | Not started |
+| **M13** | **Invoicing & Accounting Export** | **Not started** |
+| M13-S1 | Automatic quote generation | Not started |
+| M13-S2 | Automatic invoice generation | Not started |
+| M13-S3 | Payment tracking | Not started |
+| M13-S4 | Financial dashboard | Not started |
+| M13-S5 | Accounting exports | Not started |
+| **M14** | **Statistics, Notifications & Referral Proof** | **Not started** |
+| M14-S1 | Global KPI dashboard | Not started |
+| M14-S2 | Multi-platform push notifications | Not started |
+| M14-S3 | Notification preferences | Not started |
+| M14-S4 | Referral Proof showcase integration | Not started |
+| **M15** | **Security, GDPR & Launch** | **Not started** |
+| M15-S1 | Infrastructure security | Not started |
+| M15-S2 | GDPR compliance | Not started |
+| M15-S3 | SEO finalization | Not started |
+| M15-S4 | Messaging center | Not started |
+| M15-S5 | Showcase content management (admin) | Not started |
+| M15-S6 | Performance optimization & launch | Not started |
+
 ---
 
 ## M1: Foundations & Admin Shell
@@ -75,7 +184,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 ---
 
-### M1-S1: Flutter project initialization
+### M1-S1: Flutter project initialization -- `Done`
 
 **As a** developer, **I want** to initialize the Flutter project with folder structure, code conventions and linting **so that** we have a clean, standardized codebase for all future development.
 
@@ -88,7 +197,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 ---
 
-### M1-S2: Supabase setup & database
+### M1-S2: Supabase setup & database -- `Done`
 
 **As a** developer, **I want** to configure the Supabase project with PostgreSQL, storage and Edge Functions **so that** we have the complete backend infrastructure.
 
@@ -101,7 +210,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 ---
 
-### M1-S3: Multi-tenant architecture
+### M1-S3: Multi-tenant architecture -- `Done`
 
 **As a** developer, **I want** to set up a multi-tenant architecture isolated by tenant_id **so that** each photographer's data is completely separated.
 
