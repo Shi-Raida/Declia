@@ -1,7 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/errors/app_exception.dart';
-import 'tenant_data_source.dart';
+import '../../domain/datasources/tenant_data_source.dart';
+import '../../domain/entities/tenant.dart';
 
 /// Maps a [PostgrestException] to a typed [AppException].
 /// Package-level so it can be tested independently.
@@ -17,24 +18,24 @@ final class SupabaseTenantDataSource implements TenantDataSource {
   final SupabaseClient _client;
 
   @override
-  Future<Map<String, Object?>> fetchCurrentUserTenant() async {
+  Future<Tenant> fetchCurrentUserTenant() async {
     try {
       final data = await _client.from('tenants').select().single();
-      return Map<String, Object?>.from(data);
+      return Tenant.fromJson(Map<String, dynamic>.from(data));
     } on PostgrestException catch (e) {
       throw mapPostgrestException(e, '');
     }
   }
 
   @override
-  Future<Map<String, Object?>> fetchById(String tenantId) async {
+  Future<Tenant> fetchById(String tenantId) async {
     try {
       final data = await _client
           .from('tenants')
           .select()
           .eq('id', tenantId)
           .single();
-      return Map<String, Object?>.from(data);
+      return Tenant.fromJson(Map<String, dynamic>.from(data));
     } on PostgrestException catch (e) {
       throw mapPostgrestException(e, tenantId);
     }

@@ -1,7 +1,7 @@
 import '../../core/errors/app_exception.dart';
 import '../../domain/entities/tenant.dart';
 import '../../domain/repositories/tenant_repository.dart';
-import '../datasources/tenant_data_source.dart';
+import '../../domain/datasources/tenant_data_source.dart';
 
 typedef CurrentUserIdProvider = String? Function();
 
@@ -20,13 +20,9 @@ final class TenantRepositoryImpl implements TenantRepository {
     if (_currentUserId() == null) {
       throw const UnauthorisedTenantAccessException();
     }
-    final json = await _dataSource.fetchCurrentUserTenant();
-    return Tenant.fromJson(json.cast<String, dynamic>());
+    return _dataSource.fetchCurrentUserTenant();
   }
 
   @override
-  Future<Tenant> fetchById(String id) async {
-    final json = await _dataSource.fetchById(id);
-    return Tenant.fromJson(json.cast<String, dynamic>());
-  }
+  Future<Tenant> fetchById(String id) => _dataSource.fetchById(id);
 }

@@ -1,5 +1,6 @@
 import 'package:declia/core/errors/app_exception.dart';
-import 'package:declia/infrastructure/datasources/tenant_data_source.dart';
+import 'package:declia/domain/datasources/tenant_data_source.dart';
+import 'package:declia/domain/entities/tenant.dart';
 import 'package:declia/infrastructure/repositories/tenant_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,23 +11,23 @@ const _userAId = '00000000-0000-0000-0001-000000000001';
 const _userBId = '00000000-0000-0000-0001-000000000002';
 const _userCId = '00000000-0000-0000-0001-000000000003';
 
-final _fixtureA = <String, Object?>{
+final _tenantA = Tenant.fromJson(<String, dynamic>{
   'id': _tenantAId,
   'name': 'Fleur de Lumiere',
   'slug': 'fleur-de-lumiere',
-  'branding': <String, Object?>{'primary_color': '#C084A0', 'logo_url': null},
+  'branding': <String, dynamic>{'primary_color': '#C084A0', 'logo_url': null},
   'domain': 'fleur-de-lumiere.local',
   'created_at': '2026-01-01T00:00:00.000Z',
-};
+});
 
-final _fixtureB = <String, Object?>{
+final _tenantB = Tenant.fromJson(<String, dynamic>{
   'id': _tenantBId,
   'name': 'Studio Luminos',
   'slug': 'studio-luminos',
-  'branding': <String, Object?>{},
+  'branding': <String, dynamic>{},
   'domain': null,
   'created_at': '2026-01-02T00:00:00.000Z',
-};
+});
 
 // Simulates RLS: the "current user" is set externally (mirrors auth session).
 final class _FakeTenantDataSource implements TenantDataSource {
@@ -41,17 +42,17 @@ final class _FakeTenantDataSource implements TenantDataSource {
     _userCId: _tenantBId,
   };
 
-  static final _tenantFixtures = {_tenantAId: _fixtureA, _tenantBId: _fixtureB};
+  late final _tenantFixtures = {_tenantAId: _tenantA, _tenantBId: _tenantB};
 
   @override
-  Future<Map<String, Object?>> fetchCurrentUserTenant() async {
+  Future<Tenant> fetchCurrentUserTenant() async {
     final tenantId = _userTenantMap[currentUserId];
     if (tenantId == null) throw const UnauthorisedTenantAccessException();
     return _tenantFixtures[tenantId]!;
   }
 
   @override
-  Future<Map<String, Object?>> fetchById(String tenantId) async {
+  Future<Tenant> fetchById(String tenantId) async {
     // Simulate RLS: cross-tenant access is blocked.
     if (tenantId == _tenantBId && _userTenantMap[currentUserId] != _tenantBId) {
       throw const UnauthorisedTenantAccessException();
