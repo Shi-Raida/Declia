@@ -21,6 +21,16 @@ final class UnauthorisedTenantAccessException extends AppException {
     : super('Unauthorised access to tenant');
 }
 
+final class InvalidCredentialsException extends AppException {
+  const InvalidCredentialsException() : super('Invalid email or password');
+}
+
+final class UnauthorisedRoleException extends AppException {
+  const UnauthorisedRoleException(this.expectedRole)
+    : super('Access denied: requires $expectedRole role');
+  final String expectedRole;
+}
+
 final class RepositoryException extends AppException {
   const RepositoryException(super.message, {this.cause});
   final Object? cause;
