@@ -32,19 +32,27 @@ abstract final class Injection {
       SupabaseTenantDataSource(Supabase.instance.client),
       permanent: true,
     );
-    // Repositories (permanent - holds cachedUser state)
-    final authRepo = AuthRepositoryImpl(dataSource: Get.find());
-    Get.put<AuthRepository>(authRepo, permanent: true);
+    // Repositories (permanent)
+    Get.put<AuthRepository>(
+      AuthRepositoryImpl(dataSource: Get.find<AuthDataSource>()),
+      permanent: true,
+    );
     Get.put<TenantRepository>(
       TenantRepositoryImpl(
-        dataSource: Get.find(),
-        currentUserId: () => authRepo.cachedUser?.id,
+        dataSource: Get.find<TenantDataSource>(),
+        currentUserId: () => Get.find<AuthRepository>().currentUserId,
       ),
       permanent: true,
     );
     // Use cases (lazy)
-    Get.lazyPut<UseCase<AppUser, SignInParams>>(() => SignIn(Get.find()));
-    Get.lazyPut<UseCase<void, NoParams>>(() => SignOut(Get.find()));
-    Get.lazyPut<UseCase<AppUser?, NoParams>>(() => GetCurrentUser(Get.find()));
+    Get.lazyPut<UseCase<AppUser, SignInParams>>(
+      () => SignIn(Get.find<AuthRepository>()),
+    );
+    Get.lazyPut<UseCase<void, NoParams>>(
+      () => SignOut(Get.find<AuthRepository>()),
+    );
+    Get.lazyPut<UseCase<AppUser?, NoParams>>(
+      () => GetCurrentUser(Get.find<AuthRepository>()),
+    );
   }
 }

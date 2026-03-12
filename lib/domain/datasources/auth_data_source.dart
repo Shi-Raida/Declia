@@ -5,4 +5,5 @@ abstract interface class AuthDataSource {
   Future<void> signOut();
   Future<AppUser?> getCurrentUser();
   bool get isAuthenticated;
+  String? get currentUserId;
 }

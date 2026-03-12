@@ -25,10 +25,10 @@ final class _FakeAuthRepository implements AuthRepository {
   bool shouldThrowInvalidCredentials = false;
 
   @override
-  AppUser? get cachedUser => userToReturn;
+  bool get isAuthenticated => userToReturn != null;
 
   @override
-  bool get isAuthenticated => userToReturn != null;
+  String? get currentUserId => userToReturn?.id;
 
   @override
   Future<AppUser> signIn({

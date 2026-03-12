@@ -8,10 +8,10 @@ final class _FakeAuthRepository implements AuthRepository {
   bool signOutCalled = false;
 
   @override
-  AppUser? get cachedUser => null;
+  bool get isAuthenticated => false;
 
   @override
-  bool get isAuthenticated => false;
+  String? get currentUserId => null;
 
   @override
   Future<AppUser> signIn({

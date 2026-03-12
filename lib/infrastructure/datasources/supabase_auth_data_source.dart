@@ -4,6 +4,18 @@ import '../../core/errors/app_exception.dart';
 import '../../domain/datasources/auth_data_source.dart';
 import '../../domain/entities/app_user.dart';
 
+/// Maps an [AuthException] to a typed [AppException].
+/// Package-level so it can be tested independently.
+AppException mapAuthException(AuthException e) =>
+    const InvalidCredentialsException();
+
+/// Maps a [PostgrestException] from a user-profile query to a typed [AppException].
+/// Package-level so it can be tested independently.
+AppException mapAuthPostgrestException(PostgrestException e, String userId) {
+  if (e.code == 'PGRST116') return UserProfileNotFoundException(userId);
+  return RepositoryException(e.message, cause: e);
+}
+
 final class SupabaseAuthDataSource implements AuthDataSource {
   const SupabaseAuthDataSource(this._client);
 
@@ -13,16 +25,24 @@ final class SupabaseAuthDataSource implements AuthDataSource {
   bool get isAuthenticated => _client.auth.currentUser != null;
 
   @override
+  String? get currentUserId => _client.auth.currentUser?.id;
+
+  @override
   Future<AppUser> signIn({
     required String email,
     required String password,
   }) async {
+    final String userId;
     try {
       final response = await _client.auth.signInWithPassword(
         email: email,
         password: password,
       );
-      final userId = response.user!.id;
+      userId = response.user!.id;
+    } on AuthException catch (e) {
+      throw mapAuthException(e);
+    }
+    try {
       final userData = await _client
           .from('users')
           .select('id, role, tenant_id')
@@ -32,8 +52,8 @@ final class SupabaseAuthDataSource implements AuthDataSource {
         ...Map<String, Object?>.from(userData),
         'email': email,
       });
-    } on AuthException {
-      throw const InvalidCredentialsException();
+    } on PostgrestException catch (e) {
+      throw mapAuthPostgrestException(e, userId);
     }
   }
 
@@ -46,14 +66,18 @@ final class SupabaseAuthDataSource implements AuthDataSource {
   Future<AppUser?> getCurrentUser() async {
     final currentUser = _client.auth.currentUser;
     if (currentUser == null) return null;
-    final userData = await _client
-        .from('users')
-        .select('id, role, tenant_id')
-        .eq('id', currentUser.id)
-        .single();
-    return AppUser.fromJson(<String, dynamic>{
-      ...Map<String, Object?>.from(userData),
-      'email': currentUser.email,
-    });
+    try {
+      final userData = await _client
+          .from('users')
+          .select('id, role, tenant_id')
+          .eq('id', currentUser.id)
+          .single();
+      return AppUser.fromJson(<String, dynamic>{
+        ...Map<String, Object?>.from(userData),
+        'email': currentUser.email,
+      });
+    } on PostgrestException catch (e) {
+      throw mapAuthPostgrestException(e, currentUser.id);
+    }
   }
 }

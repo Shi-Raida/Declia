@@ -21,6 +21,9 @@ final class _FakeAuthDataSource implements AuthDataSource {
   bool get isAuthenticated => userFixture != null;
 
   @override
+  String? get currentUserId => userFixture?.id;
+
+  @override
   Future<AppUser> signIn({
     required String email,
     required String password,
@@ -87,54 +90,6 @@ void main() {
       final repo = AuthRepositoryImpl(dataSource: ds);
 
       expect(repo.isAuthenticated, isFalse);
-    });
-
-    test('cachedUser is null before any operation', () {
-      final ds = _FakeAuthDataSource()..userFixture = _fixturePhotographer;
-      final repo = AuthRepositoryImpl(dataSource: ds);
-
-      expect(repo.cachedUser, isNull);
-    });
-
-    test('cachedUser is populated after signIn', () async {
-      final ds = _FakeAuthDataSource()..userFixture = _fixturePhotographer;
-      final repo = AuthRepositoryImpl(dataSource: ds);
-
-      await repo.signIn(email: 'photo@fleur.test', password: 'password123');
-
-      expect(repo.cachedUser, isNotNull);
-      expect(repo.cachedUser!.email, 'photo@fleur.test');
-    });
-
-    test('cachedUser is populated after getCurrentUser', () async {
-      final ds = _FakeAuthDataSource()..userFixture = _fixturePhotographer;
-      final repo = AuthRepositoryImpl(dataSource: ds);
-
-      await repo.getCurrentUser();
-
-      expect(repo.cachedUser, isNotNull);
-      expect(repo.cachedUser!.email, 'photo@fleur.test');
-    });
-
-    test('cachedUser is cleared after signOut', () async {
-      final ds = _FakeAuthDataSource()..userFixture = _fixturePhotographer;
-      final repo = AuthRepositoryImpl(dataSource: ds);
-
-      await repo.signIn(email: 'photo@fleur.test', password: 'password123');
-      expect(repo.cachedUser, isNotNull);
-
-      await repo.signOut();
-
-      expect(repo.cachedUser, isNull);
-    });
-
-    test('cachedUser is null when getCurrentUser returns null', () async {
-      final ds = _FakeAuthDataSource();
-      final repo = AuthRepositoryImpl(dataSource: ds);
-
-      await repo.getCurrentUser();
-
-      expect(repo.cachedUser, isNull);
     });
   });
 }
