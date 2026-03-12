@@ -4,8 +4,9 @@ import 'package:get/get.dart';
 import '../../core/enums/user_role.dart';
 import '../controllers/auth_state_controller.dart';
 import '../routes/app_routes.dart';
+import '../routes/route_args.dart';
 
-class RoleMiddleware extends GetMiddleware {
+final class RoleMiddleware extends GetMiddleware {
   RoleMiddleware(this.allowedRoles);
 
   final Set<UserRole> allowedRoles;
@@ -16,7 +17,7 @@ class RoleMiddleware extends GetMiddleware {
     if (user == null || !allowedRoles.contains(user.role)) {
       return const RouteSettings(
         name: AppRoutes.login,
-        arguments: 'unauthorized_role',
+        arguments: RouteArgs.unauthorizedRole,
       );
     }
     return null;

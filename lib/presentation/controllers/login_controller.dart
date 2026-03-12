@@ -2,13 +2,14 @@ import 'package:get/get.dart';
 
 import '../../core/errors/app_exception.dart';
 import '../../domain/entities/app_user.dart';
-import '../../usecases/auth/auth_params.dart';
+import '../../usecases/auth/sign_in.dart';
 import '../../usecases/usecase.dart';
+import '../routes/route_args.dart';
 import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
 import 'login_form_mixin.dart';
 
-class LoginController extends GetxController with LoginFormMixin {
+final class LoginController extends GetxController with LoginFormMixin {
   LoginController(this._signIn, this._authState, this._nav);
 
   final UseCase<AppUser, SignInParams> _signIn;
@@ -21,7 +22,7 @@ class LoginController extends GetxController with LoginFormMixin {
   @override
   void onInit() {
     super.onInit();
-    if (Get.arguments == 'unauthorized_role') {
+    if (Get.arguments == RouteArgs.unauthorizedRole) {
       errorMessage.value = 'Accès réservé aux photographes';
       _authState.signOut();
     }
