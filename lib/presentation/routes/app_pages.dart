@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../core/enums/user_role.dart';
+import '../controllers/auth_state_controller.dart';
 import '../middleware/auth_middleware.dart';
 import '../middleware/role_middleware.dart';
 import '../pages/admin/dashboard_binding.dart';
@@ -27,8 +28,8 @@ final List<GetPage<dynamic>> appPages = [
     page: () => const DashboardPage(),
     binding: DashboardBinding(),
     middlewares: [
-      AuthMiddleware(),
-      RoleMiddleware({UserRole.photographer}),
+      AuthMiddleware(Get.find<AuthStateController>()),
+      RoleMiddleware(Get.find<AuthStateController>(), {UserRole.photographer}),
     ],
   ),
 ];

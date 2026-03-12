@@ -7,13 +7,14 @@ import '../routes/app_routes.dart';
 import '../routes/route_args.dart';
 
 final class RoleMiddleware extends GetMiddleware {
-  RoleMiddleware(this.allowedRoles);
+  RoleMiddleware(this._authState, this.allowedRoles);
 
+  final AuthStateController _authState;
   final Set<UserRole> allowedRoles;
 
   @override
   RouteSettings? redirect(String? route) {
-    final user = Get.find<AuthStateController>().currentUser.value;
+    final user = _authState.currentUser.value;
     if (user == null || !allowedRoles.contains(user.role)) {
       return const RouteSettings(
         name: AppRoutes.login,
