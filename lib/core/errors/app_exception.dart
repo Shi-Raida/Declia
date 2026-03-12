@@ -31,6 +31,12 @@ final class UnauthorisedRoleException extends AppException {
   final String expectedRole;
 }
 
+final class UserProfileNotFoundException extends AppException {
+  const UserProfileNotFoundException(this.userId)
+    : super('User profile not found: $userId');
+  final String userId;
+}
+
 final class RepositoryException extends AppException {
   const RepositoryException(super.message, {this.cause});
   final Object? cause;
