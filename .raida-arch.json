@@ -4,7 +4,8 @@
   "layers": {
     "entities": {
       "paths": ["lib/domain", "lib/core"],
-      "allowedDependencies": []
+      "allowedDependencies": [],
+      "acceptedExternalPackages": ["freezed_annotation", "json_annotation"]
     },
     "usecases": {
       "paths": ["lib/usecases"],
