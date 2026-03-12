@@ -10,6 +10,7 @@ import 'presentation/di/presentation_injection.dart';
 import 'presentation/routes/app_pages.dart';
 import 'presentation/routes/app_routes.dart';
 import 'presentation/theme/app_theme.dart';
+import 'presentation/translations/app_translations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,6 +51,9 @@ class DecliaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Declia',
+      translations: AppTranslations(),
+      locale: const Locale('fr', 'FR'),
+      fallbackLocale: const Locale('fr', 'FR'),
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       initialRoute: AppRoutes.home,
