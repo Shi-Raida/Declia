@@ -28,16 +28,12 @@ final class SupabaseTenantDataSource implements TenantDataSource {
   }
 
   @override
-  Future<Tenant> fetchById(String tenantId) async {
+  Future<Tenant> fetchById(String id) async {
     try {
-      final data = await _client
-          .from('tenants')
-          .select()
-          .eq('id', tenantId)
-          .single();
+      final data = await _client.from('tenants').select().eq('id', id).single();
       return Tenant.fromJson(Map<String, dynamic>.from(data));
     } on PostgrestException catch (e) {
-      throw mapPostgrestException(e, tenantId);
+      throw mapPostgrestException(e, id);
     }
   }
 }

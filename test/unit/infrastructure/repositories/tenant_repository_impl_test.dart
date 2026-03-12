@@ -11,23 +11,23 @@ const _userAId = '00000000-0000-0000-0001-000000000001';
 const _userBId = '00000000-0000-0000-0001-000000000002';
 const _userCId = '00000000-0000-0000-0001-000000000003';
 
-final _tenantA = Tenant.fromJson(<String, dynamic>{
-  'id': _tenantAId,
-  'name': 'Fleur de Lumiere',
-  'slug': 'fleur-de-lumiere',
-  'branding': <String, dynamic>{'primary_color': '#C084A0', 'logo_url': null},
-  'domain': 'fleur-de-lumiere.local',
-  'created_at': '2026-01-01T00:00:00.000Z',
-});
+final _tenantA = Tenant(
+  id: _tenantAId,
+  name: 'Fleur de Lumiere',
+  slug: 'fleur-de-lumiere',
+  branding: const TenantBranding(primaryColor: '#C084A0'),
+  domain: 'fleur-de-lumiere.local',
+  createdAt: DateTime.utc(2026, 1, 1),
+);
 
-final _tenantB = Tenant.fromJson(<String, dynamic>{
-  'id': _tenantBId,
-  'name': 'Studio Luminos',
-  'slug': 'studio-luminos',
-  'branding': <String, dynamic>{},
-  'domain': null,
-  'created_at': '2026-01-02T00:00:00.000Z',
-});
+final _tenantB = Tenant(
+  id: _tenantBId,
+  name: 'Studio Luminos',
+  slug: 'studio-luminos',
+  branding: const TenantBranding(),
+  domain: null,
+  createdAt: DateTime.utc(2026, 1, 2),
+);
 
 // Simulates RLS: the "current user" is set externally (mirrors auth session).
 final class _FakeTenantDataSource implements TenantDataSource {
