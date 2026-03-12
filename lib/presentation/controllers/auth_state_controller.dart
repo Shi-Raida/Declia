@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../domain/entities/app_user.dart';
 import '../../usecases/usecase.dart';
 
-class AuthStateController extends GetxController {
+final class AuthStateController extends GetxController {
   AuthStateController(this._signOut);
 
   final UseCase<void, NoParams> _signOut;

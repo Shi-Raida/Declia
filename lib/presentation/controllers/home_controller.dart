@@ -5,7 +5,7 @@ import '../../usecases/usecase.dart';
 import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
 
-class HomeController extends GetxController {
+final class HomeController extends GetxController {
   HomeController(this._getCurrentUser, this._authState, this._nav);
 
   final UseCase<AppUser?, NoParams> _getCurrentUser;
