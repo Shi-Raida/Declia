@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../controllers/dashboard_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
+import '../../translations/translation_keys.dart';
 
 class DashboardPage extends GetView<DashboardController> {
   const DashboardPage({super.key});
@@ -13,11 +14,11 @@ class DashboardPage extends GetView<DashboardController> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: const Text('Tableau de bord'),
+        title: Text(Tr.dashboardTitle.tr),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Se déconnecter',
+            tooltip: Tr.dashboardLogout.tr,
             onPressed: controller.logout,
           ),
         ],
@@ -29,7 +30,7 @@ class DashboardPage extends GetView<DashboardController> {
             return const CircularProgressIndicator();
           }
           return Text(
-            'Bienvenue, ${user.email}',
+            Tr.dashboardWelcome.tr.replaceAll('@email', user.email),
             style: AppTypography.heading3().copyWith(color: AppColors.prune),
           );
         }),

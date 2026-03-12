@@ -5,6 +5,7 @@ import '../../controllers/login_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
+import '../../translations/translation_keys.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});
@@ -24,14 +25,14 @@ class LoginPage extends GetView<LoginController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Declia',
+                    Tr.appName.tr,
                     style: AppTypography.heading1().copyWith(
                       color: AppColors.prune,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
-                    'Espace Photographe',
+                    Tr.loginSubtitle.tr,
                     style: AppTypography.bodyLarge().copyWith(
                       color: AppColors.warmGray,
                     ),
@@ -64,13 +65,13 @@ class LoginPage extends GetView<LoginController> {
                     controller: controller.emailController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'votre@email.com',
+                    decoration: InputDecoration(
+                      labelText: Tr.loginEmail.tr,
+                      hintText: Tr.loginEmailHint.tr,
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Veuillez saisir votre email';
+                        return Tr.loginEmailRequired.tr;
                       }
                       return null;
                     },
@@ -83,7 +84,7 @@ class LoginPage extends GetView<LoginController> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => controller.login(),
                       decoration: InputDecoration(
-                        labelText: 'Mot de passe',
+                        labelText: Tr.loginPassword.tr,
                         suffixIcon: IconButton(
                           icon: Icon(
                             controller.isPasswordVisible.value
@@ -95,7 +96,7 @@ class LoginPage extends GetView<LoginController> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Veuillez saisir votre mot de passe';
+                          return Tr.loginPasswordRequired.tr;
                         }
                         return null;
                       },
@@ -117,7 +118,7 @@ class LoginPage extends GetView<LoginController> {
                                   strokeWidth: 2,
                                 ),
                               )
-                            : const Text('Se connecter'),
+                            : Text(Tr.loginSubmit.tr),
                       ),
                     ),
                   ),

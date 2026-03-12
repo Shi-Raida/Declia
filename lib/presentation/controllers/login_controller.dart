@@ -4,6 +4,7 @@ import '../../core/errors/app_exception.dart';
 import '../../domain/entities/app_user.dart';
 import '../../usecases/auth/sign_in.dart';
 import '../../usecases/usecase.dart';
+import '../translations/translation_keys.dart';
 import '../routes/route_args.dart';
 import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
@@ -23,7 +24,7 @@ final class LoginController extends GetxController with LoginFormMixin {
   void onInit() {
     super.onInit();
     if (Get.arguments == RouteArgs.unauthorizedRole) {
-      errorMessage.value = 'Accès réservé aux photographes';
+      errorMessage.value = Tr.loginUnauthorizedRole.tr;
       _authState.signOut();
     }
   }
@@ -42,7 +43,7 @@ final class LoginController extends GetxController with LoginFormMixin {
       _authState.setUser(user);
       _nav.toDashboard();
     } on InvalidCredentialsException {
-      errorMessage.value = 'Email ou mot de passe incorrect';
+      errorMessage.value = Tr.loginInvalidCredentials.tr;
     } on AppException catch (e) {
       errorMessage.value = e.message;
     } finally {
