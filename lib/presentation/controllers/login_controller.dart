@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import '../../core/errors/app_exception.dart';
 import '../../domain/entities/app_user.dart';
-import '../../usecases/auth/sign_in.dart';
+import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
 import '../translations/translation_keys.dart';
 import '../routes/route_args.dart';

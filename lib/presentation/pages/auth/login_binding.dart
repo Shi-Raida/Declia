@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../domain/entities/app_user.dart';
-import '../../../usecases/auth/sign_in.dart';
+import '../../../usecases/auth/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/auth_state_controller.dart';
 import '../../controllers/login_controller.dart';

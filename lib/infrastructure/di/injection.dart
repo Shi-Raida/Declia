@@ -7,6 +7,7 @@ import '../../domain/entities/app_user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/tenant_repository.dart';
 import '../../usecases/auth/get_current_user.dart';
+import '../../usecases/auth/params.dart';
 import '../../usecases/auth/sign_in.dart';
 import '../../usecases/auth/sign_out.dart';
 import '../../usecases/usecase.dart';
