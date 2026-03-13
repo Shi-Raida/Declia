@@ -10,7 +10,7 @@ abstract final class AppTypography {
     fontWeight: FontWeight.w600,
     height: 1.15,
     letterSpacing: -0.96,
-    color: AppColors.charcoal,
+    color: AppColors.encre,
   );
 
   static TextStyle heading2() => GoogleFonts.cormorantGaramond(
@@ -18,49 +18,49 @@ abstract final class AppTypography {
     fontWeight: FontWeight.w600,
     height: 1.2,
     letterSpacing: -0.36,
-    color: AppColors.charcoal,
+    color: AppColors.encre,
   );
 
   static TextStyle heading3() => GoogleFonts.cormorantGaramond(
     fontSize: 28,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: AppColors.charcoal,
+    color: AppColors.encre,
   );
 
   static TextStyle heading4() => GoogleFonts.outfit(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     height: 1.4,
-    color: AppColors.charcoal,
+    color: AppColors.encre,
   );
 
   static TextStyle bodyLarge() => GoogleFonts.outfit(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.7,
-    color: AppColors.charcoal,
+    color: AppColors.encre,
   );
 
   static TextStyle bodyMedium() => GoogleFonts.outfit(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.6,
-    color: AppColors.charcoal,
+    color: AppColors.encre,
   );
 
   static TextStyle bodySmall() => GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: AppColors.warmGray,
+    color: AppColors.pierre,
   );
 
   static TextStyle label() => GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w600,
     letterSpacing: 1.6,
-    color: AppColors.rose,
+    color: AppColors.terracotta,
   );
 
   static TextStyle button() => GoogleFonts.outfit(

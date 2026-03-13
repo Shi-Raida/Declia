@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
 
-/// Rose Sauvage color palette — mapped from design-system.css
+/// Crépuscule color palette — mapped from declia-brand-guide
 abstract final class AppColors {
   // Brand
-  static const Color prune = Color(0xFF4A2E3D);
-  static const Color pruneLight = Color(0xFF6B4A5C);
-  static const Color pruneDark = Color(0xFF2D1A26);
-  static const Color rose = Color(0xFFC2727E);
-  static const Color roseLight = Color(0xFFF5E1E4);
-  static const Color rosePale = Color(0xFFFFF5F7);
-  static const Color roseHover = Color(0xFFA85965);
-  static const Color charcoal = Color(0xFF2D2226);
-  static const Color or = Color(0xFFD4A03C);
-  static const Color orHover = Color(0xFFB8882F);
-  static const Color orLight = Color(0xFFFDF4E3);
-  static const Color sauge = Color(0xFF6B7F5A);
-  static const Color saugeLight = Color(0xFFE8EFE4);
+  static const Color crepuscule = Color(0xFF1E2A3A);
+  static const Color crepusculeLight = Color(0xFF2E3E52);
+  static const Color crepusculeDark = Color(0xFF141E2A);
+  static const Color terracotta = Color(0xFFB45A3C);
+  static const Color terracottaLight = Color(0xFFF5E2DB);
+  static const Color terracottaPale = Color(0xFFFFF7F4);
+  static const Color terracottaHover = Color(0xFF9A4E34);
+  static const Color encre = Color(0xFF1E2434);
+  static const Color or = Color(0xFFCFA044);
+  static const Color orHover = Color(0xFFB58A30);
+  static const Color orLight = Color(0xFFFDF6E8);
+  static const Color bleuOuvert = Color(0xFF3A6B8A);
+  static const Color bleuOuvertLight = Color(0xFFE4EEF4);
 
   // Neutrals
-  static const Color warmGray = Color(0xFF8A7A7E);
-  static const Color border = Color(0xFFF0E8EB);
-  static const Color borderDark = Color(0xFFE0D4D8);
-  static const Color bg = Color(0xFFFDFBFC);
-  static const Color bgAlt = Color(0xFFFFF9F8);
-  static const Color bgCard = Color(0xFFFFFFFF);
+  static const Color pierre = Color(0xFF7A7572);
+  static const Color border = Color(0xFFE5E1DA);
+  static const Color borderDark = Color(0xFFD5CFC8);
+  static const Color bg = Color(0xFFF6F3ED);
+  static const Color bgAlt = Color(0xFFF2EEE6);
+  static const Color bgCard = Color(0xFFFFFEF9);
 
   // Semantic
-  static const Color success = Color(0xFF4CAF7C);
+  static const Color success = Color(0xFF3F8A5E);
   static const Color successLight = Color(0xFFE8F5EE);
   static const Color warning = Color(0xFFE8985E);
   static const Color warningLight = Color(0xFFFFF3EB);
-  static const Color info = Color(0xFF5B8FA8);
+  static const Color info = Color(0xFF3A6B8A);
   static const Color infoLight = Color(0xFFE8F0F4);
-  static const Color error = Color(0xFFDC2626);
+  static const Color error = Color(0xFFC44040);
   static const Color errorLight = Color(0xFFFEF2F2);
 }
