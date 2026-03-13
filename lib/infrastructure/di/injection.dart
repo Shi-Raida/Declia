@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../domain/datasources/auth_data_source.dart';
-import '../../domain/datasources/tenant_data_source.dart';
+import '../datasources/contract/auth_data_source.dart';
+import '../datasources/contract/tenant_data_source.dart';
 import '../../domain/entities/app_user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/tenant_repository.dart';

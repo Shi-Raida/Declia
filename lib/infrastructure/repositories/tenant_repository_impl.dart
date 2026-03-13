@@ -1,7 +1,7 @@
 import '../../core/errors/app_exception.dart';
 import '../../domain/entities/tenant.dart';
 import '../../domain/repositories/tenant_repository.dart';
-import '../../domain/datasources/tenant_data_source.dart';
+import '../datasources/contract/tenant_data_source.dart';
 
 typedef CurrentUserIdProvider = String? Function();
 

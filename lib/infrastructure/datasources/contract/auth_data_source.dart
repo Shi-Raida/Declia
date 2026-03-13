@@ -1,4 +1,4 @@
-import '../entities/app_user.dart';
+import '../../../domain/entities/app_user.dart';
 
 abstract interface class AuthDataSource {
   Future<AppUser> signIn({required String email, required String password});

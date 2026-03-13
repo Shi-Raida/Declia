@@ -1,4 +1,4 @@
-import '../entities/tenant.dart';
+import '../../../domain/entities/tenant.dart';
 
 abstract interface class TenantDataSource {
   Future<Tenant> fetchCurrentUserTenant();

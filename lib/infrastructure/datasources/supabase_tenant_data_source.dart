@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/errors/app_exception.dart';
-import '../../domain/datasources/tenant_data_source.dart';
+import 'contract/tenant_data_source.dart';
 import '../../domain/entities/tenant.dart';
 
 /// Maps a [PostgrestException] to a typed [AppException].

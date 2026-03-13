@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/errors/app_exception.dart';
-import '../../domain/datasources/auth_data_source.dart';
+import 'contract/auth_data_source.dart';
 import '../../domain/entities/app_user.dart';
 
 /// Maps an [AuthException] to a typed [AppException].

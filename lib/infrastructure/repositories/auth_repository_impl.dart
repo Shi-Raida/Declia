@@ -1,6 +1,6 @@
 import '../../domain/entities/app_user.dart';
 import '../../domain/repositories/auth_repository.dart';
-import '../../domain/datasources/auth_data_source.dart';
+import '../datasources/contract/auth_data_source.dart';
 
 final class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({required AuthDataSource dataSource})
