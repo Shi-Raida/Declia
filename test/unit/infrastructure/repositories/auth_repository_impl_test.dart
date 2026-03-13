@@ -1,5 +1,5 @@
 import 'package:declia/core/enums/user_role.dart';
-import 'package:declia/domain/datasources/auth_data_source.dart';
+import 'package:declia/infrastructure/datasources/contract/auth_data_source.dart';
 import 'package:declia/domain/entities/app_user.dart';
 import 'package:declia/infrastructure/repositories/auth_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';

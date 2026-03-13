@@ -1,5 +1,5 @@
 import 'package:declia/core/errors/app_exception.dart';
-import 'package:declia/domain/datasources/tenant_data_source.dart';
+import 'package:declia/infrastructure/datasources/contract/tenant_data_source.dart';
 import 'package:declia/domain/entities/tenant.dart';
 import 'package:declia/infrastructure/repositories/tenant_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
