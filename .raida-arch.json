@@ -39,5 +39,13 @@
   "ci": {
     "failOn": "high",
     "baselinePath": ".raida-arch-baseline.json"
-  }
+  },
+  "exceptions": [
+    {
+      "rule": "cross-layer-coupling",
+      "files": ["lib/presentation/**/*.dart", "lib/infrastructure/di/injection.dart"],
+      "imports": ["lib/usecases/**/params.dart"],
+      "reason": "Params typedefs are simple value objects shared across layers by design"
+    }
+  ]
 }
