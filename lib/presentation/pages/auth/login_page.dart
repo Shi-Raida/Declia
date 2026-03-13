@@ -27,14 +27,14 @@ class LoginPage extends GetView<LoginController> {
                   Text(
                     Tr.appName.tr,
                     style: AppTypography.heading1().copyWith(
-                      color: AppColors.prune,
+                      color: AppColors.crepuscule,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
                   Text(
                     Tr.loginSubtitle.tr,
                     style: AppTypography.bodyLarge().copyWith(
-                      color: AppColors.warmGray,
+                      color: AppColors.pierre,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl2),

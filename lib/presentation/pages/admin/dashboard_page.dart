@@ -31,7 +31,9 @@ class DashboardPage extends GetView<DashboardController> {
           }
           return Text(
             Tr.dashboardWelcome.tr.replaceAll('@email', user.email),
-            style: AppTypography.heading3().copyWith(color: AppColors.prune),
+            style: AppTypography.heading3().copyWith(
+              color: AppColors.crepuscule,
+            ),
           );
         }),
       ),
