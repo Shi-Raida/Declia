@@ -9,8 +9,8 @@ import '../../services/navigation_service.dart';
 class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<HomeController>(
-      () => HomeController(
+    Get.put<HomeController>(
+      HomeController(
         Get.find<UseCase<AppUser?, NoParams>>(),
         Get.find<AuthStateController>(),
         Get.find<NavigationService>(),
