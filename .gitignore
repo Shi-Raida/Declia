@@ -57,6 +57,7 @@ doc/api/
 
 # dotenv environment variables file
 .env*
+!.env.example
 
 # Avoid committing generated Javascript files:
 *.dart.js
@@ -283,3 +284,7 @@ xcuserdata/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter,dart,android,xcode,intellij,visualstudiocode
+
+### Supabase ###
+supabase/.branches
+supabase/.temp
