@@ -3,6 +3,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../datasources/contract/auth_data_source.dart';
 import '../datasources/contract/tenant_data_source.dart';
+import '../../core/enums/environment.dart';
+import '../../core/logger/app_logger.dart';
+import '../../core/utils/clock.dart';
 import '../../domain/entities/app_user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/tenant_repository.dart';
@@ -11,15 +14,38 @@ import '../../usecases/auth/params.dart';
 import '../../usecases/auth/sign_in.dart';
 import '../../usecases/auth/sign_out.dart';
 import '../../usecases/usecase.dart';
+import '../clock/system_clock.dart';
 import '../config/app_config.dart';
 import '../datasources/supabase_auth_data_source.dart';
 import '../datasources/supabase_tenant_data_source.dart';
+import '../logger/log_filter.dart';
+import '../logger/talker_logger.dart';
 import '../repositories/auth_repository_impl.dart';
 import '../repositories/tenant_repository_impl.dart';
 
 abstract final class Injection {
   static Future<void> init(AppConfig config) async {
     Get.put(config, permanent: true);
+
+    // Clock
+    Get.put<Clock>(const SystemClock(), permanent: true);
+
+    // Logger
+    final logFilter = switch (config.environment) {
+      Environment.development => const LogFilter.development(),
+      Environment.staging => const LogFilter.staging(),
+      Environment.production => const LogFilter.production(),
+      Environment.test => const LogFilter.test(),
+    };
+    Get.put<AppLogger>(
+      TalkerLogger(filter: logFilter, clock: Get.find<Clock>()),
+      permanent: true,
+    );
+    Get.find<AppLogger>().info(
+      'Initializing dependencies',
+      metadata: {'environment': config.environment.name},
+    );
+
     await Supabase.initialize(
       url: config.supabaseUrl,
       anonKey: config.supabaseAnonKey,
@@ -58,5 +84,7 @@ abstract final class Injection {
       () => GetCurrentUser(Get.find<AuthRepository>()),
       fenix: true,
     );
+
+    Get.find<AppLogger>().debug('Core services registered');
   }
 }
