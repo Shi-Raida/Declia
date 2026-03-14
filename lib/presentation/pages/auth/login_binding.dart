@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../core/enums/user_role.dart';
+import '../../../core/logger/app_logger.dart';
 import '../../../domain/entities/app_user.dart';
 import '../../../usecases/auth/params.dart';
 import '../../../usecases/usecase.dart';
@@ -11,11 +12,13 @@ import '../../services/navigation_service.dart';
 class LoginBinding extends Bindings {
   @override
   void dependencies() {
+    Get.find<AppLogger>().trace('LoginBinding: registering dependencies');
     Get.lazyPut<LoginController>(
       () => LoginController(
         Get.find<UseCase<AppUser, SignInParams>>(),
         Get.find<AuthStateController>(),
         Get.find<NavigationService>(),
+        Get.find<AppLogger>(),
         {UserRole.photographer},
       ),
       fenix: true,

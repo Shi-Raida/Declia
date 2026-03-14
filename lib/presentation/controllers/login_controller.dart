@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import '../../core/enums/user_role.dart';
 import '../../core/errors/app_exception.dart';
+import '../../core/logger/app_logger.dart';
 import '../../domain/entities/app_user.dart';
 import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
@@ -12,11 +13,18 @@ import 'auth_state_controller.dart';
 import 'login_form_mixin.dart';
 
 final class LoginController extends GetxController with LoginFormMixin {
-  LoginController(this._signIn, this._authState, this._nav, this._allowedRoles);
+  LoginController(
+    this._signIn,
+    this._authState,
+    this._nav,
+    this._logger,
+    this._allowedRoles,
+  );
 
   final UseCase<AppUser, SignInParams> _signIn;
   final AuthStateController _authState;
   final NavigationService _nav;
+  final AppLogger _logger;
   final Set<UserRole> _allowedRoles;
 
   final isLoading = false.obs;
@@ -49,9 +57,19 @@ final class LoginController extends GetxController with LoginFormMixin {
       }
       _authState.setUser(user);
       _nav.toDashboard();
-    } on InvalidCredentialsException {
+    } on InvalidCredentialsException catch (e, stack) {
+      _logger.warning(
+        'Login failed: invalid credentials',
+        error: e,
+        stackTrace: stack,
+      );
       errorMessage.value = Tr.loginInvalidCredentials.tr;
-    } on AppException catch (e) {
+    } on AppException catch (e, stack) {
+      _logger.warning(
+        'Login failed: app exception',
+        error: e,
+        stackTrace: stack,
+      );
       errorMessage.value = e.message;
     } finally {
       isLoading.value = false;
