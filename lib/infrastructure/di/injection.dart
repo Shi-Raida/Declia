@@ -45,15 +45,18 @@ abstract final class Injection {
       ),
       permanent: true,
     );
-    // Use cases (lazy)
+    // Use cases (lazy, fenix: recreated after disposal)
     Get.lazyPut<UseCase<AppUser, SignInParams>>(
       () => SignIn(Get.find<AuthRepository>()),
+      fenix: true,
     );
     Get.lazyPut<UseCase<void, NoParams>>(
       () => SignOut(Get.find<AuthRepository>()),
+      fenix: true,
     );
     Get.lazyPut<UseCase<AppUser?, NoParams>>(
       () => GetCurrentUser(Get.find<AuthRepository>()),
+      fenix: true,
     );
   }
 }
