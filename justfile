@@ -110,3 +110,53 @@ check: analyze format-check
 
 # Pre-commit hook
 pre-commit: analyze format test
+
+# ── Supabase ────────────────────────────────────────────────────────────────
+
+# Start local Supabase stack
+sb-start:
+    npx supabase start
+
+# Stop local Supabase stack
+sb-stop:
+    npx supabase stop
+
+# Show local Supabase status
+sb-status:
+    npx supabase status
+
+# Reset local DB (re-apply migrations + seed)
+sb-reset:
+    npx supabase db reset
+
+# Create a new migration (usage: just sb-new <name>)
+sb-new name:
+    npx supabase migration new {{name}}
+
+# Apply pending migrations to local DB
+sb-migrate:
+    npx supabase migration up
+
+# Diff local schema against migrations (usage: just sb-diff <name>)
+sb-diff name:
+    npx supabase db diff --use-migra -f {{name}}
+
+# Push migrations to remote project
+sb-push:
+    npx supabase db push
+
+# Pull remote schema changes
+sb-pull:
+    npx supabase db pull
+
+# Serve Edge Functions locally
+sb-functions-serve:
+    npx supabase functions serve
+
+# Deploy all Edge Functions
+sb-deploy-functions:
+    npx supabase functions deploy
+
+# Open Supabase Studio in browser
+sb-studio:
+    @echo "Studio: http://localhost:54323"
