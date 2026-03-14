@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../../core/enums/user_role.dart';
 import '../../../domain/entities/app_user.dart';
 import '../../../usecases/auth/params.dart';
 import '../../../usecases/usecase.dart';
@@ -15,7 +16,9 @@ class LoginBinding extends Bindings {
         Get.find<UseCase<AppUser, SignInParams>>(),
         Get.find<AuthStateController>(),
         Get.find<NavigationService>(),
+        {UserRole.photographer},
       ),
+      fenix: true,
     );
   }
 }

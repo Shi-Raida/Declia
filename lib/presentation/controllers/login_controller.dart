@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../core/enums/user_role.dart';
 import '../../core/errors/app_exception.dart';
 import '../../domain/entities/app_user.dart';
 import '../../usecases/auth/params.dart';
@@ -11,11 +12,12 @@ import 'auth_state_controller.dart';
 import 'login_form_mixin.dart';
 
 final class LoginController extends GetxController with LoginFormMixin {
-  LoginController(this._signIn, this._authState, this._nav);
+  LoginController(this._signIn, this._authState, this._nav, this._allowedRoles);
 
   final UseCase<AppUser, SignInParams> _signIn;
   final AuthStateController _authState;
   final NavigationService _nav;
+  final Set<UserRole> _allowedRoles;
 
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
@@ -40,6 +42,11 @@ final class LoginController extends GetxController with LoginFormMixin {
         email: emailController.text.trim(),
         password: passwordController.text,
       ));
+      if (!_allowedRoles.contains(user.role)) {
+        await _authState.signOut();
+        errorMessage.value = Tr.loginUnauthorizedRole.tr;
+        return;
+      }
       _authState.setUser(user);
       _nav.toDashboard();
     } on InvalidCredentialsException {
