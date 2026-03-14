@@ -13,18 +13,18 @@ import 'presentation/theme/app_theme.dart';
 import 'presentation/translations/app_translations.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  FlutterError.onError = (details) {
-    FlutterError.presentError(details);
-  };
-
   await runZonedGuarded(_bootstrap, (error, stack) {
     debugPrint('Uncaught async error: $error\n$stack');
   });
 }
 
 Future<void> _bootstrap() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
+
   try {
     await dotenv.load();
     final config = AppConfig(
