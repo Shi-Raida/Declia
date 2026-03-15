@@ -63,6 +63,38 @@ final class SupabaseAuthDataSource implements AuthDataSource {
   }
 
   @override
+  Future<void> signUp({
+    required String email,
+    required String password,
+    required String tenantSlug,
+  }) async {
+    try {
+      final response = await _client.auth.signUp(
+        email: email,
+        password: password,
+        data: {'tenant_slug': tenantSlug},
+      );
+      // Supabase returns an empty identities list when email is already registered
+      if (response.user?.identities?.isEmpty ?? false) {
+        throw const EmailAlreadyInUseException();
+      }
+    } on EmailAlreadyInUseException {
+      rethrow;
+    } on AuthException catch (e) {
+      throw SignUpFailedException(e.message);
+    }
+  }
+
+  @override
+  Future<void> resetPassword({required String email}) async {
+    try {
+      await _client.auth.resetPasswordForEmail(email);
+    } on AuthException catch (e) {
+      throw PasswordResetFailedException(e.message);
+    }
+  }
+
+  @override
   Future<AppUser?> getCurrentUser() async {
     final currentUser = _client.auth.currentUser;
     if (currentUser == null) return null;
