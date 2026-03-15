@@ -11,8 +11,10 @@ import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/tenant_repository.dart';
 import '../../usecases/auth/get_current_user.dart';
 import '../../usecases/auth/params.dart';
+import '../../usecases/auth/reset_password.dart';
 import '../../usecases/auth/sign_in.dart';
 import '../../usecases/auth/sign_out.dart';
+import '../../usecases/auth/sign_up.dart';
 import '../../usecases/usecase.dart';
 import '../clock/system_clock.dart';
 import '../config/app_config.dart';
@@ -21,6 +23,7 @@ import '../datasources/supabase_tenant_data_source.dart';
 import '../logger/log_filter.dart';
 import '../logger/talker_logger.dart';
 import '../repositories/auth_repository_impl.dart';
+import '../repositories/guards/auth_repository_guard.dart';
 import '../repositories/tenant_repository_impl.dart';
 
 abstract final class Injection {
@@ -59,15 +62,18 @@ abstract final class Injection {
       SupabaseTenantDataSource(Supabase.instance.client),
       permanent: true,
     );
+    // Guards
+    final guard = AuthRepositoryGuard(Get.find<AppLogger>());
     // Repositories (permanent)
     Get.put<AuthRepository>(
-      AuthRepositoryImpl(dataSource: Get.find<AuthDataSource>()),
+      AuthRepositoryImpl(dataSource: Get.find<AuthDataSource>(), guard: guard),
       permanent: true,
     );
     Get.put<TenantRepository>(
       TenantRepositoryImpl(
         dataSource: Get.find<TenantDataSource>(),
         currentUserId: () => Get.find<AuthRepository>().currentUserId,
+        guard: guard,
       ),
       permanent: true,
     );
@@ -82,6 +88,14 @@ abstract final class Injection {
     );
     Get.lazyPut<UseCase<AppUser?, NoParams>>(
       () => GetCurrentUser(Get.find<AuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UseCase<void, SignUpParams>>(
+      () => SignUp(Get.find<AuthRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UseCase<void, ResetPasswordParams>>(
+      () => ResetPassword(Get.find<AuthRepository>()),
       fenix: true,
     );
 
