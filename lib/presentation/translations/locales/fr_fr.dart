@@ -18,4 +18,34 @@ final Map<String, String> frFr = {
   Tr.dashboardTitle: 'Tableau de bord',
   Tr.dashboardLogout: 'Se déconnecter',
   Tr.dashboardWelcome: 'Bienvenue, @email',
+
+  // Client login
+  Tr.clientLoginSubtitle: 'Espace Client',
+  Tr.clientLoginForgotPassword: 'Mot de passe oublié ?',
+  Tr.clientLoginCreateAccount: 'Créer un compte',
+
+  // Client register
+  Tr.clientRegisterTitle: 'Créer un compte',
+  Tr.clientRegisterConfirmPassword: 'Confirmer le mot de passe',
+  Tr.clientRegisterConfirmPasswordRequired:
+      'Veuillez confirmer votre mot de passe',
+  Tr.clientRegisterPasswordMismatch: 'Les mots de passe ne correspondent pas',
+  Tr.clientRegisterSubmit: 'Créer mon compte',
+  Tr.clientRegisterSuccess:
+      'Vérifiez votre boîte mail pour confirmer votre adresse email.',
+  Tr.clientRegisterEmailAlreadyInUse: 'Cette adresse email est déjà utilisée',
+  Tr.clientRegisterHaveAccount: 'Déjà un compte ? Se connecter',
+
+  // Forgot password
+  Tr.clientForgotPasswordTitle: 'Réinitialiser le mot de passe',
+  Tr.clientForgotPasswordSubtitle:
+      'Saisissez votre email pour recevoir un lien de réinitialisation.',
+  Tr.clientForgotPasswordSubmit: 'Envoyer le lien',
+  Tr.clientForgotPasswordSuccess: 'Un email de réinitialisation a été envoyé.',
+  Tr.clientForgotPasswordBackToLogin: 'Retour à la connexion',
+
+  // Client home
+  Tr.clientHomeTitle: 'Espace Client',
+  Tr.clientHomeWelcome: 'Bienvenue, @email',
+  Tr.clientHomeLogout: 'Se déconnecter',
 };
