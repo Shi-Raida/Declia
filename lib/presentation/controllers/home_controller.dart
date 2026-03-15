@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../core/enums/user_role.dart';
 import '../../core/logger/app_logger.dart';
 import '../../domain/entities/app_user.dart';
 import '../../usecases/usecase.dart';
@@ -27,14 +28,27 @@ final class HomeController extends GetxController {
   }
 
   Future<void> _redirect() async {
-    final user = await _getCurrentUser(const NoParams());
-    if (user != null) {
-      _authState.setUser(user);
-      _logger.debug('Redirecting to dashboard');
-      _nav.toDashboard();
-    } else {
-      _logger.debug('Redirecting to login');
-      _nav.toLogin();
-    }
+    final result = await _getCurrentUser(const NoParams());
+    result.fold(
+      ok: (user) {
+        if (user != null) {
+          _authState.setUser(user);
+          if (_authState.currentUser.value!.role == UserRole.client) {
+            _logger.debug('Redirecting client to client home');
+            _nav.toClientHome();
+          } else {
+            _logger.debug('Redirecting to dashboard');
+            _nav.toDashboard();
+          }
+        } else {
+          _logger.debug('Redirecting to login');
+          _nav.toLogin();
+        }
+      },
+      err: (failure) {
+        _logger.warning('Failed to get current user: ${failure.message}');
+        _nav.toLogin();
+      },
+    );
   }
 }

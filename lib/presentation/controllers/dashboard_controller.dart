@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../core/logger/app_logger.dart';
-import '../../domain/entities/app_user.dart';
+import '../models/user_view_model.dart';
 import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
 
@@ -12,7 +12,7 @@ final class DashboardController extends GetxController {
   final NavigationService _nav;
   final AppLogger _logger;
 
-  Rxn<AppUser> get currentUser => _authState.currentUser;
+  Rxn<UserViewModel> get currentUser => _authState.currentUser;
 
   Future<void> logout() async {
     _logger.debug('Logging out');

@@ -17,9 +17,9 @@ class LoginBinding extends Bindings {
       () => LoginController(
         Get.find<UseCase<AppUser, SignInParams>>(),
         Get.find<AuthStateController>(),
-        Get.find<NavigationService>(),
         Get.find<AppLogger>(),
         {UserRole.photographer},
+        () => Get.find<NavigationService>().toDashboard(),
       ),
       fenix: true,
     );
