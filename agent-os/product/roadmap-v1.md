@@ -70,7 +70,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S1 | Flutter project initialization | Done |
 | M1-S2 | Supabase setup & database | Done |
 | M1-S3 | Multi-tenant architecture | Done |
-| M1-S4 | Photographer authentication | Not started |
+| M1-S4 | Photographer authentication | Done |
 | M1-S5 | Client authentication | Not started |
 | M1-S6 | Admin shell & navigation | Not started |
 | M1-S7 | Role management & access control | Not started |
@@ -223,7 +223,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 ---
 
-### M1-S4: Photographer authentication
+### M1-S4: Photographer authentication -- `Done`
 
 **As a** photographer, **I want** to log in to the back-office with email and password **so that** I can access my secure admin space.
 
