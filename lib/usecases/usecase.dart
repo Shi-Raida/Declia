@@ -1,6 +1,9 @@
+import 'package:declia/core/errors/failures.dart';
+import 'package:declia/core/utils/result.dart';
+
 abstract class UseCase<T, P> {
   const UseCase();
-  Future<T> call(P params);
+  Future<Result<T, Failure>> call(P params);
 }
 
 class NoParams {

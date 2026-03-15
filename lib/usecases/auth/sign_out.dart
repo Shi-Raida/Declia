@@ -1,3 +1,5 @@
+import '../../core/errors/failures.dart';
+import '../../core/utils/result.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../usecase.dart';
 
@@ -7,5 +9,6 @@ final class SignOut extends UseCase<void, NoParams> {
   final AuthRepository _authRepository;
 
   @override
-  Future<void> call(NoParams params) => _authRepository.signOut();
+  Future<Result<void, Failure>> call(NoParams params) =>
+      _authRepository.signOut();
 }

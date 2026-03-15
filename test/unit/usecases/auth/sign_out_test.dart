@@ -1,3 +1,5 @@
+import 'package:declia/core/errors/failures.dart';
+import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/app_user.dart';
 import 'package:declia/domain/repositories/auth_repository.dart';
 import 'package:declia/usecases/auth/sign_out.dart';
@@ -14,20 +16,30 @@ final class _FakeAuthRepository implements AuthRepository {
   String? get currentUserId => null;
 
   @override
-  Future<AppUser> signIn({
+  Future<Result<AppUser, Failure>> signIn({
     required String email,
     required String password,
-  }) async {
-    throw UnimplementedError();
-  }
+  }) async => throw UnimplementedError();
 
   @override
-  Future<void> signOut() async {
+  Future<Result<void, Failure>> signOut() async {
     signOutCalled = true;
+    return const Ok(null);
   }
 
   @override
-  Future<AppUser?> getCurrentUser() async => null;
+  Future<Result<AppUser?, Failure>> getCurrentUser() async => const Ok(null);
+
+  @override
+  Future<Result<void, Failure>> signUp({
+    required String email,
+    required String password,
+    required String tenantSlug,
+  }) async => throw UnimplementedError();
+
+  @override
+  Future<Result<void, Failure>> resetPassword({required String email}) async =>
+      throw UnimplementedError();
 }
 
 void main() {
@@ -36,8 +48,9 @@ void main() {
       final repo = _FakeAuthRepository();
       final signOut = SignOut(repo);
 
-      await signOut(const NoParams());
+      final result = await signOut(const NoParams());
 
+      expect(result, isA<Ok<void, Failure>>());
       expect(repo.signOutCalled, isTrue);
     });
   });
