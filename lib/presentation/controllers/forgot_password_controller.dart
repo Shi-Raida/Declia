@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/logger/app_logger.dart';
 import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
+import 'forgot_password_form_mixin.dart';
 
-final class ForgotPasswordController extends GetxController {
+final class ForgotPasswordController extends GetxController
+    with ForgotPasswordFormMixin {
   ForgotPasswordController(this._resetPassword, this._logger);
 
   final UseCase<void, ResetPasswordParams> _resetPassword;
   final AppLogger _logger;
 
-  final emailController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
   final isLoading = false.obs;
   final isSuccess = false.obs;
   final errorMessage = Rxn<String>();
@@ -32,11 +31,5 @@ final class ForgotPasswordController extends GetxController {
         errorMessage.value = failure.message;
       },
     );
-  }
-
-  @override
-  void onClose() {
-    emailController.dispose();
-    super.onClose();
   }
 }
