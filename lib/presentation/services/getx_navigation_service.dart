@@ -12,6 +12,9 @@ final class GetxNavigationService implements NavigationService {
   void toDashboard() => Get.offAllNamed(AppRoutes.adminDashboard);
 
   @override
+  void toAdminPage(String route) => Get.offAllNamed(route);
+
+  @override
   void toClientLogin() => Get.offAllNamed(AppRoutes.clientLogin);
 
   @override
