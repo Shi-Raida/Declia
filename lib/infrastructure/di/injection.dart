@@ -23,6 +23,7 @@ import '../datasources/supabase_tenant_data_source.dart';
 import '../logger/log_filter.dart';
 import '../logger/talker_logger.dart';
 import '../repositories/auth_repository_impl.dart';
+import '../../core/repositories/repository_guard.dart';
 import '../repositories/guards/auth_repository_guard.dart';
 import '../repositories/tenant_repository_impl.dart';
 
@@ -63,17 +64,23 @@ abstract final class Injection {
       permanent: true,
     );
     // Guards
-    final guard = AuthRepositoryGuard(Get.find<AppLogger>());
+    Get.put<RepositoryGuard>(
+      AuthRepositoryGuard(Get.find<AppLogger>()),
+      permanent: true,
+    );
     // Repositories (permanent)
     Get.put<AuthRepository>(
-      AuthRepositoryImpl(dataSource: Get.find<AuthDataSource>(), guard: guard),
+      AuthRepositoryImpl(
+        dataSource: Get.find<AuthDataSource>(),
+        guard: Get.find<RepositoryGuard>(),
+      ),
       permanent: true,
     );
     Get.put<TenantRepository>(
       TenantRepositoryImpl(
         dataSource: Get.find<TenantDataSource>(),
         currentUserId: () => Get.find<AuthRepository>().currentUserId,
-        guard: guard,
+        guard: Get.find<RepositoryGuard>(),
       ),
       permanent: true,
     );
