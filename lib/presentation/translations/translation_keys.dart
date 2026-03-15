@@ -50,4 +50,19 @@ abstract final class Tr {
   static const String clientHomeTitle = 'clientHomeTitle';
   static const String clientHomeWelcome = 'clientHomeWelcome';
   static const String clientHomeLogout = 'clientHomeLogout';
+
+  // Admin shell
+  static const String adminBrandSubtitle = 'adminBrandSubtitle';
+  static const String adminSectionGeneral = 'adminSectionGeneral';
+  static const String adminSectionManagement = 'adminSectionManagement';
+  static const String adminSidebarDashboard = 'adminSidebarDashboard';
+  static const String adminSidebarClients = 'adminSidebarClients';
+  static const String adminSidebarPlanning = 'adminSidebarPlanning';
+  static const String adminSidebarGalleries = 'adminSidebarGalleries';
+  static const String adminSidebarShop = 'adminSidebarShop';
+  static const String adminSidebarInvoicing = 'adminSidebarInvoicing';
+  static const String adminSidebarStatistics = 'adminSidebarStatistics';
+  static const String adminSidebarSettings = 'adminSidebarSettings';
+  static const String adminTopbarLogout = 'adminTopbarLogout';
+  static const String adminPlaceholderComingSoon = 'adminPlaceholderComingSoon';
 }

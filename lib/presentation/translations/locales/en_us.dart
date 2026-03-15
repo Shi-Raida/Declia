@@ -45,4 +45,19 @@ final Map<String, String> enUs = {
   Tr.clientHomeTitle: 'Client Space',
   Tr.clientHomeWelcome: 'Welcome, @email',
   Tr.clientHomeLogout: 'Sign out',
+
+  // Admin shell
+  Tr.adminBrandSubtitle: 'ADMINISTRATION',
+  Tr.adminSectionGeneral: 'GENERAL',
+  Tr.adminSectionManagement: 'MANAGEMENT',
+  Tr.adminSidebarDashboard: 'Dashboard',
+  Tr.adminSidebarClients: 'Clients',
+  Tr.adminSidebarPlanning: 'Planning',
+  Tr.adminSidebarGalleries: 'Galleries',
+  Tr.adminSidebarShop: 'Shop',
+  Tr.adminSidebarInvoicing: 'Invoicing',
+  Tr.adminSidebarStatistics: 'Statistics',
+  Tr.adminSidebarSettings: 'Settings',
+  Tr.adminTopbarLogout: 'Sign out',
+  Tr.adminPlaceholderComingSoon: 'Coming soon',
 };

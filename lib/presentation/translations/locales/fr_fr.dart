@@ -48,4 +48,19 @@ final Map<String, String> frFr = {
   Tr.clientHomeTitle: 'Espace Client',
   Tr.clientHomeWelcome: 'Bienvenue, @email',
   Tr.clientHomeLogout: 'Se déconnecter',
+
+  // Admin shell
+  Tr.adminBrandSubtitle: 'ADMINISTRATION',
+  Tr.adminSectionGeneral: 'GÉNÉRAL',
+  Tr.adminSectionManagement: 'GESTION',
+  Tr.adminSidebarDashboard: 'Tableau de bord',
+  Tr.adminSidebarClients: 'Clients',
+  Tr.adminSidebarPlanning: 'Planning',
+  Tr.adminSidebarGalleries: 'Galeries',
+  Tr.adminSidebarShop: 'Boutique',
+  Tr.adminSidebarInvoicing: 'Facturation',
+  Tr.adminSidebarStatistics: 'Statistiques',
+  Tr.adminSidebarSettings: 'Paramètres',
+  Tr.adminTopbarLogout: 'Se déconnecter',
+  Tr.adminPlaceholderComingSoon: 'Bientôt disponible',
 };
