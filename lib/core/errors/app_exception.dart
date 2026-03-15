@@ -37,6 +37,18 @@ final class UserProfileNotFoundException extends AppException {
   final String userId;
 }
 
+final class SignUpFailedException extends AppException {
+  const SignUpFailedException(super.message);
+}
+
+final class EmailAlreadyInUseException extends AppException {
+  const EmailAlreadyInUseException() : super('Email already in use');
+}
+
+final class PasswordResetFailedException extends AppException {
+  const PasswordResetFailedException(super.message);
+}
+
 final class RepositoryException extends AppException {
   const RepositoryException(super.message, {this.cause});
   final Object? cause;
