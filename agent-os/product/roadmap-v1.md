@@ -71,7 +71,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S2 | Supabase setup & database | Done |
 | M1-S3 | Multi-tenant architecture | Done |
 | M1-S4 | Photographer authentication | Done |
-| M1-S5 | Client authentication | Not started |
+| M1-S5 | Client authentication | Done |
 | M1-S6 | Admin shell & navigation | Not started |
 | M1-S7 | Role management & access control | Not started |
 | M1-S8 | Base security & GDPR foundations | Not started |
