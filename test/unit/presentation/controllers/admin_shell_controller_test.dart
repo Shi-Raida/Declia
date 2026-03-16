@@ -72,6 +72,7 @@ void main() {
     nav = MockNavigationService();
     authState = AuthStateController(signOut);
     controller = AdminShellController(authState, nav, _FakeLogger());
+    when(() => nav.currentRoute).thenReturn('');
     controller.onInit();
   });
 
