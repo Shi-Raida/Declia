@@ -73,7 +73,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S4 | Photographer authentication | Done |
 | M1-S5 | Client authentication | Done |
 | M1-S6 | Admin shell & navigation | Done |
-| M1-S7 | Role management & access control | Not started |
+| M1-S7 | Role management & access control | Done |
 | M1-S8 | Base security & GDPR foundations | Not started |
 | **M2** | **CRM & Planning** | **Not started** |
 | M2-S1 | Client CRM profiles | Not started |
@@ -262,15 +262,15 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 ---
 
-### M1-S7: Role management & access control
+### M1-S7: Role management & access control -- `Done`
 
 **As a** developer, **I want** to implement a role system (photographer full admin, developer tech access, future assistant) **so that** permissions are properly controlled -- CDC 15.11.
 
 **Acceptance criteria:**
-- [ ] Three roles defined: `photographer` (full admin), `tech` (tech + admin access), `client` (client space only)
-- [ ] A route guard (middleware) verifies the role before accessing each protected route
-- [ ] Supabase RLS policies are consistent with Flutter roles (double client + server verification)
-- [ ] Unauthorized route access attempt: redirect with message
+- [x] Three roles defined: `photographer` (full admin), `tech` (tech + admin access), `client` (client space only)
+- [x] A route guard (middleware) verifies the role before accessing each protected route
+- [x] Supabase RLS policies are consistent with Flutter roles (double client + server verification)
+- [x] Unauthorized route access attempt: redirect with message
 
 ---
 
