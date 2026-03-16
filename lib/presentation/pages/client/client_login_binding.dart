@@ -20,6 +20,7 @@ class ClientLoginBinding extends Bindings {
         Get.find<AppLogger>(),
         {UserRole.client},
         () => Get.find<NavigationService>().toClientHome(),
+        initialReason: Get.arguments as String?,
       ),
       fenix: true,
     );

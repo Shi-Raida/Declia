@@ -17,14 +17,16 @@ final class LoginController extends GetxController with LoginFormMixin {
     this._authState,
     this._logger,
     this._allowedRoles,
-    this._onLoginSuccess,
-  );
+    this._onLoginSuccess, {
+    this.initialReason,
+  });
 
   final UseCase<AppUser, SignInParams> _signIn;
   final AuthStateController _authState;
   final AppLogger _logger;
   final Set<UserRole> _allowedRoles;
   final void Function() _onLoginSuccess;
+  final String? initialReason;
 
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
@@ -32,7 +34,7 @@ final class LoginController extends GetxController with LoginFormMixin {
   @override
   void onInit() {
     super.onInit();
-    if (Get.arguments == RouteArgs.unauthorizedRole) {
+    if (initialReason == RouteArgs.unauthorizedRole) {
       errorMessage.value = Tr.loginUnauthorizedRole.tr;
       _authState.signOut();
     }

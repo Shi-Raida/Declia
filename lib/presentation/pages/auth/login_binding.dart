@@ -20,6 +20,7 @@ class LoginBinding extends Bindings {
         Get.find<AppLogger>(),
         {UserRole.photographer},
         () => Get.find<NavigationService>().toDashboard(),
+        initialReason: Get.arguments as String?,
       ),
       fenix: true,
     );
