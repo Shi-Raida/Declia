@@ -2,14 +2,18 @@ import 'package:declia/core/errors/app_exception.dart';
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/logger/app_logger.dart';
 import 'package:declia/core/repositories/repository_guard.dart';
+import 'package:declia/core/storage/local_storage.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/app_user.dart';
 import 'package:declia/domain/repositories/auth_repository.dart';
+import 'package:declia/domain/repositories/consent_repository.dart';
 import 'package:declia/domain/repositories/tenant_repository.dart';
 import 'package:declia/infrastructure/datasources/contract/auth_data_source.dart';
+import 'package:declia/infrastructure/datasources/contract/consent_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/tenant_data_source.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
+import 'package:declia/usecases/consent/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -19,9 +23,15 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 
 class MockTenantRepository extends Mock implements TenantRepository {}
 
+class MockConsentRepository extends Mock implements ConsentRepository {}
+
 class MockAuthDataSource extends Mock implements AuthDataSource {}
 
 class MockTenantDataSource extends Mock implements TenantDataSource {}
+
+class MockConsentDataSource extends Mock implements ConsentDataSource {}
+
+class MockLocalStorage extends Mock implements LocalStorage {}
 
 class MockNavigationService extends Mock implements NavigationService {}
 
@@ -36,6 +46,9 @@ class MockSignUp extends Mock implements UseCase<void, SignUpParams> {}
 
 class MockResetPassword extends Mock
     implements UseCase<void, ResetPasswordParams> {}
+
+class MockSaveCookieConsent extends Mock
+    implements UseCase<void, SaveCookieConsentParams> {}
 
 /// A manual guard implementation that can be toggled between success and failure.
 final class MockRepositoryGuard implements RepositoryGuard {
