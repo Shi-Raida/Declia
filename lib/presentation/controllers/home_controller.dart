@@ -1,8 +1,9 @@
 import 'package:get/get.dart';
 
 import '../../core/logger/app_logger.dart';
-import '../../domain/entities/app_user.dart';
+import '../../usecases/auth/get_current_user.dart';
 import '../../usecases/usecase.dart';
+import '../models/user_view_model.dart';
 import '../services/navigation_service.dart';
 import 'auth_state_controller.dart';
 
@@ -14,7 +15,7 @@ final class HomeController extends GetxController {
     this._logger,
   );
 
-  final UseCase<AppUser?, NoParams> _getCurrentUser;
+  final GetCurrentUserUseCase _getCurrentUser;
   final AuthStateController _authState;
   final NavigationService _nav;
   final AppLogger _logger;
@@ -31,7 +32,7 @@ final class HomeController extends GetxController {
     result.fold(
       ok: (user) {
         if (user != null) {
-          _authState.setUser(user);
+          _authState.setUser(UserViewModel.fromEntity(user));
           final role = _authState.currentUser.value!.role;
           _logger.debug('Redirecting $role to home');
           _nav.toHome(role);

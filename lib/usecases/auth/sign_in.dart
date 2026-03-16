@@ -6,6 +6,8 @@ import '../../domain/repositories/auth_repository.dart';
 import '../usecase.dart';
 import 'params.dart';
 
+typedef SignInUseCase = UseCase<AppUser, SignInParams>;
+
 final class SignIn extends UseCase<AppUser, SignInParams> {
   const SignIn(this._authRepository);
 
