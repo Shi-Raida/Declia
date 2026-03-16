@@ -18,7 +18,7 @@ class LoginBinding extends Bindings {
         Get.find<UseCase<AppUser, SignInParams>>(),
         Get.find<AuthStateController>(),
         Get.find<AppLogger>(),
-        {UserRole.photographer},
+        {UserRole.photographer, UserRole.tech},
         () => Get.find<NavigationService>().toDashboard(),
         initialReason: Get.arguments as String?,
       ),

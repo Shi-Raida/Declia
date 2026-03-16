@@ -5,6 +5,7 @@ import '../controllers/auth_state_controller.dart';
 import '../middleware/auth_middleware.dart';
 import '../middleware/role_middleware.dart';
 import '../pages/admin/clients_page.dart';
+import '../pages/admin/admin_shell_binding.dart';
 import '../pages/admin/dashboard_binding.dart';
 import '../pages/admin/dashboard_page.dart';
 import '../pages/admin/galleries_page.dart';
@@ -29,7 +30,10 @@ import 'app_routes.dart';
 
 List<GetMiddleware> _adminMiddlewares() => [
   AuthMiddleware(Get.find<AuthStateController>()),
-  RoleMiddleware(Get.find<AuthStateController>(), {UserRole.photographer}),
+  RoleMiddleware(Get.find<AuthStateController>(), {
+    UserRole.photographer,
+    UserRole.tech,
+  }),
 ];
 
 final List<GetPage<dynamic>> appPages = [
@@ -46,42 +50,52 @@ final List<GetPage<dynamic>> appPages = [
   GetPage<void>(
     name: AppRoutes.adminDashboard,
     page: () => const DashboardPage(),
-    binding: DashboardBinding(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      DashboardBinding().dependencies();
+    }),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminClients,
     page: () => const ClientsPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminPlanning,
     page: () => const PlanningPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminGalleries,
     page: () => const GalleriesPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminShop,
     page: () => const ShopPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminInvoicing,
     page: () => const InvoicingPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminStatistics,
     page: () => const StatisticsPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(
     name: AppRoutes.adminSettings,
     page: () => const SettingsPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
   ),
   GetPage<void>(

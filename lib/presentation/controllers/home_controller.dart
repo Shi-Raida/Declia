@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import '../../core/enums/user_role.dart';
 import '../../core/logger/app_logger.dart';
 import '../../domain/entities/app_user.dart';
 import '../../usecases/usecase.dart';
@@ -33,13 +32,9 @@ final class HomeController extends GetxController {
       ok: (user) {
         if (user != null) {
           _authState.setUser(user);
-          if (_authState.currentUser.value!.role == UserRole.client) {
-            _logger.debug('Redirecting client to client home');
-            _nav.toClientHome();
-          } else {
-            _logger.debug('Redirecting to dashboard');
-            _nav.toDashboard();
-          }
+          final role = _authState.currentUser.value!.role;
+          _logger.debug('Redirecting $role to home');
+          _nav.toHome(role);
         } else {
           _logger.debug('Redirecting to login');
           _nav.toLogin();
