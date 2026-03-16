@@ -19,7 +19,7 @@ final class AdminShellController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    currentRoute.value = Get.currentRoute;
+    currentRoute.value = _nav.currentRoute;
     _logger.debug(
       'AdminShellController initialized, route: ${currentRoute.value}',
     );
