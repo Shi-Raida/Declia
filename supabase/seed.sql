@@ -24,6 +24,10 @@ INSERT INTO auth.users (
   ('00000000-0000-0000-0000-000000000000','00000000-0000-0000-0001-000000000003','authenticated','authenticated',
    'photo@luminos.test',crypt('password123',gen_salt('bf')), now(),
    '','','','',
+   '{"provider":"email","providers":["email"]}','{}', now(), now()),
+  ('00000000-0000-0000-0000-000000000000','00000000-0000-0000-0001-000000000004','authenticated','authenticated',
+   'tech@fleur.test', crypt('password123',gen_salt('bf')), now(),
+   '','','','',
    '{"provider":"email","providers":["email"]}','{}', now(), now())
 ON CONFLICT (id) DO NOTHING;
 
@@ -31,5 +35,6 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.users (id, tenant_id, role) VALUES
   ('00000000-0000-0000-0001-000000000001','00000000-0000-0000-0000-000000000001','photographer'),
   ('00000000-0000-0000-0001-000000000002','00000000-0000-0000-0000-000000000001','client'),
-  ('00000000-0000-0000-0001-000000000003','00000000-0000-0000-0000-000000000002','photographer')
+  ('00000000-0000-0000-0001-000000000003','00000000-0000-0000-0000-000000000002','photographer'),
+  ('00000000-0000-0000-0001-000000000004','00000000-0000-0000-0000-000000000001','tech')
 ON CONFLICT (id) DO NOTHING;
