@@ -20,6 +20,13 @@ const _client = AppUser(
   role: UserRole.client,
 );
 
+const _tech = AppUser(
+  id: '00000000-0000-0000-0001-000000000004',
+  email: 'tech@fleur.test',
+  tenantId: '00000000-0000-0000-0000-000000000001',
+  role: UserRole.tech,
+);
+
 final class _FakeAuthRepository implements AuthRepository {
   AppUser? userToReturn;
   bool signOutCalled = false;
@@ -157,6 +164,41 @@ void main() {
 
         expect(result, isA<Ok<AppUser, Failure>>());
         expect(repo.signOutCalled, isFalse);
+      },
+    );
+
+    test(
+      'returns Ok for tech user with allowedRoles {photographer, tech}',
+      () async {
+        repo.userToReturn = _tech;
+
+        final result = await signIn((
+          email: 'tech@fleur.test',
+          password: 'password123',
+          allowedRoles: {UserRole.photographer, UserRole.tech},
+        ));
+
+        expect(result, isA<Ok<AppUser, Failure>>());
+        final ok = result as Ok<AppUser, Failure>;
+        expect(ok.value.role, UserRole.tech);
+        expect(repo.signOutCalled, isFalse);
+      },
+    );
+
+    test(
+      'returns Err with UnauthorisedRoleFailure and signs out when tech user tries client-only login',
+      () async {
+        repo.userToReturn = _tech;
+
+        final result = await signIn((
+          email: 'tech@fleur.test',
+          password: 'password123',
+          allowedRoles: {UserRole.client},
+        ));
+
+        expect(result, isA<Err<AppUser, Failure>>());
+        expect((result as Err).error, isA<UnauthorisedRoleFailure>());
+        expect(repo.signOutCalled, isTrue);
       },
     );
   });
