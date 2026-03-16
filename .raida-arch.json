@@ -46,6 +46,12 @@
       "files": ["lib/presentation/**/*.dart", "lib/infrastructure/di/injection.dart"],
       "imports": ["lib/usecases/**/params.dart"],
       "reason": "Params typedefs are simple value objects shared across layers by design"
+    },
+    {
+      "rule": "dependency-rule",
+      "files": ["lib/infrastructure/datasources/contract/*.dart"],
+      "imports": ["lib/domain/**/*.dart"],
+      "reason": "Data-source contracts live in infrastructure by design; domain does not reference them directly"
     }
   ]
 }
