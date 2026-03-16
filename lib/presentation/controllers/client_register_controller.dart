@@ -4,21 +4,30 @@ import '../../core/errors/failures.dart';
 import '../../core/logger/app_logger.dart';
 import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
+import '../services/navigation_service.dart';
 import '../translations/translation_keys.dart';
 import 'login_form_mixin.dart';
 import 'register_form_mixin.dart';
 
 final class ClientRegisterController extends GetxController
     with LoginFormMixin, RegisterFormMixin {
-  ClientRegisterController(this._signUp, this._logger, this._tenantSlug);
+  ClientRegisterController(
+    this._signUp,
+    this._logger,
+    this._tenantSlug,
+    this._nav,
+  );
 
   final UseCase<void, SignUpParams> _signUp;
   final AppLogger _logger;
   final String _tenantSlug;
+  final NavigationService _nav;
 
   final isLoading = false.obs;
   final isSuccess = false.obs;
   final errorMessage = Rxn<String>();
+
+  void goToLogin() => _nav.toClientLogin();
 
   Future<void> register() async {
     if (!formKey.currentState!.validate()) return;

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/forgot_password_controller.dart';
-import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
@@ -47,7 +46,7 @@ class ClientForgotPasswordPage extends GetView<ForgotPasswordController> {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     TextButton(
-                      onPressed: () => Get.offAllNamed(AppRoutes.clientLogin),
+                      onPressed: controller.goToLogin,
                       child: Text(Tr.clientForgotPasswordBackToLogin.tr),
                     ),
                   ],
@@ -141,7 +140,7 @@ class ClientForgotPasswordPage extends GetView<ForgotPasswordController> {
                     ),
                     const SizedBox(height: AppSpacing.md),
                     TextButton(
-                      onPressed: () => Get.offAllNamed(AppRoutes.clientLogin),
+                      onPressed: controller.goToLogin,
                       child: Text(Tr.clientForgotPasswordBackToLogin.tr),
                     ),
                   ],

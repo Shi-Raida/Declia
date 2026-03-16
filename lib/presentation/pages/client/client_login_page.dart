@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/login_controller.dart';
-import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
@@ -107,8 +106,7 @@ class ClientLoginPage extends GetView<LoginController> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () =>
-                          Get.toNamed(AppRoutes.clientForgotPassword),
+                      onPressed: () => controller.onForgotPassword?.call(),
                       child: Text(Tr.clientLoginForgotPassword.tr),
                     ),
                   ),
@@ -134,7 +132,7 @@ class ClientLoginPage extends GetView<LoginController> {
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextButton(
-                    onPressed: () => Get.toNamed(AppRoutes.clientRegister),
+                    onPressed: () => controller.onRegister?.call(),
                     child: Text(Tr.clientLoginCreateAccount.tr),
                   ),
                 ],

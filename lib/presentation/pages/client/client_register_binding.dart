@@ -4,6 +4,7 @@ import '../../../core/logger/app_logger.dart';
 import '../../../usecases/auth/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/client_register_controller.dart';
+import '../../services/navigation_service.dart';
 
 class ClientRegisterBinding extends Bindings {
   @override
@@ -17,6 +18,7 @@ class ClientRegisterBinding extends Bindings {
         Get.find<UseCase<void, SignUpParams>>(),
         Get.find<AppLogger>(),
         tenantSlug,
+        Get.find<NavigationService>(),
       ),
       fenix: true,
     );

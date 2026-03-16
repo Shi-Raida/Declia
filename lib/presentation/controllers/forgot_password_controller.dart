@@ -3,18 +3,22 @@ import 'package:get/get.dart';
 import '../../core/logger/app_logger.dart';
 import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
+import '../services/navigation_service.dart';
 import 'forgot_password_form_mixin.dart';
 
 final class ForgotPasswordController extends GetxController
     with ForgotPasswordFormMixin {
-  ForgotPasswordController(this._resetPassword, this._logger);
+  ForgotPasswordController(this._resetPassword, this._logger, this._nav);
 
   final UseCase<void, ResetPasswordParams> _resetPassword;
   final AppLogger _logger;
+  final NavigationService _nav;
 
   final isLoading = false.obs;
   final isSuccess = false.obs;
   final errorMessage = Rxn<String>();
+
+  void goToLogin() => _nav.toClientLogin();
 
   Future<void> submit() async {
     if (!formKey.currentState!.validate()) return;

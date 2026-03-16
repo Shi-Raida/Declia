@@ -3,9 +3,8 @@ import 'package:get/get.dart';
 import '../../core/enums/user_role.dart';
 import '../../core/errors/failures.dart';
 import '../../core/logger/app_logger.dart';
-import '../../domain/entities/app_user.dart';
-import '../../usecases/auth/params.dart';
-import '../../usecases/usecase.dart';
+import '../../usecases/auth/sign_in.dart';
+import '../models/user_view_model.dart';
 import '../translations/translation_keys.dart';
 import '../routes/route_args.dart';
 import 'auth_state_controller.dart';
@@ -19,14 +18,18 @@ final class LoginController extends GetxController with LoginFormMixin {
     this._allowedRoles,
     this._onLoginSuccess, {
     this.initialReason,
+    this.onForgotPassword,
+    this.onRegister,
   });
 
-  final UseCase<AppUser, SignInParams> _signIn;
+  final SignInUseCase _signIn;
   final AuthStateController _authState;
   final AppLogger _logger;
   final Set<UserRole> _allowedRoles;
   final void Function() _onLoginSuccess;
   final String? initialReason;
+  final void Function()? onForgotPassword;
+  final void Function()? onRegister;
 
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
@@ -54,7 +57,7 @@ final class LoginController extends GetxController with LoginFormMixin {
     isLoading.value = false;
     result.fold(
       ok: (user) {
-        _authState.setUser(user);
+        _authState.setUser(UserViewModel.fromEntity(user));
         _onLoginSuccess();
       },
       err: (failure) {
