@@ -4,6 +4,7 @@ import 'package:declia/core/enums/user_role.dart';
 import 'package:declia/domain/entities/app_user.dart';
 import 'package:declia/presentation/controllers/auth_state_controller.dart';
 import 'package:declia/presentation/middleware/role_middleware.dart';
+import 'package:declia/presentation/models/user_view_model.dart';
 import 'package:declia/presentation/routes/app_routes.dart';
 import 'package:declia/presentation/routes/route_args.dart';
 import 'package:declia/usecases/usecase.dart';
@@ -44,7 +45,7 @@ void main() {
 
   group('RoleMiddleware', () {
     test('returns null when photographer is in {photographer, tech}', () {
-      authState.setUser(_photographer);
+      authState.setUser(UserViewModel.fromEntity(_photographer));
       final middleware = RoleMiddleware(authState, {
         UserRole.photographer,
         UserRole.tech,
@@ -54,7 +55,7 @@ void main() {
     });
 
     test('returns null when tech user is in {photographer, tech}', () {
-      authState.setUser(_tech);
+      authState.setUser(UserViewModel.fromEntity(_tech));
       final middleware = RoleMiddleware(authState, {
         UserRole.photographer,
         UserRole.tech,
@@ -66,7 +67,7 @@ void main() {
     test(
       'redirects with unauthorizedRole when client is in {photographer, tech}',
       () {
-        authState.setUser(_client);
+        authState.setUser(UserViewModel.fromEntity(_client));
         final middleware = RoleMiddleware(authState, {
           UserRole.photographer,
           UserRole.tech,
@@ -94,14 +95,14 @@ void main() {
     });
 
     test('returns null when client is in {client}', () {
-      authState.setUser(_client);
+      authState.setUser(UserViewModel.fromEntity(_client));
       final middleware = RoleMiddleware(authState, {UserRole.client});
 
       expect(middleware.redirect('/client'), isNull);
     });
 
     test('uses custom redirectRoute when specified', () {
-      authState.setUser(_client);
+      authState.setUser(UserViewModel.fromEntity(_client));
       final middleware = RoleMiddleware(authState, {
         UserRole.photographer,
         UserRole.tech,

@@ -4,6 +4,7 @@ import 'package:declia/core/enums/user_role.dart';
 import 'package:declia/domain/entities/app_user.dart';
 import 'package:declia/presentation/controllers/auth_state_controller.dart';
 import 'package:declia/presentation/middleware/auth_middleware.dart';
+import 'package:declia/presentation/models/user_view_model.dart';
 import 'package:declia/presentation/routes/app_routes.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,7 +30,7 @@ void main() {
 
   group('AuthMiddleware', () {
     test('returns null when user is authenticated', () {
-      authState.setUser(_photographer);
+      authState.setUser(UserViewModel.fromEntity(_photographer));
       final middleware = AuthMiddleware(authState);
 
       expect(middleware.redirect('/some-route'), isNull);

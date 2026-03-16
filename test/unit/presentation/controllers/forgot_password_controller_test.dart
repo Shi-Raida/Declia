@@ -4,6 +4,7 @@ import 'package:declia/core/logger/log_observer.dart';
 import 'package:declia/core/logger/log_record.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/presentation/controllers/forgot_password_controller.dart';
+import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,13 +62,40 @@ final class _FakeLogger implements AppLogger {
   void clearHistory() {}
 }
 
+final class _FakeNavigationService implements NavigationService {
+  @override
+  String get currentRoute => '';
+  @override
+  void toLogin({String? reason}) {}
+  @override
+  void toHome(dynamic role) {}
+  @override
+  void toDashboard() {}
+  @override
+  void toAdminPage(String route) {}
+  @override
+  void toClientLogin() {}
+  @override
+  void toClientHome() {}
+  @override
+  void toClientRegister({String? tenantSlug}) {}
+  @override
+  void toClientForgotPassword() {}
+  @override
+  void toLegalPrivacy() {}
+}
+
 void main() {
   late _FakeResetPassword resetPassword;
   late ForgotPasswordController controller;
 
   setUp(() {
     resetPassword = _FakeResetPassword();
-    controller = ForgotPasswordController(resetPassword, _FakeLogger());
+    controller = ForgotPasswordController(
+      resetPassword,
+      _FakeLogger(),
+      _FakeNavigationService(),
+    );
     controller.onInit();
   });
 
