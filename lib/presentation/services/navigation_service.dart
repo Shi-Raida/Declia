@@ -1,4 +1,5 @@
 abstract interface class NavigationService {
+  String get currentRoute;
   void toLogin({String? reason});
   void toDashboard();
   void toAdminPage(String route);

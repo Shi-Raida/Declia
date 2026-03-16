@@ -5,6 +5,9 @@ import 'navigation_service.dart';
 
 final class GetxNavigationService implements NavigationService {
   @override
+  String get currentRoute => Get.currentRoute;
+
+  @override
   void toLogin({String? reason}) =>
       Get.offAllNamed(AppRoutes.login, arguments: reason);
 
