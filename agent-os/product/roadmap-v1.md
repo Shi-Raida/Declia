@@ -74,7 +74,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S5 | Client authentication | Done |
 | M1-S6 | Admin shell & navigation | Done |
 | M1-S7 | Role management & access control | Done |
-| M1-S8 | Base security & GDPR foundations | Not started |
+| M1-S8 | Base security & GDPR foundations | Done |
 | **M2** | **CRM & Planning** | **Not started** |
 | M2-S1 | Client CRM profiles | Not started |
 | M2-S2 | Client list & filtering | Not started |
