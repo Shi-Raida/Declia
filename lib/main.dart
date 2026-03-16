@@ -13,6 +13,7 @@ import 'presentation/routes/app_pages.dart';
 import 'presentation/routes/app_routes.dart';
 import 'presentation/theme/app_theme.dart';
 import 'presentation/translations/app_translations.dart';
+import 'presentation/widgets/app_shell.dart';
 
 Future<void> main() async {
   await runZonedGuarded(_bootstrap, (error, stack) {
@@ -82,6 +83,7 @@ class DecliaApp extends StatelessWidget {
       theme: AppTheme.light,
       initialRoute: AppRoutes.home,
       getPages: appPages,
+      builder: (context, child) => AppShell(child: child),
     );
   }
 }
