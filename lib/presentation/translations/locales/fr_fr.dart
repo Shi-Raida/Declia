@@ -11,7 +11,8 @@ final Map<String, String> frFr = {
   Tr.loginPassword: 'Mot de passe',
   Tr.loginPasswordRequired: 'Veuillez saisir votre mot de passe',
   Tr.loginSubmit: 'Se connecter',
-  Tr.loginUnauthorizedRole: 'Accès réservé aux photographes',
+  Tr.loginUnauthorizedRole:
+      'Vous n\'avez pas la permission d\'accéder à cet espace',
   Tr.loginInvalidCredentials: 'Email ou mot de passe incorrect',
 
   // Dashboard
