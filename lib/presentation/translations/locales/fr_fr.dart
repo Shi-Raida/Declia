@@ -64,4 +64,25 @@ final Map<String, String> frFr = {
   Tr.adminSidebarSettings: 'Paramètres',
   Tr.adminTopbarLogout: 'Se déconnecter',
   Tr.adminPlaceholderComingSoon: 'Bientôt disponible',
+
+  // Cookie banner
+  Tr.cookieBannerTitle: 'Gestion des cookies',
+  Tr.cookieBannerDescription:
+      'Nous utilisons des cookies pour améliorer votre expérience. Vous pouvez accepter, refuser ou personnaliser vos préférences.',
+  Tr.cookieBannerAcceptAll: 'Tout accepter',
+  Tr.cookieBannerRefuseAll: 'Tout refuser',
+  Tr.cookieBannerCustomize: 'Personnaliser',
+  Tr.cookieBannerSavePreferences: 'Enregistrer mes préférences',
+  Tr.cookieBannerAnalytics: 'Cookies analytiques',
+  Tr.cookieBannerMarketing: 'Cookies marketing',
+  Tr.cookieBannerFunctional: 'Cookies fonctionnels',
+  Tr.cookieBannerPrivacyPolicy: 'Politique de confidentialité',
+
+  // Legal pages
+  Tr.legalPrivacyTitle: 'Politique de confidentialité',
+  Tr.legalPrivacyContent:
+      'Le contenu de cette page sera disponible prochainement.',
+  Tr.legalNoticesTitle: 'Mentions légales',
+  Tr.legalNoticesContent:
+      'Le contenu de cette page sera disponible prochainement.',
 };

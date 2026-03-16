@@ -60,4 +60,23 @@ final Map<String, String> enUs = {
   Tr.adminSidebarSettings: 'Settings',
   Tr.adminTopbarLogout: 'Sign out',
   Tr.adminPlaceholderComingSoon: 'Coming soon',
+
+  // Cookie banner
+  Tr.cookieBannerTitle: 'Cookie settings',
+  Tr.cookieBannerDescription:
+      'We use cookies to improve your experience. You can accept, refuse, or customize your preferences.',
+  Tr.cookieBannerAcceptAll: 'Accept all',
+  Tr.cookieBannerRefuseAll: 'Refuse all',
+  Tr.cookieBannerCustomize: 'Customize',
+  Tr.cookieBannerSavePreferences: 'Save preferences',
+  Tr.cookieBannerAnalytics: 'Analytics cookies',
+  Tr.cookieBannerMarketing: 'Marketing cookies',
+  Tr.cookieBannerFunctional: 'Functional cookies',
+  Tr.cookieBannerPrivacyPolicy: 'Privacy policy',
+
+  // Legal pages
+  Tr.legalPrivacyTitle: 'Privacy policy',
+  Tr.legalPrivacyContent: 'This page content will be available soon.',
+  Tr.legalNoticesTitle: 'Legal notices',
+  Tr.legalNoticesContent: 'This page content will be available soon.',
 };

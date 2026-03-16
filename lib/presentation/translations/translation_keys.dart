@@ -65,4 +65,23 @@ abstract final class Tr {
   static const String adminSidebarSettings = 'adminSidebarSettings';
   static const String adminTopbarLogout = 'adminTopbarLogout';
   static const String adminPlaceholderComingSoon = 'adminPlaceholderComingSoon';
+
+  // Cookie banner
+  static const String cookieBannerTitle = 'cookieBannerTitle';
+  static const String cookieBannerDescription = 'cookieBannerDescription';
+  static const String cookieBannerAcceptAll = 'cookieBannerAcceptAll';
+  static const String cookieBannerRefuseAll = 'cookieBannerRefuseAll';
+  static const String cookieBannerCustomize = 'cookieBannerCustomize';
+  static const String cookieBannerSavePreferences =
+      'cookieBannerSavePreferences';
+  static const String cookieBannerAnalytics = 'cookieBannerAnalytics';
+  static const String cookieBannerMarketing = 'cookieBannerMarketing';
+  static const String cookieBannerFunctional = 'cookieBannerFunctional';
+  static const String cookieBannerPrivacyPolicy = 'cookieBannerPrivacyPolicy';
+
+  // Legal pages
+  static const String legalPrivacyTitle = 'legalPrivacyTitle';
+  static const String legalPrivacyContent = 'legalPrivacyContent';
+  static const String legalNoticesTitle = 'legalNoticesTitle';
+  static const String legalNoticesContent = 'legalNoticesContent';
 }
