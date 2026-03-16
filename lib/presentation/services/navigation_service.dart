@@ -8,6 +8,7 @@ abstract interface class NavigationService {
   void toAdminPage(String route);
   void toClientLogin();
   void toClientHome();
-  void toClientRegister({required String tenantSlug});
+  void toClientRegister({String? tenantSlug});
   void toClientForgotPassword();
+  void toLegalPrivacy();
 }

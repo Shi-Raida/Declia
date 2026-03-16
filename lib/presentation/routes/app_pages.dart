@@ -24,6 +24,8 @@ import '../pages/client/client_login_binding.dart';
 import '../pages/client/client_login_page.dart';
 import '../pages/client/client_register_binding.dart';
 import '../pages/client/client_register_page.dart';
+import '../pages/legal/legal_notices_page.dart';
+import '../pages/legal/legal_privacy_page.dart';
 import '../pages/shared/home_binding.dart';
 import '../pages/shared/home_page.dart';
 import 'app_routes.dart';
@@ -126,5 +128,13 @@ final List<GetPage<dynamic>> appPages = [
         UserRole.client,
       }, redirectRoute: AppRoutes.clientLogin),
     ],
+  ),
+  GetPage<void>(
+    name: AppRoutes.legalPrivacy,
+    page: () => const LegalPrivacyPage(),
+  ),
+  GetPage<void>(
+    name: AppRoutes.legalNotices,
+    page: () => const LegalNoticesPage(),
   ),
 ];

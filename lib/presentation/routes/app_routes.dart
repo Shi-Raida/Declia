@@ -13,4 +13,6 @@ abstract final class AppRoutes {
   static const String clientRegister = '/client/register';
   static const String clientForgotPassword = '/client/forgot-password';
   static const String clientHome = '/client/home';
+  static const String legalPrivacy = '/legal/privacy';
+  static const String legalNotices = '/legal/notices';
 }
