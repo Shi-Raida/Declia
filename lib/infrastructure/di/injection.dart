@@ -20,6 +20,7 @@ import '../../usecases/auth/sign_out.dart';
 import '../../usecases/auth/sign_up.dart';
 import '../../usecases/consent/params.dart';
 import '../../usecases/consent/save_cookie_consent.dart';
+import '../../usecases/tenant/check_tenant_slug.dart';
 import '../../usecases/usecase.dart';
 import '../clock/system_clock.dart';
 import '../config/app_config.dart';
@@ -128,6 +129,10 @@ abstract final class Injection {
     );
     Get.lazyPut<UseCase<void, SaveCookieConsentParams>>(
       () => SaveCookieConsent(Get.find<ConsentRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UseCase<bool, CheckTenantSlugParams>>(
+      () => CheckTenantSlug(Get.find<TenantRepository>()),
       fenix: true,
     );
 
