@@ -61,6 +61,10 @@ final class _FakeTenantDataSource implements TenantDataSource {
     if (fixture == null) throw NotFoundTenantException(tenantId);
     return fixture;
   }
+
+  @override
+  Future<bool> existsBySlug(String slug) async =>
+      _tenantFixtures.values.any((t) => t.slug == slug);
 }
 
 final class _PassthroughGuard implements RepositoryGuard {
@@ -132,5 +136,21 @@ void main() {
         expect((result as Err).error, isA<UnauthorisedTenantAccessFailure>());
       },
     );
+
+    test('existsBySlug returns Ok(true) for a known slug', () async {
+      final repo = _makeRepo(null);
+      final result = await repo.existsBySlug('fleur-de-lumiere');
+
+      expect(result, isA<Ok<bool, Failure>>());
+      expect((result as Ok<bool, Failure>).value, isTrue);
+    });
+
+    test('existsBySlug returns Ok(false) for an unknown slug', () async {
+      final repo = _makeRepo(null);
+      final result = await repo.existsBySlug('nonexistent');
+
+      expect(result, isA<Ok<bool, Failure>>());
+      expect((result as Ok<bool, Failure>).value, isFalse);
+    });
   });
 }
