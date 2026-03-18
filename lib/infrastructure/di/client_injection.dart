@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/repositories/repository_guard.dart';
+import '../../core/utils/clock.dart';
 import '../../domain/entities/client.dart';
 import '../../domain/repositories/client_repository.dart';
 import '../../usecases/client/create_client.dart';
@@ -43,11 +44,11 @@ abstract final class ClientInjection {
       fenix: true,
     );
     Get.lazyPut<UseCase<Client, CreateClientParams>>(
-      () => CreateClient(Get.find<ClientRepository>()),
+      () => CreateClient(Get.find<ClientRepository>(), Get.find<Clock>()),
       fenix: true,
     );
     Get.lazyPut<UseCase<Client, UpdateClientParams>>(
-      () => UpdateClient(Get.find<ClientRepository>()),
+      () => UpdateClient(Get.find<ClientRepository>(), Get.find<Clock>()),
       fenix: true,
     );
     Get.lazyPut<UseCase<void, DeleteClientParams>>(

@@ -130,7 +130,6 @@ final class ClientFormController extends GetxController {
         err: (failure) => errorMessage.value = failure.message,
       );
     } else {
-      final now = DateTime.now().toUtc();
       final newClient = Client(
         id: '',
         tenantId: '', // set by DB DEFAULT (current_user_tenant_id())
@@ -144,8 +143,8 @@ final class ClientFormController extends GetxController {
         tags: tags.toList(),
         notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
         communicationPrefs: communicationPrefs,
-        createdAt: now,
-        updatedAt: now,
+        createdAt: DateTime(0), // stamped by use case
+        updatedAt: DateTime(0), // stamped by use case
       );
       final result = await _createClient((client: newClient));
       result.fold(
