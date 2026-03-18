@@ -5,6 +5,7 @@ import '../../core/repositories/repository_guard.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/tenant_repository.dart';
 import '../../usecases/tenant/check_tenant_slug.dart';
+import '../../usecases/tenant/params.dart';
 import '../../usecases/usecase.dart';
 import '../datasources/contract/tenant_data_source.dart';
 import '../datasources/supabase_tenant_data_source.dart';

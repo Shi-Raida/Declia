@@ -1,0 +1,1 @@
+typedef CheckTenantSlugParams = ({String slug});
