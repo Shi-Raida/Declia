@@ -65,7 +65,8 @@ class ClientDetailPage extends StatelessWidget {
                   rows: [
                     _DetailRow(
                       label: Tr.adminClientFormSectionAddress.tr,
-                      value: _formatAddress(client) ??
+                      value:
+                          _formatAddress(client) ??
                           Tr.adminClientDetailNoAddress.tr,
                     ),
                   ],
@@ -81,9 +82,7 @@ class ClientDetailPage extends StatelessWidget {
                       ),
                     _DetailRow(
                       label: Tr.adminClientFormTags.tr,
-                      value: client.tags.isEmpty
-                          ? '—'
-                          : client.tags.join(', '),
+                      value: client.tags.isEmpty ? '—' : client.tags.join(', '),
                     ),
                     _DetailRow(
                       label: Tr.adminClientFormNotes.tr,
@@ -204,8 +203,7 @@ class _DetailActions extends StatelessWidget {
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(
               Tr.adminClientFormCancel.tr,
-              style:
-                  AppTypography.button().copyWith(color: AppColors.pierre),
+              style: AppTypography.button().copyWith(color: AppColors.pierre),
             ),
           ),
           FilledButton(
@@ -278,9 +276,7 @@ class _DetailRow extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: Text(value, style: AppTypography.bodyMedium()),
-          ),
+          Expanded(child: Text(value, style: AppTypography.bodyMedium())),
         ],
       ),
     );

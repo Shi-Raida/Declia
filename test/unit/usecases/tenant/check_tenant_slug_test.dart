@@ -26,9 +26,7 @@ final class _FakeTenantRepository implements TenantRepository {
 void main() {
   group('CheckTenantSlug', () {
     test('returns Ok(true) when tenant exists', () async {
-      final useCase = CheckTenantSlug(
-        _FakeTenantRepository(slugExists: true),
-      );
+      final useCase = CheckTenantSlug(_FakeTenantRepository(slugExists: true));
 
       final result = await useCase((slug: 'fleur-de-lumiere'));
 
@@ -37,9 +35,7 @@ void main() {
     });
 
     test('returns Ok(false) when tenant does not exist', () async {
-      final useCase = CheckTenantSlug(
-        _FakeTenantRepository(slugExists: false),
-      );
+      final useCase = CheckTenantSlug(_FakeTenantRepository(slugExists: false));
 
       final result = await useCase((slug: 'nonexistent'));
 

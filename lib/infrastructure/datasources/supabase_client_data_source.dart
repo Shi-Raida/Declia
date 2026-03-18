@@ -36,11 +36,7 @@ final class SupabaseClientDataSource implements ClientDataSource {
   @override
   Future<Client> fetchById(String id) async {
     try {
-      final data = await _client
-          .from('clients')
-          .select()
-          .eq('id', id)
-          .single();
+      final data = await _client.from('clients').select().eq('id', id).single();
       return Client.fromJson(Map<String, dynamic>.from(data));
     } on PostgrestException catch (e) {
       throw mapClientPostgrestException(e, id);
@@ -55,11 +51,7 @@ final class SupabaseClientDataSource implements ClientDataSource {
         ..remove('tenant_id') // set by DB DEFAULT (current_user_tenant_id())
         ..remove('created_at')
         ..remove('updated_at');
-      final data = await _client
-          .from('clients')
-          .insert(json)
-          .select()
-          .single();
+      final data = await _client.from('clients').insert(json).select().single();
       return Client.fromJson(Map<String, dynamic>.from(data));
     } on PostgrestException catch (e) {
       throw RepositoryException(e.message, cause: e);
@@ -98,8 +90,10 @@ final class SupabaseClientDataSource implements ClientDataSource {
   @override
   Future<List<Client>> search(String query) async {
     try {
-      final data = await _client
-          .rpc('search_clients', params: {'query': query});
+      final data = await _client.rpc(
+        'search_clients',
+        params: {'query': query},
+      );
       return (data as List)
           .map((e) => Client.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList();

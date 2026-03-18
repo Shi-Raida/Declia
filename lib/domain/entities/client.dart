@@ -31,6 +31,5 @@ class Client with _$Client {
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _Client;
 
-  factory Client.fromJson(Map<String, dynamic> json) =>
-      _$ClientFromJson(json);
+  factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
 }

@@ -44,9 +44,7 @@ final class _FakeSearchClients
   String? lastQuery;
 
   @override
-  Future<Result<List<Client>, Failure>> call(
-    SearchClientsParams params,
-  ) async {
+  Future<Result<List<Client>, Failure>> call(SearchClientsParams params) async {
     lastQuery = params.query;
     return Ok(toReturn);
   }
@@ -124,8 +122,9 @@ void main() {
     test('removeClient sets errorMessage on failure', () async {
       final fetch = _FakeFetchClients()..toReturn = _fixtureClients;
       final delete = _FakeDeleteClient()
-        ..failureToReturn =
-            const UnauthorisedClientAccessFailure('Unauthorized');
+        ..failureToReturn = const UnauthorisedClientAccessFailure(
+          'Unauthorized',
+        );
       final controller = _makeController(fetch: fetch, delete: delete);
       controller.onInit();
 

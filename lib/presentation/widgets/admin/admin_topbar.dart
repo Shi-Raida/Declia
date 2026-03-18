@@ -26,10 +26,8 @@ class AdminTopbar extends GetView<AdminShellController> {
         tween: Tween(begin: 0.0, end: 1.0),
         duration: AppDurations.adminPageFadeIn,
         curve: Curves.easeOut,
-        builder: (context, value, child) => Opacity(
-          opacity: value,
-          child: child,
-        ),
+        builder: (context, value, child) =>
+            Opacity(opacity: value, child: child),
         child: Text(
           title,
           style: GoogleFonts.cormorantGaramond(

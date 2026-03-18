@@ -27,8 +27,7 @@ final class _FakeClientRepository implements ClientRepository {
   Future<Result<Client, Failure>> update(Client client) =>
       throw UnimplementedError();
   @override
-  Future<Result<void, Failure>> delete(String id) =>
-      throw UnimplementedError();
+  Future<Result<void, Failure>> delete(String id) => throw UnimplementedError();
   @override
   Future<Result<List<Client>, Failure>> search(String query) =>
       throw UnimplementedError();
@@ -58,26 +57,30 @@ void main() {
   );
 
   group('CreateClient', () {
-    test('delegates to repository and returns Ok with created client',
-        () async {
-      final client = makeClient();
+    test(
+      'delegates to repository and returns Ok with created client',
+      () async {
+        final client = makeClient();
 
-      final result = await createClient((client: client));
+        final result = await createClient((client: client));
 
-      expect(result, isA<Ok<Client, Failure>>());
-      expect(repo.created, isNotNull);
-    });
+        expect(result, isA<Ok<Client, Failure>>());
+        expect(repo.created, isNotNull);
+      },
+    );
 
-    test('sets gdprConsentDate when email pref is enabled and date is null',
-        () async {
-      final client = makeClient(
-        prefs: const CommunicationPreferences(email: true),
-      );
+    test(
+      'sets gdprConsentDate when email pref is enabled and date is null',
+      () async {
+        final client = makeClient(
+          prefs: const CommunicationPreferences(email: true),
+        );
 
-      await createClient((client: client));
+        await createClient((client: client));
 
-      expect(repo.created!.gdprConsentDate, isNotNull);
-    });
+        expect(repo.created!.gdprConsentDate, isNotNull);
+      },
+    );
 
     test('sets gdprConsentDate when sms pref is enabled', () async {
       final client = makeClient(
@@ -102,22 +105,22 @@ void main() {
     });
 
     test('does not set gdprConsentDate when all prefs are false', () async {
-      final client = makeClient(
-        prefs: const CommunicationPreferences(),
-      );
+      final client = makeClient(prefs: const CommunicationPreferences());
 
       await createClient((client: client));
 
       expect(repo.created!.gdprConsentDate, isNull);
     });
 
-    test('does not set gdprConsentDate when communicationPrefs is null',
-        () async {
-      final client = makeClient();
+    test(
+      'does not set gdprConsentDate when communicationPrefs is null',
+      () async {
+        final client = makeClient();
 
-      await createClient((client: client));
+        await createClient((client: client));
 
-      expect(repo.created!.gdprConsentDate, isNull);
-    });
+        expect(repo.created!.gdprConsentDate, isNull);
+      },
+    );
   });
 }

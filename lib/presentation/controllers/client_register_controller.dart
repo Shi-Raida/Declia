@@ -47,7 +47,8 @@ final class ClientRegisterController extends GetxController
     final result = await _checkTenantSlug((slug: _tenantSlug));
     result.fold(
       ok: (exists) => isSlugValid.value = exists,
-      err: (_) => isSlugValid.value = true, // fail open: let server-side be the final guard
+      err: (_) => isSlugValid.value =
+          true, // fail open: let server-side be the final guard
     );
     isValidatingSlug.value = false;
   }

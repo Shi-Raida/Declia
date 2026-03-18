@@ -30,8 +30,7 @@ final class _FakeClientRepository implements ClientRepository {
   Future<Result<Client, Failure>> update(Client client) =>
       throw UnimplementedError();
   @override
-  Future<Result<void, Failure>> delete(String id) =>
-      throw UnimplementedError();
+  Future<Result<void, Failure>> delete(String id) => throw UnimplementedError();
 }
 
 void main() {

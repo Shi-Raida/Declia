@@ -186,8 +186,9 @@ void main() {
 
     test('returns Err with EmailAlreadyInUseFailure', () async {
       final signUp = _FakeSignUp()
-        ..failureToReturn =
-            const EmailAlreadyInUseFailure('Email already in use');
+        ..failureToReturn = const EmailAlreadyInUseFailure(
+          'Email already in use',
+        );
 
       final result = await signUp((
         email: 'existing@fleur.test',

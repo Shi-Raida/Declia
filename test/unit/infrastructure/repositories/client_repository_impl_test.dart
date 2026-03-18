@@ -158,33 +158,31 @@ void main() {
       expect((result as Ok<List<Client>, Failure>).value.length, 1);
     });
 
-    test('guard converts ClientNotFoundException to ClientNotFoundFailure',
-        () async {
-      final ds = _FakeClientDataSource()
-        ..exceptionToThrow = const ClientNotFoundException('x');
-      final repo = _makeRepo(ds);
+    test(
+      'guard converts ClientNotFoundException to ClientNotFoundFailure',
+      () async {
+        final ds = _FakeClientDataSource()
+          ..exceptionToThrow = const ClientNotFoundException('x');
+        final repo = _makeRepo(ds);
 
-      final result = await repo.fetchById('x');
+        final result = await repo.fetchById('x');
 
-      expect(result, isA<Err<Client, Failure>>());
-      expect((result as Err).error, isA<ClientNotFoundFailure>());
-    });
+        expect(result, isA<Err<Client, Failure>>());
+        expect((result as Err).error, isA<ClientNotFoundFailure>());
+      },
+    );
 
     test(
       'guard converts UnauthorisedClientAccessException to failure',
       () async {
         final ds = _FakeClientDataSource()
-          ..exceptionToThrow =
-              const UnauthorisedClientAccessException();
+          ..exceptionToThrow = const UnauthorisedClientAccessException();
         final repo = _makeRepo(ds);
 
         final result = await repo.fetchAll();
 
         expect(result, isA<Err<List<Client>, Failure>>());
-        expect(
-          (result as Err).error,
-          isA<UnauthorisedClientAccessFailure>(),
-        );
+        expect((result as Err).error, isA<UnauthorisedClientAccessFailure>());
       },
     );
   });

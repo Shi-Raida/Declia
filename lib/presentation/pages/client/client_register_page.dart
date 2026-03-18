@@ -27,9 +27,7 @@ class ClientRegisterPage extends GetView<ClientRegisterController> {
                 return const _InvalidSlugView();
               }
               if (controller.isSuccess.value) {
-                return _RegisterSuccessView(
-                  onGoToLogin: controller.goToLogin,
-                );
+                return _RegisterSuccessView(onGoToLogin: controller.goToLogin);
               }
               return _RegisterFormBody(controller: controller);
             }),
@@ -50,23 +48,15 @@ class _InvalidSlugView extends StatelessWidget {
       children: [
         Text(
           Tr.appName.tr,
-          style: AppTypography.heading1().copyWith(
-            color: AppColors.crepuscule,
-          ),
+          style: AppTypography.heading1().copyWith(color: AppColors.crepuscule),
         ),
         const SizedBox(height: AppSpacing.xl2),
-        const Icon(
-          Icons.link_off,
-          size: 48,
-          color: AppColors.error,
-        ),
+        const Icon(Icons.link_off, size: 48, color: AppColors.error),
         const SizedBox(height: AppSpacing.md),
         Text(
           Tr.clientRegisterInvalidLink.tr,
           textAlign: TextAlign.center,
-          style: AppTypography.bodyLarge().copyWith(
-            color: AppColors.pierre,
-          ),
+          style: AppTypography.bodyLarge().copyWith(color: AppColors.pierre),
         ),
       ],
     );
@@ -85,9 +75,7 @@ class _RegisterSuccessView extends StatelessWidget {
       children: [
         Text(
           Tr.appName.tr,
-          style: AppTypography.heading1().copyWith(
-            color: AppColors.crepuscule,
-          ),
+          style: AppTypography.heading1().copyWith(color: AppColors.crepuscule),
         ),
         const SizedBox(height: AppSpacing.xl2),
         const Icon(
@@ -134,24 +122,18 @@ class _RegisterFormBody extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
           Text(
             Tr.clientRegisterTitle.tr,
-            style: AppTypography.bodyLarge().copyWith(
-              color: AppColors.pierre,
-            ),
+            style: AppTypography.bodyLarge().copyWith(color: AppColors.pierre),
           ),
           const SizedBox(height: AppSpacing.xl2),
           Obx(
             () => controller.errorMessage.value != null
                 ? Container(
                     width: double.infinity,
-                    margin: const EdgeInsets.only(
-                      bottom: AppSpacing.md,
-                    ),
+                    margin: const EdgeInsets.only(bottom: AppSpacing.md),
                     padding: const EdgeInsets.all(AppSpacing.md),
                     decoration: BoxDecoration(
                       color: AppColors.errorLight,
-                      borderRadius: BorderRadius.circular(
-                        AppSpacing.sm,
-                      ),
+                      borderRadius: BorderRadius.circular(AppSpacing.sm),
                     ),
                     child: Text(
                       controller.errorMessage.value!,
@@ -233,9 +215,7 @@ class _RegisterFormBody extends StatelessWidget {
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
+                        child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(Tr.clientRegisterSubmit.tr),
               ),
