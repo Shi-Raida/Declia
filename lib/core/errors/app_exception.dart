@@ -53,3 +53,14 @@ final class RepositoryException extends AppException {
   const RepositoryException(super.message, {this.cause});
   final Object? cause;
 }
+
+final class ClientNotFoundException extends AppException {
+  const ClientNotFoundException(this.clientId)
+    : super('Client not found: $clientId');
+  final String clientId;
+}
+
+final class UnauthorisedClientAccessException extends AppException {
+  const UnauthorisedClientAccessException()
+    : super('Unauthorised access to client');
+}

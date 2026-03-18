@@ -26,6 +26,9 @@ sealed class Failure {
       message,
     ),
     RepositoryException(:final message) => RepositoryFailure(message),
+    ClientNotFoundException(:final message) => ClientNotFoundFailure(message),
+    UnauthorisedClientAccessException(:final message) =>
+      UnauthorisedClientAccessFailure(message),
   };
 
   @override
@@ -80,4 +83,12 @@ class PasswordResetFailedFailure extends Failure {
 
 class RepositoryFailure extends Failure {
   const RepositoryFailure(super.message);
+}
+
+class ClientNotFoundFailure extends Failure {
+  const ClientNotFoundFailure(super.message);
+}
+
+class UnauthorisedClientAccessFailure extends Failure {
+  const UnauthorisedClientAccessFailure(super.message);
 }
