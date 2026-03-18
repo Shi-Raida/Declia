@@ -5,6 +5,10 @@ import '../controllers/auth_state_controller.dart';
 import '../middleware/auth_middleware.dart';
 import '../middleware/role_middleware.dart';
 import '../pages/admin/admin_shell_binding.dart';
+import '../pages/admin/client_detail_page.dart';
+import '../pages/admin/client_form_binding.dart';
+import '../pages/admin/client_form_page.dart';
+import '../pages/admin/clients_binding.dart';
 import '../pages/admin/clients_page.dart';
 import '../pages/admin/dashboard_binding.dart';
 import '../pages/admin/dashboard_page.dart';
@@ -38,7 +42,37 @@ final List<GetPage<dynamic>> adminPages = [
   GetPage<void>(
     name: AppRoutes.adminClients,
     page: () => const ClientsPage(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      ClientsBinding().dependencies();
+    }),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminClientNew,
+    page: () => const ClientFormPage(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      ClientFormBinding().dependencies();
+    }),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminClientDetail,
+    page: () => const ClientDetailPage(),
     binding: AdminShellBinding(),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminClientEdit,
+    page: () => const ClientFormPage(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      ClientFormBinding().dependencies();
+    }),
     middlewares: _adminMiddlewares(),
     transition: Transition.noTransition,
   ),

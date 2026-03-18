@@ -85,4 +85,73 @@ abstract final class Tr {
   static const String legalPrivacyContent = 'legalPrivacyContent';
   static const String legalNoticesTitle = 'legalNoticesTitle';
   static const String legalNoticesContent = 'legalNoticesContent';
+
+  // Clients list
+  static const String adminClientsTitle = 'adminClientsTitle';
+  static const String adminClientsNew = 'adminClientsNew';
+  static const String adminClientsSearch = 'adminClientsSearch';
+  static const String adminClientsEmpty = 'adminClientsEmpty';
+  static const String adminClientsTableName = 'adminClientsTableName';
+  static const String adminClientsTableEmail = 'adminClientsTableEmail';
+  static const String adminClientsTablePhone = 'adminClientsTablePhone';
+  static const String adminClientsTableTags = 'adminClientsTableTags';
+  static const String adminClientsTableDate = 'adminClientsTableDate';
+  static const String adminClientsTableActions = 'adminClientsTableActions';
+  static const String adminClientsDeleteConfirm = 'adminClientsDeleteConfirm';
+  static const String adminClientsDeleteBody = 'adminClientsDeleteBody';
+  static const String adminClientsDeleteSuccess = 'adminClientsDeleteSuccess';
+
+  // Client form
+  static const String adminClientFormTitleCreate = 'adminClientFormTitleCreate';
+  static const String adminClientFormTitleEdit = 'adminClientFormTitleEdit';
+  static const String adminClientFormSectionIdentity =
+      'adminClientFormSectionIdentity';
+  static const String adminClientFormFirstName = 'adminClientFormFirstName';
+  static const String adminClientFormLastName = 'adminClientFormLastName';
+  static const String adminClientFormEmail = 'adminClientFormEmail';
+  static const String adminClientFormPhone = 'adminClientFormPhone';
+  static const String adminClientFormDob = 'adminClientFormDob';
+  static const String adminClientFormSectionAddress =
+      'adminClientFormSectionAddress';
+  static const String adminClientFormStreet = 'adminClientFormStreet';
+  static const String adminClientFormCity = 'adminClientFormCity';
+  static const String adminClientFormPostalCode = 'adminClientFormPostalCode';
+  static const String adminClientFormCountry = 'adminClientFormCountry';
+  static const String adminClientFormSectionCrm = 'adminClientFormSectionCrm';
+  static const String adminClientFormAcquisitionSource =
+      'adminClientFormAcquisitionSource';
+  static const String adminClientFormTags = 'adminClientFormTags';
+  static const String adminClientFormNotes = 'adminClientFormNotes';
+  static const String adminClientFormSectionGdpr = 'adminClientFormSectionGdpr';
+  static const String adminClientFormGdprConsentDate =
+      'adminClientFormGdprConsentDate';
+  static const String adminClientFormGdprEmail = 'adminClientFormGdprEmail';
+  static const String adminClientFormGdprSms = 'adminClientFormGdprSms';
+  static const String adminClientFormGdprPhone = 'adminClientFormGdprPhone';
+  static const String adminClientFormSave = 'adminClientFormSave';
+  static const String adminClientFormCancel = 'adminClientFormCancel';
+  static const String adminClientFormSuccess = 'adminClientFormSuccess';
+  static const String adminClientFormError = 'adminClientFormError';
+  static const String adminClientFormFirstNameRequired =
+      'adminClientFormFirstNameRequired';
+  static const String adminClientFormLastNameRequired =
+      'adminClientFormLastNameRequired';
+
+  // Client detail
+  static const String adminClientDetailEdit = 'adminClientDetailEdit';
+  static const String adminClientDetailDelete = 'adminClientDetailDelete';
+  static const String adminClientDetailNoEmail = 'adminClientDetailNoEmail';
+  static const String adminClientDetailNoPhone = 'adminClientDetailNoPhone';
+  static const String adminClientDetailNoAddress = 'adminClientDetailNoAddress';
+  static const String adminClientDetailNoNotes = 'adminClientDetailNoNotes';
+
+  // Acquisition source labels
+  static const String acquisitionSourceReferral = 'acquisitionSourceReferral';
+  static const String acquisitionSourceSocialMedia =
+      'acquisitionSourceSocialMedia';
+  static const String acquisitionSourceWebsite = 'acquisitionSourceWebsite';
+  static const String acquisitionSourceWordOfMouth =
+      'acquisitionSourceWordOfMouth';
+  static const String acquisitionSourceEvent = 'acquisitionSourceEvent';
+  static const String acquisitionSourceOther = 'acquisitionSourceOther';
 }
