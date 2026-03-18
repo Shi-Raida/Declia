@@ -2,6 +2,7 @@ import 'package:declia/core/enums/consent_type.dart';
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/storage/local_storage.dart';
 import 'package:declia/core/utils/result.dart';
+import 'package:declia/core/utils/uuid_generator.dart';
 import 'package:declia/presentation/controllers/cookie_consent_controller.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/consent/params.dart';
@@ -33,6 +34,16 @@ final class _FakeLocalStorage implements LocalStorage {
 
   @override
   void delete(String key) => _store.remove(key);
+}
+
+final class _FakeUuidGenerator implements UuidGenerator {
+  int _counter = 0;
+
+  @override
+  String generate() {
+    _counter++;
+    return '00000000-0000-4000-8000-00000000000$_counter';
+  }
 }
 
 final class _FakeNavigationService implements NavigationService {
@@ -68,6 +79,7 @@ void main() {
       saveCookieConsent: saveConsent,
       localStorage: localStorage,
       navigationService: _FakeNavigationService(),
+      uuidGenerator: _FakeUuidGenerator(),
     );
     controller.onInit();
   }

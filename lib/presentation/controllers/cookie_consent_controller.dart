@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import '../../core/enums/consent_type.dart';
 import '../../core/storage/local_storage.dart';
-import '../../core/utils/uuid.dart';
+import '../../core/utils/uuid_generator.dart';
 import '../../usecases/consent/params.dart';
 import '../../usecases/usecase.dart';
 import '../services/navigation_service.dart';
@@ -12,9 +12,11 @@ final class CookieConsentController extends GetxController {
     required UseCase<void, SaveCookieConsentParams> saveCookieConsent,
     required LocalStorage localStorage,
     required NavigationService navigationService,
+    required UuidGenerator uuidGenerator,
   }) : _saveCookieConsent = saveCookieConsent,
        _localStorage = localStorage,
-       _nav = navigationService;
+       _nav = navigationService,
+       _uuidGenerator = uuidGenerator;
 
   static const String _consentKey = 'cookie_consent_v1';
   static const String _anonIdKey = 'cookie_anon_id';
@@ -22,6 +24,7 @@ final class CookieConsentController extends GetxController {
   final UseCase<void, SaveCookieConsentParams> _saveCookieConsent;
   final LocalStorage _localStorage;
   final NavigationService _nav;
+  final UuidGenerator _uuidGenerator;
 
   final showBanner = false.obs;
   final showCustomize = false.obs;
@@ -74,7 +77,7 @@ final class CookieConsentController extends GetxController {
   String _getOrCreateAnonId() {
     final existing = _localStorage.read(_anonIdKey);
     if (existing != null) return existing;
-    final id = generateUuidV4();
+    final id = _uuidGenerator.generate();
     _localStorage.write(_anonIdKey, id);
     return id;
   }
