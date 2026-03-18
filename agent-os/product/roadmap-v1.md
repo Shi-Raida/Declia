@@ -66,7 +66,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 | Step | Description | Status |
 |------|-------------|--------|
-| **M1** | **Foundations & Admin Shell** | **In progress** |
+| **M1** | **Foundations & Admin Shell** | **Done** |
 | M1-S1 | Flutter project initialization | Done |
 | M1-S2 | Supabase setup & database | Done |
 | M1-S3 | Multi-tenant architecture | Done |
@@ -75,8 +75,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S6 | Admin shell & navigation | Done |
 | M1-S7 | Role management & access control | Done |
 | M1-S8 | Base security & GDPR foundations | Done |
-| **M2** | **CRM & Planning** | **Not started** |
-| M2-S1 | Client CRM profiles | Not started |
+| **M2** | **CRM & Planning** | **In progress** |
+| M2-S1 | Client CRM profiles | Done |
 | M2-S2 | Client list & filtering | Not started |
 | M2-S3 | Client history | Not started |
 | M2-S4 | Calendar & planning view | Not started |
