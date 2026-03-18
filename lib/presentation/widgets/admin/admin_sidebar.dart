@@ -214,7 +214,7 @@ class AdminSidebar extends GetView<AdminShellController> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    user.role.name,
+                    user.role.name.capitalize!,
                     style: GoogleFonts.outfit(
                       fontSize: 10,
                       color: AppColors.pierre,
