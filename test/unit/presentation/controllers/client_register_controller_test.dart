@@ -6,7 +6,7 @@ import 'package:declia/core/utils/result.dart';
 import 'package:declia/presentation/controllers/client_register_controller.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
-import 'package:declia/usecases/tenant/check_tenant_slug.dart';
+import 'package:declia/usecases/tenant/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';

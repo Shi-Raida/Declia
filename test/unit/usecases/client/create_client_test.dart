@@ -1,4 +1,5 @@
 import 'package:declia/core/errors/failures.dart';
+import 'package:declia/core/utils/clock.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/communication_preferences.dart';
@@ -7,6 +8,11 @@ import 'package:declia/usecases/client/create_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _now = DateTime(2026, 3, 18);
+
+final class _FakeClock implements Clock {
+  @override
+  DateTime now() => _now;
+}
 
 final class _FakeClientRepository implements ClientRepository {
   Client? created;
@@ -39,12 +45,14 @@ void main() {
 
   setUp(() {
     repo = _FakeClientRepository();
-    createClient = CreateClient(repo);
+    createClient = CreateClient(repo, _FakeClock());
   });
 
   Client makeClient({
     CommunicationPreferences? prefs,
     DateTime? gdprConsentDate,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) => Client(
     id: '',
     tenantId: '',
@@ -52,8 +60,8 @@ void main() {
     lastName: 'Dupont',
     communicationPrefs: prefs,
     gdprConsentDate: gdprConsentDate,
-    createdAt: _now,
-    updatedAt: _now,
+    createdAt: createdAt ?? DateTime(0),
+    updatedAt: updatedAt ?? DateTime(0),
   );
 
   group('CreateClient', () {
@@ -69,6 +77,15 @@ void main() {
       },
     );
 
+    test('stamps createdAt and updatedAt from clock', () async {
+      final client = makeClient(createdAt: DateTime(0), updatedAt: DateTime(0));
+
+      await createClient((client: client));
+
+      expect(repo.created!.createdAt, equals(_now.toUtc()));
+      expect(repo.created!.updatedAt, equals(_now.toUtc()));
+    });
+
     test(
       'sets gdprConsentDate when email pref is enabled and date is null',
       () async {
@@ -78,7 +95,7 @@ void main() {
 
         await createClient((client: client));
 
-        expect(repo.created!.gdprConsentDate, isNotNull);
+        expect(repo.created!.gdprConsentDate, equals(_now.toUtc()));
       },
     );
 
@@ -89,7 +106,7 @@ void main() {
 
       await createClient((client: client));
 
-      expect(repo.created!.gdprConsentDate, isNotNull);
+      expect(repo.created!.gdprConsentDate, equals(_now.toUtc()));
     });
 
     test('does not overwrite existing gdprConsentDate', () async {
