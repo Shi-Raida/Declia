@@ -36,4 +36,17 @@ final class SupabaseTenantDataSource implements TenantDataSource {
       throw mapPostgrestException(e, id);
     }
   }
+
+  @override
+  Future<bool> existsBySlug(String slug) async {
+    try {
+      final result = await _client.rpc(
+        'tenant_exists_by_slug',
+        params: {'p_slug': slug},
+      );
+      return result as bool;
+    } on PostgrestException catch (e) {
+      throw RepositoryException(e.message, cause: e);
+    }
+  }
 }

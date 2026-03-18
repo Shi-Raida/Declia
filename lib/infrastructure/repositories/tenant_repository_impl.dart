@@ -36,4 +36,8 @@ final class TenantRepositoryImpl implements TenantRepository {
   @override
   Future<Result<Tenant, Failure>> fetchById(String id) =>
       _guard(() => _dataSource.fetchById(id), method: 'fetchById');
+
+  @override
+  Future<Result<bool, Failure>> existsBySlug(String slug) =>
+      _guard(() => _dataSource.existsBySlug(slug), method: 'existsBySlug');
 }
