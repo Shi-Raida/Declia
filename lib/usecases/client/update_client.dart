@@ -11,6 +11,15 @@ final class UpdateClient extends UseCase<Client, UpdateClientParams> {
   final ClientRepository _clientRepository;
 
   @override
-  Future<Result<Client, Failure>> call(UpdateClientParams params) =>
-      _clientRepository.update(params.client);
+  Future<Result<Client, Failure>> call(UpdateClientParams params) {
+    final client = params.client;
+    // Auto-set gdprConsentDate when any communication preference is enabled
+    final prefs = client.communicationPrefs;
+    final hasConsent =
+        prefs != null && (prefs.email || prefs.sms || prefs.phone);
+    final clientToUpdate = hasConsent && client.gdprConsentDate == null
+        ? client.copyWith(gdprConsentDate: DateTime.now().toUtc())
+        : client;
+    return _clientRepository.update(clientToUpdate);
+  }
 }

@@ -54,8 +54,7 @@ final class ClientFormController extends GetxController {
     phoneCtrl = TextEditingController(text: c?.phone ?? '');
     streetCtrl = TextEditingController(text: c?.address?.street ?? '');
     cityCtrl = TextEditingController(text: c?.address?.city ?? '');
-    postalCodeCtrl =
-        TextEditingController(text: c?.address?.postalCode ?? '');
+    postalCodeCtrl = TextEditingController(text: c?.address?.postalCode ?? '');
     countryCtrl = TextEditingController(text: c?.address?.country ?? '');
     notesCtrl = TextEditingController(text: c?.notes ?? '');
     tagsInputCtrl = TextEditingController();
@@ -103,42 +102,27 @@ final class ClientFormController extends GetxController {
       phone: commPhone.value,
     );
 
-    final hasConsent =
-        communicationPrefs.email ||
-        communicationPrefs.sms ||
-        communicationPrefs.phone;
-
     final address = Address(
       street: streetCtrl.text.trim().isEmpty ? null : streetCtrl.text.trim(),
       city: cityCtrl.text.trim().isEmpty ? null : cityCtrl.text.trim(),
-      postalCode:
-          postalCodeCtrl.text.trim().isEmpty
-              ? null
-              : postalCodeCtrl.text.trim(),
-      country:
-          countryCtrl.text.trim().isEmpty ? null : countryCtrl.text.trim(),
+      postalCode: postalCodeCtrl.text.trim().isEmpty
+          ? null
+          : postalCodeCtrl.text.trim(),
+      country: countryCtrl.text.trim().isEmpty ? null : countryCtrl.text.trim(),
     );
 
     if (isEditing) {
-      final gdprConsentDate =
-          hasConsent
-              ? (existingClient!.gdprConsentDate ?? DateTime.now().toUtc())
-              : existingClient!.gdprConsentDate;
-
       final updated = existingClient!.copyWith(
         firstName: firstNameCtrl.text.trim(),
         lastName: lastNameCtrl.text.trim(),
-        email:
-            emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
-        phone:
-            phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+        email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
+        phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
         dateOfBirth: dateOfBirth.value,
         address: address,
         acquisitionSource: acquisitionSource.value,
         tags: tags.toList(),
         notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
         communicationPrefs: communicationPrefs,
-        gdprConsentDate: gdprConsentDate,
       );
       final result = await _updateClient((client: updated));
       result.fold(
@@ -152,17 +136,14 @@ final class ClientFormController extends GetxController {
         tenantId: '', // set by DB DEFAULT (current_user_tenant_id())
         firstName: firstNameCtrl.text.trim(),
         lastName: lastNameCtrl.text.trim(),
-        email:
-            emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
-        phone:
-            phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+        email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
+        phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
         dateOfBirth: dateOfBirth.value,
         address: address,
         acquisitionSource: acquisitionSource.value,
         tags: tags.toList(),
         notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
         communicationPrefs: communicationPrefs,
-        gdprConsentDate: hasConsent ? now : null,
         createdAt: now,
         updatedAt: now,
       );
