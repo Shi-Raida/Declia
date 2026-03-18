@@ -23,7 +23,7 @@ file_size_limit = "50MiB"
 
 [auth]
 site_url = "http://localhost:3000"
-additional_redirect_urls = ["https://localhost:3000"]
+additional_redirect_urls = ["http://localhost:*"]
 jwt_expiry = 3600
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10
@@ -35,10 +35,9 @@ double_confirm_changes = true
 enable_confirmations = true
 
 [auth.rate_limit]
-email_sent = { period = "1h", limit = 5 }
-sms_sent = { period = "1h", limit = 5 }
-token_refresh = { period = "5m", limit = 30 }
-sign_ups = { period = "1h", limit = 10 }
+email_sent = 5
+sms_sent = 5
+token_refresh = 30
 
 [analytics]
 enabled = false
