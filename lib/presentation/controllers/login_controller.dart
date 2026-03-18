@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../../core/enums/user_role.dart';
 import '../../core/errors/failures.dart';
 import '../../core/logger/app_logger.dart';
-import '../../usecases/auth/sign_in.dart';
+import '../../usecases/auth/params.dart';
 import '../models/user_view_model.dart';
 import '../translations/translation_keys.dart';
 import '../routes/route_args.dart';

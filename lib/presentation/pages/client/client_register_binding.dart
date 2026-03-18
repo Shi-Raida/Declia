@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../core/logger/app_logger.dart';
 import '../../../usecases/auth/params.dart';
-import '../../../usecases/tenant/check_tenant_slug.dart';
+import '../../../usecases/tenant/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/client_register_controller.dart';
 import '../../services/navigation_service.dart';

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 
 import '../../../core/enums/user_role.dart';
 import '../../../core/logger/app_logger.dart';
-import '../../../usecases/auth/sign_in.dart';
+import '../../../usecases/auth/params.dart';
 import '../../controllers/auth_state_controller.dart';
 import '../../controllers/login_controller.dart';
 import '../../routes/app_routes.dart';
