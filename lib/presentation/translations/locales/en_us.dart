@@ -1,7 +1,7 @@
 import '../translation_keys.dart';
 
 final Map<String, String> enUs = {
-  Tr.appName: 'Declia',
+  Tr.appName: 'Déclia',
 
   // Login
   Tr.loginSubtitle: 'Photographer Space',
@@ -32,6 +32,7 @@ final Map<String, String> enUs = {
   Tr.clientRegisterSubmit: 'Create my account',
   Tr.clientRegisterSuccess: 'Check your inbox to confirm your email address.',
   Tr.clientRegisterEmailAlreadyInUse: 'This email address is already in use',
+  Tr.clientRegisterInvalidLink: 'Invalid invitation link. Please use the link provided by your studio.',
   Tr.clientRegisterHaveAccount: 'Already have an account? Sign in',
 
   // Forgot password

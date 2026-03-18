@@ -34,6 +34,7 @@ abstract final class Tr {
   static const String clientRegisterSuccess = 'clientRegisterSuccess';
   static const String clientRegisterEmailAlreadyInUse =
       'clientRegisterEmailAlreadyInUse';
+  static const String clientRegisterInvalidLink = 'clientRegisterInvalidLink';
   static const String clientRegisterHaveAccount = 'clientRegisterHaveAccount';
 
   // Forgot password

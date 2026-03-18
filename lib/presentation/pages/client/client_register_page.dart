@@ -20,6 +20,36 @@ class ClientRegisterPage extends GetView<ClientRegisterController> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: Obx(() {
+              if (controller.isValidatingSlug.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.isSlugValid.value == false) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      Tr.appName.tr,
+                      style: AppTypography.heading1().copyWith(
+                        color: AppColors.crepuscule,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xl2),
+                    const Icon(
+                      Icons.link_off,
+                      size: 48,
+                      color: AppColors.error,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                    Text(
+                      Tr.clientRegisterInvalidLink.tr,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.bodyLarge().copyWith(
+                        color: AppColors.pierre,
+                      ),
+                    ),
+                  ],
+                );
+              }
               if (controller.isSuccess.value) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,

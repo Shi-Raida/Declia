@@ -75,7 +75,7 @@ class DecliaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Declia',
+      title: 'Déclia',
       translations: AppTranslations(),
       locale: const Locale('fr', 'FR'),
       fallbackLocale: const Locale('fr', 'FR'),
