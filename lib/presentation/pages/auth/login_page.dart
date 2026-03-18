@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/login_controller.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
@@ -9,6 +10,9 @@ import '../../translations/translation_keys.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});
+
+  @override
+  String? get tag => AppRoutes.login;
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import '../../../core/logger/app_logger.dart';
 import '../../../usecases/auth/sign_in.dart';
 import '../../controllers/auth_state_controller.dart';
 import '../../controllers/login_controller.dart';
+import '../../routes/app_routes.dart';
 import '../../services/navigation_service.dart';
 
 class LoginBinding extends Bindings {
@@ -21,6 +22,7 @@ class LoginBinding extends Bindings {
         initialReason: Get.arguments as String?,
       ),
       fenix: true,
+      tag: AppRoutes.login,
     );
   }
 }

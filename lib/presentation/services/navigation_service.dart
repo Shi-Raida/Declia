@@ -6,7 +6,7 @@ abstract interface class NavigationService {
   void toHome(UserRole role);
   void toDashboard();
   void toAdminPage(String route);
-  void toClientLogin();
+  void toClientLogin({String? tenantSlug});
   void toClientHome();
   void toClientRegister({String? tenantSlug});
   void toClientForgotPassword();

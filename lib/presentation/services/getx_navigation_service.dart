@@ -30,13 +30,16 @@ final class GetxNavigationService implements NavigationService {
   void toAdminPage(String route) => Get.offAllNamed(route);
 
   @override
-  void toClientLogin() => Get.offAllNamed(AppRoutes.clientLogin);
+  void toClientLogin({String? tenantSlug}) => Get.offAllNamed(
+    AppRoutes.clientLogin,
+    parameters: tenantSlug != null ? {'tenant': tenantSlug} : null,
+  );
 
   @override
   void toClientHome() => Get.offAllNamed(AppRoutes.clientHome);
 
   @override
-  void toClientRegister({String? tenantSlug}) => Get.toNamed(
+  void toClientRegister({String? tenantSlug}) => Get.offNamed(
     AppRoutes.clientRegister,
     parameters: tenantSlug != null ? {'tenant': tenantSlug} : null,
   );
