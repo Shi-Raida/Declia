@@ -60,7 +60,7 @@ Future<void> _bootstrap() async {
       environment: environment,
     );
     await Injection.init(config);
-    PresentationInjection.init();
+    await PresentationInjection.init();
     Get.find<AppLogger>().info('Declia application starting');
     runApp(const DecliaApp());
   } catch (error, stack) {
