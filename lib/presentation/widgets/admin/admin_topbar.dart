@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../controllers/admin_shell_controller.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_durations.dart';
 import '../../translations/translation_keys.dart';
 
 class AdminTopbar extends GetView<AdminShellController> {
@@ -20,6 +21,26 @@ class AdminTopbar extends GetView<AdminShellController> {
 
   @override
   Widget build(BuildContext context) {
+    final animatedTitle = Expanded(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: AppDurations.adminPageFadeIn,
+        curve: Curves.easeOut,
+        builder: (context, value, child) => Opacity(
+          opacity: value,
+          child: child,
+        ),
+        child: Text(
+          title,
+          style: GoogleFonts.cormorantGaramond(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: AppColors.encre,
+          ),
+        ),
+      ),
+    );
+
     return Container(
       height: height,
       decoration: const BoxDecoration(
@@ -36,16 +57,7 @@ class AdminTopbar extends GetView<AdminShellController> {
               tooltip: 'Menu',
             ),
           if (showMenuButton) const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              title,
-              style: GoogleFonts.cormorantGaramond(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: AppColors.encre,
-              ),
-            ),
-          ),
+          animatedTitle,
           Obx(() {
             final user = controller.currentUser.value;
             return Row(

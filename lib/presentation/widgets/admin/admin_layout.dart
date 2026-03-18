@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/app_breakpoints.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_durations.dart';
 import 'admin_sidebar.dart';
 import 'admin_topbar.dart';
 
@@ -16,6 +17,19 @@ class AdminLayout extends StatelessWidget {
     final width = MediaQuery.sizeOf(context).width;
     final isMobile = width < AppBreakpoints.mobile;
 
+    final animatedBody = Expanded(
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0.0, end: 1.0),
+        duration: AppDurations.adminPageFadeIn,
+        curve: Curves.easeOut,
+        builder: (context, value, child) => Opacity(
+          opacity: value,
+          child: child,
+        ),
+        child: body,
+      ),
+    );
+
     if (isMobile) {
       return Scaffold(
         backgroundColor: AppColors.bg,
@@ -23,7 +37,7 @@ class AdminLayout extends StatelessWidget {
         body: Column(
           children: [
             AdminTopbar(title: title, showMenuButton: true),
-            Expanded(child: body),
+            animatedBody,
           ],
         ),
       );
@@ -38,7 +52,7 @@ class AdminLayout extends StatelessWidget {
             child: Column(
               children: [
                 AdminTopbar(title: title, showMenuButton: false),
-                Expanded(child: body),
+                animatedBody,
               ],
             ),
           ),
