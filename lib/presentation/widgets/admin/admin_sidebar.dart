@@ -20,7 +20,7 @@ class AdminSidebar extends GetView<AdminShellController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(),
+          const _SidebarHeader(),
           const SizedBox(height: 8),
           Expanded(
             child: SingleChildScrollView(
@@ -74,37 +74,7 @@ class AdminSidebar extends GetView<AdminShellController> {
               ),
             ),
           ),
-          _buildFooter(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            Tr.appName.tr,
-            style: GoogleFonts.cormorantGaramond(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            Tr.adminBrandSubtitle.tr,
-            style: GoogleFonts.outfit(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: AppColors.pierre,
-              letterSpacing: 2,
-            ),
-          ),
+          _SidebarUserFooter(controller: controller),
         ],
       ),
     );
@@ -170,8 +140,50 @@ class AdminSidebar extends GetView<AdminShellController> {
       );
     });
   }
+}
 
-  Widget _buildFooter() {
+class _SidebarHeader extends StatelessWidget {
+  const _SidebarHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            Tr.appName.tr,
+            style: GoogleFonts.cormorantGaramond(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            Tr.adminBrandSubtitle.tr,
+            style: GoogleFonts.outfit(
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+              color: AppColors.pierre,
+              letterSpacing: 2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SidebarUserFooter extends StatelessWidget {
+  const _SidebarUserFooter({required this.controller});
+
+  final AdminShellController controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() {
       final user = controller.currentUser.value;
       if (user == null) return const SizedBox.shrink();

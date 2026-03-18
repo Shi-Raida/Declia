@@ -24,196 +24,229 @@ class ClientRegisterPage extends GetView<ClientRegisterController> {
                 return const Center(child: CircularProgressIndicator());
               }
               if (controller.isSlugValid.value == false) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      Tr.appName.tr,
-                      style: AppTypography.heading1().copyWith(
-                        color: AppColors.crepuscule,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl2),
-                    const Icon(
-                      Icons.link_off,
-                      size: 48,
-                      color: AppColors.error,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text(
-                      Tr.clientRegisterInvalidLink.tr,
-                      textAlign: TextAlign.center,
-                      style: AppTypography.bodyLarge().copyWith(
-                        color: AppColors.pierre,
-                      ),
-                    ),
-                  ],
-                );
+                return const _InvalidSlugView();
               }
               if (controller.isSuccess.value) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      Tr.appName.tr,
-                      style: AppTypography.heading1().copyWith(
-                        color: AppColors.crepuscule,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl2),
-                    const Icon(
-                      Icons.mark_email_read_outlined,
-                      size: 48,
-                      color: AppColors.success,
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Text(
-                      Tr.clientRegisterSuccess.tr,
-                      textAlign: TextAlign.center,
-                      style: AppTypography.bodyLarge().copyWith(
-                        color: AppColors.crepuscule,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    TextButton(
-                      onPressed: controller.goToLogin,
-                      child: Text(Tr.clientRegisterHaveAccount.tr),
-                    ),
-                  ],
+                return _RegisterSuccessView(
+                  onGoToLogin: controller.goToLogin,
                 );
               }
-              return Form(
-                key: controller.formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      Tr.appName.tr,
-                      style: AppTypography.heading1().copyWith(
-                        color: AppColors.crepuscule,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(
-                      Tr.clientRegisterTitle.tr,
-                      style: AppTypography.bodyLarge().copyWith(
-                        color: AppColors.pierre,
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.xl2),
-                    Obx(
-                      () => controller.errorMessage.value != null
-                          ? Container(
-                              width: double.infinity,
-                              margin: const EdgeInsets.only(
-                                bottom: AppSpacing.md,
-                              ),
-                              padding: const EdgeInsets.all(AppSpacing.md),
-                              decoration: BoxDecoration(
-                                color: AppColors.errorLight,
-                                borderRadius: BorderRadius.circular(
-                                  AppSpacing.sm,
-                                ),
-                              ),
-                              child: Text(
-                                controller.errorMessage.value!,
-                                style: AppTypography.bodyMedium().copyWith(
-                                  color: AppColors.error,
-                                ),
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                    TextFormField(
-                      controller: controller.emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        labelText: Tr.loginEmail.tr,
-                        hintText: Tr.loginEmailHint.tr,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return Tr.loginEmailRequired.tr;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Obx(
-                      () => TextFormField(
-                        controller: controller.passwordController,
-                        obscureText: !controller.isPasswordVisible.value,
-                        textInputAction: TextInputAction.next,
-                        decoration: InputDecoration(
-                          labelText: Tr.loginPassword.tr,
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              controller.isPasswordVisible.value
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: controller.togglePasswordVisibility,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return Tr.loginPasswordRequired.tr;
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    TextFormField(
-                      controller: controller.confirmPasswordController,
-                      obscureText: true,
-                      textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) => controller.register(),
-                      decoration: InputDecoration(
-                        labelText: Tr.clientRegisterConfirmPassword.tr,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return Tr.clientRegisterConfirmPasswordRequired.tr;
-                        }
-                        if (value != controller.passwordController.text) {
-                          return Tr.clientRegisterPasswordMismatch.tr;
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Obx(
-                        () => ElevatedButton(
-                          onPressed: controller.isLoading.value
-                              ? null
-                              : controller.register,
-                          child: controller.isLoading.value
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Text(Tr.clientRegisterSubmit.tr),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    TextButton(
-                      onPressed: controller.goToLogin,
-                      child: Text(Tr.clientRegisterHaveAccount.tr),
-                    ),
-                  ],
-                ),
-              );
+              return _RegisterFormBody(controller: controller);
             }),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _InvalidSlugView extends StatelessWidget {
+  const _InvalidSlugView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          Tr.appName.tr,
+          style: AppTypography.heading1().copyWith(
+            color: AppColors.crepuscule,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xl2),
+        const Icon(
+          Icons.link_off,
+          size: 48,
+          color: AppColors.error,
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          Tr.clientRegisterInvalidLink.tr,
+          textAlign: TextAlign.center,
+          style: AppTypography.bodyLarge().copyWith(
+            color: AppColors.pierre,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RegisterSuccessView extends StatelessWidget {
+  const _RegisterSuccessView({required this.onGoToLogin});
+
+  final VoidCallback onGoToLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          Tr.appName.tr,
+          style: AppTypography.heading1().copyWith(
+            color: AppColors.crepuscule,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xl2),
+        const Icon(
+          Icons.mark_email_read_outlined,
+          size: 48,
+          color: AppColors.success,
+        ),
+        const SizedBox(height: AppSpacing.md),
+        Text(
+          Tr.clientRegisterSuccess.tr,
+          textAlign: TextAlign.center,
+          style: AppTypography.bodyLarge().copyWith(
+            color: AppColors.crepuscule,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        TextButton(
+          onPressed: onGoToLogin,
+          child: Text(Tr.clientRegisterHaveAccount.tr),
+        ),
+      ],
+    );
+  }
+}
+
+class _RegisterFormBody extends StatelessWidget {
+  const _RegisterFormBody({required this.controller});
+
+  final ClientRegisterController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: controller.formKey,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            Tr.appName.tr,
+            style: AppTypography.heading1().copyWith(
+              color: AppColors.crepuscule,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            Tr.clientRegisterTitle.tr,
+            style: AppTypography.bodyLarge().copyWith(
+              color: AppColors.pierre,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xl2),
+          Obx(
+            () => controller.errorMessage.value != null
+                ? Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(
+                      bottom: AppSpacing.md,
+                    ),
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: AppColors.errorLight,
+                      borderRadius: BorderRadius.circular(
+                        AppSpacing.sm,
+                      ),
+                    ),
+                    child: Text(
+                      controller.errorMessage.value!,
+                      style: AppTypography.bodyMedium().copyWith(
+                        color: AppColors.error,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ),
+          TextFormField(
+            controller: controller.emailController,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: Tr.loginEmail.tr,
+              hintText: Tr.loginEmailHint.tr,
+            ),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return Tr.loginEmailRequired.tr;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: AppSpacing.md),
+          Obx(
+            () => TextFormField(
+              controller: controller.passwordController,
+              obscureText: !controller.isPasswordVisible.value,
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                labelText: Tr.loginPassword.tr,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    controller.isPasswordVisible.value
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: controller.togglePasswordVisibility,
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return Tr.loginPasswordRequired.tr;
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          TextFormField(
+            controller: controller.confirmPasswordController,
+            obscureText: true,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => controller.register(),
+            decoration: InputDecoration(
+              labelText: Tr.clientRegisterConfirmPassword.tr,
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return Tr.clientRegisterConfirmPasswordRequired.tr;
+              }
+              if (value != controller.passwordController.text) {
+                return Tr.clientRegisterPasswordMismatch.tr;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          SizedBox(
+            width: double.infinity,
+            child: Obx(
+              () => ElevatedButton(
+                onPressed: controller.isLoading.value
+                    ? null
+                    : controller.register,
+                child: controller.isLoading.value
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(Tr.clientRegisterSubmit.tr),
+              ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          TextButton(
+            onPressed: controller.goToLogin,
+            child: Text(Tr.clientRegisterHaveAccount.tr),
+          ),
+        ],
       ),
     );
   }
