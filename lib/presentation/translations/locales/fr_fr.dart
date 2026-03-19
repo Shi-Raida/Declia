@@ -240,6 +240,26 @@ final Map<String, String> frFr = {
   Tr.adminPlanningSaturday: 'Sam',
   Tr.adminPlanningSunday: 'Dim',
 
+  // Availability management
+  Tr.adminAvailabilityToggle: 'Disponibilités',
+  Tr.adminAvailabilityManage: 'Gérer les disponibilités',
+  Tr.adminAvailabilityTitle: 'Règles de disponibilité',
+  Tr.adminAvailabilityRecurring: 'Récurrente',
+  Tr.adminAvailabilityOverride: 'Ponctuelle',
+  Tr.adminAvailabilityBlocked: 'Jour bloqué',
+  Tr.adminAvailabilityDayOfWeek: 'Jour de la semaine',
+  Tr.adminAvailabilityDate: 'Date',
+  Tr.adminAvailabilityStartTime: 'Heure de début',
+  Tr.adminAvailabilityEndTime: 'Heure de fin',
+  Tr.adminAvailabilityLabel: 'Libellé (optionnel)',
+  Tr.adminAvailabilitySave: 'Enregistrer',
+  Tr.adminAvailabilityDelete: 'Supprimer',
+  Tr.adminAvailabilityDeleteConfirm: 'Supprimer cette règle ?',
+  Tr.adminAvailabilityEmpty: 'Aucune règle de disponibilité définie',
+  Tr.adminAvailabilityAddRule: 'Ajouter une règle',
+  Tr.adminAvailabilityEditRule: 'Modifier la règle',
+  Tr.adminAvailabilityNoSlots: 'Aucun créneau disponible',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Parrainage',
   Tr.acquisitionSourceSocialMedia: 'Réseaux sociaux',

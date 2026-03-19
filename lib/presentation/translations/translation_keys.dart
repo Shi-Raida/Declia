@@ -248,6 +248,27 @@ abstract final class Tr {
   static const String adminPlanningSaturday = 'adminPlanningSaturday';
   static const String adminPlanningSunday = 'adminPlanningSunday';
 
+  // Availability management
+  static const String adminAvailabilityToggle = 'adminAvailabilityToggle';
+  static const String adminAvailabilityManage = 'adminAvailabilityManage';
+  static const String adminAvailabilityTitle = 'adminAvailabilityTitle';
+  static const String adminAvailabilityRecurring = 'adminAvailabilityRecurring';
+  static const String adminAvailabilityOverride = 'adminAvailabilityOverride';
+  static const String adminAvailabilityBlocked = 'adminAvailabilityBlocked';
+  static const String adminAvailabilityDayOfWeek = 'adminAvailabilityDayOfWeek';
+  static const String adminAvailabilityDate = 'adminAvailabilityDate';
+  static const String adminAvailabilityStartTime = 'adminAvailabilityStartTime';
+  static const String adminAvailabilityEndTime = 'adminAvailabilityEndTime';
+  static const String adminAvailabilityLabel = 'adminAvailabilityLabel';
+  static const String adminAvailabilitySave = 'adminAvailabilitySave';
+  static const String adminAvailabilityDelete = 'adminAvailabilityDelete';
+  static const String adminAvailabilityDeleteConfirm =
+      'adminAvailabilityDeleteConfirm';
+  static const String adminAvailabilityEmpty = 'adminAvailabilityEmpty';
+  static const String adminAvailabilityAddRule = 'adminAvailabilityAddRule';
+  static const String adminAvailabilityEditRule = 'adminAvailabilityEditRule';
+  static const String adminAvailabilityNoSlots = 'adminAvailabilityNoSlots';
+
   // Acquisition source labels
   static const String acquisitionSourceReferral = 'acquisitionSourceReferral';
   static const String acquisitionSourceSocialMedia =

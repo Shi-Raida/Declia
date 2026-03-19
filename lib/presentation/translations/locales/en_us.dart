@@ -234,6 +234,26 @@ final Map<String, String> enUs = {
   Tr.adminPlanningSaturday: 'Sat',
   Tr.adminPlanningSunday: 'Sun',
 
+  // Availability management
+  Tr.adminAvailabilityToggle: 'Availability',
+  Tr.adminAvailabilityManage: 'Manage availability',
+  Tr.adminAvailabilityTitle: 'Availability rules',
+  Tr.adminAvailabilityRecurring: 'Recurring',
+  Tr.adminAvailabilityOverride: 'One-time override',
+  Tr.adminAvailabilityBlocked: 'Blocked day',
+  Tr.adminAvailabilityDayOfWeek: 'Day of week',
+  Tr.adminAvailabilityDate: 'Date',
+  Tr.adminAvailabilityStartTime: 'Start time',
+  Tr.adminAvailabilityEndTime: 'End time',
+  Tr.adminAvailabilityLabel: 'Label (optional)',
+  Tr.adminAvailabilitySave: 'Save',
+  Tr.adminAvailabilityDelete: 'Delete',
+  Tr.adminAvailabilityDeleteConfirm: 'Delete this rule?',
+  Tr.adminAvailabilityEmpty: 'No availability rules defined',
+  Tr.adminAvailabilityAddRule: 'Add rule',
+  Tr.adminAvailabilityEditRule: 'Edit rule',
+  Tr.adminAvailabilityNoSlots: 'No available slots',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Referral',
   Tr.acquisitionSourceSocialMedia: 'Social media',
