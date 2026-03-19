@@ -17,6 +17,7 @@ import '../pages/admin/galleries_page.dart';
 import '../pages/admin/invoicing_page.dart';
 import '../pages/admin/planning_binding.dart';
 import '../pages/admin/planning_page.dart';
+import '../pages/admin/settings_binding.dart';
 import '../pages/admin/settings_page.dart';
 import '../pages/admin/shop_page.dart';
 import '../pages/admin/statistics_page.dart';
@@ -122,7 +123,10 @@ final List<GetPage<dynamic>> adminPages = [
   GetPage<void>(
     name: AppRoutes.adminSettings,
     page: () => const SettingsPage(),
-    binding: AdminShellBinding(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      SettingsBinding().dependencies();
+    }),
     middlewares: _adminMiddlewares(),
     transition: Transition.noTransition,
   ),
