@@ -10,11 +10,13 @@ class ClientFormBinding extends Bindings {
   @override
   void dependencies() {
     Get.find<AppLogger>().trace('ClientFormBinding: registering dependencies');
+    final client = Get.arguments as Client?;
     Get.lazyPut<ClientFormController>(
       () => ClientFormController(
-        Get.find<UseCase<Client, CreateClientParams>>(),
-        Get.find<UseCase<Client, UpdateClientParams>>(),
-        existingClient: Get.arguments as Client?,
+        Get.find<UseCase<Client, SaveClientParams>>(
+          tag: client != null ? 'updateClient' : 'createClient',
+        ),
+        existingClient: client,
       ),
     );
   }

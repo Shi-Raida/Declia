@@ -63,6 +63,9 @@ class MockFetchClients extends Mock
 
 class MockGetClient extends Mock implements UseCase<Client, GetClientParams> {}
 
+class MockSaveClient extends Mock
+    implements UseCase<Client, SaveClientParams> {}
+
 class MockCreateClient extends Mock
     implements UseCase<Client, CreateClientParams> {}
 

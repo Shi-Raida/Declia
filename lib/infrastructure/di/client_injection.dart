@@ -43,12 +43,14 @@ abstract final class ClientInjection {
       () => GetClient(Get.find<ClientRepository>()),
       fenix: true,
     );
-    Get.lazyPut<UseCase<Client, CreateClientParams>>(
+    Get.lazyPut<UseCase<Client, SaveClientParams>>(
       () => CreateClient(Get.find<ClientRepository>(), Get.find<Clock>()),
+      tag: 'createClient',
       fenix: true,
     );
-    Get.lazyPut<UseCase<Client, UpdateClientParams>>(
+    Get.lazyPut<UseCase<Client, SaveClientParams>>(
       () => UpdateClient(Get.find<ClientRepository>(), Get.find<Clock>()),
+      tag: 'updateClient',
       fenix: true,
     );
     Get.lazyPut<UseCase<void, DeleteClientParams>>(

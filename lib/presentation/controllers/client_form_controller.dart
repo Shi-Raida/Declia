@@ -9,14 +9,9 @@ import '../../usecases/client/params.dart';
 import '../../usecases/usecase.dart';
 
 final class ClientFormController extends GetxController {
-  ClientFormController(
-    this._createClient,
-    this._updateClient, {
-    this.existingClient,
-  });
+  ClientFormController(this._saveClient, {this.existingClient});
 
-  final UseCase<Client, CreateClientParams> _createClient;
-  final UseCase<Client, UpdateClientParams> _updateClient;
+  final UseCase<Client, SaveClientParams> _saveClient;
   final Client? existingClient;
 
   bool get isEditing => existingClient != null;
@@ -111,47 +106,41 @@ final class ClientFormController extends GetxController {
       country: countryCtrl.text.trim().isEmpty ? null : countryCtrl.text.trim(),
     );
 
-    if (isEditing) {
-      final updated = existingClient!.copyWith(
-        firstName: firstNameCtrl.text.trim(),
-        lastName: lastNameCtrl.text.trim(),
-        email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
-        phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
-        dateOfBirth: dateOfBirth.value,
-        address: address,
-        acquisitionSource: acquisitionSource.value,
-        tags: tags.toList(),
-        notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
-        communicationPrefs: communicationPrefs,
-      );
-      final result = await _updateClient((client: updated));
-      result.fold(
-        ok: (_) => Get.back(),
-        err: (failure) => errorMessage.value = failure.message,
-      );
-    } else {
-      final newClient = Client(
-        id: '',
-        tenantId: '', // set by DB DEFAULT (current_user_tenant_id())
-        firstName: firstNameCtrl.text.trim(),
-        lastName: lastNameCtrl.text.trim(),
-        email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
-        phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
-        dateOfBirth: dateOfBirth.value,
-        address: address,
-        acquisitionSource: acquisitionSource.value,
-        tags: tags.toList(),
-        notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
-        communicationPrefs: communicationPrefs,
-        createdAt: DateTime(0), // stamped by use case
-        updatedAt: DateTime(0), // stamped by use case
-      );
-      final result = await _createClient((client: newClient));
-      result.fold(
-        ok: (_) => Get.back(),
-        err: (failure) => errorMessage.value = failure.message,
-      );
-    }
+    final client = isEditing
+        ? existingClient!.copyWith(
+            firstName: firstNameCtrl.text.trim(),
+            lastName: lastNameCtrl.text.trim(),
+            email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
+            phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+            dateOfBirth: dateOfBirth.value,
+            address: address,
+            acquisitionSource: acquisitionSource.value,
+            tags: tags.toList(),
+            notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
+            communicationPrefs: communicationPrefs,
+          )
+        : Client(
+            id: '',
+            tenantId: '', // set by DB DEFAULT (current_user_tenant_id())
+            firstName: firstNameCtrl.text.trim(),
+            lastName: lastNameCtrl.text.trim(),
+            email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
+            phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+            dateOfBirth: dateOfBirth.value,
+            address: address,
+            acquisitionSource: acquisitionSource.value,
+            tags: tags.toList(),
+            notes: notesCtrl.text.trim().isEmpty ? null : notesCtrl.text.trim(),
+            communicationPrefs: communicationPrefs,
+            createdAt: DateTime(0), // stamped by use case
+            updatedAt: DateTime(0), // stamped by use case
+          );
+
+    final result = await _saveClient((client: client));
+    result.fold(
+      ok: (_) => Get.back(),
+      err: (failure) => errorMessage.value = failure.message,
+    );
 
     isLoading.value = false;
   }
