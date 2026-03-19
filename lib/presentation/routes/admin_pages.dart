@@ -5,6 +5,7 @@ import '../controllers/auth_state_controller.dart';
 import '../middleware/auth_middleware.dart';
 import '../middleware/role_middleware.dart';
 import '../pages/admin/admin_shell_binding.dart';
+import '../pages/admin/client_detail_binding.dart';
 import '../pages/admin/client_detail_page.dart';
 import '../pages/admin/client_form_binding.dart';
 import '../pages/admin/client_form_page.dart';
@@ -62,7 +63,10 @@ final List<GetPage<dynamic>> adminPages = [
   GetPage<void>(
     name: AppRoutes.adminClientDetail,
     page: () => const ClientDetailPage(),
-    binding: AdminShellBinding(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      ClientDetailBinding().dependencies();
+    }),
     middlewares: _adminMiddlewares(),
     transition: Transition.noTransition,
   ),
