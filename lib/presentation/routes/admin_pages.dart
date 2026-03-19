@@ -15,6 +15,7 @@ import '../pages/admin/dashboard_binding.dart';
 import '../pages/admin/dashboard_page.dart';
 import '../pages/admin/galleries_page.dart';
 import '../pages/admin/invoicing_page.dart';
+import '../pages/admin/planning_binding.dart';
 import '../pages/admin/planning_page.dart';
 import '../pages/admin/settings_page.dart';
 import '../pages/admin/shop_page.dart';
@@ -83,7 +84,10 @@ final List<GetPage<dynamic>> adminPages = [
   GetPage<void>(
     name: AppRoutes.adminPlanning,
     page: () => const PlanningPage(),
-    binding: AdminShellBinding(),
+    binding: BindingsBuilder(() {
+      AdminShellBinding().dependencies();
+      PlanningBinding().dependencies();
+    }),
     middlewares: _adminMiddlewares(),
     transition: Transition.noTransition,
   ),
