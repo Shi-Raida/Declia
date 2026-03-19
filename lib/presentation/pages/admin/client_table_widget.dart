@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/enums/client_sort_field.dart';
+import '../../../core/enums/sort_direction.dart';
 import '../../controllers/clients_controller.dart';
 import '../../models/client_view_model.dart';
 import '../../theme/app_colors.dart';
@@ -16,8 +18,13 @@ class ClientsTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
-      child: Obx(
-        () => DataTable(
+      child: Obx(() {
+        final sortField = controller.query.value.sortField;
+        final sortAsc =
+            controller.query.value.sortDirection == SortDirection.ascending;
+        return DataTable(
+          sortColumnIndex: sortField == ClientSortField.name ? 0 : null,
+          sortAscending: sortAsc,
           headingRowColor: WidgetStateProperty.all(AppColors.bgAlt),
           headingTextStyle: AppTypography.bodySmall().copyWith(
             fontWeight: FontWeight.w600,
@@ -32,16 +39,23 @@ class ClientsTable extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           columns: [
-            DataColumn(label: Text(Tr.adminClientsTableName.tr)),
+            DataColumn(
+              label: Text(Tr.adminClientsTableName.tr),
+              onSort: (_, ascending) => controller.setSort(
+                ClientSortField.name,
+                ascending ? SortDirection.ascending : SortDirection.descending,
+              ),
+            ),
             DataColumn(label: Text(Tr.adminClientsTableEmail.tr)),
             DataColumn(label: Text(Tr.adminClientsTablePhone.tr)),
-            DataColumn(label: Text(Tr.adminClientsTableTags.tr)),
-            DataColumn(label: Text(Tr.adminClientsTableDate.tr)),
+            DataColumn(label: Text(Tr.adminClientsTableSessions.tr)),
+            DataColumn(label: Text(Tr.adminClientsTableTotalSpent.tr)),
+            DataColumn(label: Text(Tr.adminClientsTableLastShooting.tr)),
             DataColumn(label: Text(Tr.adminClientsTableActions.tr)),
           ],
           rows: controller.clients.map((vm) => _buildRow(context, vm)).toList(),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -62,45 +76,15 @@ class ClientsTable extends StatelessWidget {
         ),
         DataCell(Text(vm.email ?? '—')),
         DataCell(Text(vm.phone ?? '—')),
-        DataCell(_TagsCell(tags: vm.tags)),
         DataCell(
-          Text(_formatDate(vm.createdAt), style: AppTypography.bodySmall()),
+          Text(vm.sessionCountDisplay, style: AppTypography.bodySmall()),
+        ),
+        DataCell(Text(vm.totalSpentDisplay, style: AppTypography.bodySmall())),
+        DataCell(
+          Text(vm.lastShootingDisplay, style: AppTypography.bodySmall()),
         ),
         DataCell(_ActionsCell(vm: vm, controller: controller)),
       ],
-    );
-  }
-
-  String _formatDate(DateTime dt) =>
-      '${dt.day.toString().padLeft(2, '0')}/'
-      '${dt.month.toString().padLeft(2, '0')}/'
-      '${dt.year}';
-}
-
-class _TagsCell extends StatelessWidget {
-  const _TagsCell({required this.tags});
-
-  final List<String> tags;
-
-  @override
-  Widget build(BuildContext context) {
-    if (tags.isEmpty) return const Text('—');
-    return Wrap(
-      spacing: 4,
-      runSpacing: 4,
-      children: tags
-          .take(3)
-          .map(
-            (tag) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppColors.terracottaLight,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(tag, style: AppTypography.bodySmall()),
-            ),
-          )
-          .toList(),
     );
   }
 }

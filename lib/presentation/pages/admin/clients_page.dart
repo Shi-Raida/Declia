@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/enums/acquisition_source.dart';
+import '../../../core/enums/client_sort_field.dart';
+import '../../../core/enums/sort_direction.dart';
 import '../../controllers/clients_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
@@ -20,7 +22,9 @@ class ClientsPage extends GetView<ClientsController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _ClientsToolbar(controller: controller),
+          _ClientsFilterBar(controller: controller),
           Expanded(child: _ClientsContent(controller: controller)),
+          _ClientsPaginationBar(controller: controller),
         ],
       ),
     );
@@ -96,6 +100,206 @@ class _ClientsToolbar extends StatelessWidget {
   }
 }
 
+class _ClientsFilterBar extends StatefulWidget {
+  const _ClientsFilterBar({required this.controller});
+
+  final ClientsController controller;
+
+  @override
+  State<_ClientsFilterBar> createState() => _ClientsFilterBarState();
+}
+
+class _ClientsFilterBarState extends State<_ClientsFilterBar> {
+  final _tagController = TextEditingController();
+
+  @override
+  void dispose() {
+    _tagController.dispose();
+    super.dispose();
+  }
+
+  void _addTag() {
+    final tag = _tagController.text.trim();
+    if (tag.isEmpty) return;
+    widget.controller.addTag(tag);
+    _tagController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final ctrl = widget.controller;
+      final q = ctrl.query.value;
+      return Container(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
+        decoration: const BoxDecoration(
+          color: AppColors.bgAlt,
+          border: Border(bottom: BorderSide(color: AppColors.border)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                _label(Tr.adminClientsFilterBySource.tr),
+                const SizedBox(width: 8),
+                DropdownButton<AcquisitionSource?>(
+                  value: q.acquisitionSource,
+                  underline: const SizedBox(),
+                  style: AppTypography.bodySmall().copyWith(
+                    color: AppColors.encre,
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: null,
+                      child: Text(Tr.adminClientsAllSources.tr),
+                    ),
+                    ...AcquisitionSource.values.map(
+                      (src) => DropdownMenuItem(
+                        value: src,
+                        child: Text(src.trKey.tr),
+                      ),
+                    ),
+                  ],
+                  onChanged: ctrl.setAcquisitionSourceFilter,
+                ),
+                const SizedBox(width: 20),
+                _label(Tr.adminClientsSortBy.tr),
+                const SizedBox(width: 8),
+                DropdownButton<ClientSortField>(
+                  value: q.sortField,
+                  underline: const SizedBox(),
+                  style: AppTypography.bodySmall().copyWith(
+                    color: AppColors.encre,
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: ClientSortField.name,
+                      child: Text(Tr.adminClientsSortName.tr),
+                    ),
+                    DropdownMenuItem(
+                      value: ClientSortField.createdAt,
+                      child: Text(Tr.adminClientsSortDate.tr),
+                    ),
+                  ],
+                  onChanged: (field) {
+                    if (field != null) ctrl.toggleSort(field);
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    q.sortDirection == SortDirection.ascending
+                        ? Icons.arrow_upward
+                        : Icons.arrow_downward,
+                    size: 16,
+                  ),
+                  color: AppColors.pierre,
+                  tooltip: q.sortDirection == SortDirection.ascending
+                      ? 'Ascending'
+                      : 'Descending',
+                  onPressed: () => ctrl.toggleSort(q.sortField),
+                ),
+                const Spacer(),
+                Text(
+                  Tr.adminClientsCount.trParams({
+                    'count': '${ctrl.totalCount.value}',
+                  }),
+                  style: AppTypography.bodySmall().copyWith(
+                    color: AppColors.pierre,
+                  ),
+                ),
+                if (ctrl.hasActiveFilters) ...[
+                  const SizedBox(width: 12),
+                  TextButton.icon(
+                    onPressed: ctrl.clearFilters,
+                    icon: const Icon(Icons.filter_alt_off, size: 16),
+                    label: Text(
+                      Tr.adminClientsClearFilters.tr,
+                      style: AppTypography.bodySmall(),
+                    ),
+                    style: TextButton.styleFrom(
+                      foregroundColor: AppColors.error,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      minimumSize: const Size(0, 32),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                _label(Tr.adminClientsFilterByTag.tr),
+                const SizedBox(width: 8),
+                SizedBox(
+                  width: 160,
+                  height: 32,
+                  child: TextField(
+                    controller: _tagController,
+                    style: AppTypography.bodySmall(),
+                    decoration: InputDecoration(
+                      hintText: Tr.adminClientsFilterTagHint.tr,
+                      hintStyle: AppTypography.bodySmall(),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 0,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(color: AppColors.border),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(color: AppColors.border),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(
+                          color: AppColors.terracotta,
+                        ),
+                      ),
+                    ),
+                    onSubmitted: (_) => _addTag(),
+                  ),
+                ),
+                SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: IconButton(
+                    icon: const Icon(Icons.add, size: 16),
+                    onPressed: _addTag,
+                    color: AppColors.terracotta,
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                ...q.tags.map(
+                  (tag) => Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: InputChip(
+                      label: Text(tag, style: AppTypography.bodySmall()),
+                      onDeleted: () => ctrl.removeTag(tag),
+                      backgroundColor: AppColors.terracottaLight,
+                      deleteIconColor: AppColors.pierre,
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _label(String text) => Text(
+    text,
+    style: AppTypography.bodySmall().copyWith(color: AppColors.pierre),
+  );
+}
+
 class _ClientsContent extends StatelessWidget {
   const _ClientsContent({required this.controller});
 
@@ -124,6 +328,51 @@ class _ClientsContent extends StatelessWidget {
         );
       }
       return ClientsTable(controller: controller);
+    });
+  }
+}
+
+class _ClientsPaginationBar extends StatelessWidget {
+  const _ClientsPaginationBar({required this.controller});
+
+  final ClientsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final page = controller.query.value.page;
+      final total = controller.totalPages;
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        decoration: const BoxDecoration(
+          color: AppColors.bgCard,
+          border: Border(top: BorderSide(color: AppColors.border)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.chevron_left),
+              onPressed: controller.hasPreviousPage
+                  ? controller.previousPage
+                  : null,
+              color: AppColors.pierre,
+            ),
+            Text(
+              Tr.adminClientsPaginationInfo.trParams({
+                'page': '${page + 1}',
+                'total': '$total',
+              }),
+              style: AppTypography.bodySmall(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.chevron_right),
+              onPressed: controller.hasNextPage ? controller.nextPage : null,
+              color: AppColors.pierre,
+            ),
+          ],
+        ),
+      );
     });
   }
 }

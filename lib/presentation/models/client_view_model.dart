@@ -21,6 +21,9 @@ class ClientViewModel {
     this.city,
     this.postalCode,
     this.country,
+    this.sessionCount,
+    this.totalSpent,
+    this.lastShooting,
   });
 
   factory ClientViewModel.fromEntity(Client c) => ClientViewModel(
@@ -62,4 +65,18 @@ class ClientViewModel {
   final String? postalCode;
   final String? country;
   final DateTime createdAt;
+
+  // M2-S3 placeholders (populated when Client History lands)
+  final int? sessionCount;
+  final double? totalSpent;
+  final DateTime? lastShooting;
+
+  String get sessionCountDisplay => sessionCount?.toString() ?? '—';
+  String get totalSpentDisplay =>
+      totalSpent != null ? '${totalSpent!.toStringAsFixed(2)} €' : '—';
+  String get lastShootingDisplay => lastShooting != null
+      ? '${lastShooting!.day.toString().padLeft(2, '0')}/'
+            '${lastShooting!.month.toString().padLeft(2, '0')}/'
+            '${lastShooting!.year}'
+      : '—';
 }
