@@ -53,4 +53,8 @@ final class ClientRepositoryImpl implements ClientRepository {
       (tuple) => PagedResult(items: tuple.$1, totalCount: tuple.$2),
     );
   }
+
+  @override
+  Future<Result<List<String>, Failure>> fetchDistinctTags() =>
+      _guard(() => _dataSource.fetchDistinctTags(), method: 'fetchDistinctTags');
 }

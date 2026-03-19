@@ -9,4 +9,5 @@ abstract interface class ClientDataSource {
   Future<void> delete(String id);
   Future<List<Client>> search(String query);
   Future<(List<Client>, int)> fetchList(ClientListQuery query);
+  Future<List<String>> fetchDistinctTags();
 }

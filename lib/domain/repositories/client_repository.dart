@@ -12,4 +12,5 @@ abstract interface class ClientRepository {
   Future<Result<void, Failure>> delete(String id);
   Future<Result<List<Client>, Failure>> search(String query);
   Future<Result<PagedResult<Client>, Failure>> fetchList(ClientListQuery query);
+  Future<Result<List<String>, Failure>> fetchDistinctTags();
 }

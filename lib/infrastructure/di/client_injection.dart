@@ -10,6 +10,7 @@ import '../../usecases/client/create_client.dart';
 import '../../usecases/client/delete_client.dart';
 import '../../usecases/client/fetch_client_list.dart';
 import '../../usecases/client/fetch_clients.dart';
+import '../../usecases/client/fetch_distinct_tags.dart';
 import '../../usecases/client/get_client.dart';
 import '../../usecases/client/params.dart';
 import '../../usecases/client/search_clients.dart';
@@ -65,6 +66,11 @@ abstract final class ClientInjection {
     );
     Get.lazyPut<UseCase<PagedResult<Client>, FetchClientsParams>>(
       () => FetchClientList(Get.find<ClientRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UseCase<List<String>, NoParams>>(
+      () => FetchDistinctTags(Get.find<ClientRepository>()),
+      tag: 'fetchDistinctTags',
       fenix: true,
     );
   }

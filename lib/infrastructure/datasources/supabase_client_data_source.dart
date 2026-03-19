@@ -151,4 +151,14 @@ final class SupabaseClientDataSource implements ClientDataSource {
       throw RepositoryException(e.message, cause: e);
     }
   }
+
+  @override
+  Future<List<String>> fetchDistinctTags() async {
+    try {
+      final data = await _client.rpc('distinct_client_tags');
+      return (data as List).cast<String>();
+    } on PostgrestException catch (e) {
+      throw RepositoryException(e.message, cause: e);
+    }
+  }
 }
