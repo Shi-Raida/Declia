@@ -6,17 +6,20 @@ import 'package:declia/core/storage/local_storage.dart';
 import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/app_user.dart';
+import 'package:declia/domain/entities/availability_rule.dart';
 import 'package:declia/domain/entities/calendar_event.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_history.dart';
 import 'package:declia/domain/entities/client_summary_stats.dart';
 import 'package:declia/domain/repositories/auth_repository.dart';
+import 'package:declia/domain/repositories/availability_repository.dart';
 import 'package:declia/domain/repositories/calendar_repository.dart';
 import 'package:declia/domain/repositories/client_history_repository.dart';
 import 'package:declia/domain/repositories/client_repository.dart';
 import 'package:declia/domain/repositories/consent_repository.dart';
 import 'package:declia/domain/repositories/tenant_repository.dart';
 import 'package:declia/infrastructure/datasources/contract/auth_data_source.dart';
+import 'package:declia/infrastructure/datasources/contract/availability_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/calendar_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/client_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/client_history_data_source.dart';
@@ -24,6 +27,7 @@ import 'package:declia/infrastructure/datasources/contract/consent_data_source.d
 import 'package:declia/infrastructure/datasources/contract/tenant_data_source.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
+import 'package:declia/usecases/availability/params.dart';
 import 'package:declia/usecases/calendar/params.dart';
 import 'package:declia/usecases/client/params.dart';
 import 'package:declia/usecases/client_history/params.dart';
@@ -110,6 +114,24 @@ class MockCalendarDataSource extends Mock implements CalendarDataSource {}
 
 class MockFetchCalendarSessions extends Mock
     implements UseCase<List<CalendarEvent>, FetchCalendarSessionsParams> {}
+
+class MockAvailabilityRepository extends Mock
+    implements AvailabilityRepository {}
+
+class MockAvailabilityDataSource extends Mock
+    implements AvailabilityDataSource {}
+
+class MockFetchAvailabilityRules extends Mock
+    implements UseCase<List<AvailabilityRule>, NoParams> {}
+
+class MockCreateAvailabilityRule extends Mock
+    implements UseCase<AvailabilityRule, CreateAvailabilityRuleParams> {}
+
+class MockUpdateAvailabilityRule extends Mock
+    implements UseCase<AvailabilityRule, UpdateAvailabilityRuleParams> {}
+
+class MockDeleteAvailabilityRule extends Mock
+    implements UseCase<void, DeleteAvailabilityRuleParams> {}
 
 /// A manual guard implementation that can be toggled between success and failure.
 final class MockRepositoryGuard implements RepositoryGuard {
