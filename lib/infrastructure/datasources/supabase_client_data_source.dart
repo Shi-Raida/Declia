@@ -1,7 +1,11 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../core/enums/acquisition_source.dart';
+import '../../core/enums/client_sort_field.dart';
+import '../../core/enums/sort_direction.dart';
 import '../../core/errors/app_exception.dart';
 import '../../domain/entities/client.dart';
+import '../../domain/entities/client_list_query.dart';
 import 'contract/client_data_source.dart';
 
 /// Maps a [PostgrestException] to a typed [AppException] for client operations.
@@ -97,6 +101,52 @@ final class SupabaseClientDataSource implements ClientDataSource {
       return (data as List)
           .map((e) => Client.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList();
+    } on PostgrestException catch (e) {
+      throw RepositoryException(e.message, cause: e);
+    }
+  }
+
+  @override
+  Future<(List<Client>, int)> fetchList(ClientListQuery query) async {
+    try {
+      var q = _client.from('clients').select();
+
+      if (query.search.isNotEmpty) {
+        final s = query.search;
+        q = q.or(
+          'first_name.ilike.%$s%,last_name.ilike.%$s%'
+          ',email.ilike.%$s%,phone.ilike.%$s%',
+        );
+      }
+      if (query.tags.isNotEmpty) {
+        q = q.contains('tags', query.tags);
+      }
+      if (query.acquisitionSource != null) {
+        q = q.eq('acquisition_source', query.acquisitionSource!.jsonValue);
+      }
+
+      final asc = query.sortDirection == SortDirection.ascending;
+      final from = query.page * query.pageSize;
+      final to = from + query.pageSize - 1;
+
+      final response = await switch (query.sortField) {
+        ClientSortField.name =>
+          q
+              .order('last_name', ascending: asc)
+              .order('first_name', ascending: asc)
+              .range(from, to)
+              .count(CountOption.exact),
+        ClientSortField.createdAt =>
+          q
+              .order('created_at', ascending: asc)
+              .range(from, to)
+              .count(CountOption.exact),
+      };
+
+      final items = (response.data as List)
+          .map((e) => Client.fromJson(Map<String, dynamic>.from(e as Map)))
+          .toList();
+      return (items, (response.count as int?) ?? 0);
     } on PostgrestException catch (e) {
       throw RepositoryException(e.message, cause: e);
     }

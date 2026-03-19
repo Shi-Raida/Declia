@@ -14,3 +14,14 @@ enum AcquisitionSource {
   @JsonValue('other')
   other,
 }
+
+extension AcquisitionSourceJson on AcquisitionSource {
+  String get jsonValue => switch (this) {
+    AcquisitionSource.referral => 'referral',
+    AcquisitionSource.socialMedia => 'social_media',
+    AcquisitionSource.website => 'website',
+    AcquisitionSource.wordOfMouth => 'word_of_mouth',
+    AcquisitionSource.event => 'event',
+    AcquisitionSource.other => 'other',
+  };
+}
