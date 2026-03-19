@@ -136,6 +136,7 @@ final Map<String, String> frFr = {
   // Client detail
   Tr.adminClientDetailEdit: 'Modifier',
   Tr.adminClientDetailDelete: 'Supprimer',
+  Tr.adminClientDetailView: 'Voir',
   Tr.adminClientDetailNoEmail: 'Email non renseigné',
   Tr.adminClientDetailNoPhone: 'Téléphone non renseigné',
   Tr.adminClientDetailNoAddress: 'Adresse non renseignée',

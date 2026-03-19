@@ -140,6 +140,7 @@ abstract final class Tr {
   // Client detail
   static const String adminClientDetailEdit = 'adminClientDetailEdit';
   static const String adminClientDetailDelete = 'adminClientDetailDelete';
+  static const String adminClientDetailView = 'adminClientDetailView';
   static const String adminClientDetailNoEmail = 'adminClientDetailNoEmail';
   static const String adminClientDetailNoPhone = 'adminClientDetailNoPhone';
   static const String adminClientDetailNoAddress = 'adminClientDetailNoAddress';

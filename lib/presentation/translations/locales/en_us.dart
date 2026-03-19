@@ -130,6 +130,7 @@ final Map<String, String> enUs = {
   // Client detail
   Tr.adminClientDetailEdit: 'Edit',
   Tr.adminClientDetailDelete: 'Delete',
+  Tr.adminClientDetailView: 'View',
   Tr.adminClientDetailNoEmail: 'No email provided',
   Tr.adminClientDetailNoPhone: 'No phone provided',
   Tr.adminClientDetailNoAddress: 'No address provided',
