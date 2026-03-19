@@ -1,9 +1,9 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const GOOGLE_CLIENT_ID = Deno.env.get('GOOGLE_CLIENT_ID')!
-const GOOGLE_CLIENT_SECRET = Deno.env.get('GOOGLE_CLIENT_SECRET')!
-const GOOGLE_REDIRECT_URI = Deno.env.get('GOOGLE_REDIRECT_URI')!
+const GOOGLE_CLIENT_ID = Deno.env.get('DC_GOOGLE_CLIENT_ID')!
+const GOOGLE_CLIENT_SECRET = Deno.env.get('DC_GOOGLE_CLIENT_SECRET')!
+const GOOGLE_REDIRECT_URI = Deno.env.get('DC_GOOGLE_REDIRECT_URI')!
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
@@ -16,6 +16,13 @@ serve(async (req) => {
   const headers = { 'Content-Type': 'application/json' }
 
   try {
+    if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REDIRECT_URI) {
+      return new Response(
+        JSON.stringify({ error: 'Missing Google OAuth configuration. Set DC_GOOGLE_CLIENT_ID, DC_GOOGLE_CLIENT_SECRET, and DC_GOOGLE_REDIRECT_URI.' }),
+        { status: 500, headers },
+      )
+    }
+
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
       return new Response(JSON.stringify({ error: 'Missing Authorization header' }), {
@@ -34,17 +41,17 @@ serve(async (req) => {
     }
 
     // Get tenant_id for this user
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
+    const { data: userRow, error: userRowError } = await supabase
+      .from('users')
       .select('tenant_id')
       .eq('id', user.id)
       .single()
 
-    if (profileError || !profile) {
-      return new Response(JSON.stringify({ error: 'Profile not found' }), { status: 404, headers })
+    if (userRowError || !userRow) {
+      return new Response(JSON.stringify({ error: 'User not found' }), { status: 404, headers })
     }
 
-    const tenantId = profile.tenant_id
+    const tenantId = userRow.tenant_id
     const body = await req.json()
     const action = body.action as string
 
