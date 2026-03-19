@@ -79,7 +79,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M2-S1 | Client CRM profiles | Done |
 | M2-S2 | Client list & filtering | Done |
 | M2-S3 | Client history | Done |
-| M2-S4 | Calendar & planning view | Not started |
+| M2-S4 | Calendar & planning view | Done |
 | M2-S5 | Availability management | Not started |
 | M2-S6 | Google Calendar sync | Not started |
 | **M3** | **Public Showcase** | **Not started** |
