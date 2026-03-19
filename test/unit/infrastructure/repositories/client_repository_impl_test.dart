@@ -1,8 +1,10 @@
 import 'package:declia/core/errors/app_exception.dart';
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/repositories/repository_guard.dart';
+import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
+import 'package:declia/domain/entities/client_list_query.dart';
 import 'package:declia/infrastructure/datasources/contract/client_data_source.dart';
 import 'package:declia/infrastructure/repositories/client_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -73,6 +75,12 @@ final class _FakeClientDataSource implements ClientDataSource {
               (c.email?.contains(query) ?? false),
         )
         .toList();
+  }
+
+  @override
+  Future<(List<Client>, int)> fetchList(ClientListQuery query) async {
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+    return (clients, clients.length);
   }
 }
 
@@ -185,5 +193,28 @@ void main() {
         expect((result as Err).error, isA<UnauthorisedClientAccessFailure>());
       },
     );
+
+    test('fetchList returns Ok with PagedResult wrapping tuple', () async {
+      final ds = _FakeClientDataSource();
+      final repo = _makeRepo(ds);
+
+      final result = await repo.fetchList(const ClientListQuery());
+
+      expect(result, isA<Ok<PagedResult<Client>, Failure>>());
+      final paged = (result as Ok<PagedResult<Client>, Failure>).value;
+      expect(paged.items.length, 1);
+      expect(paged.totalCount, 1);
+    });
+
+    test('fetchList returns Err when data source throws', () async {
+      final ds = _FakeClientDataSource()
+        ..exceptionToThrow = const UnauthorisedClientAccessException();
+      final repo = _makeRepo(ds);
+
+      final result = await repo.fetchList(const ClientListQuery());
+
+      expect(result, isA<Err<PagedResult<Client>, Failure>>());
+      expect((result as Err).error, isA<UnauthorisedClientAccessFailure>());
+    });
   });
 }
