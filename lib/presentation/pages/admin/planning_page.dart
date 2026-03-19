@@ -186,7 +186,7 @@ class _PlanningBody extends StatelessWidget {
 
       final view = controller.currentView.value;
       final date = controller.focusedDate.value;
-      final events = controller.events;
+      final events = controller.events.toList();
       final showAvailability = controller.showAvailability.value;
 
       List<TimeSlot> slotsForDate(DateTime d) =>
