@@ -11,4 +11,5 @@ abstract interface class NavigationService {
   void toClientRegister({String? tenantSlug});
   void toClientForgotPassword();
   void toLegalPrivacy();
+  void goBack();
 }

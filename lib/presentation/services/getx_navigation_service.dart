@@ -49,4 +49,7 @@ final class GetxNavigationService implements NavigationService {
 
   @override
   void toLegalPrivacy() => Get.toNamed(AppRoutes.legalPrivacy);
+
+  @override
+  void goBack() => Get.back();
 }
