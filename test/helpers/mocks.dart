@@ -6,21 +6,25 @@ import 'package:declia/core/storage/local_storage.dart';
 import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/app_user.dart';
+import 'package:declia/domain/entities/calendar_event.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_history.dart';
 import 'package:declia/domain/entities/client_summary_stats.dart';
 import 'package:declia/domain/repositories/auth_repository.dart';
+import 'package:declia/domain/repositories/calendar_repository.dart';
 import 'package:declia/domain/repositories/client_history_repository.dart';
 import 'package:declia/domain/repositories/client_repository.dart';
 import 'package:declia/domain/repositories/consent_repository.dart';
 import 'package:declia/domain/repositories/tenant_repository.dart';
 import 'package:declia/infrastructure/datasources/contract/auth_data_source.dart';
+import 'package:declia/infrastructure/datasources/contract/calendar_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/client_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/client_history_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/consent_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/tenant_data_source.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
+import 'package:declia/usecases/calendar/params.dart';
 import 'package:declia/usecases/client/params.dart';
 import 'package:declia/usecases/client_history/params.dart';
 import 'package:declia/usecases/consent/params.dart';
@@ -99,6 +103,13 @@ class MockFetchClientHistory extends Mock
 class MockFetchSummaryStats extends Mock
     implements
         UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams> {}
+
+class MockCalendarRepository extends Mock implements CalendarRepository {}
+
+class MockCalendarDataSource extends Mock implements CalendarDataSource {}
+
+class MockFetchCalendarSessions extends Mock
+    implements UseCase<List<CalendarEvent>, FetchCalendarSessionsParams> {}
 
 /// A manual guard implementation that can be toggled between success and failure.
 final class MockRepositoryGuard implements RepositoryGuard {
