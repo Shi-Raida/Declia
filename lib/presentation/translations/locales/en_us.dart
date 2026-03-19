@@ -217,6 +217,23 @@ final Map<String, String> enUs = {
   Tr.commStatusFailed: 'Failed',
   Tr.commStatusBounced: 'Bounced',
 
+  // Planning calendar
+  Tr.adminPlanningTitle: 'Planning',
+  Tr.adminPlanningViewDay: 'Day',
+  Tr.adminPlanningViewWeek: 'Week',
+  Tr.adminPlanningViewMonth: 'Month',
+  Tr.adminPlanningToday: 'Today',
+  Tr.adminPlanningNoSessions: 'No sessions',
+  Tr.adminPlanningSessionDetail: 'Session detail',
+  Tr.adminPlanningViewClient: 'View client',
+  Tr.adminPlanningMonday: 'Mon',
+  Tr.adminPlanningTuesday: 'Tue',
+  Tr.adminPlanningWednesday: 'Wed',
+  Tr.adminPlanningThursday: 'Thu',
+  Tr.adminPlanningFriday: 'Fri',
+  Tr.adminPlanningSaturday: 'Sat',
+  Tr.adminPlanningSunday: 'Sun',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Referral',
   Tr.acquisitionSourceSocialMedia: 'Social media',

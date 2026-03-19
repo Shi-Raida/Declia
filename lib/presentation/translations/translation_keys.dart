@@ -231,6 +231,23 @@ abstract final class Tr {
   static const String commStatusFailed = 'commStatusFailed';
   static const String commStatusBounced = 'commStatusBounced';
 
+  // Planning calendar
+  static const String adminPlanningTitle = 'adminPlanningTitle';
+  static const String adminPlanningViewDay = 'adminPlanningViewDay';
+  static const String adminPlanningViewWeek = 'adminPlanningViewWeek';
+  static const String adminPlanningViewMonth = 'adminPlanningViewMonth';
+  static const String adminPlanningToday = 'adminPlanningToday';
+  static const String adminPlanningNoSessions = 'adminPlanningNoSessions';
+  static const String adminPlanningSessionDetail = 'adminPlanningSessionDetail';
+  static const String adminPlanningViewClient = 'adminPlanningViewClient';
+  static const String adminPlanningMonday = 'adminPlanningMonday';
+  static const String adminPlanningTuesday = 'adminPlanningTuesday';
+  static const String adminPlanningWednesday = 'adminPlanningWednesday';
+  static const String adminPlanningThursday = 'adminPlanningThursday';
+  static const String adminPlanningFriday = 'adminPlanningFriday';
+  static const String adminPlanningSaturday = 'adminPlanningSaturday';
+  static const String adminPlanningSunday = 'adminPlanningSunday';
+
   // Acquisition source labels
   static const String acquisitionSourceReferral = 'acquisitionSourceReferral';
   static const String acquisitionSourceSocialMedia =

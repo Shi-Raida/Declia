@@ -223,6 +223,23 @@ final Map<String, String> frFr = {
   Tr.commStatusFailed: 'Échec',
   Tr.commStatusBounced: 'Rebond',
 
+  // Planning calendar
+  Tr.adminPlanningTitle: 'Planning',
+  Tr.adminPlanningViewDay: 'Jour',
+  Tr.adminPlanningViewWeek: 'Semaine',
+  Tr.adminPlanningViewMonth: 'Mois',
+  Tr.adminPlanningToday: "Aujourd'hui",
+  Tr.adminPlanningNoSessions: 'Aucune séance',
+  Tr.adminPlanningSessionDetail: 'Détail de la séance',
+  Tr.adminPlanningViewClient: 'Voir le client',
+  Tr.adminPlanningMonday: 'Lun',
+  Tr.adminPlanningTuesday: 'Mar',
+  Tr.adminPlanningWednesday: 'Mer',
+  Tr.adminPlanningThursday: 'Jeu',
+  Tr.adminPlanningFriday: 'Ven',
+  Tr.adminPlanningSaturday: 'Sam',
+  Tr.adminPlanningSunday: 'Dim',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Parrainage',
   Tr.acquisitionSourceSocialMedia: 'Réseaux sociaux',
