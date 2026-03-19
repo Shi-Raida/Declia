@@ -54,7 +54,7 @@ CREATE POLICY "tenant_select_connection"
   ON google_calendar_connections FOR SELECT
   USING (
     tenant_id = (
-      SELECT tenant_id FROM profiles WHERE id = auth.uid()
+      SELECT tenant_id FROM users WHERE id = auth.uid()
     )
   );
 
@@ -63,12 +63,12 @@ CREATE POLICY "tenant_update_connection"
   ON google_calendar_connections FOR UPDATE
   USING (
     tenant_id = (
-      SELECT tenant_id FROM profiles WHERE id = auth.uid()
+      SELECT tenant_id FROM users WHERE id = auth.uid()
     )
   )
   WITH CHECK (
     tenant_id = (
-      SELECT tenant_id FROM profiles WHERE id = auth.uid()
+      SELECT tenant_id FROM users WHERE id = auth.uid()
     )
   );
 
@@ -77,7 +77,7 @@ CREATE POLICY "tenant_select_external_events"
   ON external_calendar_events FOR SELECT
   USING (
     tenant_id = (
-      SELECT tenant_id FROM profiles WHERE id = auth.uid()
+      SELECT tenant_id FROM users WHERE id = auth.uid()
     )
   );
 
@@ -86,7 +86,7 @@ CREATE POLICY "tenant_select_session_sync"
   ON session_google_sync FOR SELECT
   USING (
     tenant_id = (
-      SELECT tenant_id FROM profiles WHERE id = auth.uid()
+      SELECT tenant_id FROM users WHERE id = auth.uid()
     )
   );
 

@@ -1,9 +1,12 @@
--- Helper: returns the tenant_id of the currently authenticated user
+-- Helper: returns the tenant_id of the currently authenticated user.
+-- Must be SECURITY DEFINER to bypass RLS on public.users and avoid
+-- infinite recursion (defined originally in 20260309000002_fix_rls_recursion.sql).
 CREATE OR REPLACE FUNCTION public.current_user_tenant_id()
   RETURNS UUID
   LANGUAGE sql
-  SECURITY INVOKER
+  SECURITY DEFINER
   STABLE
+  SET search_path = public
 AS $$
   SELECT tenant_id FROM public.users WHERE id = auth.uid() LIMIT 1;
 $$;
