@@ -10,3 +10,4 @@ typedef SignInParams = ({
 typedef SignUpParams = ({String email, String password, String tenantSlug});
 typedef ResetPasswordParams = ({String email});
 typedef SignInUseCase = UseCase<AppUser, SignInParams>;
+typedef GetCurrentUserUseCase = UseCase<AppUser?, NoParams>;

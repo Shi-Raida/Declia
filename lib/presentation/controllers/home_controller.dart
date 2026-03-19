@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../core/logger/app_logger.dart';
-import '../../usecases/auth/get_current_user.dart';
+import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/user_view_model.dart';
 import '../services/navigation_service.dart';
