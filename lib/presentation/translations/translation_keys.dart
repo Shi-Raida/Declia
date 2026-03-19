@@ -100,6 +100,21 @@ abstract final class Tr {
   static const String adminClientsDeleteConfirm = 'adminClientsDeleteConfirm';
   static const String adminClientsDeleteBody = 'adminClientsDeleteBody';
   static const String adminClientsDeleteSuccess = 'adminClientsDeleteSuccess';
+  static const String adminClientsFilterByTag = 'adminClientsFilterByTag';
+  static const String adminClientsFilterBySource = 'adminClientsFilterBySource';
+  static const String adminClientsFilterTagHint = 'adminClientsFilterTagHint';
+  static const String adminClientsSortBy = 'adminClientsSortBy';
+  static const String adminClientsSortName = 'adminClientsSortName';
+  static const String adminClientsSortDate = 'adminClientsSortDate';
+  static const String adminClientsCount = 'adminClientsCount';
+  static const String adminClientsClearFilters = 'adminClientsClearFilters';
+  static const String adminClientsTableSessions = 'adminClientsTableSessions';
+  static const String adminClientsTableTotalSpent =
+      'adminClientsTableTotalSpent';
+  static const String adminClientsTableLastShooting =
+      'adminClientsTableLastShooting';
+  static const String adminClientsPaginationInfo = 'adminClientsPaginationInfo';
+  static const String adminClientsAllSources = 'adminClientsAllSources';
 
   // Client form
   static const String adminClientFormTitleCreate = 'adminClientFormTitleCreate';
