@@ -6,9 +6,11 @@ import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_list_query.dart';
+import 'package:declia/domain/entities/client_summary_stats.dart';
 import 'package:declia/presentation/controllers/clients_controller.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/client/params.dart';
+import 'package:declia/usecases/client_history/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -48,6 +50,20 @@ final class _FakeFetchClientList
     lastQuery = params.query;
     if (failureToReturn != null) return Err(failureToReturn!);
     return Ok(result);
+  }
+}
+
+final class _FakeFetchSummaryStats
+    extends UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams> {
+  Map<String, ClientSummaryStats>? statsToReturn;
+  Failure? failureToReturn;
+
+  @override
+  Future<Result<Map<String, ClientSummaryStats>, Failure>> call(
+    FetchSummaryStatsParams params,
+  ) async {
+    if (failureToReturn != null) return Err(failureToReturn!);
+    return Ok(statsToReturn ?? {});
   }
 }
 
@@ -97,11 +113,13 @@ final class _FakeNavigationService implements NavigationService {
 ClientsController _makeController({
   _FakeFetchClientList? fetch,
   _FakeDeleteClient? delete,
+  _FakeFetchSummaryStats? stats,
 }) {
   return ClientsController(
     fetch ?? _FakeFetchClientList(),
     delete ?? _FakeDeleteClient(),
     _FakeNavigationService(),
+    stats ?? _FakeFetchSummaryStats(),
   );
 }
 
@@ -389,6 +407,45 @@ void main() {
         controller.clearFilters();
         await Future<void>.delayed(Duration.zero);
         expect(controller.hasActiveFilters, isFalse);
+      });
+    });
+
+    group('stats integration', () {
+      test('merges summary stats into client view models', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final stats = _FakeFetchSummaryStats()
+          ..statsToReturn = {
+            '1': const ClientSummaryStats(
+              clientId: '1',
+              sessionCount: 5,
+              totalSpent: 300.0,
+            ),
+          };
+        final controller = _makeController(fetch: fetch, stats: stats);
+        controller.onInit();
+
+        // Wait for both loads (clients + stats)
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        final alice = controller.clients.firstWhere((c) => c.id == '1');
+        expect(alice.sessionCount, 5);
+        expect(alice.totalSpent, 300.0);
+      });
+
+      test('stats failure leaves columns as null (non-fatal)', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final stats = _FakeFetchSummaryStats()
+          ..failureToReturn = const RepositoryFailure('stats error');
+        final controller = _makeController(fetch: fetch, stats: stats);
+        controller.onInit();
+
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+
+        expect(controller.clients.length, 2);
+        expect(controller.errorMessage.value, isNull);
+        expect(controller.clients.first.sessionCount, isNull);
       });
     });
   });
