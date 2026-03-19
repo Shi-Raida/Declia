@@ -1,8 +1,6 @@
 import 'package:declia/core/enums/consent_type.dart';
 import 'package:declia/core/errors/failures.dart';
-import 'package:declia/core/storage/local_storage.dart';
 import 'package:declia/core/utils/result.dart';
-import 'package:declia/core/utils/uuid_generator.dart';
 import 'package:declia/presentation/controllers/cookie_consent_controller.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/consent/params.dart';
@@ -20,29 +18,6 @@ final class _FakeSaveCookieConsent
     lastParams = params;
     if (shouldFail) return const Err(RepositoryFailure('save failed'));
     return const Ok(null);
-  }
-}
-
-final class _FakeLocalStorage implements LocalStorage {
-  final Map<String, String> _store = {};
-
-  @override
-  String? read(String key) => _store[key];
-
-  @override
-  void write(String key, String value) => _store[key] = value;
-
-  @override
-  void delete(String key) => _store.remove(key);
-}
-
-final class _FakeUuidGenerator implements UuidGenerator {
-  int _counter = 0;
-
-  @override
-  String generate() {
-    _counter++;
-    return '00000000-0000-4000-8000-00000000000$_counter';
   }
 }
 
@@ -67,26 +42,25 @@ final class _FakeNavigationService implements NavigationService {
   void toClientForgotPassword() {}
   @override
   void toLegalPrivacy() {}
+  @override
+  void goBack() {}
 }
 
 void main() {
   late _FakeSaveCookieConsent saveConsent;
-  late _FakeLocalStorage localStorage;
   late CookieConsentController controller;
 
-  void makeController() {
+  void makeController({bool hasExistingConsent = false}) {
     controller = CookieConsentController(
       saveCookieConsent: saveConsent,
-      localStorage: localStorage,
       navigationService: _FakeNavigationService(),
-      uuidGenerator: _FakeUuidGenerator(),
+      hasExistingConsent: hasExistingConsent,
     );
     controller.onInit();
   }
 
   setUp(() {
     saveConsent = _FakeSaveCookieConsent();
-    localStorage = _FakeLocalStorage();
   });
 
   tearDown(() {
@@ -97,13 +71,12 @@ void main() {
   group('CookieConsentController', () {
     group('banner visibility', () {
       test('shows banner when no consent stored', () {
-        makeController();
+        makeController(hasExistingConsent: false);
         expect(controller.showBanner.value, isTrue);
       });
 
       test('hides banner when consent already stored', () {
-        localStorage.write('cookie_consent_v1', 'true');
-        makeController();
+        makeController(hasExistingConsent: true);
         expect(controller.showBanner.value, isFalse);
       });
     });
@@ -124,31 +97,6 @@ void main() {
         await controller.acceptAll();
 
         expect(controller.showBanner.value, isFalse);
-      });
-
-      test('writes consent key to localStorage', () async {
-        makeController();
-        await controller.acceptAll();
-
-        expect(localStorage.read('cookie_consent_v1'), 'true');
-      });
-
-      test('creates and persists anonId in localStorage', () async {
-        makeController();
-        await controller.acceptAll();
-
-        final anonId = localStorage.read('cookie_anon_id');
-        expect(anonId, isNotNull);
-        expect(anonId, isNotEmpty);
-        expect(anonId!.split('-').length, 5);
-      });
-
-      test('reuses existing anonId on second consent save', () async {
-        localStorage.write('cookie_anon_id', 'existing-anon-id');
-        makeController();
-        await controller.acceptAll();
-
-        expect(saveConsent.lastParams!.anonId, 'existing-anon-id');
       });
     });
 
