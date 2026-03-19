@@ -5,6 +5,7 @@ import '../../controllers/client_form_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
+import '../../utils/date_formatter.dart';
 import 'client_form_shared_widgets.dart';
 
 class ClientFormIdentitySection extends StatelessWidget {
@@ -84,7 +85,7 @@ class _DobField extends StatelessWidget {
                   Expanded(
                     child: Text(
                       controller.dateOfBirth.value != null
-                          ? _formatDate(controller.dateOfBirth.value!)
+                          ? formatDate(controller.dateOfBirth.value!)
                           : '—',
                       style: AppTypography.bodyMedium().copyWith(
                         color: controller.dateOfBirth.value != null
@@ -116,9 +117,4 @@ class _DobField extends StatelessWidget {
     );
     if (picked != null) controller.dateOfBirth.value = picked;
   }
-
-  String _formatDate(DateTime dt) =>
-      '${dt.day.toString().padLeft(2, '0')}/'
-      '${dt.month.toString().padLeft(2, '0')}/'
-      '${dt.year}';
 }

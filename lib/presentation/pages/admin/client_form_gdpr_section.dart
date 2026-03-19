@@ -5,6 +5,7 @@ import '../../controllers/client_form_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
+import '../../utils/date_formatter.dart';
 import 'client_form_shared_widgets.dart';
 
 class ClientFormGdprSection extends StatelessWidget {
@@ -34,7 +35,7 @@ class ClientFormGdprSection extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         '${Tr.adminClientFormGdprConsentDate.tr}: '
-                        '${_formatDate(controller.existingClient!.gdprConsentDate!)}',
+                        '${formatDate(controller.existingClient!.gdprConsentDate!)}',
                         style: AppTypography.bodySmall().copyWith(
                           color: AppColors.success,
                         ),
@@ -63,11 +64,6 @@ class ClientFormGdprSection extends StatelessWidget {
       ],
     );
   }
-
-  String _formatDate(DateTime dt) =>
-      '${dt.day.toString().padLeft(2, '0')}/'
-      '${dt.month.toString().padLeft(2, '0')}/'
-      '${dt.year}';
 }
 
 class _GdprCheckbox extends StatelessWidget {
