@@ -81,7 +81,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M2-S3 | Client history | Done |
 | M2-S4 | Calendar & planning view | Done |
 | M2-S5 | Availability management | Done |
-| M2-S6 | Google Calendar sync | Not started |
+| M2-S6 | Google Calendar sync | Done |
 | **M3** | **Public Showcase** | **Not started** |
 | M3-S1 | Home page with seasonal mode | Not started |
 | M3-S2 | Portfolio by specialty | Not started |
@@ -367,11 +367,11 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 **As a** photographer, **I want** to sync my Declia calendar with Google Calendar bidirectionally **so that** I only need one calendar -- CDC 15.2.
 
 **Acceptance criteria:**
-- [ ] OAuth2 connection with Google Calendar from admin settings
-- [ ] Declia sessions appear in Google Calendar with title, location and time
-- [ ] Google Calendar events block corresponding slots in Declia
-- [ ] Bidirectional near real-time sync (webhook or 5 min polling)
-- [ ] Disconnect possible without losing Declia data
+- [x] OAuth2 connection with Google Calendar from admin settings
+- [x] Declia sessions appear in Google Calendar with title, location and time
+- [x] Google Calendar events block corresponding slots in Declia
+- [x] Bidirectional near real-time sync (webhook or 5 min polling)
+- [x] Disconnect possible without losing Declia data
 
 ---
 
