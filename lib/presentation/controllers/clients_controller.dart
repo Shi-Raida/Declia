@@ -6,17 +6,26 @@ import '../../core/enums/sort_direction.dart';
 import '../../core/utils/paged_result.dart';
 import '../../domain/entities/client.dart';
 import '../../domain/entities/client_list_query.dart';
+import '../../domain/entities/client_summary_stats.dart';
 import '../../usecases/client/params.dart';
+import '../../usecases/client_history/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/client_view_model.dart';
 import '../services/navigation_service.dart';
 
 final class ClientsController extends GetxController {
-  ClientsController(this._fetchClientList, this._deleteClient, this._nav);
+  ClientsController(
+    this._fetchClientList,
+    this._deleteClient,
+    this._nav,
+    this._fetchSummaryStats,
+  );
 
   final UseCase<PagedResult<Client>, FetchClientsParams> _fetchClientList;
   final UseCase<void, DeleteClientParams> _deleteClient;
   final NavigationService _nav;
+  final UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams>
+  _fetchSummaryStats;
 
   final clients = <ClientViewModel>[].obs;
   final _entityMap = <String, Client>{};
@@ -69,6 +78,27 @@ final class ClientsController extends GetxController {
       err: (failure) => errorMessage.value = failure.message,
     );
     isLoading.value = false;
+
+    if (result.isOk) {
+      await _loadStats();
+    }
+  }
+
+  Future<void> _loadStats() async {
+    final ids = _entityMap.keys.toList();
+    if (ids.isEmpty) return;
+    final statsResult = await _fetchSummaryStats((clientIds: ids));
+    statsResult.fold(
+      ok: (statsMap) {
+        clients.assignAll(
+          _entityMap.values.map(
+            (c) => ClientViewModel.fromEntity(c, stats: statsMap[c.id]),
+          ),
+        );
+      },
+      // Stats failure is non-fatal — columns stay "—"
+      err: (_) {},
+    );
   }
 
   // Filter methods
