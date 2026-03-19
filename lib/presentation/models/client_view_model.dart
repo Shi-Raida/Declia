@@ -1,5 +1,6 @@
 import '../../core/enums/acquisition_source.dart';
 import '../../domain/entities/client.dart';
+import '../../domain/entities/client_summary_stats.dart';
 
 class ClientViewModel {
   const ClientViewModel({
@@ -26,26 +27,30 @@ class ClientViewModel {
     this.lastShooting,
   });
 
-  factory ClientViewModel.fromEntity(Client c) => ClientViewModel(
-    id: c.id,
-    firstName: c.firstName,
-    lastName: c.lastName,
-    createdAt: c.createdAt,
-    email: c.email,
-    phone: c.phone,
-    dateOfBirth: c.dateOfBirth,
-    acquisitionSource: c.acquisitionSource,
-    tags: c.tags,
-    notes: c.notes,
-    gdprConsentDate: c.gdprConsentDate,
-    commEmail: c.communicationPrefs?.email ?? false,
-    commSms: c.communicationPrefs?.sms ?? false,
-    commPhone: c.communicationPrefs?.phone ?? false,
-    street: c.address?.street,
-    city: c.address?.city,
-    postalCode: c.address?.postalCode,
-    country: c.address?.country,
-  );
+  factory ClientViewModel.fromEntity(Client c, {ClientSummaryStats? stats}) =>
+      ClientViewModel(
+        id: c.id,
+        firstName: c.firstName,
+        lastName: c.lastName,
+        createdAt: c.createdAt,
+        email: c.email,
+        phone: c.phone,
+        dateOfBirth: c.dateOfBirth,
+        acquisitionSource: c.acquisitionSource,
+        tags: c.tags,
+        notes: c.notes,
+        gdprConsentDate: c.gdprConsentDate,
+        commEmail: c.communicationPrefs?.email ?? false,
+        commSms: c.communicationPrefs?.sms ?? false,
+        commPhone: c.communicationPrefs?.phone ?? false,
+        street: c.address?.street,
+        city: c.address?.city,
+        postalCode: c.address?.postalCode,
+        country: c.address?.country,
+        sessionCount: stats?.sessionCount,
+        totalSpent: stats?.totalSpent,
+        lastShooting: stats?.lastShooting,
+      );
 
   final String id;
   final String firstName;
