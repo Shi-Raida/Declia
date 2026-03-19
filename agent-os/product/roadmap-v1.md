@@ -77,7 +77,7 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S8 | Base security & GDPR foundations | Done |
 | **M2** | **CRM & Planning** | **In progress** |
 | M2-S1 | Client CRM profiles | Done |
-| M2-S2 | Client list & filtering | Not started |
+| M2-S2 | Client list & filtering | Done |
 | M2-S3 | Client history | Not started |
 | M2-S4 | Calendar & planning view | Not started |
 | M2-S5 | Availability management | Not started |
