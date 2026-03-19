@@ -3,10 +3,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/repositories/repository_guard.dart';
 import '../../core/utils/clock.dart';
+import '../../core/utils/paged_result.dart';
 import '../../domain/entities/client.dart';
 import '../../domain/repositories/client_repository.dart';
 import '../../usecases/client/create_client.dart';
 import '../../usecases/client/delete_client.dart';
+import '../../usecases/client/fetch_client_list.dart';
 import '../../usecases/client/fetch_clients.dart';
 import '../../usecases/client/get_client.dart';
 import '../../usecases/client/params.dart';
@@ -59,6 +61,10 @@ abstract final class ClientInjection {
     );
     Get.lazyPut<UseCase<List<Client>, SearchClientsParams>>(
       () => SearchClients(Get.find<ClientRepository>()),
+      fenix: true,
+    );
+    Get.lazyPut<UseCase<PagedResult<Client>, FetchClientsParams>>(
+      () => FetchClientList(Get.find<ClientRepository>()),
       fenix: true,
     );
   }
