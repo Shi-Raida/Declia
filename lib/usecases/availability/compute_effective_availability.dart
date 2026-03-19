@@ -1,6 +1,7 @@
 import '../../core/enums/availability_rule_type.dart';
 import '../../domain/entities/availability_rule.dart';
 import '../../domain/entities/calendar_event.dart';
+import '../../domain/entities/external_calendar_event.dart';
 import '../../domain/entities/time_slot.dart';
 
 /// Pure function: computes effective available [TimeSlot]s for a given [date],
@@ -14,8 +15,9 @@ import '../../domain/entities/time_slot.dart';
 List<TimeSlot> computeEffectiveAvailability(
   List<AvailabilityRule> rules,
   List<CalendarEvent> sessions,
-  DateTime date,
-) {
+  DateTime date, {
+  List<ExternalCalendarEvent> externalEvents = const [],
+}) {
   final dateOnly = DateTime(date.year, date.month, date.day);
 
   // Step 1: check for blocked rule
@@ -79,6 +81,28 @@ List<TimeSlot> computeEffectiveAvailability(
         .expand((slot) => _subtractSlot(slot, session))
         .toList();
   }
+
+  // Step 5: subtract external calendar event times
+  final dayExternalSlots = externalEvents
+      .where((e) {
+        if (e.isAllDay) {
+          return e.startAt.year == date.year &&
+              e.startAt.month == date.month &&
+              e.startAt.day == date.day;
+        }
+        return e.startAt.year == date.year &&
+            e.startAt.month == date.month &&
+            e.startAt.day == date.day;
+      })
+      .map((e) => TimeSlot(start: e.startAt, end: e.endAt))
+      .toList();
+
+  for (final extSlot in dayExternalSlots) {
+    result = result
+        .expand((slot) => _subtractSlot(slot, extSlot))
+        .toList();
+  }
+
   return result;
 }
 
