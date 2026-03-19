@@ -155,6 +155,74 @@ final Map<String, String> frFr = {
   Tr.adminClientDetailNoAddress: 'Adresse non renseignée',
   Tr.adminClientDetailNoNotes: 'Aucune note',
 
+  // Client history
+  Tr.adminHistoryStatSessions: 'Séances',
+  Tr.adminHistoryStatTotalSpent: 'Dépenses totales',
+  Tr.adminHistoryStatLastShooting: 'Dernière séance',
+  Tr.adminHistorySessions: 'Séances',
+  Tr.adminHistorySessionsEmpty: 'Aucune séance',
+  Tr.adminHistoryGalleries: 'Galeries',
+  Tr.adminHistoryGalleriesEmpty: 'Aucune galerie',
+  Tr.adminHistoryOrders: 'Commandes',
+  Tr.adminHistoryOrdersEmpty: 'Aucune commande',
+  Tr.adminHistoryCommunications: 'Communications',
+  Tr.adminHistoryCommunicationsEmpty: 'Aucune communication',
+  Tr.adminHistoryPhotos: 'photos',
+  Tr.adminHistoryColDate: 'Date',
+  Tr.adminHistoryColType: 'Type',
+  Tr.adminHistoryColLocation: 'Lieu',
+  Tr.adminHistoryColStatus: 'Statut',
+  Tr.adminHistoryColPayment: 'Paiement',
+  Tr.adminHistoryColAmount: 'Montant',
+
+  // Session type labels
+  Tr.sessionTypeFamily: 'Famille',
+  Tr.sessionTypeEquestrian: 'Équestre',
+  Tr.sessionTypeEvent: 'Événement',
+  Tr.sessionTypeMaternity: 'Maternité',
+  Tr.sessionTypeSchool: 'Scolaire',
+  Tr.sessionTypePortrait: 'Portrait',
+  Tr.sessionTypeMiniSession: 'Mini-séance',
+  Tr.sessionTypeOther: 'Autre',
+
+  // Session status labels
+  Tr.sessionStatusScheduled: 'Planifiée',
+  Tr.sessionStatusConfirmed: 'Confirmée',
+  Tr.sessionStatusCompleted: 'Terminée',
+  Tr.sessionStatusCancelled: 'Annulée',
+  Tr.sessionStatusNoShow: 'Absent',
+
+  // Payment status labels
+  Tr.paymentStatusPending: 'En attente',
+  Tr.paymentStatusPartial: 'Partiel',
+  Tr.paymentStatusPaid: 'Payé',
+  Tr.paymentStatusRefunded: 'Remboursé',
+
+  // Gallery status labels
+  Tr.galleryStatusDraft: 'Brouillon',
+  Tr.galleryStatusPublished: 'Publiée',
+  Tr.galleryStatusArchived: 'Archivée',
+  Tr.galleryStatusExpired: 'Expirée',
+
+  // Order status labels
+  Tr.orderStatusPending: 'En attente',
+  Tr.orderStatusProcessing: 'En traitement',
+  Tr.orderStatusShipped: 'Expédiée',
+  Tr.orderStatusDelivered: 'Livrée',
+  Tr.orderStatusCancelled: 'Annulée',
+  Tr.orderStatusRefunded: 'Remboursée',
+
+  // Communication channel labels
+  Tr.commChannelEmail: 'Email',
+  Tr.commChannelSms: 'SMS',
+
+  // Communication status labels
+  Tr.commStatusQueued: 'En file',
+  Tr.commStatusSent: 'Envoyé',
+  Tr.commStatusDelivered: 'Livré',
+  Tr.commStatusFailed: 'Échec',
+  Tr.commStatusBounced: 'Rebond',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Parrainage',
   Tr.acquisitionSourceSocialMedia: 'Réseaux sociaux',

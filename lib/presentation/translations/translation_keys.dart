@@ -161,6 +161,76 @@ abstract final class Tr {
   static const String adminClientDetailNoAddress = 'adminClientDetailNoAddress';
   static const String adminClientDetailNoNotes = 'adminClientDetailNoNotes';
 
+  // Client history
+  static const String adminHistoryStatSessions = 'adminHistoryStatSessions';
+  static const String adminHistoryStatTotalSpent = 'adminHistoryStatTotalSpent';
+  static const String adminHistoryStatLastShooting =
+      'adminHistoryStatLastShooting';
+  static const String adminHistorySessions = 'adminHistorySessions';
+  static const String adminHistorySessionsEmpty = 'adminHistorySessionsEmpty';
+  static const String adminHistoryGalleries = 'adminHistoryGalleries';
+  static const String adminHistoryGalleriesEmpty = 'adminHistoryGalleriesEmpty';
+  static const String adminHistoryOrders = 'adminHistoryOrders';
+  static const String adminHistoryOrdersEmpty = 'adminHistoryOrdersEmpty';
+  static const String adminHistoryCommunications = 'adminHistoryCommunications';
+  static const String adminHistoryCommunicationsEmpty =
+      'adminHistoryCommunicationsEmpty';
+  static const String adminHistoryPhotos = 'adminHistoryPhotos';
+  static const String adminHistoryColDate = 'adminHistoryColDate';
+  static const String adminHistoryColType = 'adminHistoryColType';
+  static const String adminHistoryColLocation = 'adminHistoryColLocation';
+  static const String adminHistoryColStatus = 'adminHistoryColStatus';
+  static const String adminHistoryColPayment = 'adminHistoryColPayment';
+  static const String adminHistoryColAmount = 'adminHistoryColAmount';
+
+  // Session type labels
+  static const String sessionTypeFamily = 'sessionTypeFamily';
+  static const String sessionTypeEquestrian = 'sessionTypeEquestrian';
+  static const String sessionTypeEvent = 'sessionTypeEvent';
+  static const String sessionTypeMaternity = 'sessionTypeMaternity';
+  static const String sessionTypeSchool = 'sessionTypeSchool';
+  static const String sessionTypePortrait = 'sessionTypePortrait';
+  static const String sessionTypeMiniSession = 'sessionTypeMiniSession';
+  static const String sessionTypeOther = 'sessionTypeOther';
+
+  // Session status labels
+  static const String sessionStatusScheduled = 'sessionStatusScheduled';
+  static const String sessionStatusConfirmed = 'sessionStatusConfirmed';
+  static const String sessionStatusCompleted = 'sessionStatusCompleted';
+  static const String sessionStatusCancelled = 'sessionStatusCancelled';
+  static const String sessionStatusNoShow = 'sessionStatusNoShow';
+
+  // Payment status labels
+  static const String paymentStatusPending = 'paymentStatusPending';
+  static const String paymentStatusPartial = 'paymentStatusPartial';
+  static const String paymentStatusPaid = 'paymentStatusPaid';
+  static const String paymentStatusRefunded = 'paymentStatusRefunded';
+
+  // Gallery status labels
+  static const String galleryStatusDraft = 'galleryStatusDraft';
+  static const String galleryStatusPublished = 'galleryStatusPublished';
+  static const String galleryStatusArchived = 'galleryStatusArchived';
+  static const String galleryStatusExpired = 'galleryStatusExpired';
+
+  // Order status labels
+  static const String orderStatusPending = 'orderStatusPending';
+  static const String orderStatusProcessing = 'orderStatusProcessing';
+  static const String orderStatusShipped = 'orderStatusShipped';
+  static const String orderStatusDelivered = 'orderStatusDelivered';
+  static const String orderStatusCancelled = 'orderStatusCancelled';
+  static const String orderStatusRefunded = 'orderStatusRefunded';
+
+  // Communication channel labels
+  static const String commChannelEmail = 'commChannelEmail';
+  static const String commChannelSms = 'commChannelSms';
+
+  // Communication status labels
+  static const String commStatusQueued = 'commStatusQueued';
+  static const String commStatusSent = 'commStatusSent';
+  static const String commStatusDelivered = 'commStatusDelivered';
+  static const String commStatusFailed = 'commStatusFailed';
+  static const String commStatusBounced = 'commStatusBounced';
+
   // Acquisition source labels
   static const String acquisitionSourceReferral = 'acquisitionSourceReferral';
   static const String acquisitionSourceSocialMedia =

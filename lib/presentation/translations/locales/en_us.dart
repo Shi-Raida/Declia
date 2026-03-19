@@ -149,6 +149,74 @@ final Map<String, String> enUs = {
   Tr.adminClientDetailNoAddress: 'No address provided',
   Tr.adminClientDetailNoNotes: 'No notes',
 
+  // Client history
+  Tr.adminHistoryStatSessions: 'Sessions',
+  Tr.adminHistoryStatTotalSpent: 'Total spent',
+  Tr.adminHistoryStatLastShooting: 'Last shooting',
+  Tr.adminHistorySessions: 'Sessions',
+  Tr.adminHistorySessionsEmpty: 'No sessions',
+  Tr.adminHistoryGalleries: 'Galleries',
+  Tr.adminHistoryGalleriesEmpty: 'No galleries',
+  Tr.adminHistoryOrders: 'Orders',
+  Tr.adminHistoryOrdersEmpty: 'No orders',
+  Tr.adminHistoryCommunications: 'Communications',
+  Tr.adminHistoryCommunicationsEmpty: 'No communications',
+  Tr.adminHistoryPhotos: 'photos',
+  Tr.adminHistoryColDate: 'Date',
+  Tr.adminHistoryColType: 'Type',
+  Tr.adminHistoryColLocation: 'Location',
+  Tr.adminHistoryColStatus: 'Status',
+  Tr.adminHistoryColPayment: 'Payment',
+  Tr.adminHistoryColAmount: 'Amount',
+
+  // Session type labels
+  Tr.sessionTypeFamily: 'Family',
+  Tr.sessionTypeEquestrian: 'Equestrian',
+  Tr.sessionTypeEvent: 'Event',
+  Tr.sessionTypeMaternity: 'Maternity',
+  Tr.sessionTypeSchool: 'School',
+  Tr.sessionTypePortrait: 'Portrait',
+  Tr.sessionTypeMiniSession: 'Mini session',
+  Tr.sessionTypeOther: 'Other',
+
+  // Session status labels
+  Tr.sessionStatusScheduled: 'Scheduled',
+  Tr.sessionStatusConfirmed: 'Confirmed',
+  Tr.sessionStatusCompleted: 'Completed',
+  Tr.sessionStatusCancelled: 'Cancelled',
+  Tr.sessionStatusNoShow: 'No show',
+
+  // Payment status labels
+  Tr.paymentStatusPending: 'Pending',
+  Tr.paymentStatusPartial: 'Partial',
+  Tr.paymentStatusPaid: 'Paid',
+  Tr.paymentStatusRefunded: 'Refunded',
+
+  // Gallery status labels
+  Tr.galleryStatusDraft: 'Draft',
+  Tr.galleryStatusPublished: 'Published',
+  Tr.galleryStatusArchived: 'Archived',
+  Tr.galleryStatusExpired: 'Expired',
+
+  // Order status labels
+  Tr.orderStatusPending: 'Pending',
+  Tr.orderStatusProcessing: 'Processing',
+  Tr.orderStatusShipped: 'Shipped',
+  Tr.orderStatusDelivered: 'Delivered',
+  Tr.orderStatusCancelled: 'Cancelled',
+  Tr.orderStatusRefunded: 'Refunded',
+
+  // Communication channel labels
+  Tr.commChannelEmail: 'Email',
+  Tr.commChannelSms: 'SMS',
+
+  // Communication status labels
+  Tr.commStatusQueued: 'Queued',
+  Tr.commStatusSent: 'Sent',
+  Tr.commStatusDelivered: 'Delivered',
+  Tr.commStatusFailed: 'Failed',
+  Tr.commStatusBounced: 'Bounced',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Referral',
   Tr.acquisitionSourceSocialMedia: 'Social media',
