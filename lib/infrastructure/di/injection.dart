@@ -10,6 +10,7 @@ import 'client_history_injection.dart';
 import 'client_injection.dart';
 import 'consent_injection.dart';
 import 'core_injection.dart';
+import 'google_calendar_injection.dart';
 import 'tenant_injection.dart';
 
 abstract final class Injection {
@@ -28,6 +29,7 @@ abstract final class Injection {
     ClientHistoryInjection.init();
     CalendarInjection.init();
     AvailabilityInjection.init();
+    GoogleCalendarInjection.init();
 
     Get.find<AppLogger>().debug('Core services registered');
   }
