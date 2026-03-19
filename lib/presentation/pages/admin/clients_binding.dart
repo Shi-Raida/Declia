@@ -5,6 +5,7 @@ import '../../../domain/entities/client.dart';
 import '../../../usecases/client/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/clients_controller.dart';
+import '../../services/navigation_service.dart';
 
 class ClientsBinding extends Bindings {
   @override
@@ -15,6 +16,7 @@ class ClientsBinding extends Bindings {
         Get.find<UseCase<List<Client>, NoParams>>(),
         Get.find<UseCase<List<Client>, SearchClientsParams>>(),
         Get.find<UseCase<void, DeleteClientParams>>(),
+        Get.find<NavigationService>(),
       ),
     );
   }

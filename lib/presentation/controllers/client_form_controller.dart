@@ -83,6 +83,8 @@ final class ClientFormController extends GetxController {
     super.onClose();
   }
 
+  void cancel() => _nav.goBack();
+
   void addTag(String tag) {
     final t = tag.trim();
     if (t.isNotEmpty && !tags.contains(t)) {

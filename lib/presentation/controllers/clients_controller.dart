@@ -4,17 +4,20 @@ import '../../domain/entities/client.dart';
 import '../../usecases/client/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/client_view_model.dart';
+import '../services/navigation_service.dart';
 
 final class ClientsController extends GetxController {
   ClientsController(
     this._fetchClients,
     this._searchClients,
     this._deleteClient,
+    this._nav,
   );
 
   final UseCase<List<Client>, NoParams> _fetchClients;
   final UseCase<List<Client>, SearchClientsParams> _searchClients;
   final UseCase<void, DeleteClientParams> _deleteClient;
+  final NavigationService _nav;
 
   final clients = <ClientViewModel>[].obs;
   final _entityMap = <String, Client>{};
@@ -79,6 +82,12 @@ final class ClientsController extends GetxController {
     );
     isLoading.value = false;
   }
+
+  void viewClient(ClientViewModel vm) =>
+      _nav.toClientDetail(vm.id, arguments: vm);
+  void editClient(ClientViewModel vm) =>
+      _nav.toClientEdit(vm.id, arguments: vm);
+  void createNewClient() => _nav.toClientNew();
 
   Future<bool> removeClient(String id) async {
     final result = await _deleteClient((id: id));

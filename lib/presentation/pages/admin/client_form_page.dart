@@ -105,7 +105,7 @@ class _FormActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: () => Get.back(),
+          onPressed: () => controller.cancel(),
           child: Text(
             Tr.adminClientFormCancel.tr,
             style: AppTypography.button().copyWith(color: AppColors.pierre),

@@ -50,7 +50,7 @@ class ClientsTable extends StatelessWidget {
       cells: [
         DataCell(
           GestureDetector(
-            onTap: () => Get.toNamed('/admin/clients/${vm.id}', arguments: vm),
+            onTap: () => controller.viewClient(vm),
             child: Text(
               '${vm.lastName} ${vm.firstName}',
               style: AppTypography.bodyMedium().copyWith(
@@ -119,16 +119,14 @@ class _ActionsCell extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.visibility_outlined, size: 18),
           color: AppColors.bleuOuvert,
-          tooltip: 'Voir',
-          onPressed: () =>
-              Get.toNamed('/admin/clients/${vm.id}', arguments: vm),
+          tooltip: Tr.adminClientDetailView.tr,
+          onPressed: () => controller.viewClient(vm),
         ),
         IconButton(
           icon: const Icon(Icons.edit_outlined, size: 18),
           color: AppColors.pierre,
           tooltip: Tr.adminClientDetailEdit.tr,
-          onPressed: () =>
-              Get.toNamed('/admin/clients/${vm.id}/edit', arguments: vm),
+          onPressed: () => controller.editClient(vm),
         ),
         IconButton(
           icon: const Icon(Icons.delete_outline, size: 18),

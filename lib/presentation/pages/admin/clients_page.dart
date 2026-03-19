@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../core/enums/acquisition_source.dart';
 import '../../controllers/clients_controller.dart';
-import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
@@ -80,7 +79,7 @@ class _ClientsToolbar extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           FilledButton.icon(
-            onPressed: () => Get.toNamed(AppRoutes.adminClientNew),
+            onPressed: () => controller.createNewClient(),
             icon: const Icon(Icons.add, size: 18),
             label: Text(Tr.adminClientsNew.tr),
             style: FilledButton.styleFrom(

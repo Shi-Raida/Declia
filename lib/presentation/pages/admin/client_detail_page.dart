@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/clients_controller.dart';
 import '../../models/client_view_model.dart';
+import '../../services/navigation_service.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
@@ -151,8 +153,8 @@ class _DetailActions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         OutlinedButton.icon(
-          onPressed: () => Get.toNamed(
-            '/admin/clients/${client.id}/edit',
+          onPressed: () => Get.find<NavigationService>().toClientEdit(
+            client.id,
             arguments: client,
           ),
           icon: const Icon(Icons.edit_outlined, size: 16),
@@ -199,9 +201,10 @@ class _DetailActions extends StatelessWidget {
             ),
           ),
           FilledButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(ctx).pop();
-              Get.back(); // nav back to list; list controller handles deletion
+              await Get.find<ClientsController>().removeClient(client.id);
+              Get.find<NavigationService>().goBack();
             },
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,
