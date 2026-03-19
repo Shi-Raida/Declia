@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../core/logger/app_logger.dart';
+import '../../../domain/entities/client.dart';
 import '../../../domain/entities/client_history.dart';
 import '../../../usecases/client/params.dart';
 import '../../../usecases/client_history/params.dart';
@@ -19,6 +20,7 @@ class ClientDetailBinding extends Bindings {
         Get.find<UseCase<ClientHistory, FetchClientHistoryParams>>(),
         Get.find<UseCase<void, DeleteClientParams>>(),
         Get.find<NavigationService>(),
+        Get.find<UseCase<Client, GetClientParams>>(),
       ),
     );
   }

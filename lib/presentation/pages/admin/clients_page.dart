@@ -110,21 +110,6 @@ class _ClientsFilterBar extends StatefulWidget {
 }
 
 class _ClientsFilterBarState extends State<_ClientsFilterBar> {
-  final _tagController = TextEditingController();
-
-  @override
-  void dispose() {
-    _tagController.dispose();
-    super.dispose();
-  }
-
-  void _addTag() {
-    final tag = _tagController.text.trim();
-    if (tag.isEmpty) return;
-    widget.controller.addTag(tag);
-    _tagController.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -234,42 +219,60 @@ class _ClientsFilterBarState extends State<_ClientsFilterBar> {
                 SizedBox(
                   width: 160,
                   height: 32,
-                  child: TextField(
-                    controller: _tagController,
-                    style: AppTypography.bodySmall(),
-                    decoration: InputDecoration(
-                      hintText: Tr.adminClientsFilterTagHint.tr,
-                      hintStyle: AppTypography.bodySmall(),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 0,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: const BorderSide(color: AppColors.border),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: const BorderSide(
-                          color: AppColors.terracotta,
+                  child: Autocomplete<String>(
+                    optionsBuilder: (textEditingValue) {
+                      final input = textEditingValue.text.toLowerCase();
+                      if (input.isEmpty) return const [];
+                      return ctrl.availableTags.where(
+                        (tag) =>
+                            tag.toLowerCase().contains(input) &&
+                            !q.tags.contains(tag),
+                      );
+                    },
+                    onSelected: (tag) => ctrl.addTag(tag),
+                    fieldViewBuilder: (
+                      context,
+                      textController,
+                      focusNode,
+                      onFieldSubmitted,
+                    ) {
+                      return TextField(
+                        controller: textController,
+                        focusNode: focusNode,
+                        style: AppTypography.bodySmall(),
+                        decoration: InputDecoration(
+                          hintText: Tr.adminClientsFilterTagHint.tr,
+                          hintStyle: AppTypography.bodySmall(),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 0,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            borderSide:
+                                const BorderSide(color: AppColors.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(6),
+                            borderSide: const BorderSide(
+                              color: AppColors.terracotta,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    onSubmitted: (_) => _addTag(),
-                  ),
-                ),
-                SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: IconButton(
-                    icon: const Icon(Icons.add, size: 16),
-                    onPressed: _addTag,
-                    color: AppColors.terracotta,
-                    padding: EdgeInsets.zero,
+                        onSubmitted: (value) {
+                          final tag = value.trim();
+                          if (tag.isNotEmpty) {
+                            ctrl.addTag(tag);
+                            textController.clear();
+                          }
+                        },
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(width: 4),

@@ -13,11 +13,14 @@ final class ClientFormController extends GetxController {
   ClientFormController(
     this._saveClient, {
     required NavigationService navigationService,
+    required UseCase<List<String>, NoParams> fetchDistinctTags,
     this.existingClient,
-  }) : _nav = navigationService;
+  }) : _nav = navigationService,
+       _fetchDistinctTags = fetchDistinctTags;
 
   final UseCase<Client, SaveClientParams> _saveClient;
   final NavigationService _nav;
+  final UseCase<List<String>, NoParams> _fetchDistinctTags;
   final Client? existingClient;
 
   bool get isEditing => existingClient != null;
@@ -32,12 +35,12 @@ final class ClientFormController extends GetxController {
   late final TextEditingController postalCodeCtrl;
   late final TextEditingController countryCtrl;
   late final TextEditingController notesCtrl;
-  late final TextEditingController tagsInputCtrl;
 
   // Reactive fields
   final dateOfBirth = Rxn<DateTime>();
   final acquisitionSource = Rxn<AcquisitionSource>();
   final tags = <String>[].obs;
+  final availableTags = <String>[].obs;
   final commEmail = false.obs;
   final commSms = false.obs;
   final commPhone = false.obs;
@@ -58,7 +61,6 @@ final class ClientFormController extends GetxController {
     postalCodeCtrl = TextEditingController(text: c?.address?.postalCode ?? '');
     countryCtrl = TextEditingController(text: c?.address?.country ?? '');
     notesCtrl = TextEditingController(text: c?.notes ?? '');
-    tagsInputCtrl = TextEditingController();
 
     dateOfBirth.value = c?.dateOfBirth;
     acquisitionSource.value = c?.acquisitionSource;
@@ -66,6 +68,8 @@ final class ClientFormController extends GetxController {
     commEmail.value = c?.communicationPrefs?.email ?? false;
     commSms.value = c?.communicationPrefs?.sms ?? false;
     commPhone.value = c?.communicationPrefs?.phone ?? false;
+
+    _loadTags();
   }
 
   @override
@@ -79,8 +83,12 @@ final class ClientFormController extends GetxController {
     postalCodeCtrl.dispose();
     countryCtrl.dispose();
     notesCtrl.dispose();
-    tagsInputCtrl.dispose();
     super.onClose();
+  }
+
+  Future<void> _loadTags() async {
+    final result = await _fetchDistinctTags(const NoParams());
+    result.fold(ok: (t) => availableTags.assignAll(t), err: (_) {});
   }
 
   void cancel() => _nav.goBack();
@@ -90,7 +98,6 @@ final class ClientFormController extends GetxController {
     if (t.isNotEmpty && !tags.contains(t)) {
       tags.add(t);
     }
-    tagsInputCtrl.clear();
   }
 
   void removeTag(String tag) => tags.remove(tag);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 
 import '../../core/enums/acquisition_source.dart';
@@ -19,6 +21,7 @@ final class ClientsController extends GetxController {
     this._deleteClient,
     this._nav,
     this._fetchSummaryStats,
+    this._fetchDistinctTags,
   );
 
   final UseCase<PagedResult<Client>, FetchClientsParams> _fetchClientList;
@@ -26,6 +29,7 @@ final class ClientsController extends GetxController {
   final NavigationService _nav;
   final UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams>
   _fetchSummaryStats;
+  final UseCase<List<String>, NoParams> _fetchDistinctTags;
 
   final clients = <ClientViewModel>[].obs;
   final _entityMap = <String, Client>{};
@@ -34,6 +38,9 @@ final class ClientsController extends GetxController {
   final searchQuery = ''.obs;
   final query = const ClientListQuery().obs;
   final totalCount = 0.obs;
+  final availableTags = <String>[].obs;
+
+  Timer? _searchTimer;
 
   Client? entityById(String id) => _entityMap[id];
 
@@ -45,22 +52,29 @@ final class ClientsController extends GetxController {
   bool get hasActiveFilters =>
       query.value.tags.isNotEmpty || query.value.acquisitionSource != null;
 
-  Worker? _debounceWorker;
-
   @override
   void onInit() {
     super.onInit();
     loadClients();
-    _debounceWorker = debounce(searchQuery, (q) {
-      query.value = query.value.copyWith(search: q.trim(), page: 0);
-      loadClients();
-    }, time: const Duration(milliseconds: 300));
+    _loadTags();
+    ever(searchQuery, (q) {
+      _searchTimer?.cancel();
+      _searchTimer = Timer(const Duration(milliseconds: 300), () {
+        query.value = query.value.copyWith(search: q.trim(), page: 0);
+        loadClients();
+      });
+    });
   }
 
   @override
   void onClose() {
-    _debounceWorker?.dispose();
+    _searchTimer?.cancel();
     super.onClose();
+  }
+
+  Future<void> _loadTags() async {
+    final result = await _fetchDistinctTags(const NoParams());
+    result.fold(ok: (tags) => availableTags.assignAll(tags), err: (_) {});
   }
 
   Future<void> loadClients() async {

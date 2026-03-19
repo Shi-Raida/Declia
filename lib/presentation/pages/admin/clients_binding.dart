@@ -22,6 +22,7 @@ class ClientsBinding extends Bindings {
         Get.find<
           UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams>
         >(),
+        Get.find<UseCase<List<String>, NoParams>>(tag: 'fetchDistinctTags'),
       ),
     );
   }
