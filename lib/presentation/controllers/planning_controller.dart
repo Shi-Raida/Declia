@@ -1,15 +1,32 @@
 import 'package:get/get.dart';
 
 import '../../core/enums/calendar_view.dart';
+import '../../domain/entities/availability_rule.dart';
 import '../../domain/entities/calendar_event.dart';
+import '../../domain/entities/time_slot.dart';
+import '../../usecases/availability/compute_effective_availability.dart';
+import '../../usecases/availability/params.dart';
 import '../../usecases/calendar/params.dart';
 import '../../usecases/usecase.dart';
 import '../services/navigation_service.dart';
 
 final class PlanningController extends GetxController {
-  PlanningController(this._fetchSessions, this._nav);
+  PlanningController(
+    this._fetchSessions,
+    this._fetchAvailabilityRules,
+    this._createAvailabilityRule,
+    this._updateAvailabilityRule,
+    this._deleteAvailabilityRule,
+    this._nav,
+  );
 
   final UseCase<List<CalendarEvent>, FetchCalendarSessionsParams> _fetchSessions;
+  final UseCase<List<AvailabilityRule>, NoParams> _fetchAvailabilityRules;
+  final UseCase<AvailabilityRule, CreateAvailabilityRuleParams>
+  _createAvailabilityRule;
+  final UseCase<AvailabilityRule, UpdateAvailabilityRuleParams>
+  _updateAvailabilityRule;
+  final UseCase<void, DeleteAvailabilityRuleParams> _deleteAvailabilityRule;
   final NavigationService _nav;
 
   final currentView = CalendarView.month.obs;
@@ -18,10 +35,14 @@ final class PlanningController extends GetxController {
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
 
+  final availabilityRules = <AvailabilityRule>[].obs;
+  final showAvailability = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     loadSessions();
+    loadAvailabilityRules();
   }
 
   Future<void> loadSessions() async {
@@ -34,6 +55,51 @@ final class PlanningController extends GetxController {
       err: (f) => errorMessage.value = f.message,
     );
     isLoading.value = false;
+  }
+
+  Future<void> loadAvailabilityRules() async {
+    final result = await _fetchAvailabilityRules(const NoParams());
+    result.fold(
+      ok: (list) => availabilityRules.value = list,
+      err: (_) {},
+    );
+  }
+
+  void toggleAvailability() {
+    showAvailability.value = !showAvailability.value;
+  }
+
+  List<TimeSlot> availableSlotsForDate(DateTime date) =>
+      computeEffectiveAvailability(availabilityRules, events, date);
+
+  bool isDateBlocked(DateTime date) {
+    final dateOnly = DateTime(date.year, date.month, date.day);
+    return availabilityRules.any(
+      (r) =>
+          r.ruleType.name == 'blocked' &&
+          r.specificDate != null &&
+          r.specificDate!.year == dateOnly.year &&
+          r.specificDate!.month == dateOnly.month &&
+          r.specificDate!.day == dateOnly.day,
+    );
+  }
+
+  bool hasAvailability(DateTime date) =>
+      availableSlotsForDate(date).isNotEmpty;
+
+  Future<void> createRule(AvailabilityRule rule) async {
+    final result = await _createAvailabilityRule((rule: rule));
+    result.fold(ok: (_) => loadAvailabilityRules(), err: (_) {});
+  }
+
+  Future<void> updateRule(AvailabilityRule rule) async {
+    final result = await _updateAvailabilityRule((rule: rule));
+    result.fold(ok: (_) => loadAvailabilityRules(), err: (_) {});
+  }
+
+  Future<void> deleteRule(String id) async {
+    final result = await _deleteAvailabilityRule((id: id));
+    result.fold(ok: (_) => loadAvailabilityRules(), err: (_) {});
   }
 
   ({DateTime start, DateTime end}) _computeRange() {

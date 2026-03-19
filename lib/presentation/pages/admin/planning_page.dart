@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 
 import '../../../core/enums/calendar_view.dart';
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/time_slot.dart';
 import '../../controllers/planning_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/admin/admin_layout.dart';
+import 'availability_rules_list_dialog.dart';
 import 'planning_day_view.dart';
 import 'planning_month_view.dart';
 import 'planning_session_dialog.dart';
@@ -36,6 +38,18 @@ class _PlanningToolbar extends StatelessWidget {
   const _PlanningToolbar({required this.controller});
 
   final PlanningController controller;
+
+  void _showRulesDialog(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (_) => AvailabilityRulesListDialog(
+        rules: controller.availabilityRules,
+        onAdd: controller.createRule,
+        onEdit: controller.updateRule,
+        onDelete: controller.deleteRule,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +114,26 @@ class _PlanningToolbar extends StatelessWidget {
               ),
             ),
             const Spacer(),
+            // Availability toggle
+            IconButton(
+              icon: Icon(
+                Icons.event_available,
+                color: controller.showAvailability.value
+                    ? AppColors.terracotta
+                    : AppColors.pierre,
+              ),
+              tooltip: Tr.adminAvailabilityToggle.tr,
+              onPressed: controller.toggleAvailability,
+            ),
+            // Manage availability rules
+            IconButton(
+              icon: const Icon(Icons.tune),
+              tooltip: Tr.adminAvailabilityManage.tr,
+              onPressed: () => _showRulesDialog(context),
+              style: IconButton.styleFrom(
+                foregroundColor: AppColors.crepuscule,
+              ),
+            ),
             // Loading indicator
             if (controller.isLoading.value)
               const SizedBox(
@@ -141,6 +175,13 @@ class _PlanningBody extends StatelessWidget {
       final view = controller.currentView.value;
       final date = controller.focusedDate.value;
       final events = controller.events;
+      final showAvailability = controller.showAvailability.value;
+
+      List<TimeSlot> slotsForDate(DateTime d) =>
+          showAvailability ? controller.availableSlotsForDate(d) : [];
+
+      bool isBlocked(DateTime d) =>
+          showAvailability && controller.isDateBlocked(d);
 
       return switch (view) {
         CalendarView.month => PlanningMonthView(
@@ -148,16 +189,25 @@ class _PlanningBody extends StatelessWidget {
           events: events,
           onDayTap: controller.selectDate,
           onEventTap: (e) => _showSessionDetail(context, e),
+          showAvailability: showAvailability,
+          hasAvailability: controller.hasAvailability,
+          isDateBlocked: controller.isDateBlocked,
         ),
         CalendarView.week => PlanningWeekView(
           focusedDate: date,
           events: events,
           onEventTap: (e) => _showSessionDetail(context, e),
+          showAvailability: showAvailability,
+          availableSlotsForDate: slotsForDate,
+          isDateBlocked: isBlocked,
         ),
         CalendarView.day => PlanningDayView(
           focusedDate: date,
           events: events,
           onEventTap: (e) => _showSessionDetail(context, e),
+          showAvailability: showAvailability,
+          availableSlots: slotsForDate(date),
+          isBlocked: isBlocked(date),
         ),
       };
     });

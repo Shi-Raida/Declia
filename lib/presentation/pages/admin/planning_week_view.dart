@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/time_slot.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import 'planning_event_card.dart';
@@ -11,11 +12,17 @@ class PlanningWeekView extends StatelessWidget {
     required this.focusedDate,
     required this.events,
     required this.onEventTap,
+    this.showAvailability = false,
+    this.availableSlotsForDate,
+    this.isDateBlocked,
   });
 
   final DateTime focusedDate;
   final List<CalendarEvent> events;
   final void Function(CalendarEvent) onEventTap;
+  final bool showAvailability;
+  final List<TimeSlot> Function(DateTime)? availableSlotsForDate;
+  final bool Function(DateTime)? isDateBlocked;
 
   static const double _hourHeight = 60.0;
   static const int _startHour = 8;
@@ -54,6 +61,11 @@ class PlanningWeekView extends StatelessWidget {
                         endHour: _endHour,
                         hourHeight: _hourHeight,
                         onEventTap: onEventTap,
+                        availableSlots: showAvailability
+                            ? (availableSlotsForDate?.call(day) ?? [])
+                            : [],
+                        isBlocked: showAvailability &&
+                            (isDateBlocked?.call(day) ?? false),
                       ),
                     ),
                   )
@@ -83,6 +95,8 @@ class _WeekDayColumn extends StatelessWidget {
     required this.endHour,
     required this.hourHeight,
     required this.onEventTap,
+    required this.availableSlots,
+    required this.isBlocked,
   });
 
   final DateTime date;
@@ -91,6 +105,8 @@ class _WeekDayColumn extends StatelessWidget {
   final int endHour;
   final double hourHeight;
   final void Function(CalendarEvent) onEventTap;
+  final List<TimeSlot> availableSlots;
+  final bool isBlocked;
 
   bool get _isToday {
     final now = DateTime.now();
@@ -140,6 +156,23 @@ class _WeekDayColumn extends StatelessWidget {
           height: totalHeight,
           child: Stack(
             children: [
+              // Blocked overlay
+              if (isBlocked)
+                Positioned.fill(
+                  child: Container(color: Colors.grey.withAlpha(40)),
+                ),
+              // Availability slots (green background)
+              if (!isBlocked)
+                for (final slot in availableSlots)
+                  Positioned(
+                    top: _topOffsetFromDt(slot.start),
+                    height: _heightFromSlot(slot),
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: Colors.green.withAlpha(30),
+                    ),
+                  ),
               // Hour lines
               for (int i = 0; i <= endHour - startHour; i++)
                 Positioned(
@@ -172,6 +205,21 @@ class _WeekDayColumn extends StatelessWidget {
         (scheduledAt.hour - startHour) * 60 + scheduledAt.minute;
     final totalMinutes = (endHour - startHour) * 60;
     return (minutes.clamp(0, totalMinutes - 60) / 60) * hourHeight;
+  }
+
+  double _topOffsetFromDt(DateTime dt) {
+    final minutes = (dt.hour - startHour) * 60 + dt.minute;
+    final totalMinutes = (endHour - startHour) * 60;
+    return (minutes.clamp(0, totalMinutes) / 60) * hourHeight;
+  }
+
+  double _heightFromSlot(TimeSlot slot) {
+    final startMinutes = (slot.start.hour - startHour) * 60 + slot.start.minute;
+    final endMinutes = (slot.end.hour - startHour) * 60 + slot.end.minute;
+    final totalMinutes = (endHour - startHour) * 60;
+    final clampedStart = startMinutes.clamp(0, totalMinutes);
+    final clampedEnd = endMinutes.clamp(0, totalMinutes);
+    return ((clampedEnd - clampedStart) / 60) * hourHeight;
   }
 
   String _dayAbbrev(int weekday) {

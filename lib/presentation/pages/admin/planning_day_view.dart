@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/time_slot.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
@@ -13,11 +14,17 @@ class PlanningDayView extends StatelessWidget {
     required this.focusedDate,
     required this.events,
     required this.onEventTap,
+    this.showAvailability = false,
+    this.availableSlots = const [],
+    this.isBlocked = false,
   });
 
   final DateTime focusedDate;
   final List<CalendarEvent> events;
   final void Function(CalendarEvent) onEventTap;
+  final bool showAvailability;
+  final List<TimeSlot> availableSlots;
+  final bool isBlocked;
 
   static const double _hourHeight = 64.0;
   static const int _startHour = 8;
@@ -65,10 +72,29 @@ class PlanningDayView extends StatelessWidget {
                 const SizedBox(height: 8),
                 SizedBox(
                   height: totalHeight,
-                  child: events.isEmpty
+                  child: events.isEmpty && !showAvailability
                       ? _EmptyDay()
                       : Stack(
                           children: [
+                            // Blocked overlay
+                            if (showAvailability && isBlocked)
+                              Positioned.fill(
+                                child: Container(
+                                  color: Colors.grey.withAlpha(40),
+                                ),
+                              ),
+                            // Availability slots
+                            if (showAvailability && !isBlocked)
+                              for (final slot in availableSlots)
+                                Positioned(
+                                  top: _topOffsetFromDt(slot.start),
+                                  height: _heightFromSlot(slot),
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    color: Colors.green.withAlpha(30),
+                                  ),
+                                ),
                             // Hour lines
                             for (
                               int i = 0;
@@ -82,6 +108,14 @@ class PlanningDayView extends StatelessWidget {
                                 child: const Divider(
                                   height: 1,
                                   color: AppColors.border,
+                                ),
+                              ),
+                            // Empty message when no events
+                            if (events.isEmpty)
+                              Center(
+                                child: Text(
+                                  Tr.adminPlanningNoSessions.tr,
+                                  style: AppTypography.bodySmall(),
                                 ),
                               ),
                             // Events
@@ -112,6 +146,22 @@ class PlanningDayView extends StatelessWidget {
         (scheduledAt.hour - _startHour) * 60 + scheduledAt.minute;
     final totalMinutes = (_endHour - _startHour) * 60;
     return (minutes.clamp(0, totalMinutes - 60) / 60) * _hourHeight;
+  }
+
+  double _topOffsetFromDt(DateTime dt) {
+    final minutes = (dt.hour - _startHour) * 60 + dt.minute;
+    final totalMinutes = (_endHour - _startHour) * 60;
+    return (minutes.clamp(0, totalMinutes) / 60) * _hourHeight;
+  }
+
+  double _heightFromSlot(TimeSlot slot) {
+    final startMinutes =
+        (slot.start.hour - _startHour) * 60 + slot.start.minute;
+    final endMinutes = (slot.end.hour - _startHour) * 60 + slot.end.minute;
+    final totalMinutes = (_endHour - _startHour) * 60;
+    final clampedStart = startMinutes.clamp(0, totalMinutes);
+    final clampedEnd = endMinutes.clamp(0, totalMinutes);
+    return ((clampedEnd - clampedStart) / 60) * _hourHeight;
   }
 }
 

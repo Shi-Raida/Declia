@@ -14,12 +14,18 @@ class PlanningMonthView extends StatelessWidget {
     required this.events,
     required this.onDayTap,
     required this.onEventTap,
+    this.showAvailability = false,
+    this.hasAvailability,
+    this.isDateBlocked,
   });
 
   final DateTime focusedDate;
   final List<CalendarEvent> events;
   final void Function(DateTime) onDayTap;
   final void Function(CalendarEvent) onEventTap;
+  final bool showAvailability;
+  final bool Function(DateTime)? hasAvailability;
+  final bool Function(DateTime)? isDateBlocked;
 
   static const _dayHeaders = [
     Tr.adminPlanningMonday,
@@ -83,6 +89,9 @@ class PlanningMonthView extends StatelessWidget {
                             ),
                             onDayTap: onDayTap,
                             onEventTap: onEventTap,
+                            showAvailability: showAvailability,
+                            hasAvailability: hasAvailability,
+                            isDateBlocked: isDateBlocked,
                           ),
                         ),
                     ],
@@ -124,6 +133,9 @@ class _DayCell extends StatelessWidget {
     required this.events,
     required this.onDayTap,
     required this.onEventTap,
+    required this.showAvailability,
+    this.hasAvailability,
+    this.isDateBlocked,
   });
 
   final DateTime date;
@@ -131,6 +143,9 @@ class _DayCell extends StatelessWidget {
   final List<CalendarEvent> events;
   final void Function(DateTime) onDayTap;
   final void Function(CalendarEvent) onEventTap;
+  final bool showAvailability;
+  final bool Function(DateTime)? hasAvailability;
+  final bool Function(DateTime)? isDateBlocked;
 
   bool get _isCurrentMonth => date.month == focusedMonth;
 
@@ -147,6 +162,10 @@ class _DayCell extends StatelessWidget {
     final visible = events.take(maxVisible).toList();
     final overflow = events.length - maxVisible;
 
+    final blocked = showAvailability && (isDateBlocked?.call(date) ?? false);
+    final hasSlots =
+        showAvailability && !blocked && (hasAvailability?.call(date) ?? false);
+
     return GestureDetector(
       onTap: () => onDayTap(date),
       child: Container(
@@ -155,39 +174,62 @@ class _DayCell extends StatelessWidget {
             right: BorderSide(color: AppColors.border),
             bottom: BorderSide(color: AppColors.border),
           ),
-          color: _isCurrentMonth ? null : AppColors.bg,
+          color: blocked
+              ? Colors.grey.withAlpha(25)
+              : _isCurrentMonth
+                  ? null
+                  : AppColors.bg,
         ),
         padding: const EdgeInsets.all(4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Day number
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                width: 24,
-                height: 24,
-                decoration: _isToday
-                    ? const BoxDecoration(
-                        color: AppColors.terracotta,
-                        shape: BoxShape.circle,
-                      )
-                    : null,
-                child: Center(
-                  child: Text(
-                    '${date.day}',
-                    style: AppTypography.bodySmall().copyWith(
-                      fontWeight:
-                          _isToday ? FontWeight.w700 : FontWeight.w400,
-                      color: _isToday
-                          ? Colors.white
-                          : _isCurrentMonth
-                              ? AppColors.encre
-                              : AppColors.pierre,
+            // Day number row with optional availability dot
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Availability dot
+                if (showAvailability)
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: blocked
+                          ? AppColors.pierre
+                          : hasSlots
+                              ? Colors.green
+                              : Colors.transparent,
+                    ),
+                  )
+                else
+                  const SizedBox(width: 6),
+                // Day number
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: _isToday
+                      ? const BoxDecoration(
+                          color: AppColors.terracotta,
+                          shape: BoxShape.circle,
+                        )
+                      : null,
+                  child: Center(
+                    child: Text(
+                      '${date.day}',
+                      style: AppTypography.bodySmall().copyWith(
+                        fontWeight:
+                            _isToday ? FontWeight.w700 : FontWeight.w400,
+                        color: _isToday
+                            ? Colors.white
+                            : _isCurrentMonth
+                                ? AppColors.encre
+                                : AppColors.pierre,
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(height: 2),
             // Event pills
