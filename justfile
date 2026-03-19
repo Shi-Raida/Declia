@@ -151,7 +151,7 @@ sb-pull:
 
 # Serve Edge Functions locally
 sb-functions-serve:
-    npx supabase functions serve
+    npx supabase functions serve --env-file supabase/.env.local
 
 # Deploy all Edge Functions
 sb-deploy-functions:
