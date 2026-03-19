@@ -29,6 +29,7 @@ sealed class Failure {
     ClientNotFoundException(:final message) => ClientNotFoundFailure(message),
     UnauthorisedClientAccessException(:final message) =>
       UnauthorisedClientAccessFailure(message),
+    GoogleCalendarException(:final message) => GoogleCalendarFailure(message),
   };
 
   @override
@@ -91,4 +92,8 @@ class ClientNotFoundFailure extends Failure {
 
 class UnauthorisedClientAccessFailure extends Failure {
   const UnauthorisedClientAccessFailure(super.message);
+}
+
+class GoogleCalendarFailure extends Failure {
+  const GoogleCalendarFailure(super.message);
 }

@@ -64,3 +64,7 @@ final class UnauthorisedClientAccessException extends AppException {
   const UnauthorisedClientAccessException()
     : super('Unauthorised access to client');
 }
+
+final class GoogleCalendarException extends AppException {
+  const GoogleCalendarException(super.message);
+}
