@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/logger/app_logger.dart';
-import '../../core/storage/local_storage.dart';
 import '../../usecases/consent/params.dart';
 import '../../usecases/usecase.dart';
 import '../controllers/auth_state_controller.dart';
@@ -23,12 +22,15 @@ abstract final class PresentationInjection {
       ),
       permanent: true,
     );
+    final consentResult = await Get.find<UseCase<bool, NoParams>>()(
+      const NoParams(),
+    );
+    final hasConsent = consentResult.fold(ok: (v) => v, err: (_) => false);
     Get.put<CookieConsentController>(
       CookieConsentController(
         saveCookieConsent: Get.find<UseCase<void, SaveCookieConsentParams>>(),
         navigationService: Get.find<NavigationService>(),
-        hasExistingConsent:
-            Get.find<LocalStorage>().read(saveCookieConsentKey) != null,
+        hasExistingConsent: hasConsent,
       ),
       permanent: true,
     );

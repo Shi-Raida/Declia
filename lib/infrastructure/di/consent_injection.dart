@@ -6,6 +6,7 @@ import '../../core/storage/local_storage.dart';
 import '../../core/utils/uuid_generator.dart';
 import '../../domain/repositories/consent_repository.dart';
 import '../../usecases/consent/params.dart';
+import '../../usecases/consent/has_existing_consent.dart';
 import '../../usecases/consent/save_cookie_consent.dart';
 import '../../usecases/usecase.dart';
 import '../datasources/contract/consent_data_source.dart';
@@ -30,6 +31,11 @@ abstract final class ConsentInjection {
     );
 
     // Use cases
+    Get.lazyPut<UseCase<bool, NoParams>>(
+      () => HasExistingConsent(Get.find<LocalStorage>()),
+      fenix: true,
+    );
+
     Get.lazyPut<UseCase<void, SaveCookieConsentParams>>(
       () => SaveCookieConsent(
         Get.find<ConsentRepository>(),
