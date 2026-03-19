@@ -4,8 +4,7 @@ import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_list_query.dart';
 import 'package:declia/domain/repositories/client_repository.dart';
-import 'package:declia/usecases/client/fetch_clients.dart';
-import 'package:declia/usecases/usecase.dart';
+import 'package:declia/usecases/client/fetch_client_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _now = DateTime(2026, 3, 18);
@@ -19,89 +18,79 @@ final _fixtureClients = [
     createdAt: _now,
     updatedAt: _now,
   ),
-  Client(
-    id: '2',
-    tenantId: 'tid',
-    firstName: 'Bob',
-    lastName: 'Martin',
-    createdAt: _now,
-    updatedAt: _now,
-  ),
 ];
 
 final class _FakeClientRepository implements ClientRepository {
-  List<Client> clientsToReturn = [];
+  ClientListQuery? lastQuery;
+  PagedResult<Client> resultToReturn = PagedResult(
+    items: _fixtureClients,
+    totalCount: 1,
+  );
   Failure? failureToReturn;
-
-  @override
-  Future<Result<List<Client>, Failure>> fetchAll() async {
-    if (failureToReturn != null) return Err(failureToReturn!);
-    return Ok(clientsToReturn);
-  }
-
-  @override
-  Future<Result<Client, Failure>> fetchById(String id) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<Client, Failure>> create(Client client) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<Client, Failure>> update(Client client) =>
-      throw UnimplementedError();
-
-  @override
-  Future<Result<void, Failure>> delete(String id) => throw UnimplementedError();
-
-  @override
-  Future<Result<List<Client>, Failure>> search(String query) =>
-      throw UnimplementedError();
 
   @override
   Future<Result<PagedResult<Client>, Failure>> fetchList(
     ClientListQuery query,
-  ) => throw UnimplementedError();
+  ) async {
+    lastQuery = query;
+    if (failureToReturn != null) return Err(failureToReturn!);
+    return Ok(resultToReturn);
+  }
+
+  @override
+  Future<Result<List<Client>, Failure>> fetchAll() =>
+      throw UnimplementedError();
+  @override
+  Future<Result<Client, Failure>> fetchById(String id) =>
+      throw UnimplementedError();
+  @override
+  Future<Result<Client, Failure>> create(Client client) =>
+      throw UnimplementedError();
+  @override
+  Future<Result<Client, Failure>> update(Client client) =>
+      throw UnimplementedError();
+  @override
+  Future<Result<void, Failure>> delete(String id) => throw UnimplementedError();
+  @override
+  Future<Result<List<Client>, Failure>> search(String query) =>
+      throw UnimplementedError();
 }
 
 void main() {
   late _FakeClientRepository repo;
-  late FetchClients fetchClients;
+  late FetchClientList fetchClientList;
 
   setUp(() {
     repo = _FakeClientRepository();
-    fetchClients = FetchClients(repo);
+    fetchClientList = FetchClientList(repo);
   });
 
-  group('FetchClients', () {
-    test('returns Ok with list of clients', () async {
-      repo.clientsToReturn = _fixtureClients;
+  group('FetchClientList', () {
+    test('delegates query to repository.fetchList', () async {
+      const query = ClientListQuery(search: 'Alice', page: 1);
 
-      final result = await fetchClients(const NoParams());
+      await fetchClientList((query: query));
 
-      expect(result, isA<Ok<List<Client>, Failure>>());
-      final clients = (result as Ok<List<Client>, Failure>).value;
-      expect(clients.length, 2);
-      expect(clients.first.firstName, 'Alice');
+      expect(repo.lastQuery, query);
     });
 
-    test('returns Ok with empty list when no clients', () async {
-      repo.clientsToReturn = [];
+    test('returns Ok with PagedResult on success', () async {
+      final result = await fetchClientList((query: const ClientListQuery()));
 
-      final result = await fetchClients(const NoParams());
-
-      expect(result, isA<Ok<List<Client>, Failure>>());
-      expect((result as Ok<List<Client>, Failure>).value, isEmpty);
+      expect(result, isA<Ok<PagedResult<Client>, Failure>>());
+      final paged = (result as Ok<PagedResult<Client>, Failure>).value;
+      expect(paged.items.length, 1);
+      expect(paged.totalCount, 1);
     });
 
     test('returns Err when repository fails', () async {
       repo.failureToReturn = const RepositoryFailure('DB error');
 
-      final result = await fetchClients(const NoParams());
+      final result = await fetchClientList((query: const ClientListQuery()));
 
-      expect(result, isA<Err<List<Client>, Failure>>());
+      expect(result, isA<Err<PagedResult<Client>, Failure>>());
       expect(
-        (result as Err<List<Client>, Failure>).error,
+        (result as Err<PagedResult<Client>, Failure>).error,
         isA<RepositoryFailure>(),
       );
     });

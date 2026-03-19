@@ -3,6 +3,7 @@ import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/logger/app_logger.dart';
 import 'package:declia/core/repositories/repository_guard.dart';
 import 'package:declia/core/storage/local_storage.dart';
+import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/app_user.dart';
 import 'package:declia/domain/entities/client.dart';
@@ -77,6 +78,9 @@ class MockDeleteClient extends Mock
 
 class MockSearchClients extends Mock
     implements UseCase<List<Client>, SearchClientsParams> {}
+
+class MockFetchClientList extends Mock
+    implements UseCase<PagedResult<Client>, FetchClientsParams> {}
 
 /// A manual guard implementation that can be toggled between success and failure.
 final class MockRepositoryGuard implements RepositoryGuard {

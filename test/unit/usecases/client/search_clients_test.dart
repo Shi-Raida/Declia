@@ -1,6 +1,8 @@
 import 'package:declia/core/errors/failures.dart';
+import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
+import 'package:declia/domain/entities/client_list_query.dart';
 import 'package:declia/domain/repositories/client_repository.dart';
 import 'package:declia/usecases/client/search_clients.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,6 +33,11 @@ final class _FakeClientRepository implements ClientRepository {
       throw UnimplementedError();
   @override
   Future<Result<void, Failure>> delete(String id) => throw UnimplementedError();
+
+  @override
+  Future<Result<PagedResult<Client>, Failure>> fetchList(
+    ClientListQuery query,
+  ) => throw UnimplementedError();
 }
 
 void main() {
