@@ -1,21 +1,20 @@
 import 'package:get/get.dart';
 
+import '../../core/enums/acquisition_source.dart';
+import '../../core/enums/client_sort_field.dart';
+import '../../core/enums/sort_direction.dart';
+import '../../core/utils/paged_result.dart';
 import '../../domain/entities/client.dart';
+import '../../domain/entities/client_list_query.dart';
 import '../../usecases/client/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/client_view_model.dart';
 import '../services/navigation_service.dart';
 
 final class ClientsController extends GetxController {
-  ClientsController(
-    this._fetchClients,
-    this._searchClients,
-    this._deleteClient,
-    this._nav,
-  );
+  ClientsController(this._fetchClientList, this._deleteClient, this._nav);
 
-  final UseCase<List<Client>, NoParams> _fetchClients;
-  final UseCase<List<Client>, SearchClientsParams> _searchClients;
+  final UseCase<PagedResult<Client>, FetchClientsParams> _fetchClientList;
   final UseCase<void, DeleteClientParams> _deleteClient;
   final NavigationService _nav;
 
@@ -24,8 +23,18 @@ final class ClientsController extends GetxController {
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
   final searchQuery = ''.obs;
+  final query = const ClientListQuery().obs;
+  final totalCount = 0.obs;
 
   Client? entityById(String id) => _entityMap[id];
+
+  int get totalPages => totalCount.value == 0
+      ? 1
+      : (totalCount.value / query.value.pageSize).ceil();
+  bool get hasNextPage => query.value.page < totalPages - 1;
+  bool get hasPreviousPage => query.value.page > 0;
+  bool get hasActiveFilters =>
+      query.value.tags.isNotEmpty || query.value.acquisitionSource != null;
 
   Worker? _debounceWorker;
 
@@ -33,11 +42,10 @@ final class ClientsController extends GetxController {
   void onInit() {
     super.onInit();
     loadClients();
-    _debounceWorker = debounce(
-      searchQuery,
-      (_) => _performSearch(),
-      time: const Duration(milliseconds: 300),
-    );
+    _debounceWorker = debounce(searchQuery, (q) {
+      query.value = query.value.copyWith(search: q.trim(), page: 0);
+      loadClients();
+    }, time: const Duration(milliseconds: 300));
   }
 
   @override
@@ -49,39 +57,80 @@ final class ClientsController extends GetxController {
   Future<void> loadClients() async {
     isLoading.value = true;
     errorMessage.value = null;
-    final result = await _fetchClients(const NoParams());
+    final result = await _fetchClientList((query: query.value));
     result.fold(
-      ok: (value) {
+      ok: (paged) {
         _entityMap
           ..clear()
-          ..addEntries(value.map((c) => MapEntry(c.id, c)));
-        clients.assignAll(value.map(ClientViewModel.fromEntity));
+          ..addEntries(paged.items.map((c) => MapEntry(c.id, c)));
+        clients.assignAll(paged.items.map(ClientViewModel.fromEntity));
+        totalCount.value = paged.totalCount;
       },
       err: (failure) => errorMessage.value = failure.message,
     );
     isLoading.value = false;
   }
 
-  Future<void> _performSearch() async {
-    final query = searchQuery.value.trim();
-    if (query.isEmpty) {
-      await loadClients();
-      return;
-    }
-    isLoading.value = true;
-    errorMessage.value = null;
-    final result = await _searchClients((query: query));
-    result.fold(
-      ok: (value) {
-        _entityMap
-          ..clear()
-          ..addEntries(value.map((c) => MapEntry(c.id, c)));
-        clients.assignAll(value.map(ClientViewModel.fromEntity));
-      },
-      err: (failure) => errorMessage.value = failure.message,
-    );
-    isLoading.value = false;
+  // Filter methods
+  void setTagFilter(List<String> tags) {
+    query.value = query.value.copyWith(tags: tags, page: 0);
+    loadClients();
   }
+
+  void addTag(String tag) {
+    if (!query.value.tags.contains(tag)) {
+      setTagFilter([...query.value.tags, tag]);
+    }
+  }
+
+  void removeTag(String tag) {
+    setTagFilter(query.value.tags.where((t) => t != tag).toList());
+  }
+
+  void setAcquisitionSourceFilter(AcquisitionSource? source) {
+    query.value = query.value.copyWith(acquisitionSource: source, page: 0);
+    loadClients();
+  }
+
+  void clearFilters() {
+    query.value = query.value.copyWith(
+      tags: [],
+      acquisitionSource: null,
+      page: 0,
+    );
+    loadClients();
+  }
+
+  // Sort methods
+  void setSort(ClientSortField field, SortDirection direction) {
+    query.value = query.value.copyWith(
+      sortField: field,
+      sortDirection: direction,
+      page: 0,
+    );
+    loadClients();
+  }
+
+  void toggleSort(ClientSortField field) {
+    if (query.value.sortField == field) {
+      final newDirection = query.value.sortDirection == SortDirection.ascending
+          ? SortDirection.descending
+          : SortDirection.ascending;
+      setSort(field, newDirection);
+    } else {
+      setSort(field, SortDirection.ascending);
+    }
+  }
+
+  // Pagination
+  void goToPage(int page) {
+    if (page < 0 || page >= totalPages) return;
+    query.value = query.value.copyWith(page: page);
+    loadClients();
+  }
+
+  void nextPage() => goToPage(query.value.page + 1);
+  void previousPage() => goToPage(query.value.page - 1);
 
   void viewClient(ClientViewModel vm) =>
       _nav.toClientDetail(vm.id, arguments: vm);
@@ -95,6 +144,7 @@ final class ClientsController extends GetxController {
       ok: (_) {
         _entityMap.remove(id);
         clients.removeWhere((c) => c.id == id);
+        if (totalCount.value > 0) totalCount.value--;
         return true;
       },
       err: (failure) {

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../core/logger/app_logger.dart';
+import '../../../core/utils/paged_result.dart';
 import '../../../domain/entities/client.dart';
 import '../../../usecases/client/params.dart';
 import '../../../usecases/usecase.dart';
@@ -13,8 +14,7 @@ class ClientsBinding extends Bindings {
     Get.find<AppLogger>().trace('ClientsBinding: registering dependencies');
     Get.lazyPut<ClientsController>(
       () => ClientsController(
-        Get.find<UseCase<List<Client>, NoParams>>(),
-        Get.find<UseCase<List<Client>, SearchClientsParams>>(),
+        Get.find<UseCase<PagedResult<Client>, FetchClientsParams>>(),
         Get.find<UseCase<void, DeleteClientParams>>(),
         Get.find<NavigationService>(),
       ),
