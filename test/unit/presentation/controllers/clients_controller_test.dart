@@ -79,6 +79,17 @@ final class _FakeDeleteClient extends UseCase<void, DeleteClientParams> {
   }
 }
 
+final class _FakeFetchDistinctTags extends UseCase<List<String>, NoParams> {
+  List<String> tagsToReturn = [];
+  Failure? failureToReturn;
+
+  @override
+  Future<Result<List<String>, Failure>> call(NoParams params) async {
+    if (failureToReturn != null) return Err(failureToReturn!);
+    return Ok(tagsToReturn);
+  }
+}
+
 final class _FakeNavigationService implements NavigationService {
   @override
   String get currentRoute => '';
@@ -114,12 +125,14 @@ ClientsController _makeController({
   _FakeFetchClientList? fetch,
   _FakeDeleteClient? delete,
   _FakeFetchSummaryStats? stats,
+  _FakeFetchDistinctTags? tags,
 }) {
   return ClientsController(
     fetch ?? _FakeFetchClientList(),
     delete ?? _FakeDeleteClient(),
     _FakeNavigationService(),
     stats ?? _FakeFetchSummaryStats(),
+    tags ?? _FakeFetchDistinctTags(),
   );
 }
 
@@ -407,6 +420,66 @@ void main() {
         controller.clearFilters();
         await Future<void>.delayed(Duration.zero);
         expect(controller.hasActiveFilters, isFalse);
+      });
+    });
+
+    group('availableTags', () {
+      test('populated on init from fetchDistinctTags', () async {
+        final tags = _FakeFetchDistinctTags()
+          ..tagsToReturn = ['portrait', 'wedding'];
+        final controller = _makeController(tags: tags);
+        controller.onInit();
+
+        await Future<void>.delayed(Duration.zero);
+
+        expect(controller.availableTags, ['portrait', 'wedding']);
+      });
+
+      test('stays empty when fetchDistinctTags fails (non-fatal)', () async {
+        final tags = _FakeFetchDistinctTags()
+          ..failureToReturn = const RepositoryFailure('error');
+        final controller = _makeController(tags: tags);
+        controller.onInit();
+
+        await Future<void>.delayed(Duration.zero);
+
+        expect(controller.availableTags, isEmpty);
+        expect(controller.errorMessage.value, isNull);
+      });
+    });
+
+    group('search debounce', () {
+      test('updates query and triggers reload after delay', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = const PagedResult(items: [], totalCount: 0);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        final countBefore = fetch.callCount;
+        controller.searchQuery.value = 'Alice';
+        await Future<void>.delayed(const Duration(milliseconds: 350));
+
+        expect(fetch.callCount, greaterThan(countBefore));
+        expect(fetch.lastQuery?.search, 'Alice');
+        expect(fetch.lastQuery?.page, 0);
+      });
+
+      test('resets page to 0 when searching', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = const PagedResult(items: [], totalCount: 100);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.goToPage(1);
+        await Future<void>.delayed(Duration.zero);
+        expect(controller.query.value.page, 1);
+
+        controller.searchQuery.value = 'Bob';
+        await Future<void>.delayed(const Duration(milliseconds: 350));
+
+        expect(controller.query.value.page, 0);
       });
     });
 

@@ -1,5 +1,6 @@
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/utils/result.dart';
+import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_history.dart';
 import 'package:declia/presentation/controllers/client_detail_controller.dart';
 import 'package:declia/presentation/models/client_view_model.dart';
@@ -22,6 +23,15 @@ final _fixtureVm = ClientViewModel(
   commPhone: false,
 );
 
+final _fixtureClient = Client(
+  id: 'client-1',
+  tenantId: 'tenant-1',
+  firstName: 'Alice',
+  lastName: 'Dupont',
+  createdAt: _now,
+  updatedAt: _now,
+);
+
 final _fixtureHistory = const ClientHistory(
   clientId: 'client-1',
   sessions: [],
@@ -29,6 +39,19 @@ final _fixtureHistory = const ClientHistory(
   orders: [],
   communicationLogs: [],
 );
+
+final class _FakeGetClient extends UseCase<Client, GetClientParams> {
+  Client? clientToReturn;
+  Failure? failureToReturn;
+  int callCount = 0;
+
+  @override
+  Future<Result<Client, Failure>> call(GetClientParams params) async {
+    callCount++;
+    if (failureToReturn != null) return Err(failureToReturn!);
+    return Ok(clientToReturn ?? _fixtureClient);
+  }
+}
 
 final class _FakeDeleteClient extends UseCase<void, DeleteClientParams> {
   Failure? failureToReturn;
@@ -99,6 +122,7 @@ void main() {
         fetch,
         _FakeDeleteClient(),
         _FakeNavigationService(),
+        _FakeGetClient(),
       );
 
       await controller.initialize('client-1', _fixtureVm);
@@ -117,6 +141,7 @@ void main() {
         fetch,
         _FakeDeleteClient(),
         _FakeNavigationService(),
+        _FakeGetClient(),
       );
 
       await controller.initialize('client-1', _fixtureVm);
@@ -132,6 +157,7 @@ void main() {
         fetch,
         _FakeDeleteClient(),
         _FakeNavigationService(),
+        _FakeGetClient(),
       );
 
       // Start but don't await
@@ -142,17 +168,56 @@ void main() {
       await future;
     });
 
+    test('initialize always calls getClient and stores clientEntity', () async {
+      final getClient = _FakeGetClient();
+      final controller = ClientDetailController(
+        _FakeFetchClientHistory(),
+        _FakeDeleteClient(),
+        _FakeNavigationService(),
+        getClient,
+      );
+
+      await controller.initialize('client-1', _fixtureVm);
+
+      expect(getClient.callCount, 1);
+      expect(controller.clientEntity, isNotNull);
+      expect(controller.clientEntity?.id, 'client-1');
+    });
+
     test('isLoading is false after completion', () async {
       final fetch = _FakeFetchClientHistory();
       final controller = ClientDetailController(
         fetch,
         _FakeDeleteClient(),
         _FakeNavigationService(),
+        _FakeGetClient(),
       );
 
       await controller.initialize('client-1', _fixtureVm);
 
       expect(controller.isLoading.value, isFalse);
+    });
+
+    test('initialize fetches client from API when no initialVm is provided',
+        () async {
+      final getClient = _FakeGetClient();
+      final controller = ClientDetailController(
+        _FakeFetchClientHistory(),
+        _FakeDeleteClient(),
+        _FakeNavigationService(),
+        getClient,
+      );
+
+      await controller.initialize('client-1', null);
+
+      expect(getClient.callCount, 1);
+      expect(controller.client.value, isNotNull);
+      expect(controller.client.value?.id, 'client-1');
+      expect(controller.client.value?.firstName, 'Alice');
+      expect(controller.clientEntity, isNotNull);
+      expect(controller.clientEntity?.id, 'client-1');
+      expect(controller.history.value, isNotNull);
+      expect(controller.errorMessage.value, isNull);
     });
   });
 
@@ -164,6 +229,7 @@ void main() {
         _FakeFetchClientHistory(),
         delete,
         nav,
+        _FakeGetClient(),
       );
       await controller.initialize('client-1', _fixtureVm);
 
@@ -180,6 +246,7 @@ void main() {
         _FakeFetchClientHistory(),
         delete,
         _FakeNavigationService(),
+        _FakeGetClient(),
       );
       await controller.initialize('client-1', _fixtureVm);
 
@@ -194,6 +261,7 @@ void main() {
         _FakeFetchClientHistory(),
         delete,
         _FakeNavigationService(),
+        _FakeGetClient(),
       );
       // Do not initialize — client remains null
 
