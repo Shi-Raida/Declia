@@ -260,6 +260,30 @@ final Map<String, String> frFr = {
   Tr.adminAvailabilityEditRule: 'Modifier la règle',
   Tr.adminAvailabilityNoSlots: 'Aucun créneau disponible',
 
+  // Settings — Google Calendar
+  Tr.settingsGoogleCalendarTitle: 'Google Agenda',
+  Tr.settingsGoogleCalendarDesc:
+      'Synchronisez vos séances avec Google Agenda pour gérer votre planning en un seul endroit.',
+  Tr.settingsGoogleCalendarConnect: 'Connecter Google Agenda',
+  Tr.settingsGoogleCalendarDisconnect: 'Déconnecter',
+  Tr.settingsGoogleCalendarDisconnectConfirm:
+      'Voulez-vous déconnecter Google Agenda ? Les données Déclia seront conservées.',
+  Tr.settingsGoogleCalendarConnected: 'Connecté',
+  Tr.settingsGoogleCalendarDisconnected: 'Non connecté',
+  Tr.settingsGoogleCalendarId: 'Agenda',
+  Tr.settingsGoogleCalendarLastSync: 'Dernière sync.',
+  Tr.settingsGoogleCalendarSyncNow: 'Synchroniser',
+  Tr.settingsGoogleCalendarSyncing: 'Synchronisation…',
+  Tr.settingsGoogleCalendarSyncEnabled: 'Sync. automatique',
+  Tr.settingsGoogleCalendarError: 'Erreur de synchronisation',
+  Tr.settingsGoogleCalendarAuthCode:
+      'Ouvrez le lien ci-dessous, autorisez l\'accès, puis collez le code d\'autorisation.',
+  Tr.settingsGoogleCalendarAuthCodeHint: 'Collez le code ici',
+
+  // Planning — External events
+  Tr.adminPlanningExternalEvent: 'Événement Google Agenda',
+  Tr.adminPlanningExternalSource: 'Source',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Parrainage',
   Tr.acquisitionSourceSocialMedia: 'Réseaux sociaux',

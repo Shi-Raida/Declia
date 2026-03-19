@@ -254,6 +254,30 @@ final Map<String, String> enUs = {
   Tr.adminAvailabilityEditRule: 'Edit rule',
   Tr.adminAvailabilityNoSlots: 'No available slots',
 
+  // Settings — Google Calendar
+  Tr.settingsGoogleCalendarTitle: 'Google Calendar',
+  Tr.settingsGoogleCalendarDesc:
+      'Sync your sessions with Google Calendar to manage your schedule in one place.',
+  Tr.settingsGoogleCalendarConnect: 'Connect Google Calendar',
+  Tr.settingsGoogleCalendarDisconnect: 'Disconnect',
+  Tr.settingsGoogleCalendarDisconnectConfirm:
+      'Disconnect Google Calendar? Your Déclia data will be preserved.',
+  Tr.settingsGoogleCalendarConnected: 'Connected',
+  Tr.settingsGoogleCalendarDisconnected: 'Not connected',
+  Tr.settingsGoogleCalendarId: 'Calendar',
+  Tr.settingsGoogleCalendarLastSync: 'Last sync',
+  Tr.settingsGoogleCalendarSyncNow: 'Sync now',
+  Tr.settingsGoogleCalendarSyncing: 'Syncing…',
+  Tr.settingsGoogleCalendarSyncEnabled: 'Auto-sync',
+  Tr.settingsGoogleCalendarError: 'Sync error',
+  Tr.settingsGoogleCalendarAuthCode:
+      'Open the link below, grant access, then paste the authorization code.',
+  Tr.settingsGoogleCalendarAuthCodeHint: 'Paste code here',
+
+  // Planning — External events
+  Tr.adminPlanningExternalEvent: 'Google Calendar event',
+  Tr.adminPlanningExternalSource: 'Source',
+
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Referral',
   Tr.acquisitionSourceSocialMedia: 'Social media',
