@@ -83,6 +83,8 @@ final class _FakeNavigationService implements NavigationService {
   void toClientForgotPassword() {}
   @override
   void toLegalPrivacy() {}
+  @override
+  void goBack() {}
 }
 
 void main() {
