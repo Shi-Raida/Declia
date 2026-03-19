@@ -101,7 +101,8 @@ class AdminSidebar extends GetView<AdminShellController> {
     required String label,
   }) {
     return Obx(() {
-      final isActive = controller.currentRoute.value == route;
+      final current = controller.currentRoute.value;
+      final isActive = current == route || current.startsWith('$route/');
       return InkWell(
         onTap: () => controller.navigateTo(route),
         child: Container(

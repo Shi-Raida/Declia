@@ -36,4 +36,6 @@ final class AdminShellController extends GetxController {
     currentRoute.value = route;
     _nav.toAdminPage(route);
   }
+
+  void syncRoute(String route) => currentRoute.value = route;
 }

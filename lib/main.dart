@@ -9,6 +9,7 @@ import 'core/logger/app_logger.dart';
 import 'infrastructure/config/app_config.dart';
 import 'infrastructure/di/injection.dart';
 import 'presentation/di/presentation_injection.dart';
+import 'presentation/observers/route_change_observer.dart';
 import 'presentation/routes/app_pages.dart';
 import 'presentation/routes/app_routes.dart';
 import 'presentation/theme/app_theme.dart';
@@ -48,15 +49,15 @@ Future<void> _bootstrap() async {
 
   try {
     await dotenv.load();
-    final envName = dotenv.env['ENVIRONMENT'] ?? 'development';
+    final envName = dotenv.env['DC_ENVIRONMENT'] ?? 'development';
     final environment = Environment.values.byName(envName);
     final config = AppConfig(
       supabaseUrl:
-          dotenv.env['SUPABASE_URL'] ??
-          (throw StateError('SUPABASE_URL not set')),
+          dotenv.env['DC_SUPABASE_URL'] ??
+          (throw StateError('DC_SUPABASE_URL not set')),
       supabaseAnonKey:
-          dotenv.env['SUPABASE_ANON_KEY'] ??
-          (throw StateError('SUPABASE_ANON_KEY not set')),
+          dotenv.env['DC_SUPABASE_ANON_KEY'] ??
+          (throw StateError('DC_SUPABASE_ANON_KEY not set')),
       environment: environment,
     );
     await Injection.init(config);
@@ -83,6 +84,7 @@ class DecliaApp extends StatelessWidget {
       theme: AppTheme.light,
       initialRoute: AppRoutes.home,
       getPages: appPages,
+      navigatorObservers: [RouteChangeObserver()],
       builder: (context, child) => AppShell(child: child),
     );
   }
