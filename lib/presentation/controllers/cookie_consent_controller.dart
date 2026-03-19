@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
 import '../../core/enums/consent_type.dart';
-import '../../core/storage/local_storage.dart';
-import '../../core/utils/uuid_generator.dart';
 import '../../usecases/consent/params.dart';
 import '../../usecases/usecase.dart';
 import '../services/navigation_service.dart';
@@ -10,21 +8,15 @@ import '../services/navigation_service.dart';
 final class CookieConsentController extends GetxController {
   CookieConsentController({
     required UseCase<void, SaveCookieConsentParams> saveCookieConsent,
-    required LocalStorage localStorage,
     required NavigationService navigationService,
-    required UuidGenerator uuidGenerator,
+    required bool hasExistingConsent,
   }) : _saveCookieConsent = saveCookieConsent,
-       _localStorage = localStorage,
        _nav = navigationService,
-       _uuidGenerator = uuidGenerator;
-
-  static const String _consentKey = 'cookie_consent_v1';
-  static const String _anonIdKey = 'cookie_anon_id';
+       _hasExistingConsent = hasExistingConsent;
 
   final UseCase<void, SaveCookieConsentParams> _saveCookieConsent;
-  final LocalStorage _localStorage;
   final NavigationService _nav;
-  final UuidGenerator _uuidGenerator;
+  final bool _hasExistingConsent;
 
   final showBanner = false.obs;
   final showCustomize = false.obs;
@@ -37,7 +29,7 @@ final class CookieConsentController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    if (_localStorage.read(_consentKey) == null) {
+    if (!_hasExistingConsent) {
       showBanner.value = true;
     }
   }
@@ -67,18 +59,8 @@ final class CookieConsentController extends GetxController {
   }
 
   Future<void> _saveChoices(Map<ConsentType, bool> choicesMap) async {
-    final anonId = _getOrCreateAnonId();
-    await _saveCookieConsent((choices: choicesMap, anonId: anonId));
-    _localStorage.write(_consentKey, 'true');
+    await _saveCookieConsent((choices: choicesMap));
     showBanner.value = false;
     showCustomize.value = false;
-  }
-
-  String _getOrCreateAnonId() {
-    final existing = _localStorage.read(_anonIdKey);
-    if (existing != null) return existing;
-    final id = _uuidGenerator.generate();
-    _localStorage.write(_anonIdKey, id);
-    return id;
   }
 }

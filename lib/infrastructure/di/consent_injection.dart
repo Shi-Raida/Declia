@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide LocalStorage;
 
 import '../../core/repositories/repository_guard.dart';
+import '../../core/storage/local_storage.dart';
+import '../../core/utils/uuid_generator.dart';
 import '../../domain/repositories/consent_repository.dart';
 import '../../usecases/consent/params.dart';
 import '../../usecases/consent/save_cookie_consent.dart';
@@ -29,7 +31,11 @@ abstract final class ConsentInjection {
 
     // Use cases
     Get.lazyPut<UseCase<void, SaveCookieConsentParams>>(
-      () => SaveCookieConsent(Get.find<ConsentRepository>()),
+      () => SaveCookieConsent(
+        Get.find<ConsentRepository>(),
+        Get.find<LocalStorage>(),
+        Get.find<UuidGenerator>(),
+      ),
       fenix: true,
     );
   }

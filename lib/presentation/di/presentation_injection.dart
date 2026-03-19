@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../core/logger/app_logger.dart';
 import '../../core/storage/local_storage.dart';
-import '../../core/utils/uuid_generator.dart';
 import '../../usecases/consent/params.dart';
+import '../../usecases/consent/save_cookie_consent.dart';
 import '../../usecases/usecase.dart';
 import '../controllers/auth_state_controller.dart';
 import '../controllers/cookie_consent_controller.dart';
@@ -27,9 +27,9 @@ abstract final class PresentationInjection {
     Get.put<CookieConsentController>(
       CookieConsentController(
         saveCookieConsent: Get.find<UseCase<void, SaveCookieConsentParams>>(),
-        localStorage: Get.find<LocalStorage>(),
         navigationService: Get.find<NavigationService>(),
-        uuidGenerator: Get.find<UuidGenerator>(),
+        hasExistingConsent:
+            Get.find<LocalStorage>().read(SaveCookieConsent.consentKey) != null,
       ),
       permanent: true,
     );
