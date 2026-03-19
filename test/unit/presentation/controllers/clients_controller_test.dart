@@ -2,6 +2,7 @@ import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/presentation/controllers/clients_controller.dart';
+import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/client/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -62,6 +63,37 @@ final class _FakeDeleteClient extends UseCase<void, DeleteClientParams> {
   }
 }
 
+final class _FakeNavigationService implements NavigationService {
+  @override
+  String get currentRoute => '';
+  @override
+  void toLogin({String? reason}) {}
+  @override
+  void toHome(dynamic role) {}
+  @override
+  void toDashboard() {}
+  @override
+  void toAdminPage(String route) {}
+  @override
+  void toClientLogin({String? tenantSlug}) {}
+  @override
+  void toClientHome() {}
+  @override
+  void toClientRegister({String? tenantSlug}) {}
+  @override
+  void toClientForgotPassword() {}
+  @override
+  void toLegalPrivacy() {}
+  @override
+  void toClientDetail(String id, {dynamic arguments}) {}
+  @override
+  void toClientEdit(String id, {dynamic arguments}) {}
+  @override
+  void toClientNew() {}
+  @override
+  void goBack() {}
+}
+
 ClientsController _makeController({
   _FakeFetchClients? fetch,
   _FakeSearchClients? search,
@@ -71,6 +103,7 @@ ClientsController _makeController({
     fetch ?? _FakeFetchClients(),
     search ?? _FakeSearchClients(),
     delete ?? _FakeDeleteClient(),
+    _FakeNavigationService(),
   );
 }
 

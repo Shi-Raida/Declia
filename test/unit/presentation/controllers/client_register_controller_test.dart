@@ -98,6 +98,12 @@ final class _FakeNavigationService implements NavigationService {
   @override
   void toLegalPrivacy() {}
   @override
+  void toClientDetail(String id, {dynamic arguments}) {}
+  @override
+  void toClientEdit(String id, {dynamic arguments}) {}
+  @override
+  void toClientNew() {}
+  @override
   void goBack() {}
 }
 
