@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../domain/entities/client.dart';
 import '../../controllers/clients_controller.dart';
+import '../../models/client_view_model.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
@@ -39,23 +39,20 @@ class ClientsTable extends StatelessWidget {
             DataColumn(label: Text(Tr.adminClientsTableDate.tr)),
             DataColumn(label: Text(Tr.adminClientsTableActions.tr)),
           ],
-          rows: controller.clients
-              .map((client) => _buildRow(context, client))
-              .toList(),
+          rows: controller.clients.map((vm) => _buildRow(context, vm)).toList(),
         ),
       ),
     );
   }
 
-  DataRow _buildRow(BuildContext context, Client client) {
+  DataRow _buildRow(BuildContext context, ClientViewModel vm) {
     return DataRow(
       cells: [
         DataCell(
           GestureDetector(
-            onTap: () =>
-                Get.toNamed('/admin/clients/${client.id}', arguments: client),
+            onTap: () => Get.toNamed('/admin/clients/${vm.id}', arguments: vm),
             child: Text(
-              '${client.lastName} ${client.firstName}',
+              '${vm.lastName} ${vm.firstName}',
               style: AppTypography.bodyMedium().copyWith(
                 color: AppColors.terracotta,
                 decoration: TextDecoration.underline,
@@ -63,13 +60,13 @@ class ClientsTable extends StatelessWidget {
             ),
           ),
         ),
-        DataCell(Text(client.email ?? '—')),
-        DataCell(Text(client.phone ?? '—')),
-        DataCell(_TagsCell(tags: client.tags)),
+        DataCell(Text(vm.email ?? '—')),
+        DataCell(Text(vm.phone ?? '—')),
+        DataCell(_TagsCell(tags: vm.tags)),
         DataCell(
-          Text(_formatDate(client.createdAt), style: AppTypography.bodySmall()),
+          Text(_formatDate(vm.createdAt), style: AppTypography.bodySmall()),
         ),
-        DataCell(_ActionsCell(client: client, controller: controller)),
+        DataCell(_ActionsCell(vm: vm, controller: controller)),
       ],
     );
   }
@@ -109,9 +106,9 @@ class _TagsCell extends StatelessWidget {
 }
 
 class _ActionsCell extends StatelessWidget {
-  const _ActionsCell({required this.client, required this.controller});
+  const _ActionsCell({required this.vm, required this.controller});
 
-  final Client client;
+  final ClientViewModel vm;
   final ClientsController controller;
 
   @override
@@ -124,16 +121,14 @@ class _ActionsCell extends StatelessWidget {
           color: AppColors.bleuOuvert,
           tooltip: 'Voir',
           onPressed: () =>
-              Get.toNamed('/admin/clients/${client.id}', arguments: client),
+              Get.toNamed('/admin/clients/${vm.id}', arguments: vm),
         ),
         IconButton(
           icon: const Icon(Icons.edit_outlined, size: 18),
           color: AppColors.pierre,
           tooltip: Tr.adminClientDetailEdit.tr,
-          onPressed: () => Get.toNamed(
-            '/admin/clients/${client.id}/edit',
-            arguments: client,
-          ),
+          onPressed: () =>
+              Get.toNamed('/admin/clients/${vm.id}/edit', arguments: vm),
         ),
         IconButton(
           icon: const Icon(Icons.delete_outline, size: 18),
@@ -168,7 +163,7 @@ class _ActionsCell extends StatelessWidget {
           FilledButton(
             onPressed: () async {
               Navigator.of(ctx).pop();
-              await controller.removeClient(client.id);
+              await controller.removeClient(vm.id);
             },
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.error,

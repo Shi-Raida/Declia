@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../domain/entities/client.dart';
+import '../../models/client_view_model.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
@@ -13,7 +13,7 @@ class ClientDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final client = Get.arguments as Client?;
+    final client = Get.arguments as ClientViewModel?;
     if (client == null) {
       return const AdminLayout(
         title: '',
@@ -101,21 +101,15 @@ class ClientDetailPage extends StatelessWidget {
                       ),
                     _DetailRow(
                       label: Tr.adminClientFormGdprEmail.tr,
-                      value: _boolLabel(
-                        client.communicationPrefs?.email ?? false,
-                      ),
+                      value: _boolLabel(client.commEmail),
                     ),
                     _DetailRow(
                       label: Tr.adminClientFormGdprSms.tr,
-                      value: _boolLabel(
-                        client.communicationPrefs?.sms ?? false,
-                      ),
+                      value: _boolLabel(client.commSms),
                     ),
                     _DetailRow(
                       label: Tr.adminClientFormGdprPhone.tr,
-                      value: _boolLabel(
-                        client.communicationPrefs?.phone ?? false,
-                      ),
+                      value: _boolLabel(client.commPhone),
                     ),
                   ],
                 ),
@@ -132,14 +126,12 @@ class ClientDetailPage extends StatelessWidget {
       '${dt.month.toString().padLeft(2, '0')}/'
       '${dt.year}';
 
-  String? _formatAddress(Client client) {
-    final a = client.address;
-    if (a == null) return null;
+  String? _formatAddress(ClientViewModel vm) {
     final parts = [
-      a.street,
-      a.city,
-      a.postalCode,
-      a.country,
+      vm.street,
+      vm.city,
+      vm.postalCode,
+      vm.country,
     ].whereType<String>().where((s) => s.isNotEmpty).toList();
     if (parts.isEmpty) return null;
     return parts.join(', ');
@@ -151,7 +143,7 @@ class ClientDetailPage extends StatelessWidget {
 class _DetailActions extends StatelessWidget {
   const _DetailActions({required this.client});
 
-  final Client client;
+  final ClientViewModel client;
 
   @override
   Widget build(BuildContext context) {

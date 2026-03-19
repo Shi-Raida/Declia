@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../domain/entities/client.dart';
 import '../../usecases/client/params.dart';
 import '../../usecases/usecase.dart';
+import '../models/client_view_model.dart';
 
 final class ClientsController extends GetxController {
   ClientsController(
@@ -15,10 +16,13 @@ final class ClientsController extends GetxController {
   final UseCase<List<Client>, SearchClientsParams> _searchClients;
   final UseCase<void, DeleteClientParams> _deleteClient;
 
-  final clients = <Client>[].obs;
+  final clients = <ClientViewModel>[].obs;
+  final _entityMap = <String, Client>{};
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
   final searchQuery = ''.obs;
+
+  Client? entityById(String id) => _entityMap[id];
 
   Worker? _debounceWorker;
 
@@ -44,7 +48,12 @@ final class ClientsController extends GetxController {
     errorMessage.value = null;
     final result = await _fetchClients(const NoParams());
     result.fold(
-      ok: (value) => clients.assignAll(value),
+      ok: (value) {
+        _entityMap
+          ..clear()
+          ..addEntries(value.map((c) => MapEntry(c.id, c)));
+        clients.assignAll(value.map(ClientViewModel.fromEntity));
+      },
       err: (failure) => errorMessage.value = failure.message,
     );
     isLoading.value = false;
@@ -60,7 +69,12 @@ final class ClientsController extends GetxController {
     errorMessage.value = null;
     final result = await _searchClients((query: query));
     result.fold(
-      ok: (value) => clients.assignAll(value),
+      ok: (value) {
+        _entityMap
+          ..clear()
+          ..addEntries(value.map((c) => MapEntry(c.id, c)));
+        clients.assignAll(value.map(ClientViewModel.fromEntity));
+      },
       err: (failure) => errorMessage.value = failure.message,
     );
     isLoading.value = false;
@@ -70,6 +84,7 @@ final class ClientsController extends GetxController {
     final result = await _deleteClient((id: id));
     return result.fold(
       ok: (_) {
+        _entityMap.remove(id);
         clients.removeWhere((c) => c.id == id);
         return true;
       },
