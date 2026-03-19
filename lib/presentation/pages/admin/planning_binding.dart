@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import '../../../core/logger/app_logger.dart';
 import '../../../domain/entities/availability_rule.dart';
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/external_calendar_event.dart';
 import '../../../usecases/availability/params.dart';
 import '../../../usecases/calendar/params.dart';
+import '../../../usecases/google_calendar/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/planning_controller.dart';
 import '../../services/navigation_service.dart';
@@ -27,6 +29,7 @@ class PlanningBinding extends Bindings {
         ),
         Get.find<UseCase<void, DeleteAvailabilityRuleParams>>(),
         Get.find<NavigationService>(),
+        Get.find<UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams>>(),
       ),
     );
   }

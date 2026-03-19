@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/external_calendar_event.dart';
 import '../../../domain/entities/time_slot.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
+import 'external_event_card.dart';
 import 'planning_event_card.dart';
 
 class PlanningDayView extends StatelessWidget {
@@ -17,6 +19,8 @@ class PlanningDayView extends StatelessWidget {
     this.showAvailability = false,
     this.availableSlots = const [],
     this.isBlocked = false,
+    this.externalEvents = const [],
+    this.onExternalEventTap,
   });
 
   final DateTime focusedDate;
@@ -25,6 +29,8 @@ class PlanningDayView extends StatelessWidget {
   final bool showAvailability;
   final List<TimeSlot> availableSlots;
   final bool isBlocked;
+  final List<ExternalCalendarEvent> externalEvents;
+  final void Function(ExternalCalendarEvent)? onExternalEventTap;
 
   static const double _hourHeight = 64.0;
   static const int _startHour = 8;
@@ -116,6 +122,23 @@ class PlanningDayView extends StatelessWidget {
                                 child: Text(
                                   Tr.adminPlanningNoSessions.tr,
                                   style: AppTypography.bodySmall(),
+                                ),
+                              ),
+                            // External events
+                            for (final ext in externalEvents)
+                              Positioned(
+                                top: _topOffsetFromDt(ext.startAt),
+                                height: _heightFromSlot(
+                                  TimeSlot(start: ext.startAt, end: ext.endAt),
+                                ).clamp(_hourHeight - 8, double.infinity),
+                                left: 4,
+                                right: 4,
+                                child: ExternalEventBlock(
+                                  event: ext,
+                                  onTap: () => onExternalEventTap?.call(ext),
+                                  height: _heightFromSlot(
+                                    TimeSlot(start: ext.startAt, end: ext.endAt),
+                                  ).clamp(_hourHeight - 8, double.infinity),
                                 ),
                               ),
                             // Events

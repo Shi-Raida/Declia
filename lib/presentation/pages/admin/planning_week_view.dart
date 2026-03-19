@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/external_calendar_event.dart';
 import '../../../domain/entities/time_slot.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
+import 'external_event_card.dart';
 import 'planning_event_card.dart';
 
 class PlanningWeekView extends StatelessWidget {
@@ -15,6 +17,8 @@ class PlanningWeekView extends StatelessWidget {
     this.showAvailability = false,
     this.availableSlotsForDate,
     this.isDateBlocked,
+    this.externalEventsForDate,
+    this.onExternalEventTap,
   });
 
   final DateTime focusedDate;
@@ -23,6 +27,8 @@ class PlanningWeekView extends StatelessWidget {
   final bool showAvailability;
   final List<TimeSlot> Function(DateTime)? availableSlotsForDate;
   final bool Function(DateTime)? isDateBlocked;
+  final List<ExternalCalendarEvent> Function(DateTime)? externalEventsForDate;
+  final void Function(ExternalCalendarEvent)? onExternalEventTap;
 
   static const double _hourHeight = 60.0;
   static const int _startHour = 8;
@@ -66,6 +72,8 @@ class PlanningWeekView extends StatelessWidget {
                             : [],
                         isBlocked: showAvailability &&
                             (isDateBlocked?.call(day) ?? false),
+                        externalEvents: externalEventsForDate?.call(day) ?? [],
+                        onExternalEventTap: onExternalEventTap,
                       ),
                     ),
                   )
@@ -97,6 +105,8 @@ class _WeekDayColumn extends StatelessWidget {
     required this.onEventTap,
     required this.availableSlots,
     required this.isBlocked,
+    this.externalEvents = const [],
+    this.onExternalEventTap,
   });
 
   final DateTime date;
@@ -107,6 +117,8 @@ class _WeekDayColumn extends StatelessWidget {
   final void Function(CalendarEvent) onEventTap;
   final List<TimeSlot> availableSlots;
   final bool isBlocked;
+  final List<ExternalCalendarEvent> externalEvents;
+  final void Function(ExternalCalendarEvent)? onExternalEventTap;
 
   bool get _isToday {
     final now = DateTime.now();
@@ -180,6 +192,18 @@ class _WeekDayColumn extends StatelessWidget {
                   left: 0,
                   right: 0,
                   child: const Divider(height: 1, color: AppColors.border),
+                ),
+              // External events
+              for (final ext in externalEvents)
+                Positioned(
+                  top: _topOffsetFromDt(ext.startAt),
+                  left: 0,
+                  right: 0,
+                  child: ExternalEventBlock(
+                    event: ext,
+                    onTap: () => onExternalEventTap?.call(ext),
+                    height: hourHeight - 4,
+                  ),
                 ),
               // Events
               for (final event in events)

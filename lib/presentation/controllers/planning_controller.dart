@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import '../../core/enums/calendar_view.dart';
 import '../../domain/entities/availability_rule.dart';
 import '../../domain/entities/calendar_event.dart';
+import '../../domain/entities/external_calendar_event.dart';
 import '../../domain/entities/time_slot.dart';
 import '../../usecases/availability/compute_effective_availability.dart';
 import '../../usecases/availability/params.dart';
 import '../../usecases/calendar/params.dart';
+import '../../usecases/google_calendar/params.dart';
 import '../../usecases/usecase.dart';
 import '../services/navigation_service.dart';
 
@@ -18,6 +20,7 @@ final class PlanningController extends GetxController {
     this._updateAvailabilityRule,
     this._deleteAvailabilityRule,
     this._nav,
+    this._fetchExternalEvents,
   );
 
   final UseCase<List<CalendarEvent>, FetchCalendarSessionsParams> _fetchSessions;
@@ -28,6 +31,8 @@ final class PlanningController extends GetxController {
   _updateAvailabilityRule;
   final UseCase<void, DeleteAvailabilityRuleParams> _deleteAvailabilityRule;
   final NavigationService _nav;
+  final UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams>
+  _fetchExternalEvents;
 
   final currentView = CalendarView.month.obs;
   final focusedDate = DateTime.now().obs;
@@ -37,6 +42,7 @@ final class PlanningController extends GetxController {
 
   final availabilityRules = <AvailabilityRule>[].obs;
   final showAvailability = false.obs;
+  final externalEvents = <ExternalCalendarEvent>[].obs;
 
   @override
   void onInit() {
@@ -54,6 +60,13 @@ final class PlanningController extends GetxController {
       ok: (list) => events.value = list,
       err: (f) => errorMessage.value = f.message,
     );
+    final extResult = await _fetchExternalEvents(
+      (start: range.start, end: range.end),
+    );
+    extResult.fold(
+      ok: (list) => externalEvents.value = list,
+      err: (_) {},
+    );
     isLoading.value = false;
   }
 
@@ -70,7 +83,22 @@ final class PlanningController extends GetxController {
   }
 
   List<TimeSlot> availableSlotsForDate(DateTime date) =>
-      computeEffectiveAvailability(availabilityRules, events, date);
+      computeEffectiveAvailability(
+        availabilityRules,
+        events,
+        date,
+        externalEvents: externalEvents,
+      );
+
+  List<ExternalCalendarEvent> externalEventsForDate(DateTime date) =>
+      externalEvents
+          .where(
+            (e) =>
+                e.startAt.year == date.year &&
+                e.startAt.month == date.month &&
+                e.startAt.day == date.day,
+          )
+          .toList();
 
   bool isDateBlocked(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);

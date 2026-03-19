@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/external_calendar_event.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
+import 'external_event_card.dart';
 import 'planning_event_card.dart';
 
 class PlanningMonthView extends StatelessWidget {
@@ -17,6 +19,8 @@ class PlanningMonthView extends StatelessWidget {
     this.showAvailability = false,
     this.hasAvailability,
     this.isDateBlocked,
+    this.externalEventsForDate,
+    this.onExternalEventTap,
   });
 
   final DateTime focusedDate;
@@ -26,6 +30,8 @@ class PlanningMonthView extends StatelessWidget {
   final bool showAvailability;
   final bool Function(DateTime)? hasAvailability;
   final bool Function(DateTime)? isDateBlocked;
+  final List<ExternalCalendarEvent> Function(DateTime)? externalEventsForDate;
+  final void Function(ExternalCalendarEvent)? onExternalEventTap;
 
   static const _dayHeaders = [
     Tr.adminPlanningMonday,
@@ -92,6 +98,11 @@ class PlanningMonthView extends StatelessWidget {
                             showAvailability: showAvailability,
                             hasAvailability: hasAvailability,
                             isDateBlocked: isDateBlocked,
+                            externalEvents: externalEventsForDate?.call(
+                                  gridStart.add(Duration(days: row * 7 + col)),
+                                ) ??
+                                [],
+                            onExternalEventTap: onExternalEventTap,
                           ),
                         ),
                     ],
@@ -136,6 +147,8 @@ class _DayCell extends StatelessWidget {
     required this.showAvailability,
     this.hasAvailability,
     this.isDateBlocked,
+    this.externalEvents = const [],
+    this.onExternalEventTap,
   });
 
   final DateTime date;
@@ -146,6 +159,8 @@ class _DayCell extends StatelessWidget {
   final bool showAvailability;
   final bool Function(DateTime)? hasAvailability;
   final bool Function(DateTime)? isDateBlocked;
+  final List<ExternalCalendarEvent> externalEvents;
+  final void Function(ExternalCalendarEvent)? onExternalEventTap;
 
   bool get _isCurrentMonth => date.month == focusedMonth;
 
@@ -232,7 +247,13 @@ class _DayCell extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 2),
-            // Event pills
+            // External event pills
+            for (final ext in externalEvents.take(2))
+              ExternalEventPill(
+                event: ext,
+                onTap: () => onExternalEventTap?.call(ext),
+              ),
+            // Declia session pills
             for (final event in visible)
               PlanningEventPill(
                 event: event,

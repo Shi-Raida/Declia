@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../core/enums/calendar_view.dart';
 import '../../../domain/entities/calendar_event.dart';
+import '../../../domain/entities/external_calendar_event.dart';
 import '../../../domain/entities/time_slot.dart';
 import '../../controllers/planning_controller.dart';
 import '../../theme/app_colors.dart';
@@ -10,6 +11,7 @@ import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/admin/admin_layout.dart';
 import 'availability_rules_list_dialog.dart';
+import 'external_event_dialog.dart';
 import 'planning_day_view.dart';
 import 'planning_month_view.dart';
 import 'planning_session_dialog.dart';
@@ -160,6 +162,16 @@ class _PlanningBody extends StatelessWidget {
     );
   }
 
+  void _showExternalEventDetail(
+    BuildContext context,
+    ExternalCalendarEvent event,
+  ) {
+    showDialog<void>(
+      context: context,
+      builder: (_) => ExternalEventDialog(event: event),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -192,6 +204,8 @@ class _PlanningBody extends StatelessWidget {
           showAvailability: showAvailability,
           hasAvailability: controller.hasAvailability,
           isDateBlocked: controller.isDateBlocked,
+          externalEventsForDate: controller.externalEventsForDate,
+          onExternalEventTap: (e) => _showExternalEventDetail(context, e),
         ),
         CalendarView.week => PlanningWeekView(
           focusedDate: date,
@@ -200,6 +214,8 @@ class _PlanningBody extends StatelessWidget {
           showAvailability: showAvailability,
           availableSlotsForDate: slotsForDate,
           isDateBlocked: isBlocked,
+          externalEventsForDate: controller.externalEventsForDate,
+          onExternalEventTap: (e) => _showExternalEventDetail(context, e),
         ),
         CalendarView.day => PlanningDayView(
           focusedDate: date,
@@ -208,6 +224,8 @@ class _PlanningBody extends StatelessWidget {
           showAvailability: showAvailability,
           availableSlots: slotsForDate(date),
           isBlocked: isBlocked(date),
+          externalEvents: controller.externalEventsForDate(date),
+          onExternalEventTap: (e) => _showExternalEventDetail(context, e),
         ),
       };
     });
