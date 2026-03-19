@@ -7,11 +7,17 @@ import '../../domain/entities/client.dart';
 import '../../domain/entities/communication_preferences.dart';
 import '../../usecases/client/params.dart';
 import '../../usecases/usecase.dart';
+import '../services/navigation_service.dart';
 
 final class ClientFormController extends GetxController {
-  ClientFormController(this._saveClient, {this.existingClient});
+  ClientFormController(
+    this._saveClient, {
+    required NavigationService navigationService,
+    this.existingClient,
+  }) : _nav = navigationService;
 
   final UseCase<Client, SaveClientParams> _saveClient;
+  final NavigationService _nav;
   final Client? existingClient;
 
   bool get isEditing => existingClient != null;
@@ -138,7 +144,7 @@ final class ClientFormController extends GetxController {
 
     final result = await _saveClient((client: client));
     result.fold(
-      ok: (_) => Get.back(),
+      ok: (_) => _nav.goBack(),
       err: (failure) => errorMessage.value = failure.message,
     );
 

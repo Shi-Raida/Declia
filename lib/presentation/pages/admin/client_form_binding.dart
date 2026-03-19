@@ -5,6 +5,7 @@ import '../../../domain/entities/client.dart';
 import '../../../usecases/client/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/client_form_controller.dart';
+import '../../services/navigation_service.dart';
 
 class ClientFormBinding extends Bindings {
   @override
@@ -16,6 +17,7 @@ class ClientFormBinding extends Bindings {
         Get.find<UseCase<Client, SaveClientParams>>(
           tag: client != null ? 'updateClient' : 'createClient',
         ),
+        navigationService: Get.find<NavigationService>(),
         existingClient: client,
       ),
     );
