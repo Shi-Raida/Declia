@@ -4,6 +4,7 @@ import 'package:declia/core/storage/local_storage.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/core/utils/uuid_generator.dart';
 import 'package:declia/domain/repositories/consent_repository.dart';
+import 'package:declia/usecases/consent/params.dart';
 import 'package:declia/usecases/consent/save_cookie_consent.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -106,7 +107,7 @@ void main() {
       test('writes consent flag to localStorage on success', () async {
         await useCase((choices: {ConsentType.functional: true}));
 
-        expect(localStorage.read(SaveCookieConsent.consentKey), 'true');
+        expect(localStorage.read(saveCookieConsentKey), 'true');
       });
 
       test('does not write consent flag when repo fails', () async {
@@ -115,7 +116,7 @@ void main() {
           choices: {ConsentType.analytics: true, ConsentType.marketing: true},
         ));
 
-        expect(localStorage.read(SaveCookieConsent.consentKey), isNull);
+        expect(localStorage.read(saveCookieConsentKey), isNull);
       });
     });
 

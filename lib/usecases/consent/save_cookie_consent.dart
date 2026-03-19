@@ -13,7 +13,6 @@ final class SaveCookieConsent extends UseCase<void, SaveCookieConsentParams> {
     this._uuidGenerator,
   );
 
-  static const String consentKey = 'cookie_consent_v1';
   static const String _anonIdKey = 'cookie_anon_id';
 
   final ConsentRepository _consentRepository;
@@ -31,7 +30,7 @@ final class SaveCookieConsent extends UseCase<void, SaveCookieConsentParams> {
       );
       if (result.isErr) return result;
     }
-    _localStorage.write(consentKey, 'true');
+    _localStorage.write(saveCookieConsentKey, 'true');
     return const Ok(null);
   }
 
