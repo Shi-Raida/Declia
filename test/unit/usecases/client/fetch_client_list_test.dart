@@ -54,6 +54,10 @@ final class _FakeClientRepository implements ClientRepository {
   @override
   Future<Result<List<Client>, Failure>> search(String query) =>
       throw UnimplementedError();
+
+  @override
+  Future<Result<List<String>, Failure>> fetchDistinctTags() =>
+      throw UnimplementedError();
 }
 
 void main() {

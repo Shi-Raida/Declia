@@ -62,6 +62,10 @@ final class _FakeClientRepository implements ClientRepository {
   Future<Result<PagedResult<Client>, Failure>> fetchList(
     ClientListQuery query,
   ) => throw UnimplementedError();
+
+  @override
+  Future<Result<List<String>, Failure>> fetchDistinctTags() =>
+      throw UnimplementedError();
 }
 
 void main() {

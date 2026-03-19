@@ -82,6 +82,14 @@ final class _FakeClientDataSource implements ClientDataSource {
     if (exceptionToThrow != null) throw exceptionToThrow!;
     return (clients, clients.length);
   }
+
+  List<String> tagsToReturn = ['portrait', 'wedding'];
+
+  @override
+  Future<List<String>> fetchDistinctTags() async {
+    if (exceptionToThrow != null) throw exceptionToThrow!;
+    return tagsToReturn;
+  }
 }
 
 final class _PassthroughGuard implements RepositoryGuard {
@@ -214,6 +222,27 @@ void main() {
       final result = await repo.fetchList(const ClientListQuery());
 
       expect(result, isA<Err<PagedResult<Client>, Failure>>());
+      expect((result as Err).error, isA<UnauthorisedClientAccessFailure>());
+    });
+
+    test('fetchDistinctTags returns Ok with tag list', () async {
+      final ds = _FakeClientDataSource()..tagsToReturn = ['portrait', 'wedding'];
+      final repo = _makeRepo(ds);
+
+      final result = await repo.fetchDistinctTags();
+
+      expect(result, isA<Ok<List<String>, Failure>>());
+      expect((result as Ok<List<String>, Failure>).value, ['portrait', 'wedding']);
+    });
+
+    test('fetchDistinctTags returns Err when data source throws', () async {
+      final ds = _FakeClientDataSource()
+        ..exceptionToThrow = const UnauthorisedClientAccessException();
+      final repo = _makeRepo(ds);
+
+      final result = await repo.fetchDistinctTags();
+
+      expect(result, isA<Err<List<String>, Failure>>());
       expect((result as Err).error, isA<UnauthorisedClientAccessFailure>());
     });
   });
