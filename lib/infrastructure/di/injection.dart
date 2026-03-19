@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/logger/app_logger.dart';
 import '../config/app_config.dart';
 import 'auth_injection.dart';
+import 'client_history_injection.dart';
 import 'client_injection.dart';
 import 'consent_injection.dart';
 import 'core_injection.dart';
@@ -22,6 +23,7 @@ abstract final class Injection {
     TenantInjection.init();
     ConsentInjection.init();
     ClientInjection.init();
+    ClientHistoryInjection.init();
 
     Get.find<AppLogger>().debug('Core services registered');
   }
