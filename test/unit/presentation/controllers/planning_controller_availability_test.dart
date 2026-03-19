@@ -3,10 +3,12 @@ import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/availability_rule.dart';
 import 'package:declia/domain/entities/calendar_event.dart';
+import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/presentation/controllers/planning_controller.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/availability/params.dart';
 import 'package:declia/usecases/calendar/params.dart';
+import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -97,6 +99,14 @@ final class _FakeDeleteAvailabilityRule
   }
 }
 
+final class _FakeFetchExternalEvents
+    extends UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams> {
+  @override
+  Future<Result<List<ExternalCalendarEvent>, Failure>> call(
+    FetchExternalEventsParams params,
+  ) async => const Ok([]);
+}
+
 final class _FakeNavigationService implements NavigationService {
   @override
   String get currentRoute => '';
@@ -140,6 +150,7 @@ PlanningController _makeController({
   update ?? _FakeUpdateAvailabilityRule(),
   delete ?? _FakeDeleteAvailabilityRule(),
   _FakeNavigationService(),
+  _FakeFetchExternalEvents(),
 );
 
 void main() {

@@ -11,12 +11,15 @@ import 'package:declia/domain/entities/calendar_event.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_history.dart';
 import 'package:declia/domain/entities/client_summary_stats.dart';
+import 'package:declia/domain/entities/external_calendar_event.dart';
+import 'package:declia/domain/entities/google_calendar_connection.dart';
 import 'package:declia/domain/repositories/auth_repository.dart';
 import 'package:declia/domain/repositories/availability_repository.dart';
 import 'package:declia/domain/repositories/calendar_repository.dart';
 import 'package:declia/domain/repositories/client_history_repository.dart';
 import 'package:declia/domain/repositories/client_repository.dart';
 import 'package:declia/domain/repositories/consent_repository.dart';
+import 'package:declia/domain/repositories/google_calendar_repository.dart';
 import 'package:declia/domain/repositories/tenant_repository.dart';
 import 'package:declia/infrastructure/datasources/contract/auth_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/availability_data_source.dart';
@@ -24,6 +27,7 @@ import 'package:declia/infrastructure/datasources/contract/calendar_data_source.
 import 'package:declia/infrastructure/datasources/contract/client_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/client_history_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/consent_data_source.dart';
+import 'package:declia/infrastructure/datasources/contract/google_calendar_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/tenant_data_source.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
@@ -32,6 +36,7 @@ import 'package:declia/usecases/calendar/params.dart';
 import 'package:declia/usecases/client/params.dart';
 import 'package:declia/usecases/client_history/params.dart';
 import 'package:declia/usecases/consent/params.dart';
+import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -132,6 +137,33 @@ class MockUpdateAvailabilityRule extends Mock
 
 class MockDeleteAvailabilityRule extends Mock
     implements UseCase<void, DeleteAvailabilityRuleParams> {}
+
+class MockGoogleCalendarRepository extends Mock
+    implements GoogleCalendarRepository {}
+
+class MockGoogleCalendarDataSource extends Mock
+    implements GoogleCalendarDataSource {}
+
+class MockGetGoogleAuthUrl extends Mock
+    implements UseCase<String, NoParams> {}
+
+class MockExchangeGoogleCode extends Mock
+    implements UseCase<void, ExchangeCodeParams> {}
+
+class MockDisconnectGoogleCalendar extends Mock
+    implements UseCase<void, NoParams> {}
+
+class MockGetGoogleConnectionStatus extends Mock
+    implements UseCase<GoogleCalendarConnection?, NoParams> {}
+
+class MockToggleGoogleSync extends Mock
+    implements UseCase<void, ToggleSyncParams> {}
+
+class MockTriggerGoogleSync extends Mock
+    implements UseCase<void, NoParams> {}
+
+class MockFetchExternalEvents extends Mock
+    implements UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams> {}
 
 /// A manual guard implementation that can be toggled between success and failure.
 final class MockRepositoryGuard implements RepositoryGuard {
