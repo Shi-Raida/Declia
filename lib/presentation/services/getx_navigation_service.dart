@@ -51,5 +51,16 @@ final class GetxNavigationService implements NavigationService {
   void toLegalPrivacy() => Get.toNamed(AppRoutes.legalPrivacy);
 
   @override
+  void toClientDetail(String id, {dynamic arguments}) =>
+      Get.toNamed('/admin/clients/$id', arguments: arguments);
+
+  @override
+  void toClientEdit(String id, {dynamic arguments}) =>
+      Get.toNamed('/admin/clients/$id/edit', arguments: arguments);
+
+  @override
+  void toClientNew() => Get.toNamed(AppRoutes.adminClientNew);
+
+  @override
   void goBack() => Get.back();
 }
