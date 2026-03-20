@@ -4,6 +4,7 @@ import 'package:declia/core/enums/session_status.dart';
 import 'package:declia/core/enums/session_type.dart';
 import 'package:declia/domain/entities/availability_rule.dart';
 import 'package:declia/domain/entities/calendar_event.dart';
+import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/domain/entities/session.dart';
 import 'package:declia/usecases/availability/compute_effective_availability.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -150,7 +151,9 @@ void main() {
 
     group('session subtraction', () {
       test('session removes its time from available slot', () {
-        final rules = [_recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00')];
+        final rules = [
+          _recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00'),
+        ];
         // Session at 11:00 on Wednesday
         final sessionAt = DateTime(2026, 3, 18, 11, 0);
         final sessions = [_session(sessionAt)];
@@ -166,7 +169,9 @@ void main() {
       });
 
       test('session on different date does not affect slot', () {
-        final rules = [_recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00')];
+        final rules = [
+          _recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00'),
+        ];
         // Session on Thursday, not Wednesday
         final sessionAt = DateTime(2026, 3, 19, 11, 0);
         final sessions = [_session(sessionAt)];
@@ -179,7 +184,9 @@ void main() {
       });
 
       test('multiple sessions carve multiple sub-slots', () {
-        final rules = [_recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00')];
+        final rules = [
+          _recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00'),
+        ];
         final sessions = [
           _session(DateTime(2026, 3, 18, 10, 0)),
           _session(DateTime(2026, 3, 18, 14, 0)),
@@ -194,15 +201,107 @@ void main() {
 
     group('combined scenarios', () {
       test('blocked day beats override and recurring', () {
-        final rules = [
-          _recurring(dayOfWeek: 3),
-          _override(),
-          _blocked(),
-        ];
+        final rules = [_recurring(dayOfWeek: 3), _override(), _blocked()];
 
         final slots = computeEffectiveAvailability(rules, [], _wednesday);
 
         expect(slots, isEmpty);
+      });
+    });
+
+    group('session duration', () {
+      test('30-minute session carves correct window', () {
+        final rules = [
+          _recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00'),
+        ];
+        final session = CalendarEvent(
+          session: Session(
+            id: 's1',
+            tenantId: 'tid',
+            clientId: 'cid',
+            type: SessionType.portrait,
+            status: SessionStatus.scheduled,
+            scheduledAt: DateTime(2026, 3, 18, 11, 0),
+            paymentStatus: PaymentStatus.pending,
+            amount: 100.0,
+            durationMinutes: 30,
+            createdAt: _wednesday,
+            updatedAt: _wednesday,
+          ),
+          clientFirstName: 'Alice',
+          clientLastName: 'Dupont',
+        );
+
+        final slots = computeEffectiveAvailability(rules, [
+          session,
+        ], _wednesday);
+
+        // [09:00-11:00] and [11:30-18:00]
+        expect(slots.length, 2);
+        expect(slots[0].start, DateTime(2026, 3, 18, 9, 0));
+        expect(slots[0].end, DateTime(2026, 3, 18, 11, 0));
+        expect(slots[1].start, DateTime(2026, 3, 18, 11, 30));
+        expect(slots[1].end, DateTime(2026, 3, 18, 18, 0));
+      });
+    });
+
+    group('external events', () {
+      test('all-day event blocks full day', () {
+        final rules = [
+          _recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00'),
+        ];
+        final allDay = ExternalCalendarEvent(
+          id: 'e1',
+          tenantId: 'tid',
+          googleEventId: 'g1',
+          title: 'Holiday',
+          startAt: DateTime(2026, 3, 18),
+          endAt: DateTime(2026, 3, 19),
+          isAllDay: true,
+          status: 'confirmed',
+          createdAt: _wednesday,
+          updatedAt: _wednesday,
+        );
+
+        final slots = computeEffectiveAvailability(
+          rules,
+          [],
+          _wednesday,
+          externalEvents: [allDay],
+        );
+
+        expect(slots, isEmpty);
+      });
+
+      test('timed external event subtracts its window', () {
+        final rules = [
+          _recurring(dayOfWeek: 3, start: '09:00:00', end: '18:00:00'),
+        ];
+        final ext = ExternalCalendarEvent(
+          id: 'e2',
+          tenantId: 'tid',
+          googleEventId: 'g2',
+          title: 'Meeting',
+          startAt: DateTime(2026, 3, 18, 10, 0),
+          endAt: DateTime(2026, 3, 18, 11, 0),
+          isAllDay: false,
+          status: 'confirmed',
+          createdAt: _wednesday,
+          updatedAt: _wednesday,
+        );
+
+        final slots = computeEffectiveAvailability(
+          rules,
+          [],
+          _wednesday,
+          externalEvents: [ext],
+        );
+
+        expect(slots.length, 2);
+        expect(slots[0].start, DateTime(2026, 3, 18, 9, 0));
+        expect(slots[0].end, DateTime(2026, 3, 18, 10, 0));
+        expect(slots[1].start, DateTime(2026, 3, 18, 11, 0));
+        expect(slots[1].end, DateTime(2026, 3, 18, 18, 0));
       });
     });
   });

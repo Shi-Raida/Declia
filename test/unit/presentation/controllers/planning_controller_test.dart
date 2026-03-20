@@ -4,18 +4,15 @@ import 'package:declia/core/enums/session_status.dart';
 import 'package:declia/core/enums/session_type.dart';
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/utils/result.dart';
-import 'package:declia/domain/entities/availability_rule.dart';
 import 'package:declia/domain/entities/calendar_event.dart';
 import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/domain/entities/session.dart';
 import 'package:declia/presentation/controllers/planning_controller.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
-import 'package:declia/usecases/availability/params.dart';
 import 'package:declia/usecases/calendar/params.dart';
 import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 
 final _now = DateTime(2026, 3, 19);
 
@@ -54,37 +51,6 @@ final class _FakeFetchCalendarSessions
   }
 }
 
-final class _FakeFetchAvailabilityRules
-    extends UseCase<List<AvailabilityRule>, NoParams> {
-  @override
-  Future<Result<List<AvailabilityRule>, Failure>> call(NoParams params) async =>
-      const Ok([]);
-}
-
-final class _FakeCreateAvailabilityRule
-    extends UseCase<AvailabilityRule, CreateAvailabilityRuleParams> {
-  @override
-  Future<Result<AvailabilityRule, Failure>> call(
-    CreateAvailabilityRuleParams params,
-  ) async => Ok(params.rule);
-}
-
-final class _FakeUpdateAvailabilityRule
-    extends UseCase<AvailabilityRule, UpdateAvailabilityRuleParams> {
-  @override
-  Future<Result<AvailabilityRule, Failure>> call(
-    UpdateAvailabilityRuleParams params,
-  ) async => Ok(params.rule);
-}
-
-final class _FakeDeleteAvailabilityRule
-    extends UseCase<void, DeleteAvailabilityRuleParams> {
-  @override
-  Future<Result<void, Failure>> call(
-    DeleteAvailabilityRuleParams params,
-  ) async => const Ok(null);
-}
-
 final class _FakeFetchExternalEvents
     extends UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams> {
   @override
@@ -120,6 +86,7 @@ final class _FakeNavigationService implements NavigationService {
   void toClientDetail(String id, {dynamic arguments}) {
     lastClientId = id;
   }
+
   @override
   void toClientEdit(String id, {dynamic arguments}) {}
   @override
@@ -128,6 +95,13 @@ final class _FakeNavigationService implements NavigationService {
   void goBack() {}
 }
 
+PlanningController _makeController({_FakeFetchCalendarSessions? fetch}) =>
+    PlanningController(
+      fetch ?? _FakeFetchCalendarSessions(),
+      _FakeNavigationService(),
+      _FakeFetchExternalEvents(),
+    );
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -135,15 +109,7 @@ void main() {
     group('initialization', () {
       test('loads sessions for current month on init', () async {
         final fetch = _FakeFetchCalendarSessions()..eventsToReturn = [_event()];
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
 
         await controller.loadSessions();
 
@@ -156,15 +122,7 @@ void main() {
       test('sets errorMessage on load failure', () async {
         final fetch = _FakeFetchCalendarSessions()
           ..failureToReturn = const RepositoryFailure('load error');
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
 
         await controller.loadSessions();
 
@@ -177,84 +135,43 @@ void main() {
     group('navigation', () {
       test('goToNext advances focused date by 1 day in day view', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         controller.currentView.value = CalendarView.day;
         final initial = controller.focusedDate.value;
 
         controller.goToNext();
         await controller.loadSessions();
 
-        expect(
-          controller.focusedDate.value.difference(initial).inDays,
-          1,
-        );
+        expect(controller.focusedDate.value.difference(initial).inDays, 1);
       });
 
       test('goToNext advances focused date by 7 days in week view', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         controller.currentView.value = CalendarView.week;
         final initial = controller.focusedDate.value;
 
         controller.goToNext();
         await controller.loadSessions();
 
-        expect(
-          controller.focusedDate.value.difference(initial).inDays,
-          7,
-        );
+        expect(controller.focusedDate.value.difference(initial).inDays, 7);
       });
 
       test('goToPrevious moves back 1 day in day view', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         controller.currentView.value = CalendarView.day;
         final initial = controller.focusedDate.value;
 
         controller.goToPrevious();
         await controller.loadSessions();
 
-        expect(
-          initial.difference(controller.focusedDate.value).inDays,
-          1,
-        );
+        expect(initial.difference(controller.focusedDate.value).inDays, 1);
       });
 
       test('goToToday resets focused date to today', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         controller.focusedDate.value = DateTime(2025, 1, 1);
 
         controller.goToToday();
@@ -270,15 +187,7 @@ void main() {
     group('setView', () {
       test('changes current view', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
 
         controller.setView(CalendarView.day);
         await controller.loadSessions();
@@ -288,15 +197,7 @@ void main() {
 
       test('reloads sessions after view change', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         final countBefore = fetch.callCount;
 
         controller.setView(CalendarView.week);
@@ -309,15 +210,7 @@ void main() {
     group('selectDate', () {
       test('sets focused date and switches to day view', () async {
         final fetch = _FakeFetchCalendarSessions();
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         final target = DateTime(2026, 5, 10);
 
         controller.selectDate(target);
@@ -333,10 +226,6 @@ void main() {
         final nav = _FakeNavigationService();
         final controller = PlanningController(
           _FakeFetchCalendarSessions(),
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
           nav,
           _FakeFetchExternalEvents(),
         );
@@ -351,15 +240,7 @@ void main() {
       test('returns only events matching the given date', () async {
         final event = _event();
         final fetch = _FakeFetchCalendarSessions()..eventsToReturn = [event];
-        final controller = PlanningController(
-          fetch,
-          _FakeFetchAvailabilityRules(),
-          _FakeCreateAvailabilityRule(),
-          _FakeUpdateAvailabilityRule(),
-          _FakeDeleteAvailabilityRule(),
-          _FakeNavigationService(),
-          _FakeFetchExternalEvents(),
-        );
+        final controller = _makeController(fetch: fetch);
         await controller.loadSessions();
 
         final matches = controller.eventsForDate(_now);

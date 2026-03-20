@@ -2,13 +2,8 @@ import 'package:declia/core/enums/availability_rule_type.dart';
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/availability_rule.dart';
-import 'package:declia/domain/entities/calendar_event.dart';
-import 'package:declia/domain/entities/external_calendar_event.dart';
-import 'package:declia/presentation/controllers/planning_controller.dart';
-import 'package:declia/presentation/services/navigation_service.dart';
+import 'package:declia/presentation/controllers/availability_controller.dart';
 import 'package:declia/usecases/availability/params.dart';
-import 'package:declia/usecases/calendar/params.dart';
-import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -36,17 +31,6 @@ AvailabilityRule _blockedRule() => AvailabilityRule(
   createdAt: _now,
   updatedAt: _now,
 );
-
-
-final class _FakeFetchSessions
-    extends UseCase<List<CalendarEvent>, FetchCalendarSessionsParams> {
-  List<CalendarEvent> eventsToReturn = [];
-
-  @override
-  Future<Result<List<CalendarEvent>, Failure>> call(
-    FetchCalendarSessionsParams params,
-  ) async => Ok(eventsToReturn);
-}
 
 final class _FakeFetchAvailabilityRules
     extends UseCase<List<AvailabilityRule>, NoParams> {
@@ -93,70 +77,30 @@ final class _FakeDeleteAvailabilityRule
   String? lastId;
 
   @override
-  Future<Result<void, Failure>> call(DeleteAvailabilityRuleParams params) async {
+  Future<Result<void, Failure>> call(
+    DeleteAvailabilityRuleParams params,
+  ) async {
     lastId = params.id;
     return const Ok(null);
   }
 }
 
-final class _FakeFetchExternalEvents
-    extends UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams> {
-  @override
-  Future<Result<List<ExternalCalendarEvent>, Failure>> call(
-    FetchExternalEventsParams params,
-  ) async => const Ok([]);
-}
-
-final class _FakeNavigationService implements NavigationService {
-  @override
-  String get currentRoute => '';
-  @override
-  void toLogin({String? reason}) {}
-  @override
-  void toHome(dynamic role) {}
-  @override
-  void toDashboard() {}
-  @override
-  void toAdminPage(String route) {}
-  @override
-  void toClientLogin({String? tenantSlug}) {}
-  @override
-  void toClientHome() {}
-  @override
-  void toClientRegister({String? tenantSlug}) {}
-  @override
-  void toClientForgotPassword() {}
-  @override
-  void toLegalPrivacy() {}
-  @override
-  void toClientDetail(String id, {dynamic arguments}) {}
-  @override
-  void toClientEdit(String id, {dynamic arguments}) {}
-  @override
-  void toClientNew() {}
-  @override
-  void goBack() {}
-}
-
-PlanningController _makeController({
+AvailabilityController _makeController({
   _FakeFetchAvailabilityRules? fetchRules,
   _FakeCreateAvailabilityRule? create,
   _FakeUpdateAvailabilityRule? update,
   _FakeDeleteAvailabilityRule? delete,
-}) => PlanningController(
-  _FakeFetchSessions(),
+}) => AvailabilityController(
   fetchRules ?? _FakeFetchAvailabilityRules(),
   create ?? _FakeCreateAvailabilityRule(),
   update ?? _FakeUpdateAvailabilityRule(),
   delete ?? _FakeDeleteAvailabilityRule(),
-  _FakeNavigationService(),
-  _FakeFetchExternalEvents(),
 );
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('PlanningController availability', () {
+  group('AvailabilityController', () {
     group('loadAvailabilityRules', () {
       test('loads rules into availabilityRules on success', () async {
         final fetch = _FakeFetchAvailabilityRules()
@@ -224,7 +168,7 @@ void main() {
         final controller = _makeController(fetchRules: fetch);
         await controller.loadAvailabilityRules();
 
-        expect(controller.hasAvailability(_wednesday), isTrue);
+        expect(controller.hasAvailability(_wednesday, [], []), isTrue);
       });
 
       test('returns false when blocked', () async {
@@ -233,7 +177,7 @@ void main() {
         final controller = _makeController(fetchRules: fetch);
         await controller.loadAvailabilityRules();
 
-        expect(controller.hasAvailability(_wednesday), isFalse);
+        expect(controller.hasAvailability(_wednesday, [], []), isFalse);
       });
     });
 
@@ -244,7 +188,7 @@ void main() {
         final controller = _makeController(fetchRules: fetch);
         await controller.loadAvailabilityRules();
 
-        final slots = controller.availableSlotsForDate(_wednesday);
+        final slots = controller.availableSlotsForDate(_wednesday, [], []);
 
         expect(slots.length, 1);
         expect(slots.first.start, DateTime(2026, 3, 18, 9, 0));
