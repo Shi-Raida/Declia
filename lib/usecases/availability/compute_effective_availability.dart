@@ -70,37 +70,38 @@ List<TimeSlot> computeEffectiveAvailability(
       })
       .map((e) {
         final start = e.session.scheduledAt;
-        final end = start.add(const Duration(hours: 1));
+        final end = start.add(Duration(minutes: e.session.durationMinutes));
         return TimeSlot(start: start, end: end);
       })
       .toList();
 
   var result = baseSlots;
   for (final session in daySessionSlots) {
-    result = result
-        .expand((slot) => _subtractSlot(slot, session))
-        .toList();
+    result = result.expand((slot) => _subtractSlot(slot, session)).toList();
   }
 
   // Step 5: subtract external calendar event times
   final dayExternalSlots = externalEvents
       .where((e) {
         if (e.isAllDay) {
-          return e.startAt.year == date.year &&
-              e.startAt.month == date.month &&
-              e.startAt.day == date.day;
+          return _sameDay(e.startAt, date) ||
+              (e.startAt.isBefore(dateOnly) && e.endAt.isAfter(dateOnly));
         }
-        return e.startAt.year == date.year &&
-            e.startAt.month == date.month &&
-            e.startAt.day == date.day;
+        return _sameDay(e.startAt, date);
       })
-      .map((e) => TimeSlot(start: e.startAt, end: e.endAt))
+      .map((e) {
+        if (e.isAllDay) {
+          return TimeSlot(
+            start: DateTime(date.year, date.month, date.day, 0, 0),
+            end: DateTime(date.year, date.month, date.day, 23, 59, 59),
+          );
+        }
+        return TimeSlot(start: e.startAt, end: e.endAt);
+      })
       .toList();
 
   for (final extSlot in dayExternalSlots) {
-    result = result
-        .expand((slot) => _subtractSlot(slot, extSlot))
-        .toList();
+    result = result.expand((slot) => _subtractSlot(slot, extSlot)).toList();
   }
 
   return result;
@@ -130,8 +131,7 @@ DateTime? _parseTime(String? timeStr, DateTime date) {
 /// Returns [slot] minus the [toRemove] interval (may split into 0-2 sub-slots).
 List<TimeSlot> _subtractSlot(TimeSlot slot, TimeSlot toRemove) {
   // No overlap
-  if (toRemove.end.isBefore(slot.start) ||
-      !toRemove.start.isBefore(slot.end)) {
+  if (toRemove.end.isBefore(slot.start) || !toRemove.start.isBefore(slot.end)) {
     return [slot];
   }
   final result = <TimeSlot>[];
