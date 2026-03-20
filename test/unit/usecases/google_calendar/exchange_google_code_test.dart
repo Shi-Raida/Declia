@@ -25,7 +25,7 @@ final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
   @override
   Future<Result<GoogleCalendarConnection?, Failure>> getConnectionStatus() async => const Ok(null);
   @override
-  Future<Result<void, Failure>> toggleSync({required bool enabled}) async => const Ok(null);
+  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) async => const Ok(null);
   @override
   Future<Result<void, Failure>> triggerSync() async => const Ok(null);
   @override

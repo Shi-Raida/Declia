@@ -54,7 +54,7 @@ final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
   }
 
   @override
-  Future<Result<void, Failure>> toggleSync({required bool enabled}) async {
+  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) async {
     lastEnabledValue = enabled;
     if (failureToReturn != null) return Err(failureToReturn!);
     return const Ok(null);
@@ -120,7 +120,7 @@ final class ToggleSyncFake extends UseCase<void, ToggleSyncParams> {
   final _FakeGoogleCalendarRepository _repo;
   @override
   Future<Result<void, Failure>> call(ToggleSyncParams p) =>
-      _repo.toggleSync(enabled: p.enabled);
+      _repo.toggleSync(id: p.id, enabled: p.enabled);
 }
 
 final class TriggerSyncFake extends UseCase<void, NoParams> {

@@ -61,7 +61,7 @@ final class _FakeGoogleCalendarDataSource implements GoogleCalendarDataSource {
   }
 
   @override
-  Future<void> toggleSync({required bool enabled}) async {
+  Future<void> toggleSync({required String id, required bool enabled}) async {
     if (errorToThrow != null) throw errorToThrow!;
   }
 

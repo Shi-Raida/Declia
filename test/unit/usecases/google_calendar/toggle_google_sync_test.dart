@@ -8,11 +8,13 @@ import 'package:declia/usecases/google_calendar/toggle_google_sync.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
+  String? lastIdValue;
   bool? lastEnabledValue;
   Failure? failureToReturn;
 
   @override
-  Future<Result<void, Failure>> toggleSync({required bool enabled}) async {
+  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) async {
+    lastIdValue = id;
     lastEnabledValue = enabled;
     if (failureToReturn != null) return Err(failureToReturn!);
     return const Ok(null);
@@ -37,21 +39,22 @@ final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
 
 void main() {
   group('ToggleGoogleSync', () {
-    test('passes enabled=true to repository', () async {
+    test('passes id and enabled=true to repository', () async {
       final repo = _FakeGoogleCalendarRepository();
       final useCase = ToggleGoogleSync(repo);
 
-      final result = await useCase((enabled: true));
+      final result = await useCase((id: 'conn-1', enabled: true));
 
       expect(result.isOk, isTrue);
+      expect(repo.lastIdValue, 'conn-1');
       expect(repo.lastEnabledValue, isTrue);
     });
 
-    test('passes enabled=false to repository', () async {
+    test('passes id and enabled=false to repository', () async {
       final repo = _FakeGoogleCalendarRepository();
       final useCase = ToggleGoogleSync(repo);
 
-      final result = await useCase((enabled: false));
+      final result = await useCase((id: 'conn-1', enabled: false));
 
       expect(result.isOk, isTrue);
       expect(repo.lastEnabledValue, isFalse);
@@ -62,7 +65,7 @@ void main() {
         ..failureToReturn = const RepositoryFailure('toggle error');
       final useCase = ToggleGoogleSync(repo);
 
-      final result = await useCase((enabled: true));
+      final result = await useCase((id: 'conn-1', enabled: true));
 
       expect(result.isOk, isFalse);
     });
