@@ -36,11 +36,13 @@ final class GoogleCalendarRepositoryImpl implements GoogleCalendarRepository {
       );
 
   @override
-  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) =>
-      _guard(
-        () => _dataSource.toggleSync(id: id, enabled: enabled),
-        method: 'toggleSync',
-      );
+  Future<Result<void, Failure>> toggleSync({
+    required String id,
+    required bool enabled,
+  }) => _guard(
+    () => _dataSource.toggleSync(id: id, enabled: enabled),
+    method: 'toggleSync',
+  );
 
   @override
   Future<Result<void, Failure>> triggerSync() =>

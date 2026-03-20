@@ -21,7 +21,10 @@ final class SupabaseGoogleCalendarDataSource
       final data = response.data as Map<String, dynamic>;
       return data['url'] as String;
     } on FunctionException catch (e) {
-      throw RepositoryException(e.details?.toString() ?? 'Failed to get auth URL', cause: e);
+      throw RepositoryException(
+        e.details?.toString() ?? 'Failed to get auth URL',
+        cause: e,
+      );
     }
   }
 
@@ -33,7 +36,10 @@ final class SupabaseGoogleCalendarDataSource
         body: {'action': 'exchange_code', 'code': code},
       );
     } on FunctionException catch (e) {
-      throw RepositoryException(e.details?.toString() ?? 'Failed to exchange code', cause: e);
+      throw RepositoryException(
+        e.details?.toString() ?? 'Failed to exchange code',
+        cause: e,
+      );
     }
   }
 
@@ -45,7 +51,10 @@ final class SupabaseGoogleCalendarDataSource
         body: {'action': 'disconnect'},
       );
     } on FunctionException catch (e) {
-      throw RepositoryException(e.details?.toString() ?? 'Failed to disconnect', cause: e);
+      throw RepositoryException(
+        e.details?.toString() ?? 'Failed to disconnect',
+        cause: e,
+      );
     }
   }
 
@@ -54,7 +63,9 @@ final class SupabaseGoogleCalendarDataSource
     try {
       final data = await _client
           .from('google_calendar_connections')
-          .select('id, tenant_id, calendar_id, sync_enabled, last_sync_at, created_at, updated_at')
+          .select(
+            'id, tenant_id, calendar_id, sync_enabled, last_sync_at, created_at, updated_at',
+          )
           .maybeSingle();
       if (data == null) return null;
       return GoogleCalendarConnection.fromJson(
@@ -82,7 +93,10 @@ final class SupabaseGoogleCalendarDataSource
     try {
       await _client.functions.invoke('google-calendar-sync');
     } on FunctionException catch (e) {
-      throw RepositoryException(e.details?.toString() ?? 'Sync failed', cause: e);
+      throw RepositoryException(
+        e.details?.toString() ?? 'Sync failed',
+        cause: e,
+      );
     }
   }
 
@@ -99,7 +113,11 @@ final class SupabaseGoogleCalendarDataSource
           .lte('end_at', end.toIso8601String())
           .order('start_at');
       return (data as List)
-          .map((e) => ExternalCalendarEvent.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map(
+            (e) => ExternalCalendarEvent.fromJson(
+              Map<String, dynamic>.from(e as Map),
+            ),
+          )
           .toList();
     } on PostgrestException catch (e) {
       throw RepositoryException(e.message, cause: e);

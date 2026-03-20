@@ -63,7 +63,9 @@ abstract final class GoogleCalendarInjection {
       tag: 'triggerGoogleSync',
       fenix: true,
     );
-    Get.lazyPut<UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams>>(
+    Get.lazyPut<
+      UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams>
+    >(
       () => FetchExternalEvents(Get.find<GoogleCalendarRepository>()),
       fenix: true,
     );

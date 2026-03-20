@@ -17,8 +17,8 @@ class ClientFormBinding extends Bindings {
     final vm = Get.arguments as ClientViewModel?;
     final client = vm != null
         ? (Get.isRegistered<ClientsController>()
-            ? Get.find<ClientsController>().entityById(vm.id)
-            : Get.find<ClientDetailController>().clientEntity)
+              ? Get.find<ClientsController>().entityById(vm.id)
+              : Get.find<ClientDetailController>().clientEntity)
         : null;
     Get.lazyPut<ClientFormController>(
       () => ClientFormController(

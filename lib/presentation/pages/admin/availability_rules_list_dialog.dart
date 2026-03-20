@@ -22,15 +22,7 @@ class AvailabilityRulesListDialog extends StatelessWidget {
   final void Function(AvailabilityRule) onEdit;
   final void Function(String id) onDelete;
 
-  static const _weekdays = [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-  ];
+  static const _weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   @override
   Widget build(BuildContext context) {
@@ -79,28 +71,27 @@ class AvailabilityRulesListDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: AvailabilityRuleType.values
                       .where((t) => grouped[t]!.isNotEmpty)
-                      .expand((type) => [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 12,
-                                bottom: 6,
-                              ),
-                              child: Text(
-                                _typeLabel(type),
-                                style: AppTypography.bodySmall().copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.pierre,
-                                ),
+                      .expand(
+                        (type) => [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 12, bottom: 6),
+                            child: Text(
+                              _typeLabel(type),
+                              style: AppTypography.bodySmall().copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.pierre,
                               ),
                             ),
-                            ...grouped[type]!.map(
-                              (rule) => _RuleListTile(
-                                rule: rule,
-                                weekdays: _weekdays,
-                                onEdit: () => _openEditDialog(context, rule),
-                              ),
+                          ),
+                          ...grouped[type]!.map(
+                            (rule) => _RuleListTile(
+                              rule: rule,
+                              weekdays: _weekdays,
+                              onEdit: () => _openEditDialog(context, rule),
                             ),
-                          ])
+                          ),
+                        ],
+                      )
                       .toList(),
                 ),
               ),

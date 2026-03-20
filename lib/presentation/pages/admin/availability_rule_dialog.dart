@@ -106,7 +106,9 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
       id: widget.rule?.id ?? '',
       tenantId: widget.rule?.tenantId ?? '',
       ruleType: _ruleType,
-      dayOfWeek: _ruleType == AvailabilityRuleType.recurring ? _dayOfWeek : null,
+      dayOfWeek: _ruleType == AvailabilityRuleType.recurring
+          ? _dayOfWeek
+          : null,
       specificDate: _ruleType != AvailabilityRuleType.recurring
           ? _specificDate
           : null,
@@ -175,10 +177,8 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
                 ),
                 items: List.generate(
                   7,
-                  (i) => DropdownMenuItem(
-                    value: i + 1,
-                    child: Text(_weekdays[i]),
-                  ),
+                  (i) =>
+                      DropdownMenuItem(value: i + 1, child: Text(_weekdays[i])),
                 ),
                 onChanged: (v) => setState(() => _dayOfWeek = v),
               ),
@@ -197,8 +197,8 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
                   child: Text(
                     _specificDate != null
                         ? '${_specificDate!.day.toString().padLeft(2, '0')}/'
-                            '${_specificDate!.month.toString().padLeft(2, '0')}/'
-                            '${_specificDate!.year}'
+                              '${_specificDate!.month.toString().padLeft(2, '0')}/'
+                              '${_specificDate!.year}'
                         : '—',
                   ),
                 ),

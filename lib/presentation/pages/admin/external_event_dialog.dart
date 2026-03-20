@@ -22,11 +22,13 @@ class ExternalEventDialog extends StatelessWidget {
     return AlertDialog(
       title: Row(
         children: [
-          const Icon(Icons.calendar_today, size: 18, color: AppColors.bleuOuvert),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(event.title, style: AppTypography.heading4()),
+          const Icon(
+            Icons.calendar_today,
+            size: 18,
+            color: AppColors.bleuOuvert,
           ),
+          const SizedBox(width: 8),
+          Expanded(child: Text(event.title, style: AppTypography.heading4())),
         ],
       ),
       content: SizedBox(
@@ -88,9 +90,7 @@ class _InfoRow extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: Text(value, style: AppTypography.bodySmall()),
-          ),
+          Expanded(child: Text(value, style: AppTypography.bodySmall())),
         ],
       ),
     );

@@ -136,48 +136,48 @@ class _TagsField extends StatelessWidget {
                     );
                   },
                   onSelected: controller.addTag,
-                  fieldViewBuilder: (
-                    context,
-                    textController,
-                    focusNode,
-                    onFieldSubmitted,
-                  ) {
-                    return TextField(
-                      controller: textController,
-                      focusNode: focusNode,
-                      style: AppTypography.bodyMedium(),
-                      decoration: InputDecoration(
-                        hintText: '+ tag',
-                        hintStyle: AppTypography.bodySmall(),
-                        filled: true,
-                        fillColor: AppColors.bg,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 6,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(color: AppColors.border),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(color: AppColors.border),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          borderSide: const BorderSide(
-                            color: AppColors.terracotta,
-                            width: 1.5,
+                  fieldViewBuilder:
+                      (context, textController, focusNode, onFieldSubmitted) {
+                        return TextField(
+                          controller: textController,
+                          focusNode: focusNode,
+                          style: AppTypography.bodyMedium(),
+                          decoration: InputDecoration(
+                            hintText: '+ tag',
+                            hintStyle: AppTypography.bodySmall(),
+                            filled: true,
+                            fillColor: AppColors.bg,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 6,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6),
+                              borderSide: const BorderSide(
+                                color: AppColors.border,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6),
+                              borderSide: const BorderSide(
+                                color: AppColors.border,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6),
+                              borderSide: const BorderSide(
+                                color: AppColors.terracotta,
+                                width: 1.5,
+                              ),
+                            ),
+                            isDense: true,
                           ),
-                        ),
-                        isDense: true,
-                      ),
-                      onSubmitted: (value) {
-                        controller.addTag(value);
-                        textController.clear();
+                          onSubmitted: (value) {
+                            controller.addTag(value);
+                            textController.clear();
+                          },
+                        );
                       },
-                    );
-                  },
                 ),
               ),
             ],

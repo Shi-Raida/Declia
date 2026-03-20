@@ -25,12 +25,18 @@ class ExternalEventPill extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.bleuOuvertLight,
           borderRadius: BorderRadius.circular(3),
-          border: Border.all(color: AppColors.bleuOuvert.withValues(alpha: 0.4)),
+          border: Border.all(
+            color: AppColors.bleuOuvert.withValues(alpha: 0.4),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.calendar_today, size: 8, color: AppColors.bleuOuvert),
+            const Icon(
+              Icons.calendar_today,
+              size: 8,
+              color: AppColors.bleuOuvert,
+            ),
             const SizedBox(width: 2),
             Flexible(
               child: Text(

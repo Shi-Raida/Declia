@@ -8,7 +8,10 @@ abstract interface class GoogleCalendarRepository {
   Future<Result<void, Failure>> exchangeCode(String code);
   Future<Result<void, Failure>> disconnect();
   Future<Result<GoogleCalendarConnection?, Failure>> getConnectionStatus();
-  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled});
+  Future<Result<void, Failure>> toggleSync({
+    required String id,
+    required bool enabled,
+  });
   Future<Result<void, Failure>> triggerSync();
   Future<Result<List<ExternalCalendarEvent>, Failure>> fetchExternalEvents({
     required DateTime start,

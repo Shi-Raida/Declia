@@ -230,49 +230,47 @@ class _ClientsFilterBarState extends State<_ClientsFilterBar> {
                       );
                     },
                     onSelected: (tag) => ctrl.addTag(tag),
-                    fieldViewBuilder: (
-                      context,
-                      textController,
-                      focusNode,
-                      onFieldSubmitted,
-                    ) {
-                      return TextField(
-                        controller: textController,
-                        focusNode: focusNode,
-                        style: AppTypography.bodySmall(),
-                        decoration: InputDecoration(
-                          hintText: Tr.adminClientsFilterTagHint.tr,
-                          hintStyle: AppTypography.bodySmall(),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 0,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                            borderSide:
-                                const BorderSide(color: AppColors.border),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                            borderSide:
-                                const BorderSide(color: AppColors.border),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(6),
-                            borderSide: const BorderSide(
-                              color: AppColors.terracotta,
+                    fieldViewBuilder:
+                        (context, textController, focusNode, onFieldSubmitted) {
+                          return TextField(
+                            controller: textController,
+                            focusNode: focusNode,
+                            style: AppTypography.bodySmall(),
+                            decoration: InputDecoration(
+                              hintText: Tr.adminClientsFilterTagHint.tr,
+                              hintStyle: AppTypography.bodySmall(),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 0,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: const BorderSide(
+                                  color: AppColors.border,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: const BorderSide(
+                                  color: AppColors.border,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                borderSide: const BorderSide(
+                                  color: AppColors.terracotta,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        onSubmitted: (value) {
-                          final tag = value.trim();
-                          if (tag.isNotEmpty) {
-                            ctrl.addTag(tag);
-                            textController.clear();
-                          }
+                            onSubmitted: (value) {
+                              final tag = value.trim();
+                              if (tag.isNotEmpty) {
+                                ctrl.addTag(tag);
+                                textController.clear();
+                              }
+                            },
+                          );
                         },
-                      );
-                    },
                   ),
                 ),
                 const SizedBox(width: 4),

@@ -55,6 +55,8 @@ final class ClientRepositoryImpl implements ClientRepository {
   }
 
   @override
-  Future<Result<List<String>, Failure>> fetchDistinctTags() =>
-      _guard(() => _dataSource.fetchDistinctTags(), method: 'fetchDistinctTags');
+  Future<Result<List<String>, Failure>> fetchDistinctTags() => _guard(
+    () => _dataSource.fetchDistinctTags(),
+    method: 'fetchDistinctTags',
+  );
 }
