@@ -21,9 +21,7 @@ class SettingsPage extends GetView<SettingsController> {
         }
         return ListView(
           padding: const EdgeInsets.all(24),
-          children: [
-            _GoogleCalendarSection(controller: controller),
-          ],
+          children: [_GoogleCalendarSection(controller: controller)],
         );
       }),
     );
@@ -59,8 +57,9 @@ class _GoogleCalendarSection extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 16),
               child: Text(
                 controller.errorMessage.value!,
-                style: AppTypography.bodySmall()
-                    .copyWith(color: AppColors.error),
+                style: AppTypography.bodySmall().copyWith(
+                  color: AppColors.error,
+                ),
               ),
             ),
           // Status card
@@ -78,9 +77,7 @@ class _GoogleCalendarSection extends StatelessWidget {
                   children: [
                     Icon(
                       isConnected ? Icons.check_circle : Icons.link_off,
-                      color: isConnected
-                          ? AppColors.success
-                          : AppColors.pierre,
+                      color: isConnected ? AppColors.success : AppColors.pierre,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
@@ -118,9 +115,8 @@ class _GoogleCalendarSection extends StatelessWidget {
                       const Spacer(),
                       Switch(
                         value: conn.syncEnabled,
-                        onChanged: (v) =>
-                            controller.toggleSync(enabled: v),
-                        activeColor: AppColors.terracotta,
+                        onChanged: (v) => controller.toggleSync(enabled: v),
+                        activeThumbColor: AppColors.terracotta,
                       ),
                     ],
                   ),
@@ -213,8 +209,7 @@ class _GoogleCalendarSection extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               Tr.adminClientFormCancel.tr,
-              style: AppTypography.button()
-                  .copyWith(color: AppColors.pierre),
+              style: AppTypography.button().copyWith(color: AppColors.pierre),
             ),
           ),
           FilledButton(
@@ -234,8 +229,10 @@ class _GoogleCalendarSection extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime dt) {
-    final d = '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
-    final t = '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+    final d =
+        '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
+    final t =
+        '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
     return '$d $t';
   }
 }
@@ -300,9 +297,8 @@ class _AuthCodeInputState extends State<_AuthCodeInput> {
               ),
               IconButton(
                 icon: const Icon(Icons.copy, size: 16),
-                onPressed: () => Clipboard.setData(
-                  ClipboardData(text: widget.authUrl),
-                ),
+                onPressed: () =>
+                    Clipboard.setData(ClipboardData(text: widget.authUrl)),
                 tooltip: 'Copy URL',
               ),
             ],
@@ -333,8 +329,9 @@ class _AuthCodeInputState extends State<_AuthCodeInput> {
                 onPressed: widget.onCancel,
                 child: Text(
                   Tr.adminClientFormCancel.tr,
-                  style: AppTypography.button()
-                      .copyWith(color: AppColors.pierre),
+                  style: AppTypography.button().copyWith(
+                    color: AppColors.pierre,
+                  ),
                 ),
               ),
             ],
@@ -366,9 +363,7 @@ class _InfoRow extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: Text(value, style: AppTypography.bodySmall()),
-          ),
+          Expanded(child: Text(value, style: AppTypography.bodySmall())),
         ],
       ),
     );
