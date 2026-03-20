@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/settings_controller.dart';
@@ -7,6 +6,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/admin/admin_layout.dart';
+import 'settings_auth_code_input.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({super.key});
@@ -178,7 +178,7 @@ class _GoogleCalendarSection extends StatelessWidget {
             ),
           // Pending auth URL — show after connectGoogle()
           if (controller.pendingAuthUrl.value != null)
-            _AuthCodeInput(
+            SettingsAuthCodeInput(
               authUrl: controller.pendingAuthUrl.value!,
               onSubmit: controller.submitAuthCode,
               onCancel: () => controller.pendingAuthUrl.value = null,
@@ -234,111 +234,6 @@ class _GoogleCalendarSection extends StatelessWidget {
     final t =
         '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
     return '$d $t';
-  }
-}
-
-class _AuthCodeInput extends StatefulWidget {
-  const _AuthCodeInput({
-    required this.authUrl,
-    required this.onSubmit,
-    required this.onCancel,
-  });
-
-  final String authUrl;
-  final Future<void> Function(String code) onSubmit;
-  final VoidCallback onCancel;
-
-  @override
-  State<_AuthCodeInput> createState() => _AuthCodeInputState();
-}
-
-class _AuthCodeInputState extends State<_AuthCodeInput> {
-  final _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.orLight,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.or.withValues(alpha: 0.4)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            Tr.settingsGoogleCalendarAuthCode.tr,
-            style: AppTypography.bodyMedium().copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          // URL to open manually
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  widget.authUrl,
-                  style: AppTypography.bodySmall().copyWith(
-                    color: AppColors.bleuOuvert,
-                    decoration: TextDecoration.underline,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.copy, size: 16),
-                onPressed: () =>
-                    Clipboard.setData(ClipboardData(text: widget.authUrl)),
-                tooltip: 'Copy URL',
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              labelText: Tr.settingsGoogleCalendarAuthCodeHint.tr,
-              border: const OutlineInputBorder(),
-            ),
-            style: AppTypography.bodySmall(),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              FilledButton(
-                onPressed: () => widget.onSubmit(_controller.text),
-                style: FilledButton.styleFrom(
-                  backgroundColor: AppColors.terracotta,
-                  foregroundColor: Colors.white,
-                  textStyle: AppTypography.button(),
-                ),
-                child: Text(Tr.settingsGoogleCalendarConnect.tr),
-              ),
-              const SizedBox(width: 8),
-              TextButton(
-                onPressed: widget.onCancel,
-                child: Text(
-                  Tr.adminClientFormCancel.tr,
-                  style: AppTypography.button().copyWith(
-                    color: AppColors.pierre,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 }
 
