@@ -1,3 +1,3 @@
 typedef ExchangeCodeParams = ({String code});
-typedef ToggleSyncParams = ({bool enabled});
+typedef ToggleSyncParams = ({String id, bool enabled});
 typedef FetchExternalEventsParams = ({DateTime start, DateTime end});

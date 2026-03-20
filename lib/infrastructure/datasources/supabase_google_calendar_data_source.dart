@@ -66,11 +66,12 @@ final class SupabaseGoogleCalendarDataSource
   }
 
   @override
-  Future<void> toggleSync({required bool enabled}) async {
+  Future<void> toggleSync({required String id, required bool enabled}) async {
     try {
       await _client
           .from('google_calendar_connections')
-          .update({'sync_enabled': enabled});
+          .update({'sync_enabled': enabled})
+          .eq('id', id);
     } on PostgrestException catch (e) {
       throw RepositoryException(e.message, cause: e);
     }

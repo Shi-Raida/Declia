@@ -95,7 +95,9 @@ final class SettingsController extends GetxController {
   }
 
   Future<void> toggleSync({required bool enabled}) async {
-    final result = await _toggleSync((enabled: enabled));
+    final id = connection.value?.id;
+    if (id == null) return;
+    final result = await _toggleSync((id: id, enabled: enabled));
     result.fold(
       ok: (_) {
         if (connection.value != null) {

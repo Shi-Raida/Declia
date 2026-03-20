@@ -11,5 +11,5 @@ final class ToggleGoogleSync extends UseCase<void, ToggleSyncParams> {
 
   @override
   Future<Result<void, Failure>> call(ToggleSyncParams params) =>
-      _repository.toggleSync(enabled: params.enabled);
+      _repository.toggleSync(id: params.id, enabled: params.enabled);
 }

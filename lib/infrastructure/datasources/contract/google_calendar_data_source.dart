@@ -6,7 +6,7 @@ abstract interface class GoogleCalendarDataSource {
   Future<void> exchangeCode(String code);
   Future<void> disconnect();
   Future<GoogleCalendarConnection?> getConnectionStatus();
-  Future<void> toggleSync({required bool enabled});
+  Future<void> toggleSync({required String id, required bool enabled});
   Future<void> triggerSync();
   Future<List<ExternalCalendarEvent>> fetchExternalEvents({
     required DateTime start,
