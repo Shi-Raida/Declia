@@ -226,13 +226,17 @@ void main() {
     });
 
     test('fetchDistinctTags returns Ok with tag list', () async {
-      final ds = _FakeClientDataSource()..tagsToReturn = ['portrait', 'wedding'];
+      final ds = _FakeClientDataSource()
+        ..tagsToReturn = ['portrait', 'wedding'];
       final repo = _makeRepo(ds);
 
       final result = await repo.fetchDistinctTags();
 
       expect(result, isA<Ok<List<String>, Failure>>());
-      expect((result as Ok<List<String>, Failure>).value, ['portrait', 'wedding']);
+      expect((result as Ok<List<String>, Failure>).value, [
+        'portrait',
+        'wedding',
+      ]);
     });
 
     test('fetchDistinctTags returns Err when data source throws', () async {

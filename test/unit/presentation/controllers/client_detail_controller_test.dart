@@ -198,27 +198,29 @@ void main() {
       expect(controller.isLoading.value, isFalse);
     });
 
-    test('initialize fetches client from API when no initialVm is provided',
-        () async {
-      final getClient = _FakeGetClient();
-      final controller = ClientDetailController(
-        _FakeFetchClientHistory(),
-        _FakeDeleteClient(),
-        _FakeNavigationService(),
-        getClient,
-      );
+    test(
+      'initialize fetches client from API when no initialVm is provided',
+      () async {
+        final getClient = _FakeGetClient();
+        final controller = ClientDetailController(
+          _FakeFetchClientHistory(),
+          _FakeDeleteClient(),
+          _FakeNavigationService(),
+          getClient,
+        );
 
-      await controller.initialize('client-1', null);
+        await controller.initialize('client-1', null);
 
-      expect(getClient.callCount, 1);
-      expect(controller.client.value, isNotNull);
-      expect(controller.client.value?.id, 'client-1');
-      expect(controller.client.value?.firstName, 'Alice');
-      expect(controller.clientEntity, isNotNull);
-      expect(controller.clientEntity?.id, 'client-1');
-      expect(controller.history.value, isNotNull);
-      expect(controller.errorMessage.value, isNull);
-    });
+        expect(getClient.callCount, 1);
+        expect(controller.client.value, isNotNull);
+        expect(controller.client.value?.id, 'client-1');
+        expect(controller.client.value?.firstName, 'Alice');
+        expect(controller.clientEntity, isNotNull);
+        expect(controller.clientEntity?.id, 'client-1');
+        expect(controller.history.value, isNotNull);
+        expect(controller.errorMessage.value, isNull);
+      },
+    );
   });
 
   group('ClientDetailController.deleteClient', () {

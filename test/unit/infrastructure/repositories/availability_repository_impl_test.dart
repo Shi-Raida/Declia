@@ -54,8 +54,7 @@ void main() {
   group('AvailabilityRepositoryImpl', () {
     group('fetchAll', () {
       test('returns rules from data source', () async {
-        final ds = _FakeAvailabilityDataSource()
-          ..rulesToReturn = [_rule()];
+        final ds = _FakeAvailabilityDataSource()..rulesToReturn = [_rule()];
         final repo = AvailabilityRepositoryImpl(
           dataSource: ds,
           guard: MockRepositoryGuard(),

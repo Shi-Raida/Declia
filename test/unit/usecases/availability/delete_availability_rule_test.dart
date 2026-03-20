@@ -14,12 +14,14 @@ final class _FakeAvailabilityRepository implements AvailabilityRepository {
       const Ok([]);
 
   @override
-  Future<Result<AvailabilityRule, Failure>> create(AvailabilityRule rule) async =>
-      Ok(rule);
+  Future<Result<AvailabilityRule, Failure>> create(
+    AvailabilityRule rule,
+  ) async => Ok(rule);
 
   @override
-  Future<Result<AvailabilityRule, Failure>> update(AvailabilityRule rule) async =>
-      Ok(rule);
+  Future<Result<AvailabilityRule, Failure>> update(
+    AvailabilityRule rule,
+  ) async => Ok(rule);
 
   @override
   Future<Result<void, Failure>> delete(String id) async {

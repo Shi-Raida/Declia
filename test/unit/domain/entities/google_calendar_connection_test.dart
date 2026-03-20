@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final now = DateTime(2026, 3, 21);
 
-  GoogleCalendarConnection _connection() => GoogleCalendarConnection(
+  GoogleCalendarConnection makeConnection() => GoogleCalendarConnection(
     id: 'c1',
     tenantId: 'tid',
     calendarId: 'primary',
@@ -15,7 +15,7 @@ void main() {
 
   group('GoogleCalendarConnection JSON round-trip', () {
     test('serializes and deserializes correctly', () {
-      final conn = _connection();
+      final conn = makeConnection();
 
       final json = conn.toJson();
       final restored = GoogleCalendarConnection.fromJson(json);
@@ -29,7 +29,7 @@ void main() {
 
     test('with lastSyncAt serializes correctly', () {
       final lastSync = DateTime(2026, 3, 21, 9, 0);
-      final conn = _connection().copyWith(lastSyncAt: lastSync);
+      final conn = makeConnection().copyWith(lastSyncAt: lastSync);
 
       final json = conn.toJson();
       final restored = GoogleCalendarConnection.fromJson(json);
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('copyWith updates syncEnabled', () {
-      final conn = _connection();
+      final conn = makeConnection();
       final updated = conn.copyWith(syncEnabled: false);
 
       expect(updated.syncEnabled, isFalse);

@@ -144,8 +144,7 @@ class MockGoogleCalendarRepository extends Mock
 class MockGoogleCalendarDataSource extends Mock
     implements GoogleCalendarDataSource {}
 
-class MockGetGoogleAuthUrl extends Mock
-    implements UseCase<String, NoParams> {}
+class MockGetGoogleAuthUrl extends Mock implements UseCase<String, NoParams> {}
 
 class MockExchangeGoogleCode extends Mock
     implements UseCase<void, ExchangeCodeParams> {}
@@ -159,11 +158,11 @@ class MockGetGoogleConnectionStatus extends Mock
 class MockToggleGoogleSync extends Mock
     implements UseCase<void, ToggleSyncParams> {}
 
-class MockTriggerGoogleSync extends Mock
-    implements UseCase<void, NoParams> {}
+class MockTriggerGoogleSync extends Mock implements UseCase<void, NoParams> {}
 
 class MockFetchExternalEvents extends Mock
-    implements UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams> {}
+    implements
+        UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams> {}
 
 /// A manual guard implementation that can be toggled between success and failure.
 final class MockRepositoryGuard implements RepositoryGuard {

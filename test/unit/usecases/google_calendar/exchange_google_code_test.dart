@@ -4,7 +4,6 @@ import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/domain/entities/google_calendar_connection.dart';
 import 'package:declia/domain/repositories/google_calendar_repository.dart';
 import 'package:declia/usecases/google_calendar/exchange_google_code.dart';
-import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
@@ -23,9 +22,13 @@ final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
   @override
   Future<Result<void, Failure>> disconnect() async => const Ok(null);
   @override
-  Future<Result<GoogleCalendarConnection?, Failure>> getConnectionStatus() async => const Ok(null);
+  Future<Result<GoogleCalendarConnection?, Failure>>
+  getConnectionStatus() async => const Ok(null);
   @override
-  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) async => const Ok(null);
+  Future<Result<void, Failure>> toggleSync({
+    required String id,
+    required bool enabled,
+  }) async => const Ok(null);
   @override
   Future<Result<void, Failure>> triggerSync() async => const Ok(null);
   @override

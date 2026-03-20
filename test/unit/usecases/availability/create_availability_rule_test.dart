@@ -32,8 +32,9 @@ final class _FakeAvailabilityRepository implements AvailabilityRepository {
   }
 
   @override
-  Future<Result<AvailabilityRule, Failure>> update(AvailabilityRule rule) async =>
-      Ok(rule);
+  Future<Result<AvailabilityRule, Failure>> update(
+    AvailabilityRule rule,
+  ) async => Ok(rule);
 
   @override
   Future<Result<void, Failure>> delete(String id) async => const Ok(null);

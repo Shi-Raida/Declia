@@ -45,8 +45,7 @@ void main() {
   group('CalendarRepositoryImpl', () {
     group('fetchByDateRange', () {
       test('maps rows to CalendarEvent list', () async {
-        final ds = _FakeCalendarDataSource()
-          ..rowsToReturn = [_sessionRow()];
+        final ds = _FakeCalendarDataSource()..rowsToReturn = [_sessionRow()];
         final repo = CalendarRepositoryImpl(
           dataSource: ds,
           guard: MockRepositoryGuard(),

@@ -4,7 +4,6 @@ import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/domain/entities/google_calendar_connection.dart';
 import 'package:declia/domain/repositories/google_calendar_repository.dart';
 import 'package:declia/usecases/google_calendar/fetch_external_events.dart';
-import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _now = DateTime(2026, 3, 21, 10, 0);
@@ -42,13 +41,18 @@ final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
   @override
   Future<Result<String, Failure>> getAuthUrl() async => const Ok('');
   @override
-  Future<Result<void, Failure>> exchangeCode(String code) async => const Ok(null);
+  Future<Result<void, Failure>> exchangeCode(String code) async =>
+      const Ok(null);
   @override
   Future<Result<void, Failure>> disconnect() async => const Ok(null);
   @override
-  Future<Result<GoogleCalendarConnection?, Failure>> getConnectionStatus() async => const Ok(null);
+  Future<Result<GoogleCalendarConnection?, Failure>>
+  getConnectionStatus() async => const Ok(null);
   @override
-  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) async => const Ok(null);
+  Future<Result<void, Failure>> toggleSync({
+    required String id,
+    required bool enabled,
+  }) async => const Ok(null);
   @override
   Future<Result<void, Failure>> triggerSync() async => const Ok(null);
 }
@@ -89,9 +93,10 @@ void main() {
       final repo = _FakeGoogleCalendarRepository();
       final useCase = FetchExternalEvents(repo);
 
-      final result = await useCase(
-        (start: DateTime(2026, 3, 1), end: DateTime(2026, 3, 31)),
-      );
+      final result = await useCase((
+        start: DateTime(2026, 3, 1),
+        end: DateTime(2026, 3, 31),
+      ));
 
       expect(result.isOk, isTrue);
       result.fold(
@@ -105,9 +110,10 @@ void main() {
         ..failureToReturn = const RepositoryFailure('fetch error');
       final useCase = FetchExternalEvents(repo);
 
-      final result = await useCase(
-        (start: DateTime(2026, 3, 1), end: DateTime(2026, 3, 31)),
-      );
+      final result = await useCase((
+        start: DateTime(2026, 3, 1),
+        end: DateTime(2026, 3, 31),
+      ));
 
       expect(result.isOk, isFalse);
     });

@@ -63,9 +63,10 @@ void main() {
       final repo = _FakeCalendarRepository();
       final useCase = FetchCalendarSessions(repo);
 
-      final result = await useCase(
-        (start: DateTime(2026, 3, 1), end: DateTime(2026, 3, 31)),
-      );
+      final result = await useCase((
+        start: DateTime(2026, 3, 1),
+        end: DateTime(2026, 3, 31),
+      ));
 
       expect(result.isOk, isTrue);
       result.fold(
@@ -79,9 +80,10 @@ void main() {
         ..failureToReturn = const RepositoryFailure('fetch error');
       final useCase = FetchCalendarSessions(repo);
 
-      final result = await useCase(
-        (start: DateTime(2026, 3, 1), end: DateTime(2026, 3, 31)),
-      );
+      final result = await useCase((
+        start: DateTime(2026, 3, 1),
+        end: DateTime(2026, 3, 31),
+      ));
 
       expect(result.isOk, isFalse);
       result.fold(

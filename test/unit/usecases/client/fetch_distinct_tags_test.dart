@@ -17,7 +17,10 @@ void main() {
       final result = await useCase(const NoParams());
 
       expect(result, isA<Ok<List<String>, Failure>>());
-      expect((result as Ok<List<String>, Failure>).value, ['portrait', 'wedding']);
+      expect((result as Ok<List<String>, Failure>).value, [
+        'portrait',
+        'wedding',
+      ]);
     });
 
     test('returns Err when repository returns failure', () async {
@@ -47,7 +50,8 @@ final class _FakeClientRepository implements ClientRepository {
   }
 
   @override
-  Future<Result<List<Client>, Failure>> fetchAll() => throw UnimplementedError();
+  Future<Result<List<Client>, Failure>> fetchAll() =>
+      throw UnimplementedError();
   @override
   Future<Result<Client, Failure>> fetchById(String id) =>
       throw UnimplementedError();

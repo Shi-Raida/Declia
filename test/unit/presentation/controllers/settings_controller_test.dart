@@ -48,13 +48,17 @@ final class _FakeGoogleCalendarRepository implements GoogleCalendarRepository {
   }
 
   @override
-  Future<Result<GoogleCalendarConnection?, Failure>> getConnectionStatus() async {
+  Future<Result<GoogleCalendarConnection?, Failure>>
+  getConnectionStatus() async {
     if (failureToReturn != null) return Err(failureToReturn!);
     return Ok(connectionToReturn);
   }
 
   @override
-  Future<Result<void, Failure>> toggleSync({required String id, required bool enabled}) async {
+  Future<Result<void, Failure>> toggleSync({
+    required String id,
+    required bool enabled,
+  }) async {
     lastEnabledValue = enabled;
     if (failureToReturn != null) return Err(failureToReturn!);
     return const Ok(null);
@@ -87,14 +91,14 @@ SettingsController _makeController(_FakeGoogleCalendarRepository repo) {
 
 final class GetGoogleAuthUrlFake extends UseCase<String, NoParams> {
   GetGoogleAuthUrlFake(this._repo);
-  final _FakeGoogleCalendarRepository _repo;
+  final GoogleCalendarRepository _repo;
   @override
   Future<Result<String, Failure>> call(NoParams _) => _repo.getAuthUrl();
 }
 
 final class ExchangeGoogleCodeFake extends UseCase<void, ExchangeCodeParams> {
   ExchangeGoogleCodeFake(this._repo);
-  final _FakeGoogleCalendarRepository _repo;
+  final GoogleCalendarRepository _repo;
   @override
   Future<Result<void, Failure>> call(ExchangeCodeParams p) =>
       _repo.exchangeCode(p.code);
@@ -102,14 +106,14 @@ final class ExchangeGoogleCodeFake extends UseCase<void, ExchangeCodeParams> {
 
 final class DisconnectFake extends UseCase<void, NoParams> {
   DisconnectFake(this._repo);
-  final _FakeGoogleCalendarRepository _repo;
+  final GoogleCalendarRepository _repo;
   @override
   Future<Result<void, Failure>> call(NoParams _) => _repo.disconnect();
 }
 
 final class GetStatusFake extends UseCase<GoogleCalendarConnection?, NoParams> {
   GetStatusFake(this._repo);
-  final _FakeGoogleCalendarRepository _repo;
+  final GoogleCalendarRepository _repo;
   @override
   Future<Result<GoogleCalendarConnection?, Failure>> call(NoParams _) =>
       _repo.getConnectionStatus();
@@ -117,7 +121,7 @@ final class GetStatusFake extends UseCase<GoogleCalendarConnection?, NoParams> {
 
 final class ToggleSyncFake extends UseCase<void, ToggleSyncParams> {
   ToggleSyncFake(this._repo);
-  final _FakeGoogleCalendarRepository _repo;
+  final GoogleCalendarRepository _repo;
   @override
   Future<Result<void, Failure>> call(ToggleSyncParams p) =>
       _repo.toggleSync(id: p.id, enabled: p.enabled);
@@ -125,7 +129,7 @@ final class ToggleSyncFake extends UseCase<void, ToggleSyncParams> {
 
 final class TriggerSyncFake extends UseCase<void, NoParams> {
   TriggerSyncFake(this._repo);
-  final _FakeGoogleCalendarRepository _repo;
+  final GoogleCalendarRepository _repo;
   @override
   Future<Result<void, Failure>> call(NoParams _) => _repo.triggerSync();
 }
@@ -178,7 +182,10 @@ void main() {
         await controller.connectGoogle();
 
         expect(controller.pendingAuthUrl.value, isNotNull);
-        expect(controller.pendingAuthUrl.value, contains('accounts.google.com'));
+        expect(
+          controller.pendingAuthUrl.value,
+          contains('accounts.google.com'),
+        );
       });
 
       test('sets errorMessage on failure', () async {

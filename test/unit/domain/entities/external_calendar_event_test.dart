@@ -5,7 +5,7 @@ void main() {
   final now = DateTime(2026, 3, 21, 10, 0);
   final later = DateTime(2026, 3, 21, 11, 0);
 
-  ExternalCalendarEvent _event() => ExternalCalendarEvent(
+  ExternalCalendarEvent makeEvent() => ExternalCalendarEvent(
     id: 'e1',
     tenantId: 'tid',
     googleEventId: 'google-123',
@@ -21,7 +21,7 @@ void main() {
 
   group('ExternalCalendarEvent JSON round-trip', () {
     test('serializes and deserializes correctly', () {
-      final event = _event();
+      final event = makeEvent();
 
       final json = event.toJson();
       final restored = ExternalCalendarEvent.fromJson(json);
@@ -37,7 +37,7 @@ void main() {
     });
 
     test('default source is google', () {
-      final event = _event();
+      final event = makeEvent();
       expect(event.source, 'google');
     });
 
@@ -63,8 +63,11 @@ void main() {
     });
 
     test('copyWith updates fields correctly', () {
-      final event = _event();
-      final updated = event.copyWith(title: 'Updated meeting', status: 'cancelled');
+      final event = makeEvent();
+      final updated = event.copyWith(
+        title: 'Updated meeting',
+        status: 'cancelled',
+      );
 
       expect(updated.title, 'Updated meeting');
       expect(updated.status, 'cancelled');
