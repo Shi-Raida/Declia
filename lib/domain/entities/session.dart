@@ -21,6 +21,7 @@ class Session with _$Session {
     @JsonKey(name: 'payment_status') required PaymentStatus paymentStatus,
     required double amount,
     String? notes,
+    @JsonKey(name: 'duration_minutes') @Default(60) int durationMinutes,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'updated_at') required DateTime updatedAt,
   }) = _Session;

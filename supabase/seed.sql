@@ -186,7 +186,7 @@ ON CONFLICT (id) DO NOTHING;
 -- -------------------------------------------------------------
 
 -- Tenant A: 8 sessions (past = completed/cancelled, future = scheduled/confirmed)
-INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_at, location, payment_status, amount, notes) VALUES
+INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_at, location, payment_status, amount, notes, duration_minutes) VALUES
   -- Completed (past)
   (
     '20000000-0000-0000-0000-000000000001',
@@ -196,7 +196,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() - INTERVAL '3 months',
     'Bois de Vincennes, Paris',
     'paid', 350.00,
-    'Séance portrait en extérieur, lumière dorée de fin de journée.'
+    'Séance portrait en extérieur, lumière dorée de fin de journée.',
+    60
   ),
   (
     '20000000-0000-0000-0000-000000000002',
@@ -206,7 +207,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() - INTERVAL '2 months',
     'Parc de la Tête d''Or, Lyon',
     'paid', 480.00,
-    NULL
+    NULL,
+    90
   ),
   (
     '20000000-0000-0000-0000-000000000003',
@@ -216,7 +218,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() - INTERVAL '6 weeks',
     'Studio Fleur de Lumiere',
     'partial', 280.00,
-    'Séance maternité en studio. Reste 80€ à régler.'
+    'Séance maternité en studio. Reste 80€ à régler.',
+    30
   ),
   (
     '20000000-0000-0000-0000-000000000004',
@@ -226,7 +229,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() - INTERVAL '5 weeks',
     NULL,
     'pending', 0.00,
-    'Annulé par le client (urgence professionnelle).'
+    'Annulé par le client (urgence professionnelle).',
+    60
   ),
   -- Future sessions
   (
@@ -237,7 +241,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() + INTERVAL '2 weeks',
     'Haras de Chantilly',
     'pending', 600.00,
-    'Séance équestre. Prévoir tenue professionnelle et tenue décontractée.'
+    'Séance équestre. Prévoir tenue professionnelle et tenue décontractée.',
+    120
   ),
   (
     '20000000-0000-0000-0000-000000000006',
@@ -247,7 +252,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() + INTERVAL '1 month',
     'Montmartre, Paris',
     'pending', 320.00,
-    NULL
+    NULL,
+    60
   ),
   (
     '20000000-0000-0000-0000-000000000007',
@@ -257,7 +263,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() + INTERVAL '3 weeks',
     'Domicile client',
     'partial', 450.00,
-    'Acompte de 200€ reçu.'
+    'Acompte de 200€ reçu.',
+    90
   ),
   (
     '20000000-0000-0000-0000-000000000008',
@@ -267,12 +274,13 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() + INTERVAL '6 weeks',
     NULL,
     'pending', 300.00,
-    NULL
+    NULL,
+    60
   )
 ON CONFLICT (id) DO NOTHING;
 
 -- Tenant B: 2 sessions
-INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_at, location, payment_status, amount, notes) VALUES
+INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_at, location, payment_status, amount, notes, duration_minutes) VALUES
   (
     '20000000-0000-0000-0000-000000000009',
     '00000000-0000-0000-0000-000000000002',
@@ -281,7 +289,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() - INTERVAL '1 month',
     'Studio Luminos, Bucarest',
     'paid', 250.00,
-    NULL
+    NULL,
+    60
   ),
   (
     '20000000-0000-0000-0000-000000000010',
@@ -291,7 +300,8 @@ INSERT INTO public.sessions (id, tenant_id, client_id, type, status, scheduled_a
     NOW() + INTERVAL '2 weeks',
     NULL,
     'pending', 350.00,
-    NULL
+    NULL,
+    60
   )
 ON CONFLICT (id) DO NOTHING;
 
