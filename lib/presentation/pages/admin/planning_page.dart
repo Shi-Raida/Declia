@@ -5,6 +5,7 @@ import '../../../core/enums/calendar_view.dart';
 import '../../../domain/entities/calendar_event.dart';
 import '../../../domain/entities/external_calendar_event.dart';
 import '../../../domain/entities/time_slot.dart';
+import '../../controllers/availability_controller.dart';
 import '../../controllers/planning_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
@@ -22,14 +23,23 @@ class PlanningPage extends GetView<PlanningController> {
 
   @override
   Widget build(BuildContext context) {
+    final availabilityController = Get.find<AvailabilityController>();
     return AdminLayout(
       title: Tr.adminPlanningTitle.tr,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _PlanningToolbar(controller: controller),
+          _PlanningToolbar(
+            controller: controller,
+            availabilityController: availabilityController,
+          ),
           const Divider(height: 1, color: AppColors.border),
-          Expanded(child: _PlanningBody(controller: controller)),
+          Expanded(
+            child: _PlanningBody(
+              controller: controller,
+              availabilityController: availabilityController,
+            ),
+          ),
         ],
       ),
     );
@@ -37,18 +47,22 @@ class PlanningPage extends GetView<PlanningController> {
 }
 
 class _PlanningToolbar extends StatelessWidget {
-  const _PlanningToolbar({required this.controller});
+  const _PlanningToolbar({
+    required this.controller,
+    required this.availabilityController,
+  });
 
   final PlanningController controller;
+  final AvailabilityController availabilityController;
 
   void _showRulesDialog(BuildContext context) {
     showDialog<void>(
       context: context,
       builder: (_) => AvailabilityRulesListDialog(
-        rules: controller.availabilityRules,
-        onAdd: controller.createRule,
-        onEdit: controller.updateRule,
-        onDelete: controller.deleteRule,
+        rules: availabilityController.availabilityRules,
+        onAdd: availabilityController.createRule,
+        onEdit: availabilityController.updateRule,
+        onDelete: availabilityController.deleteRule,
       ),
     );
   }
@@ -120,12 +134,12 @@ class _PlanningToolbar extends StatelessWidget {
             IconButton(
               icon: Icon(
                 Icons.event_available,
-                color: controller.showAvailability.value
+                color: availabilityController.showAvailability.value
                     ? AppColors.terracotta
                     : AppColors.pierre,
               ),
               tooltip: Tr.adminAvailabilityToggle.tr,
-              onPressed: controller.toggleAvailability,
+              onPressed: availabilityController.toggleAvailability,
             ),
             // Manage availability rules
             IconButton(
@@ -151,9 +165,13 @@ class _PlanningToolbar extends StatelessWidget {
 }
 
 class _PlanningBody extends StatelessWidget {
-  const _PlanningBody({required this.controller});
+  const _PlanningBody({
+    required this.controller,
+    required this.availabilityController,
+  });
 
   final PlanningController controller;
+  final AvailabilityController availabilityController;
 
   void _showSessionDetail(BuildContext context, CalendarEvent event) {
     showDialog<void>(
@@ -187,13 +205,19 @@ class _PlanningBody extends StatelessWidget {
       final view = controller.currentView.value;
       final date = controller.focusedDate.value;
       final events = controller.events.toList();
-      final showAvailability = controller.showAvailability.value;
+      final externalEvents = controller.externalEvents.toList();
+      final showAvailability = availabilityController.showAvailability.value;
 
-      List<TimeSlot> slotsForDate(DateTime d) =>
-          showAvailability ? controller.availableSlotsForDate(d) : [];
+      List<TimeSlot> slotsForDate(DateTime d) => showAvailability
+          ? availabilityController.availableSlotsForDate(
+              d,
+              events,
+              externalEvents,
+            )
+          : [];
 
       bool isBlocked(DateTime d) =>
-          showAvailability && controller.isDateBlocked(d);
+          showAvailability && availabilityController.isDateBlocked(d);
 
       return switch (view) {
         CalendarView.month => PlanningMonthView(
@@ -202,8 +226,9 @@ class _PlanningBody extends StatelessWidget {
           onDayTap: controller.selectDate,
           onEventTap: (e) => _showSessionDetail(context, e),
           showAvailability: showAvailability,
-          hasAvailability: controller.hasAvailability,
-          isDateBlocked: controller.isDateBlocked,
+          hasAvailability: (d) =>
+              availabilityController.hasAvailability(d, events, externalEvents),
+          isDateBlocked: availabilityController.isDateBlocked,
           externalEventsForDate: controller.externalEventsForDate,
           onExternalEventTap: (e) => _showExternalEventDetail(context, e),
         ),
