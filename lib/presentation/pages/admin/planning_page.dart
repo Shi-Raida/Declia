@@ -21,9 +21,10 @@ import 'planning_week_view.dart';
 class PlanningPage extends GetView<PlanningController> {
   const PlanningPage({super.key});
 
+  AvailabilityController get availabilityController => Get.find();
+
   @override
   Widget build(BuildContext context) {
-    final availabilityController = Get.find<AvailabilityController>();
     return AdminLayout(
       title: Tr.adminPlanningTitle.tr,
       body: Column(
