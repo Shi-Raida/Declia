@@ -102,11 +102,7 @@ class PlanningDayView extends StatelessWidget {
                                   ),
                                 ),
                             // Hour lines
-                            for (
-                              int i = 0;
-                              i <= _endHour - _startHour;
-                              i++
-                            )
+                            for (int i = 0; i <= _endHour - _startHour; i++)
                               Positioned(
                                 top: i * _hourHeight,
                                 left: 0,
@@ -137,20 +133,29 @@ class PlanningDayView extends StatelessWidget {
                                   event: ext,
                                   onTap: () => onExternalEventTap?.call(ext),
                                   height: _heightFromSlot(
-                                    TimeSlot(start: ext.startAt, end: ext.endAt),
+                                    TimeSlot(
+                                      start: ext.startAt,
+                                      end: ext.endAt,
+                                    ),
                                   ).clamp(_hourHeight - 8, double.infinity),
                                 ),
                               ),
                             // Events
                             for (final event in events)
                               Positioned(
-                                top: _topOffset(event.session.scheduledAt),
+                                top: _topOffset(
+                                  event.session.scheduledAt,
+                                  event.session.durationMinutes,
+                                ),
                                 left: 4,
                                 right: 4,
                                 child: PlanningEventBlock(
                                   event: event,
                                   onTap: () => onEventTap(event),
-                                  height: _hourHeight - 8,
+                                  height:
+                                      (event.session.durationMinutes / 60) *
+                                          _hourHeight -
+                                      8,
                                 ),
                               ),
                           ],
@@ -164,11 +169,11 @@ class PlanningDayView extends StatelessWidget {
     );
   }
 
-  double _topOffset(DateTime scheduledAt) {
-    final minutes =
-        (scheduledAt.hour - _startHour) * 60 + scheduledAt.minute;
+  double _topOffset(DateTime scheduledAt, int durationMinutes) {
+    final minutes = (scheduledAt.hour - _startHour) * 60 + scheduledAt.minute;
     final totalMinutes = (_endHour - _startHour) * 60;
-    return (minutes.clamp(0, totalMinutes - 60) / 60) * _hourHeight;
+    return (minutes.clamp(0, totalMinutes - durationMinutes) / 60) *
+        _hourHeight;
   }
 
   double _topOffsetFromDt(DateTime dt) {
@@ -193,7 +198,11 @@ class _EmptyDay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        for (int i = 0; i <= PlanningDayView._endHour - PlanningDayView._startHour; i++)
+        for (
+          int i = 0;
+          i <= PlanningDayView._endHour - PlanningDayView._startHour;
+          i++
+        )
           Positioned(
             top: i * PlanningDayView._hourHeight,
             left: 0,

@@ -232,6 +232,7 @@ final Map<String, String> frFr = {
   Tr.adminPlanningNoSessions: 'Aucune séance',
   Tr.adminPlanningSessionDetail: 'Détail de la séance',
   Tr.adminPlanningViewClient: 'Voir le client',
+  Tr.adminPlanningDuration: 'Durée',
   Tr.adminPlanningMonday: 'Lun',
   Tr.adminPlanningTuesday: 'Mar',
   Tr.adminPlanningWednesday: 'Mer',

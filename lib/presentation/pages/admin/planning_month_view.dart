@@ -58,9 +58,7 @@ class PlanningMonthView extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: AppColors.border),
-                    ),
+                    border: Border(bottom: BorderSide(color: AppColors.border)),
                   ),
                   child: Text(
                     key.tr,
@@ -86,9 +84,7 @@ class PlanningMonthView extends StatelessWidget {
                       for (int col = 0; col < 7; col++)
                         Expanded(
                           child: _DayCell(
-                            date: gridStart.add(
-                              Duration(days: row * 7 + col),
-                            ),
+                            date: gridStart.add(Duration(days: row * 7 + col)),
                             focusedMonth: focusedDate.month,
                             events: _eventsForDate(
                               gridStart.add(Duration(days: row * 7 + col)),
@@ -98,7 +94,8 @@ class PlanningMonthView extends StatelessWidget {
                             showAvailability: showAvailability,
                             hasAvailability: hasAvailability,
                             isDateBlocked: isDateBlocked,
-                            externalEvents: externalEventsForDate?.call(
+                            externalEvents:
+                                externalEventsForDate?.call(
                                   gridStart.add(Duration(days: row * 7 + col)),
                                 ) ??
                                 [],
@@ -127,14 +124,10 @@ class PlanningMonthView extends StatelessWidget {
     return (totalDays / 7).ceil();
   }
 
-  List<CalendarEvent> _eventsForDate(DateTime date) => events
-      .where((e) {
-        final s = e.session.scheduledAt;
-        return s.year == date.year &&
-            s.month == date.month &&
-            s.day == date.day;
-      })
-      .toList();
+  List<CalendarEvent> _eventsForDate(DateTime date) => events.where((e) {
+    final s = e.session.scheduledAt;
+    return s.year == date.year && s.month == date.month && s.day == date.day;
+  }).toList();
 }
 
 class _DayCell extends StatelessWidget {
@@ -192,8 +185,8 @@ class _DayCell extends StatelessWidget {
           color: blocked
               ? Colors.grey.withAlpha(25)
               : _isCurrentMonth
-                  ? null
-                  : AppColors.bg,
+              ? null
+              : AppColors.bg,
         ),
         padding: const EdgeInsets.all(4),
         child: Column(
@@ -213,8 +206,8 @@ class _DayCell extends StatelessWidget {
                       color: blocked
                           ? AppColors.pierre
                           : hasSlots
-                              ? Colors.green
-                              : Colors.transparent,
+                          ? Colors.green
+                          : Colors.transparent,
                     ),
                   )
                 else
@@ -233,13 +226,14 @@ class _DayCell extends StatelessWidget {
                     child: Text(
                       '${date.day}',
                       style: AppTypography.bodySmall().copyWith(
-                        fontWeight:
-                            _isToday ? FontWeight.w700 : FontWeight.w400,
+                        fontWeight: _isToday
+                            ? FontWeight.w700
+                            : FontWeight.w400,
                         color: _isToday
                             ? Colors.white
                             : _isCurrentMonth
-                                ? AppColors.encre
-                                : AppColors.pierre,
+                            ? AppColors.encre
+                            : AppColors.pierre,
                       ),
                     ),
                   ),
@@ -255,10 +249,7 @@ class _DayCell extends StatelessWidget {
               ),
             // Declia session pills
             for (final event in visible)
-              PlanningEventPill(
-                event: event,
-                onTap: () => onEventTap(event),
-              ),
+              PlanningEventPill(event: event, onTap: () => onEventTap(event)),
             // Overflow indicator
             if (overflow > 0)
               Text(

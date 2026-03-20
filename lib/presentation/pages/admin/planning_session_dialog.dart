@@ -14,6 +14,13 @@ class PlanningSessionDialog extends StatelessWidget {
 
   final CalendarEvent event;
 
+  String _formatDuration(int minutes) {
+    if (minutes < 60) return '${minutes}min';
+    final h = minutes ~/ 60;
+    final m = minutes % 60;
+    return m == 0 ? '${h}h' : '${h}h${m.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final session = event.session;
@@ -35,6 +42,10 @@ class PlanningSessionDialog extends StatelessWidget {
             _InfoRow(
               label: Tr.adminHistoryColDate.tr,
               value: '${formatDate(scheduled)} $hour:$minute',
+            ),
+            _InfoRow(
+              label: Tr.adminPlanningDuration.tr,
+              value: _formatDuration(session.durationMinutes),
             ),
             _InfoRow(
               label: Tr.adminHistoryColType.tr,
@@ -78,8 +89,9 @@ class PlanningSessionDialog extends StatelessWidget {
         FilledButton(
           onPressed: () {
             Navigator.of(context).pop();
-            Get.find<PlanningController>()
-                .goToClientProfile(event.session.clientId);
+            Get.find<PlanningController>().goToClientProfile(
+              event.session.clientId,
+            );
           },
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.crepuscule,
@@ -117,9 +129,7 @@ class _InfoRow extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: Text(value, style: AppTypography.bodySmall()),
-          ),
+          Expanded(child: Text(value, style: AppTypography.bodySmall())),
         ],
       ),
     );

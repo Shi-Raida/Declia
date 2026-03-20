@@ -226,6 +226,7 @@ final Map<String, String> enUs = {
   Tr.adminPlanningNoSessions: 'No sessions',
   Tr.adminPlanningSessionDetail: 'Session detail',
   Tr.adminPlanningViewClient: 'View client',
+  Tr.adminPlanningDuration: 'Duration',
   Tr.adminPlanningMonday: 'Mon',
   Tr.adminPlanningTuesday: 'Tue',
   Tr.adminPlanningWednesday: 'Wed',

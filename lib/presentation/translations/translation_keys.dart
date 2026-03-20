@@ -240,6 +240,7 @@ abstract final class Tr {
   static const String adminPlanningNoSessions = 'adminPlanningNoSessions';
   static const String adminPlanningSessionDetail = 'adminPlanningSessionDetail';
   static const String adminPlanningViewClient = 'adminPlanningViewClient';
+  static const String adminPlanningDuration = 'adminPlanningDuration';
   static const String adminPlanningMonday = 'adminPlanningMonday';
   static const String adminPlanningTuesday = 'adminPlanningTuesday';
   static const String adminPlanningWednesday = 'adminPlanningWednesday';
@@ -270,29 +271,39 @@ abstract final class Tr {
   static const String adminAvailabilityNoSlots = 'adminAvailabilityNoSlots';
 
   // Settings — Google Calendar
-  static const String settingsGoogleCalendarTitle = 'settingsGoogleCalendarTitle';
+  static const String settingsGoogleCalendarTitle =
+      'settingsGoogleCalendarTitle';
   static const String settingsGoogleCalendarDesc = 'settingsGoogleCalendarDesc';
-  static const String settingsGoogleCalendarConnect = 'settingsGoogleCalendarConnect';
-  static const String settingsGoogleCalendarDisconnect = 'settingsGoogleCalendarDisconnect';
+  static const String settingsGoogleCalendarConnect =
+      'settingsGoogleCalendarConnect';
+  static const String settingsGoogleCalendarDisconnect =
+      'settingsGoogleCalendarDisconnect';
   static const String settingsGoogleCalendarDisconnectConfirm =
       'settingsGoogleCalendarDisconnectConfirm';
-  static const String settingsGoogleCalendarConnected = 'settingsGoogleCalendarConnected';
+  static const String settingsGoogleCalendarConnected =
+      'settingsGoogleCalendarConnected';
   static const String settingsGoogleCalendarDisconnected =
       'settingsGoogleCalendarDisconnected';
   static const String settingsGoogleCalendarId = 'settingsGoogleCalendarId';
-  static const String settingsGoogleCalendarLastSync = 'settingsGoogleCalendarLastSync';
-  static const String settingsGoogleCalendarSyncNow = 'settingsGoogleCalendarSyncNow';
-  static const String settingsGoogleCalendarSyncing = 'settingsGoogleCalendarSyncing';
+  static const String settingsGoogleCalendarLastSync =
+      'settingsGoogleCalendarLastSync';
+  static const String settingsGoogleCalendarSyncNow =
+      'settingsGoogleCalendarSyncNow';
+  static const String settingsGoogleCalendarSyncing =
+      'settingsGoogleCalendarSyncing';
   static const String settingsGoogleCalendarSyncEnabled =
       'settingsGoogleCalendarSyncEnabled';
-  static const String settingsGoogleCalendarError = 'settingsGoogleCalendarError';
-  static const String settingsGoogleCalendarAuthCode = 'settingsGoogleCalendarAuthCode';
+  static const String settingsGoogleCalendarError =
+      'settingsGoogleCalendarError';
+  static const String settingsGoogleCalendarAuthCode =
+      'settingsGoogleCalendarAuthCode';
   static const String settingsGoogleCalendarAuthCodeHint =
       'settingsGoogleCalendarAuthCodeHint';
 
   // Planning — External events
   static const String adminPlanningExternalEvent = 'adminPlanningExternalEvent';
-  static const String adminPlanningExternalSource = 'adminPlanningExternalSource';
+  static const String adminPlanningExternalSource =
+      'adminPlanningExternalSource';
 
   // Acquisition source labels
   static const String acquisitionSourceReferral = 'acquisitionSourceReferral';

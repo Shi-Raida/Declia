@@ -37,7 +37,9 @@ class PlanningWeekView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final monday = focusedDate.subtract(Duration(days: focusedDate.weekday - 1));
+    final monday = focusedDate.subtract(
+      Duration(days: focusedDate.weekday - 1),
+    );
     final days = List.generate(7, (i) => monday.add(Duration(days: i)));
 
     return SingleChildScrollView(
@@ -70,7 +72,8 @@ class PlanningWeekView extends StatelessWidget {
                         availableSlots: showAvailability
                             ? (availableSlotsForDate?.call(day) ?? [])
                             : [],
-                        isBlocked: showAvailability &&
+                        isBlocked:
+                            showAvailability &&
                             (isDateBlocked?.call(day) ?? false),
                         externalEvents: externalEventsForDate?.call(day) ?? [],
                         onExternalEventTap: onExternalEventTap,
@@ -85,14 +88,10 @@ class PlanningWeekView extends StatelessWidget {
     );
   }
 
-  List<CalendarEvent> _eventsForDate(DateTime date) => events
-      .where((e) {
-        final s = e.session.scheduledAt;
-        return s.year == date.year &&
-            s.month == date.month &&
-            s.day == date.day;
-      })
-      .toList();
+  List<CalendarEvent> _eventsForDate(DateTime date) => events.where((e) {
+    final s = e.session.scheduledAt;
+    return s.year == date.year && s.month == date.month && s.day == date.day;
+  }).toList();
 }
 
 class _WeekDayColumn extends StatelessWidget {
@@ -156,8 +155,7 @@ class _WeekDayColumn extends StatelessWidget {
                 '${date.day}',
                 style: AppTypography.bodySmall().copyWith(
                   color: _isToday ? AppColors.terracotta : AppColors.encre,
-                  fontWeight:
-                      _isToday ? FontWeight.w700 : FontWeight.w400,
+                  fontWeight: _isToday ? FontWeight.w700 : FontWeight.w400,
                 ),
               ),
             ],
@@ -181,9 +179,7 @@ class _WeekDayColumn extends StatelessWidget {
                     height: _heightFromSlot(slot),
                     left: 0,
                     right: 0,
-                    child: Container(
-                      color: Colors.green.withAlpha(30),
-                    ),
+                    child: Container(color: Colors.green.withAlpha(30)),
                   ),
               // Hour lines
               for (int i = 0; i <= endHour - startHour; i++)
@@ -208,13 +204,17 @@ class _WeekDayColumn extends StatelessWidget {
               // Events
               for (final event in events)
                 Positioned(
-                  top: _topOffset(event.session.scheduledAt),
+                  top: _topOffset(
+                    event.session.scheduledAt,
+                    event.session.durationMinutes,
+                  ),
                   left: 0,
                   right: 0,
                   child: PlanningEventBlock(
                     event: event,
                     onTap: () => onEventTap(event),
-                    height: hourHeight - 4,
+                    height:
+                        (event.session.durationMinutes / 60) * hourHeight - 4,
                   ),
                 ),
             ],
@@ -224,11 +224,10 @@ class _WeekDayColumn extends StatelessWidget {
     );
   }
 
-  double _topOffset(DateTime scheduledAt) {
-    final minutes =
-        (scheduledAt.hour - startHour) * 60 + scheduledAt.minute;
+  double _topOffset(DateTime scheduledAt, int durationMinutes) {
+    final minutes = (scheduledAt.hour - startHour) * 60 + scheduledAt.minute;
     final totalMinutes = (endHour - startHour) * 60;
-    return (minutes.clamp(0, totalMinutes - 60) / 60) * hourHeight;
+    return (minutes.clamp(0, totalMinutes - durationMinutes) / 60) * hourHeight;
   }
 
   double _topOffsetFromDt(DateTime dt) {
