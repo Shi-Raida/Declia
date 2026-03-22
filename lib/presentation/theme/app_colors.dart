@@ -25,6 +25,11 @@ abstract final class AppColors {
   static const Color bgAlt = Color(0xFFF2EEE6);
   static const Color bgCard = Color(0xFFFFFEF9);
 
+  // Mockup-specific tokens
+  static const Color grisTexte = Color(0xFF6B6560);
+  static const Color equestrian = Color(0xFF6B7F5A);
+  static const Color grossesse = Color(0xFF8E6BAF);
+
   // Semantic
   static const Color success = Color(0xFF3F8A5E);
   static const Color successLight = Color(0xFFE8F5EE);

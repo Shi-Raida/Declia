@@ -69,6 +69,27 @@ abstract final class AppTypography {
     letterSpacing: 0.3,
   );
 
+  static TextStyle statValue() => GoogleFonts.cormorantGaramond(
+    fontSize: 26,
+    fontWeight: FontWeight.w600,
+    height: 1.2,
+    color: AppColors.encre,
+  );
+
+  static TextStyle statLabel() => GoogleFonts.outfit(
+    fontSize: 11.5,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 1.3,
+    color: AppColors.grisTexte,
+  );
+
+  static TextStyle sectionTitle() => GoogleFonts.outfit(
+    fontSize: 9.6,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 2.5,
+    color: AppColors.pierre,
+  );
+
   static TextTheme get textTheme => TextTheme(
     displayLarge: heading1(),
     displayMedium: heading2(),

@@ -63,7 +63,19 @@ abstract final class AppTheme {
         borderRadius: BorderRadius.circular(AppRadius.sm),
         borderSide: const BorderSide(color: AppColors.terracotta, width: 1.5),
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+        borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(AppRadius.sm),
+        borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+      ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      hintStyle: AppTypography.bodyMedium().copyWith(
+        fontWeight: FontWeight.w300,
+        color: const Color(0xFFB8B3AC),
+      ),
     ),
     cardTheme: CardThemeData(
       color: AppColors.bgCard,
