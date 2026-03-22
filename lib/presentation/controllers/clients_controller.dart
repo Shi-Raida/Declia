@@ -9,8 +9,10 @@ import '../../usecases/usecase.dart';
 import '../models/client_view_model.dart';
 import '../services/navigation_service.dart';
 import 'client_list_query_mixin.dart';
+import 'client_pagination_mixin.dart';
 
-final class ClientsController extends GetxController with ClientListQueryMixin {
+final class ClientsController extends GetxController
+    with ClientListQueryMixin, ClientPaginationMixin {
   ClientsController(
     this._fetchClientList,
     this._deleteClient,
