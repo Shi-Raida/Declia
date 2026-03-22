@@ -6,6 +6,7 @@ abstract final class Tr {
   static const String loginEmail = 'loginEmail';
   static const String loginEmailHint = 'loginEmailHint';
   static const String loginEmailRequired = 'loginEmailRequired';
+  static const String loginEmailInvalid = 'loginEmailInvalid';
   static const String loginPassword = 'loginPassword';
   static const String loginPasswordRequired = 'loginPasswordRequired';
   static const String loginSubmit = 'loginSubmit';
@@ -66,6 +67,20 @@ abstract final class Tr {
   static const String adminSidebarSettings = 'adminSidebarSettings';
   static const String adminTopbarLogout = 'adminTopbarLogout';
   static const String adminPlaceholderComingSoon = 'adminPlaceholderComingSoon';
+
+  // Sidebar sections (new 3-section layout)
+  static const String adminSectionPrincipal = 'adminSectionPrincipal';
+  static const String adminSectionCommerce = 'adminSectionCommerce';
+  static const String adminSectionOutils = 'adminSectionOutils';
+
+  // Sidebar items (new)
+  static const String adminSidebarOrders = 'adminSidebarOrders';
+  static const String adminSidebarGiftCards = 'adminSidebarGiftCards';
+  static const String adminSidebarPromotions = 'adminSidebarPromotions';
+  static const String adminSidebarTasks = 'adminSidebarTasks';
+
+  // Misc
+  static const String adminBadgeBeta = 'adminBadgeBeta';
 
   // Cookie banner
   static const String cookieBannerTitle = 'cookieBannerTitle';
@@ -304,6 +319,200 @@ abstract final class Tr {
   static const String adminPlanningExternalEvent = 'adminPlanningExternalEvent';
   static const String adminPlanningExternalSource =
       'adminPlanningExternalSource';
+
+  // Login page (new keys)
+  static const String loginTagline = 'loginTagline';
+  static const String loginTaglineHighlight = 'loginTaglineHighlight';
+  static const String loginFeature1 = 'loginFeature1';
+  static const String loginFeature2 = 'loginFeature2';
+  static const String loginFeature3 = 'loginFeature3';
+  static const String loginFeature4 = 'loginFeature4';
+  static const String loginRememberMe = 'loginRememberMe';
+  static const String loginForgotPassword = 'loginForgotPassword';
+  static const String loginRoleClient = 'loginRoleClient';
+  static const String loginRolePhotographer = 'loginRolePhotographer';
+  static const String loginTitleClient = 'loginTitleClient';
+  static const String loginSubtitleClient = 'loginSubtitleClient';
+  static const String loginTitlePhotographer = 'loginTitlePhotographer';
+  static const String loginSubtitlePhotographer = 'loginSubtitlePhotographer';
+  static const String loginSubmitPhotographer = 'loginSubmitPhotographer';
+  static const String loginPhotographerCode = 'loginPhotographerCode';
+  static const String loginPhotographerCodeHint = 'loginPhotographerCodeHint';
+  static const String loginFooterNoAccount = 'loginFooterNoAccount';
+  static const String loginFooterCreateAccount = 'loginFooterCreateAccount';
+  static const String loginFooterCreateAccountPhotographer =
+      'loginFooterCreateAccountPhotographer';
+  static const String loginBrandSubtitle = 'loginBrandSubtitle';
+
+  // Client left panel
+  static const String loginClientTagline = 'loginClientTagline';
+  static const String loginClientTaglineHighlight =
+      'loginClientTaglineHighlight';
+  static const String loginClientSubtitle = 'loginClientSubtitle';
+  static const String loginClientFeature1 = 'loginClientFeature1';
+  static const String loginClientFeature2 = 'loginClientFeature2';
+  static const String loginClientFeature3 = 'loginClientFeature3';
+  static const String loginClientFeature4 = 'loginClientFeature4';
+
+  // Auth — Register form
+  static const String authRegisterTitleClient = 'authRegisterTitleClient';
+  static const String authRegisterTitlePhotographer =
+      'authRegisterTitlePhotographer';
+  static const String authRegisterSubtitleClient = 'authRegisterSubtitleClient';
+  static const String authRegisterSubtitlePhotographer =
+      'authRegisterSubtitlePhotographer';
+  static const String authRegisterFooterHaveAccount =
+      'authRegisterFooterHaveAccount';
+  static const String authRegisterFooterSignIn = 'authRegisterFooterSignIn';
+  static const String authRegisterSuccess = 'authRegisterSuccess';
+
+  // Auth — Error messages
+  static const String authErrorInvalidEmail = 'authErrorInvalidEmail';
+  static const String authErrorPasswordTooShort = 'authErrorPasswordTooShort';
+  static const String authErrorRateLimited = 'authErrorRateLimited';
+  static const String authErrorNetwork = 'authErrorNetwork';
+  static const String authErrorGeneric = 'authErrorGeneric';
+
+  // Auth — Forgot password form
+  static const String authForgotTitle = 'authForgotTitle';
+  static const String authForgotTitlePhotographer =
+      'authForgotTitlePhotographer';
+  static const String authForgotSubtitle = 'authForgotSubtitle';
+  static const String authForgotSubtitlePhotographer =
+      'authForgotSubtitlePhotographer';
+  static const String authForgotSubmit = 'authForgotSubmit';
+  static const String authForgotSuccess = 'authForgotSuccess';
+  static const String authForgotBackToLogin = 'authForgotBackToLogin';
+
+  // Dashboard (new keys)
+  static const String dashboardWelcomeGreeting = 'dashboardWelcomeGreeting';
+  static const String dashboardStatRevenue = 'dashboardStatRevenue';
+  static const String dashboardStatSessions = 'dashboardStatSessions';
+  static const String dashboardStatClients = 'dashboardStatClients';
+  static const String dashboardStatOrders = 'dashboardStatOrders';
+  static const String dashboardUpcomingSessions = 'dashboardUpcomingSessions';
+  static const String dashboardRecentActivity = 'dashboardRecentActivity';
+  static const String dashboardQuickActions = 'dashboardQuickActions';
+  static const String dashboardSeeAll = 'dashboardSeeAll';
+  static const String dashboardNewSession = 'dashboardNewSession';
+  static const String dashboardCreateGallery = 'dashboardCreateGallery';
+  static const String dashboardNewClient = 'dashboardNewClient';
+  static const String dashboardNewInvoice = 'dashboardNewInvoice';
+  static const String dashboardWelcomeSubtitle = 'dashboardWelcomeSubtitle';
+
+  // Clients (new keys)
+  static const String adminClientsTotalClients = 'adminClientsTotalClients';
+  static const String adminClientsActive = 'adminClientsActive';
+  static const String adminClientsStatNew = 'adminClientsStatNew';
+  static const String adminClientsAvgRevenue = 'adminClientsAvgRevenue';
+  static const String adminClientsTableStatus = 'adminClientsTableStatus';
+  static const String adminClientsAllStatuses = 'adminClientsAllStatuses';
+  static const String adminClientsAllCategories = 'adminClientsAllCategories';
+  static const String adminClientsTableCategory = 'adminClientsTableCategory';
+  static const String adminClientsTableRevenue = 'adminClientsTableRevenue';
+  static const String adminClientsExport = 'adminClientsExport';
+
+  // Planning (new keys)
+  static const String planningTabCalendar = 'planningTabCalendar';
+  static const String planningTabEditor = 'planningTabEditor';
+  static const String planningEditorIntro = 'planningEditorIntro';
+  static const String planningQuickFillWeek = 'planningQuickFillWeek';
+  static const String planningQuickFillMorning = 'planningQuickFillMorning';
+  static const String planningQuickFillAfternoon = 'planningQuickFillAfternoon';
+  static const String planningQuickFillClear = 'planningQuickFillClear';
+  static const String planningEditorSave = 'planningEditorSave';
+  static const String planningEditorCancel = 'planningEditorCancel';
+  static const String planningLegendAvailable = 'planningLegendAvailable';
+  static const String planningLegendBlocked = 'planningLegendBlocked';
+  static const String planningEditorClearConfirm = 'planningEditorClearConfirm';
+
+  // Settings (new keys)
+  static const String settingsSectionStudio = 'settingsSectionStudio';
+  static const String settingsSectionLegal = 'settingsSectionLegal';
+  static const String settingsSectionColors = 'settingsSectionColors';
+  static const String settingsSectionTypography = 'settingsSectionTypography';
+  static const String settingsSectionIntegrations =
+      'settingsSectionIntegrations';
+  static const String settingsPlaceholder = 'settingsPlaceholder';
+  static const String settingsSectionMyStudio = 'settingsSectionMyStudio';
+  static const String settingsSectionIdentity = 'settingsSectionIdentity';
+  static const String settingsSectionConnections = 'settingsSectionConnections';
+
+  // Registration wizard
+  static const String registerStepPersonal = 'registerStepPersonal';
+  static const String registerStepBusiness = 'registerStepBusiness';
+  static const String registerStepSecurity = 'registerStepSecurity';
+  static const String registerStepConfirmation = 'registerStepConfirmation';
+  static const String registerStepPersonalDesc = 'registerStepPersonalDesc';
+  static const String registerStepBusinessDesc = 'registerStepBusinessDesc';
+  static const String registerStepSecurityDesc = 'registerStepSecurityDesc';
+  static const String registerStepConfirmationDesc =
+      'registerStepConfirmationDesc';
+  static const String registerFieldFirstName = 'registerFieldFirstName';
+  static const String registerFieldLastName = 'registerFieldLastName';
+  static const String registerFieldPhone = 'registerFieldPhone';
+  static const String registerFieldStreet = 'registerFieldStreet';
+  static const String registerFieldPostalCode = 'registerFieldPostalCode';
+  static const String registerFieldCity = 'registerFieldCity';
+  static const String registerFieldStudioName = 'registerFieldStudioName';
+  static const String registerFieldCompanyName = 'registerFieldCompanyName';
+  static const String registerFieldSiret = 'registerFieldSiret';
+  static const String registerFieldLegalForm = 'registerFieldLegalForm';
+  static const String registerFieldVatNumber = 'registerFieldVatNumber';
+  static const String registerFieldBizStreet = 'registerFieldBizStreet';
+  static const String registerFieldBizPostalCode = 'registerFieldBizPostalCode';
+  static const String registerFieldBizCity = 'registerFieldBizCity';
+  static const String registerFieldAcquisitionSource =
+      'registerFieldAcquisitionSource';
+  static const String registerFieldNotes = 'registerFieldNotes';
+  static const String registerFieldRequired = 'registerFieldRequired';
+  static const String registerConsentCgu = 'registerConsentCgu';
+  static const String registerConsentCguPrefix = 'registerConsentCguPrefix';
+  static const String registerConsentCguLink = 'registerConsentCguLink';
+  static const String registerConsentCguMiddle = 'registerConsentCguMiddle';
+  static const String registerConsentPrivacyLink = 'registerConsentPrivacyLink';
+  static const String registerConsentCguRequired = 'registerConsentCguRequired';
+  static const String registerConsentMarketing = 'registerConsentMarketing';
+  static const String registerBtnContinue = 'registerBtnContinue';
+  static const String registerBtnBack = 'registerBtnBack';
+  static const String registerBtnSubmit = 'registerBtnSubmit';
+  static const String registerSummaryTitle = 'registerSummaryTitle';
+  static const String registerSummaryIdentity = 'registerSummaryIdentity';
+  static const String registerSummaryContact = 'registerSummaryContact';
+  static const String registerSummaryAddress = 'registerSummaryAddress';
+  static const String registerSummaryBusiness = 'registerSummaryBusiness';
+  static const String registerLeftTaglineClient = 'registerLeftTaglineClient';
+  static const String registerLeftTaglineClientHighlight =
+      'registerLeftTaglineClientHighlight';
+  static const String registerLeftTaglinePhotographer =
+      'registerLeftTaglinePhotographer';
+  static const String registerLeftTaglinePhotographerHighlight =
+      'registerLeftTaglinePhotographerHighlight';
+  static const String registerLeftSubtitleClient = 'registerLeftSubtitleClient';
+  static const String registerLeftSubtitlePhotographer =
+      'registerLeftSubtitlePhotographer';
+  static const String registerSectionIdentity = 'registerSectionIdentity';
+  static const String registerSectionStudio = 'registerSectionStudio';
+  static const String registerSectionPreferences = 'registerSectionPreferences';
+  static const String registerAvatarTitle = 'registerAvatarTitle';
+  static const String registerAvatarHint = 'registerAvatarHint';
+  static const String registerSectionAddress = 'registerSectionAddress';
+  static const String registerSectionBizAddress = 'registerSectionBizAddress';
+  static const String registerStepStudio = 'registerStepStudio';
+  static const String registerStepStudioDesc = 'registerStepStudioDesc';
+  static const String registerAvatarComingSoon = 'registerAvatarComingSoon';
+  static const String registerPasswordHint = 'registerPasswordHint';
+  static const String registerPasswordTooWeak = 'registerPasswordTooWeak';
+
+  // Legal form labels
+  static const String legalFormAutoEntrepreneur = 'legalFormAutoEntrepreneur';
+  static const String legalFormEi = 'legalFormEi';
+  static const String legalFormEurl = 'legalFormEurl';
+  static const String legalFormSarl = 'legalFormSarl';
+  static const String legalFormSas = 'legalFormSas';
+  static const String legalFormSasu = 'legalFormSasu';
+  static const String legalFormOther = 'legalFormOther';
+  static const String legalFormOtherSpecify = 'legalFormOtherSpecify';
 
   // Acquisition source labels
   static const String acquisitionSourceReferral = 'acquisitionSourceReferral';

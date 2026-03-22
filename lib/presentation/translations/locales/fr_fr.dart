@@ -4,10 +4,12 @@ final Map<String, String> frFr = {
   Tr.appName: 'Déclia',
 
   // Login
-  Tr.loginSubtitle: 'Espace Photographe',
+  Tr.loginSubtitle:
+      'Gestion de clientèle, réservations, galeries et facturation — tout au même endroit.',
   Tr.loginEmail: 'Email',
-  Tr.loginEmailHint: 'votre@email.com',
+  Tr.loginEmailHint: 'vous@exemple.com',
   Tr.loginEmailRequired: 'Veuillez saisir votre email',
+  Tr.loginEmailInvalid: 'Format d\'adresse email invalide',
   Tr.loginPassword: 'Mot de passe',
   Tr.loginPasswordRequired: 'Veuillez saisir votre mot de passe',
   Tr.loginSubmit: 'Se connecter',
@@ -67,6 +69,18 @@ final Map<String, String> frFr = {
   Tr.adminTopbarLogout: 'Se déconnecter',
   Tr.adminPlaceholderComingSoon: 'Bientôt disponible',
 
+  // Sidebar sections (new)
+  Tr.adminSectionPrincipal: 'PRINCIPAL',
+  Tr.adminSectionCommerce: 'COMMERCE',
+  Tr.adminSectionOutils: 'OUTILS',
+
+  // Sidebar items (new)
+  Tr.adminSidebarOrders: 'Commandes',
+  Tr.adminSidebarGiftCards: 'Cartes cadeau',
+  Tr.adminSidebarPromotions: 'Promotions',
+  Tr.adminSidebarTasks: 'Tâches',
+  Tr.adminBadgeBeta: 'Beta',
+
   // Cookie banner
   Tr.cookieBannerTitle: 'Gestion des cookies',
   Tr.cookieBannerDescription:
@@ -112,6 +126,11 @@ final Map<String, String> frFr = {
   Tr.adminClientsClearFilters: 'Effacer les filtres',
   Tr.adminClientsTableSessions: 'Séances',
   Tr.adminClientsTableTotalSpent: 'Dépenses totales',
+  Tr.adminClientsAllStatuses: 'Tous les statuts',
+  Tr.adminClientsAllCategories: 'Toutes les catégories',
+  Tr.adminClientsTableCategory: 'Catégorie',
+  Tr.adminClientsTableRevenue: 'CA total',
+  Tr.adminClientsExport: 'Exporter',
   Tr.adminClientsTableLastShooting: 'Dernière séance',
   Tr.adminClientsPaginationInfo: 'Page @page sur @total',
   Tr.adminClientsAllSources: 'Toutes les sources',
@@ -284,6 +303,194 @@ final Map<String, String> frFr = {
   // Planning — External events
   Tr.adminPlanningExternalEvent: 'Événement Google Agenda',
   Tr.adminPlanningExternalSource: 'Source',
+
+  // Login page (new)
+  Tr.loginTagline: 'Votre studio\ndevient ',
+  Tr.loginTaglineHighlight: 'intelligent',
+  Tr.loginFeature1: 'Réservation en ligne simplifiée',
+  Tr.loginFeature2: 'Galeries privées sécurisées',
+  Tr.loginFeature3: 'Facturation automatisée',
+  Tr.loginFeature4: 'Intelligence artificielle intégrée',
+  Tr.loginRememberMe: 'Se souvenir de moi',
+  Tr.loginForgotPassword: 'Mot de passe oublié ?',
+  Tr.loginRoleClient: 'Client',
+  Tr.loginRolePhotographer: 'Photographe',
+  Tr.loginTitleClient: 'Connexion Client',
+  Tr.loginSubtitleClient: 'Accédez à vos galeries, réservations et commandes.',
+  Tr.loginTitlePhotographer: 'Espace Photographe',
+  Tr.loginSubtitlePhotographer: 'Gérez votre studio en toute simplicité',
+  Tr.loginSubmitPhotographer: 'Accéder à mon espace',
+  Tr.loginPhotographerCode: 'Code photographe',
+  Tr.loginPhotographerCodeHint: 'Ex : STUDIO-XXXX',
+  Tr.loginFooterNoAccount: 'Pas encore de compte ?',
+  Tr.loginFooterCreateAccount: 'Créer un compte client',
+  Tr.loginFooterCreateAccountPhotographer: 'Créer un compte professionnel',
+  Tr.loginBrandSubtitle: 'Plateforme pour photographes professionnels',
+
+  // Client left panel
+  Tr.loginClientTagline: 'Votre espace\nphoto ',
+  Tr.loginClientTaglineHighlight: 'personnalisé',
+  Tr.loginClientSubtitle:
+      'Réservez vos séances, consultez vos galeries et gérez vos commandes — simplement.',
+  Tr.loginClientFeature1: 'Réservation de séances en ligne',
+  Tr.loginClientFeature2: 'Galeries privées haute résolution',
+  Tr.loginClientFeature3: 'Suivi de commandes en temps réel',
+  Tr.loginClientFeature4: 'Partage sécurisé de vos photos',
+
+  // Auth — Register form
+  Tr.authRegisterTitleClient: 'Créer un compte client',
+  Tr.authRegisterTitlePhotographer: 'Créer un compte photographe',
+  Tr.authRegisterSubtitleClient: 'Accédez à vos galeries et réservations.',
+  Tr.authRegisterSubtitlePhotographer: 'Commencez à gérer votre activité.',
+  Tr.authRegisterFooterHaveAccount: 'Déjà un compte ?',
+  Tr.authRegisterFooterSignIn: 'Se connecter',
+  Tr.authRegisterSuccess:
+      'Vérifiez votre boîte mail pour confirmer votre adresse email.',
+
+  // Auth — Error messages
+  Tr.authErrorInvalidEmail: 'Format d\'adresse email invalide',
+  Tr.authErrorPasswordTooShort:
+      'Le mot de passe doit contenir au moins 6 caractères',
+  Tr.authErrorRateLimited:
+      'Trop de tentatives. Veuillez patienter avant de réessayer.',
+  Tr.authErrorNetwork:
+      'Erreur de connexion. Vérifiez votre connexion internet.',
+  Tr.authErrorGeneric: 'Une erreur est survenue. Veuillez réessayer.',
+
+  // Auth — Forgot password form
+  Tr.authForgotTitle: 'Mot de passe oublié',
+  Tr.authForgotTitlePhotographer: 'Réinitialiser l\'accès studio',
+  Tr.authForgotSubtitle:
+      'Entrez votre adresse e-mail pour recevoir un lien de réinitialisation.',
+  Tr.authForgotSubtitlePhotographer:
+      'Entrez l\'email associé à votre compte professionnel.',
+  Tr.authForgotSubmit: 'Envoyer le lien',
+  Tr.authForgotSuccess: 'Un email de réinitialisation a été envoyé.',
+  Tr.authForgotBackToLogin: 'Retour à la connexion',
+
+  // Dashboard (new)
+  Tr.dashboardWelcomeGreeting: 'Bonjour,',
+  Tr.dashboardStatRevenue: "CHIFFRE D'AFFAIRES",
+  Tr.dashboardStatSessions: 'SÉANCES',
+  Tr.dashboardStatClients: 'CLIENTS',
+  Tr.dashboardStatOrders: 'COMMANDES',
+  Tr.dashboardUpcomingSessions: 'Séances à venir',
+  Tr.dashboardRecentActivity: 'Activité récente',
+  Tr.dashboardQuickActions: 'Actions rapides',
+  Tr.dashboardSeeAll: 'Voir tout',
+  Tr.dashboardNewSession: 'Nouvelle séance',
+  Tr.dashboardCreateGallery: 'Créer galerie',
+  Tr.dashboardNewClient: 'Nouveau client',
+  Tr.dashboardNewInvoice: 'Nouvelle facture',
+  Tr.dashboardWelcomeSubtitle: 'Votre prochain shooting vous attend',
+
+  // Clients (new)
+  Tr.adminClientsTotalClients: 'TOTAL CLIENTS',
+  Tr.adminClientsActive: 'ACTIFS',
+  Tr.adminClientsStatNew: 'NOUVEAUX',
+  Tr.adminClientsAvgRevenue: 'CA / CLIENT',
+  Tr.adminClientsTableStatus: 'Statut',
+
+  // Planning (new)
+  Tr.planningTabCalendar: 'Calendrier',
+  Tr.planningTabEditor: 'Éditeur',
+  Tr.planningEditorIntro:
+      'Cliquez sur les créneaux pour définir vos disponibilités',
+  Tr.planningQuickFillWeek: 'Semaine type',
+  Tr.planningQuickFillMorning: 'Matin seulement',
+  Tr.planningQuickFillAfternoon: 'Après-midi',
+  Tr.planningQuickFillClear: 'Tout effacer',
+  Tr.planningEditorSave: 'Enregistrer',
+  Tr.planningEditorCancel: 'Annuler',
+  Tr.planningLegendAvailable: 'Disponible',
+  Tr.planningLegendBlocked: 'Bloqué',
+  Tr.planningEditorClearConfirm: 'Supprimer toutes les règles récurrentes ?',
+
+  // Settings (new)
+  Tr.settingsSectionStudio: 'Informations du studio',
+  Tr.settingsSectionLegal: 'Légal / CGV / RGPD',
+  Tr.settingsSectionColors: 'Couleurs & Logo',
+  Tr.settingsSectionTypography: 'Typographie',
+  Tr.settingsSectionIntegrations: 'Intégrations',
+  Tr.settingsPlaceholder: 'Section à venir',
+  Tr.settingsSectionMyStudio: 'MON STUDIO',
+  Tr.settingsSectionIdentity: 'IDENTITÉ & DESIGN',
+  Tr.settingsSectionConnections: 'CONNEXIONS',
+
+  // Registration wizard
+  Tr.registerStepPersonal: 'Informations personnelles',
+  Tr.registerStepBusiness: 'Informations professionnelles',
+  Tr.registerStepSecurity: 'Sécurité du compte',
+  Tr.registerStepConfirmation: 'Confirmation',
+  Tr.registerStepPersonalDesc: 'Vos coordonnées',
+  Tr.registerStepBusinessDesc: 'Votre studio',
+  Tr.registerStepSecurityDesc: 'Protégez votre compte',
+  Tr.registerStepConfirmationDesc: 'Vérifiez et validez',
+  Tr.registerFieldFirstName: 'Prénom',
+  Tr.registerFieldLastName: 'Nom',
+  Tr.registerFieldPhone: 'Téléphone',
+  Tr.registerFieldStreet: 'Rue',
+  Tr.registerFieldPostalCode: 'Code postal',
+  Tr.registerFieldCity: 'Ville',
+  Tr.registerFieldStudioName: 'Nom du studio',
+  Tr.registerFieldCompanyName: 'Raison sociale',
+  Tr.registerFieldSiret: 'SIRET',
+  Tr.registerFieldLegalForm: 'Forme juridique',
+  Tr.registerFieldVatNumber: 'N° TVA',
+  Tr.registerFieldBizStreet: 'Adresse professionnelle',
+  Tr.registerFieldBizPostalCode: 'Code postal professionnel',
+  Tr.registerFieldBizCity: 'Ville professionnelle',
+  Tr.registerFieldAcquisitionSource: 'Comment nous avez-vous connu ?',
+  Tr.registerFieldNotes: 'Notes (optionnel)',
+  Tr.registerFieldRequired: 'Ce champ est requis',
+  Tr.registerConsentCgu:
+      'J\'accepte les CGU et la politique de confidentialité',
+  Tr.registerConsentCguPrefix: 'J\'accepte les ',
+  Tr.registerConsentCguLink: 'CGU',
+  Tr.registerConsentCguMiddle: ' et la ',
+  Tr.registerConsentPrivacyLink: 'politique de confidentialité',
+  Tr.registerConsentCguRequired: 'Vous devez accepter les CGU pour continuer',
+  Tr.registerConsentMarketing:
+      'J\'accepte de recevoir des communications marketing',
+  Tr.registerBtnContinue: 'Continuer',
+  Tr.registerBtnBack: 'Retour',
+  Tr.registerBtnSubmit: 'Créer mon compte',
+  Tr.registerSummaryTitle: 'Récapitulatif',
+  Tr.registerSummaryIdentity: 'Identité',
+  Tr.registerSummaryContact: 'Contact',
+  Tr.registerSummaryAddress: 'Adresse',
+  Tr.registerSummaryBusiness: 'Entreprise',
+  Tr.registerLeftTaglineClient: 'Rejoignez\nl\'expérience ',
+  Tr.registerLeftTaglineClientHighlight: 'Déclia',
+  Tr.registerLeftTaglinePhotographer: 'Créez\nvotre ',
+  Tr.registerLeftTaglinePhotographerHighlight: 'studio',
+  Tr.registerLeftSubtitleClient:
+      'Créez votre espace personnel pour accéder à vos galeries et réservations.',
+  Tr.registerLeftSubtitlePhotographer:
+      'Configurez votre espace professionnel et commencez à gérer vos clients.',
+  Tr.registerSectionIdentity: 'Identité',
+  Tr.registerSectionStudio: 'Studio',
+  Tr.registerSectionPreferences: 'Préférences',
+  Tr.registerAvatarTitle: 'Photo de profil',
+  Tr.registerAvatarHint: 'JPG ou PNG, max 2 Mo (optionnel)',
+  Tr.registerSectionAddress: 'Adresse',
+  Tr.registerSectionBizAddress: 'Adresse professionnelle',
+  Tr.registerStepStudio: 'Informations studio',
+  Tr.registerStepStudioDesc: 'Votre activité',
+  Tr.registerAvatarComingSoon: 'L\'ajout de photo sera bientôt disponible',
+  Tr.registerPasswordHint:
+      'Min. 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial',
+  Tr.registerPasswordTooWeak: 'Mot de passe trop faible',
+
+  // Legal form labels
+  Tr.legalFormAutoEntrepreneur: 'Auto-entrepreneur',
+  Tr.legalFormEi: 'Entreprise individuelle',
+  Tr.legalFormEurl: 'EURL',
+  Tr.legalFormSarl: 'SARL',
+  Tr.legalFormSas: 'SAS',
+  Tr.legalFormSasu: 'SASU',
+  Tr.legalFormOther: 'Autre',
+  Tr.legalFormOtherSpecify: 'Précisez la forme juridique',
 
   // Acquisition source labels
   Tr.acquisitionSourceReferral: 'Parrainage',
