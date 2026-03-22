@@ -28,14 +28,41 @@ final class ClientsController extends GetxController with ClientListQueryMixin {
 
   final clients = <ClientViewModel>[].obs;
   final _entityMap = <String, Client>{};
+  final _allViewModels = <ClientViewModel>[];
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();
   final availableTags = <String>[].obs;
+
+  // Selection state for checkbox column
+  final selectedIds = <String>{}.obs;
+
+  bool get isAllSelected =>
+      _allViewModels.isNotEmpty &&
+      _allViewModels.every((vm) => selectedIds.contains(vm.id));
+
+  void toggleSelect(String id) {
+    if (selectedIds.contains(id)) {
+      selectedIds.remove(id);
+    } else {
+      selectedIds.add(id);
+    }
+  }
+
+  void toggleSelectAll() {
+    if (isAllSelected) {
+      selectedIds.clear();
+    } else {
+      selectedIds.assignAll(clients.map((vm) => vm.id));
+    }
+  }
 
   Client? entityById(String id) => _entityMap[id];
 
   @override
   void onQueryChanged() => loadClients();
+
+  @override
+  void onLocalFilterChanged() => _applyLocalFilters();
 
   @override
   void onInit() {
@@ -52,14 +79,18 @@ final class ClientsController extends GetxController with ClientListQueryMixin {
   Future<void> loadClients() async {
     isLoading.value = true;
     errorMessage.value = null;
+    selectedIds.clear();
     final result = await _fetchClientList((query: query.value));
     result.fold(
       ok: (paged) {
         _entityMap
           ..clear()
           ..addEntries(paged.items.map((c) => MapEntry(c.id, c)));
-        clients.assignAll(paged.items.map(ClientViewModel.fromEntity));
+        _allViewModels
+          ..clear()
+          ..addAll(paged.items.map(ClientViewModel.fromEntity));
         totalCount.value = paged.totalCount;
+        _applyLocalFilters();
       },
       err: (failure) => errorMessage.value = failure.message,
     );
@@ -76,15 +107,34 @@ final class ClientsController extends GetxController with ClientListQueryMixin {
     final statsResult = await _fetchSummaryStats((clientIds: ids));
     statsResult.fold(
       ok: (statsMap) {
-        clients.assignAll(
-          _entityMap.values.map(
-            (c) => ClientViewModel.fromEntity(c, stats: statsMap[c.id]),
-          ),
-        );
+        _allViewModels
+          ..clear()
+          ..addAll(
+            _entityMap.values.map(
+              (c) => ClientViewModel.fromEntity(c, stats: statsMap[c.id]),
+            ),
+          );
+        _applyLocalFilters();
       },
       // Stats failure is non-fatal — columns stay "—"
       err: (_) {},
     );
+  }
+
+  void _applyLocalFilters() {
+    final q = query.value;
+    var filtered = _allViewModels.toList();
+    if (q.statusFilter != null) {
+      filtered = filtered
+          .where((vm) => vm.clientStatus == q.statusFilter)
+          .toList();
+    }
+    if (q.sessionTypeFilter != null) {
+      filtered = filtered
+          .where((vm) => vm.sessionTypes.contains(q.sessionTypeFilter))
+          .toList();
+    }
+    clients.assignAll(filtered);
   }
 
   void viewClient(ClientViewModel vm) =>
@@ -98,6 +148,8 @@ final class ClientsController extends GetxController with ClientListQueryMixin {
     return result.fold(
       ok: (_) {
         _entityMap.remove(id);
+        _allViewModels.removeWhere((c) => c.id == id);
+        selectedIds.remove(id);
         clients.removeWhere((c) => c.id == id);
         if (totalCount.value > 0) totalCount.value--;
         return true;

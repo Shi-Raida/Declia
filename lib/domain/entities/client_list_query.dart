@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../core/enums/acquisition_source.dart';
 import '../../core/enums/client_sort_field.dart';
+import '../../core/enums/client_status.dart';
+import '../../core/enums/session_type.dart';
 import '../../core/enums/sort_direction.dart';
 
 part 'client_list_query.freezed.dart';
@@ -12,6 +14,8 @@ class ClientListQuery with _$ClientListQuery {
     @Default('') String search,
     @Default([]) List<String> tags,
     AcquisitionSource? acquisitionSource,
+    ClientStatus? statusFilter,
+    SessionType? sessionTypeFilter,
     @Default(ClientSortField.name) ClientSortField sortField,
     @Default(SortDirection.ascending) SortDirection sortDirection,
     @Default(0) int page,

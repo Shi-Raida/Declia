@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 
 import '../../core/enums/acquisition_source.dart';
 import '../../core/enums/client_sort_field.dart';
+import '../../core/enums/client_status.dart';
+import '../../core/enums/session_type.dart';
 import '../../core/enums/sort_direction.dart';
 import '../../domain/entities/client_list_query.dart';
 
@@ -20,11 +22,16 @@ mixin ClientListQueryMixin on GetxController {
   bool get hasNextPage => query.value.page < totalPages - 1;
   bool get hasPreviousPage => query.value.page > 0;
   bool get hasActiveFilters =>
-      query.value.tags.isNotEmpty || query.value.acquisitionSource != null;
+      query.value.tags.isNotEmpty ||
+      query.value.acquisitionSource != null ||
+      query.value.statusFilter != null ||
+      query.value.sessionTypeFilter != null;
 
-  /// Called whenever a query parameter changes. No-op by default; override
-  /// in the controller to trigger a data reload.
+  /// Called whenever a server-side query parameter changes (triggers fetch).
   void onQueryChanged() {}
+
+  /// Called whenever a local-only filter changes (no server fetch).
+  void onLocalFilterChanged() {}
 
   @override
   void onInit() {
@@ -64,10 +71,22 @@ mixin ClientListQueryMixin on GetxController {
     onQueryChanged();
   }
 
+  void setStatusFilter(ClientStatus? status) {
+    query.value = query.value.copyWith(statusFilter: status, page: 0);
+    onLocalFilterChanged();
+  }
+
+  void setSessionTypeFilter(SessionType? sessionType) {
+    query.value = query.value.copyWith(sessionTypeFilter: sessionType, page: 0);
+    onLocalFilterChanged();
+  }
+
   void clearFilters() {
     query.value = query.value.copyWith(
       tags: [],
       acquisitionSource: null,
+      statusFilter: null,
+      sessionTypeFilter: null,
       page: 0,
     );
     onQueryChanged();

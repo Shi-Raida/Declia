@@ -6,6 +6,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/admin/admin_layout.dart';
+import '../../widgets/admin/stat_card.dart';
 import 'client_table_widget.dart';
 import 'clients_filter_bar.dart';
 import 'clients_pagination_bar.dart';
@@ -17,82 +18,85 @@ class ClientsPage extends GetView<ClientsController> {
   Widget build(BuildContext context) {
     return AdminLayout(
       title: Tr.adminClientsTitle.tr,
+      topbarActions: [
+        OutlinedButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.download_outlined, size: 18),
+          label: Text(Tr.adminClientsExport.tr),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.pierre,
+            side: const BorderSide(color: AppColors.border),
+            textStyle: AppTypography.button(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+            minimumSize: const Size(0, 40),
+          ),
+        ),
+        const SizedBox(width: 8),
+        FilledButton.icon(
+          onPressed: () => controller.createNewClient(),
+          icon: const Icon(Icons.add, size: 18),
+          label: Text(Tr.adminClientsNew.tr),
+          style: FilledButton.styleFrom(
+            backgroundColor: AppColors.terracotta,
+            foregroundColor: Colors.white,
+            textStyle: AppTypography.button(),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+            minimumSize: const Size(0, 40),
+          ),
+        ),
+      ],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _ClientsToolbar(controller: controller),
-          ClientsFilterBar(controller: controller),
-          Expanded(child: _ClientsContent(controller: controller)),
-          ClientsPaginationBar(controller: controller),
-        ],
-      ),
-    );
-  }
-}
-
-class _ClientsToolbar extends StatelessWidget {
-  const _ClientsToolbar({required this.controller});
-
-  final ClientsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
-      decoration: const BoxDecoration(
-        color: AppColors.bgCard,
-        border: Border(bottom: BorderSide(color: AppColors.border)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: SizedBox(
-              height: 40,
-              child: TextField(
-                onChanged: (v) => controller.searchQuery.value = v,
-                decoration: InputDecoration(
-                  hintText: Tr.adminClientsSearch.tr,
-                  hintStyle: AppTypography.bodySmall(),
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    size: 18,
-                    color: AppColors.pierre,
-                  ),
-                  filled: true,
-                  fillColor: AppColors.bg,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.border),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: AppColors.border),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColors.terracotta,
-                      width: 1.5,
+          // Stats row
+          Obx(
+            () => Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: StatCard(
+                      icon: Icons.people_outline,
+                      iconColor: AppColors.bleuOuvert,
+                      label: Tr.adminClientsTotalClients.tr,
+                      value: '${controller.totalCount.value}',
                     ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: StatCard(
+                      icon: Icons.check_circle_outline,
+                      iconColor: AppColors.success,
+                      label: Tr.adminClientsActive.tr,
+                      value: '—',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: StatCard(
+                      icon: Icons.person_add_outlined,
+                      iconColor: AppColors.or,
+                      label: Tr.adminClientsStatNew.tr,
+                      value: '—',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: StatCard(
+                      icon: Icons.euro_outlined,
+                      iconColor: AppColors.terracotta,
+                      label: Tr.adminClientsAvgRevenue.tr,
+                      value: '—',
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(width: 12),
-          FilledButton.icon(
-            onPressed: () => controller.createNewClient(),
-            icon: const Icon(Icons.add, size: 18),
-            label: Text(Tr.adminClientsNew.tr),
-            style: FilledButton.styleFrom(
-              backgroundColor: AppColors.terracotta,
-              foregroundColor: Colors.white,
-              textStyle: AppTypography.button(),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-              minimumSize: const Size(0, 40),
-            ),
-          ),
+          const SizedBox(height: 16),
+          ClientsFilterBar(controller: controller),
+          Expanded(child: _ClientsContent(controller: controller)),
+          ClientsPaginationBar(controller: controller),
         ],
       ),
     );

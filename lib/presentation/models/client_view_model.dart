@@ -1,4 +1,6 @@
 import '../../core/enums/acquisition_source.dart';
+import '../../core/enums/client_status.dart';
+import '../../core/enums/session_type.dart';
 import '../../domain/entities/client.dart';
 import '../../domain/entities/client_summary_stats.dart';
 
@@ -25,6 +27,7 @@ class ClientViewModel {
     this.sessionCount,
     this.totalSpent,
     this.lastShooting,
+    this.sessionTypes = const [],
   });
 
   factory ClientViewModel.fromEntity(Client c, {ClientSummaryStats? stats}) =>
@@ -50,6 +53,7 @@ class ClientViewModel {
         sessionCount: stats?.sessionCount,
         totalSpent: stats?.totalSpent,
         lastShooting: stats?.lastShooting,
+        sessionTypes: stats?.sessionTypes ?? const [],
       );
 
   final String id;
@@ -71,10 +75,11 @@ class ClientViewModel {
   final String? country;
   final DateTime createdAt;
 
-  // M2-S3 placeholders (populated when Client History lands)
+  // Stats fields (populated when ClientHistory data lands)
   final int? sessionCount;
   final double? totalSpent;
   final DateTime? lastShooting;
+  final List<SessionType> sessionTypes;
 
   String get sessionCountDisplay => sessionCount?.toString() ?? '—';
   String get totalSpentDisplay =>
@@ -84,4 +89,17 @@ class ClientViewModel {
             '${lastShooting!.month.toString().padLeft(2, '0')}/'
             '${lastShooting!.year}'
       : '—';
+
+  ClientStatus get clientStatus {
+    final daysSinceCreation = DateTime.now().difference(createdAt).inDays;
+    if (daysSinceCreation <= 30) return ClientStatus.nouveau;
+    if (totalSpent != null && totalSpent! > 1000) return ClientStatus.vip;
+    if (lastShooting != null) {
+      final daysSinceLastShooting = DateTime.now()
+          .difference(lastShooting!)
+          .inDays;
+      if (daysSinceLastShooting > 180) return ClientStatus.inactif;
+    }
+    return ClientStatus.actif;
+  }
 }
