@@ -13,6 +13,7 @@ import '../../widgets/admin/session_type_tag.dart';
 import '../../widgets/admin/status_badge.dart';
 import '../../widgets/admin/user_avatar.dart';
 import 'history_enum_extensions.dart';
+import 'client_status_color.dart';
 import 'session_type_color.dart';
 
 class ClientsTable extends StatelessWidget {
