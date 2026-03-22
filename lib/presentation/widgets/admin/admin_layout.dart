@@ -7,10 +7,18 @@ import 'admin_sidebar.dart';
 import 'admin_topbar.dart';
 
 class AdminLayout extends StatelessWidget {
-  const AdminLayout({super.key, required this.body, this.title = ''});
+  const AdminLayout({
+    super.key,
+    required this.body,
+    this.title = '',
+    this.topbarSubtitle,
+    this.topbarActions,
+  });
 
   final Widget body;
   final String title;
+  final String? topbarSubtitle;
+  final List<Widget>? topbarActions;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +42,12 @@ class AdminLayout extends StatelessWidget {
         drawer: const AdminSidebar(),
         body: Column(
           children: [
-            AdminTopbar(title: title, showMenuButton: true),
+            AdminTopbar(
+              title: title,
+              showMenuButton: true,
+              subtitle: topbarSubtitle,
+              actions: topbarActions,
+            ),
             animatedBody,
           ],
         ),
@@ -49,7 +62,12 @@ class AdminLayout extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                AdminTopbar(title: title, showMenuButton: false),
+                AdminTopbar(
+                  title: title,
+                  showMenuButton: false,
+                  subtitle: topbarSubtitle,
+                  actions: topbarActions,
+                ),
                 animatedBody,
               ],
             ),

@@ -27,7 +27,7 @@ class AdminSidebar extends GetView<AdminShellController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSectionLabel(Tr.adminSectionGeneral.tr),
+                  _buildSectionLabel(Tr.adminSectionPrincipal.tr),
                   _buildNavItem(
                     route: AppRoutes.adminDashboard,
                     icon: Icons.dashboard_outlined,
@@ -49,11 +49,11 @@ class AdminSidebar extends GetView<AdminShellController> {
                     label: Tr.adminSidebarGalleries.tr,
                   ),
                   const SizedBox(height: 8),
-                  _buildSectionLabel(Tr.adminSectionManagement.tr),
+                  _buildSectionLabel(Tr.adminSectionCommerce.tr),
                   _buildNavItem(
-                    route: AppRoutes.adminShop,
-                    icon: Icons.storefront_outlined,
-                    label: Tr.adminSidebarShop.tr,
+                    route: AppRoutes.adminOrders,
+                    icon: Icons.shopping_bag_outlined,
+                    label: Tr.adminSidebarOrders.tr,
                   ),
                   _buildNavItem(
                     route: AppRoutes.adminInvoicing,
@@ -61,9 +61,21 @@ class AdminSidebar extends GetView<AdminShellController> {
                     label: Tr.adminSidebarInvoicing.tr,
                   ),
                   _buildNavItem(
-                    route: AppRoutes.adminStatistics,
-                    icon: Icons.bar_chart_outlined,
-                    label: Tr.adminSidebarStatistics.tr,
+                    route: AppRoutes.adminGiftCards,
+                    icon: Icons.card_giftcard_outlined,
+                    label: Tr.adminSidebarGiftCards.tr,
+                  ),
+                  _buildNavItem(
+                    route: AppRoutes.adminPromotions,
+                    icon: Icons.local_offer_outlined,
+                    label: Tr.adminSidebarPromotions.tr,
+                  ),
+                  const SizedBox(height: 8),
+                  _buildSectionLabel(Tr.adminSectionOutils.tr),
+                  _buildNavItem(
+                    route: AppRoutes.adminTasks,
+                    icon: Icons.check_circle_outline,
+                    label: Tr.adminSidebarTasks.tr,
                   ),
                   _buildNavItem(
                     route: AppRoutes.adminSettings,
@@ -99,6 +111,7 @@ class AdminSidebar extends GetView<AdminShellController> {
     required String route,
     required IconData icon,
     required String label,
+    int? badge,
   }) {
     return Obx(() {
       final current = controller.currentRoute.value;
@@ -107,34 +120,55 @@ class AdminSidebar extends GetView<AdminShellController> {
         onTap: () => controller.navigateTo(route),
         child: Container(
           height: 44,
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 1),
           decoration: BoxDecoration(
             color: isActive
-                ? AppColors.crepuscule.withValues(alpha: 0.6)
+                ? AppColors.bleuOuvert.withValues(alpha: 0.25)
                 : Colors.transparent,
-            border: Border(
-              left: BorderSide(
-                color: isActive ? AppColors.terracotta : Colors.transparent,
-                width: 3,
-              ),
-            ),
+            borderRadius: BorderRadius.circular(8),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
               Icon(
                 icon,
                 size: 18,
-                color: isActive ? Colors.white : AppColors.pierre,
+                color: isActive
+                    ? AppColors.or
+                    : Colors.white.withValues(alpha: 0.5),
               ),
               const SizedBox(width: 12),
-              Text(
-                label,
-                style: GoogleFonts.outfit(
-                  fontSize: 13,
-                  fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
-                  color: isActive ? Colors.white : AppColors.pierre,
+              Expanded(
+                child: Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 13,
+                    fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
+                    color: isActive
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.5),
+                  ),
                 ),
               ),
+              if (badge != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.terracotta,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$badge',
+                    style: GoogleFonts.outfit(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -150,11 +184,10 @@ class _SidebarHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
           Text(
-            Tr.appName.tr,
+            'Declia',
             style: GoogleFonts.cormorantGaramond(
               fontSize: 22,
               fontWeight: FontWeight.w600,
@@ -162,14 +195,20 @@ class _SidebarHeader extends StatelessWidget {
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            Tr.adminBrandSubtitle.tr,
-            style: GoogleFonts.outfit(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: AppColors.pierre,
-              letterSpacing: 2,
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: AppColors.or.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Text(
+              'Beta',
+              style: GoogleFonts.outfit(
+                fontSize: 9,
+                fontWeight: FontWeight.w600,
+                color: AppColors.or,
+              ),
             ),
           ),
         ],
@@ -201,12 +240,12 @@ class _SidebarUserFooter extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-              radius: 16,
+              radius: 18,
               backgroundColor: AppColors.terracotta,
               child: Text(
                 initial,
                 style: GoogleFonts.outfit(
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
                 ),
@@ -222,6 +261,7 @@ class _SidebarUserFooter extends StatelessWidget {
                     user.email,
                     style: GoogleFonts.outfit(
                       fontSize: 12,
+                      fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -230,12 +270,22 @@ class _SidebarUserFooter extends StatelessWidget {
                     user.role.name.capitalize!,
                     style: GoogleFonts.outfit(
                       fontSize: 10,
-                      color: AppColors.pierre,
-                      letterSpacing: 0.5,
+                      color: Colors.white.withValues(alpha: 0.4),
                     ),
                   ),
                 ],
               ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.logout,
+                size: 16,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+              onPressed: controller.logout,
+              tooltip: 'Se déconnecter',
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
             ),
           ],
         ),
