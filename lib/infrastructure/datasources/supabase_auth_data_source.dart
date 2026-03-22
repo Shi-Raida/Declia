@@ -66,13 +66,18 @@ final class SupabaseAuthDataSource implements AuthDataSource {
   Future<void> signUp({
     required String email,
     required String password,
-    required String tenantSlug,
+    String? tenantSlug,
+    Map<String, dynamic> metadata = const {},
   }) async {
     try {
       final response = await _client.auth.signUp(
         email: email,
         password: password,
-        data: {'tenant_slug': tenantSlug},
+        data: {
+          // ignore: use_null_aware_elements
+          if (tenantSlug != null) 'tenant_slug': tenantSlug,
+          ...metadata,
+        },
       );
       // Supabase returns an empty identities list when email is already registered
       if (response.user?.identities?.isEmpty ?? false) {

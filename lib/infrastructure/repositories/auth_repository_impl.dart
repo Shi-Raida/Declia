@@ -42,12 +42,14 @@ final class AuthRepositoryImpl implements AuthRepository {
   Future<Result<void, Failure>> signUp({
     required String email,
     required String password,
-    required String tenantSlug,
+    String? tenantSlug,
+    Map<String, dynamic> metadata = const {},
   }) => _guard(
     () => _dataSource.signUp(
       email: email,
       password: password,
       tenantSlug: tenantSlug,
+      metadata: metadata,
     ),
     method: 'signUp',
   );

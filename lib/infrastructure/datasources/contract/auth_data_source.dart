@@ -7,7 +7,8 @@ abstract interface class AuthDataSource {
   Future<void> signUp({
     required String email,
     required String password,
-    required String tenantSlug,
+    String? tenantSlug,
+    Map<String, dynamic> metadata = const {},
   });
   Future<void> resetPassword({required String email});
   bool get isAuthenticated;

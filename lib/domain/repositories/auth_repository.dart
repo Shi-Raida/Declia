@@ -13,7 +13,8 @@ abstract interface class AuthRepository {
   Future<Result<void, Failure>> signUp({
     required String email,
     required String password,
-    required String tenantSlug,
+    String? tenantSlug,
+    Map<String, dynamic> metadata = const {},
   });
   Future<Result<void, Failure>> resetPassword({required String email});
   bool get isAuthenticated;

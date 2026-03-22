@@ -15,5 +15,6 @@ final class SignUp extends UseCase<void, SignUpParams> {
         email: params.email,
         password: params.password,
         tenantSlug: params.tenantSlug,
+        metadata: params.metadata,
       );
 }
