@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import '../../../core/enums/settings_section.dart';
 import '../../controllers/settings_controller.dart';
+import '../../theme/app_breakpoints.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
@@ -13,17 +16,294 @@ class SettingsPage extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    final isMobile = width < AppBreakpoints.mobile;
+
     return AdminLayout(
       title: Tr.adminSidebarSettings.tr,
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return ListView(
-          padding: const EdgeInsets.all(24),
-          children: [_GoogleCalendarSection(controller: controller)],
-        );
-      }),
+      body: isMobile
+          ? _MobileSettingsLayout(controller: controller)
+          : _DesktopSettingsLayout(controller: controller),
+    );
+  }
+}
+
+class _DesktopSettingsLayout extends StatelessWidget {
+  const _DesktopSettingsLayout({required this.controller});
+
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Settings sidebar
+        _SettingsSidebar(controller: controller),
+        // Content area
+        Expanded(
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return switch (controller.selectedSection.value) {
+              SettingsSection.integrations => ListView(
+                padding: const EdgeInsets.all(24),
+                children: [_GoogleCalendarSection(controller: controller)],
+              ),
+              _ => _PlaceholderPanel(
+                title: controller.selectedSection.value.label,
+              ),
+            };
+          }),
+        ),
+      ],
+    );
+  }
+}
+
+class _MobileSettingsLayout extends StatelessWidget {
+  const _MobileSettingsLayout({required this.controller});
+
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Section selector
+        Obx(
+          () => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: SettingsSection.values.map((section) {
+                final isActive = controller.selectedSection.value == section;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: GestureDetector(
+                    onTap: () => controller.selectedSection.value = section,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: isActive
+                            ? AppColors.terracotta
+                            : AppColors.bgCard,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: isActive
+                              ? AppColors.terracotta
+                              : AppColors.border,
+                        ),
+                      ),
+                      child: Text(
+                        section.label,
+                        style: AppTypography.bodySmall().copyWith(
+                          color: isActive ? Colors.white : AppColors.encre,
+                          fontWeight: isActive
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+        const Divider(height: 1, color: AppColors.border),
+        Expanded(
+          child: Obx(() {
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return switch (controller.selectedSection.value) {
+              SettingsSection.integrations => ListView(
+                padding: const EdgeInsets.all(24),
+                children: [_GoogleCalendarSection(controller: controller)],
+              ),
+              _ => _PlaceholderPanel(
+                title: controller.selectedSection.value.label,
+              ),
+            };
+          }),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingsSidebar extends StatelessWidget {
+  const _SettingsSidebar({required this.controller});
+
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 240,
+      decoration: const BoxDecoration(
+        color: AppColors.bgCard,
+        border: Border(right: BorderSide(color: AppColors.border)),
+      ),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        children: [
+          _SettingsSidebarSection(
+            title: Tr.settingsSectionMyStudio.tr,
+            items: [
+              _SettingsSidebarItem(
+                label: Tr.settingsSectionStudio.tr,
+                icon: Icons.store_outlined,
+                section: SettingsSection.studio,
+                controller: controller,
+              ),
+              _SettingsSidebarItem(
+                label: Tr.settingsSectionLegal.tr,
+                icon: Icons.gavel_outlined,
+                section: SettingsSection.legal,
+                controller: controller,
+              ),
+            ],
+          ),
+          _SettingsSidebarSection(
+            title: Tr.settingsSectionIdentity.tr,
+            items: [
+              _SettingsSidebarItem(
+                label: Tr.settingsSectionColors.tr,
+                icon: Icons.palette_outlined,
+                section: SettingsSection.colors,
+                controller: controller,
+              ),
+              _SettingsSidebarItem(
+                label: Tr.settingsSectionTypography.tr,
+                icon: Icons.text_fields_outlined,
+                section: SettingsSection.typography,
+                controller: controller,
+              ),
+            ],
+          ),
+          _SettingsSidebarSection(
+            title: Tr.settingsSectionConnections.tr,
+            items: [
+              _SettingsSidebarItem(
+                label: Tr.settingsSectionIntegrations.tr,
+                icon: Icons.extension_outlined,
+                section: SettingsSection.integrations,
+                controller: controller,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SettingsSidebarSection extends StatelessWidget {
+  const _SettingsSidebarSection({required this.title, required this.items});
+
+  final String title;
+  final List<Widget> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+          child: Text(title, style: AppTypography.sectionTitle()),
+        ),
+        ...items,
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+}
+
+class _SettingsSidebarItem extends StatelessWidget {
+  const _SettingsSidebarItem({
+    required this.label,
+    required this.icon,
+    required this.section,
+    required this.controller,
+  });
+
+  final String label;
+  final IconData icon;
+  final SettingsSection section;
+  final SettingsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final isActive = controller.selectedSection.value == section;
+      return InkWell(
+        onTap: () => controller.selectedSection.value = section,
+        child: Container(
+          height: 42,
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: isActive
+                ? AppColors.terracotta.withValues(alpha: 0.08)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: isActive ? AppColors.terracotta : AppColors.pierre,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  style: GoogleFonts.outfit(
+                    fontSize: 13,
+                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                    color: isActive ? AppColors.terracotta : AppColors.encre,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class _PlaceholderPanel extends StatelessWidget {
+  const _PlaceholderPanel({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.construction_outlined,
+            size: 48,
+            color: AppColors.pierre.withValues(alpha: 0.4),
+          ),
+          const SizedBox(height: 16),
+          Text(title, style: AppTypography.heading4()),
+          const SizedBox(height: 8),
+          Text(Tr.settingsPlaceholder.tr, style: AppTypography.bodySmall()),
+        ],
+      ),
     );
   }
 }
@@ -128,7 +408,7 @@ class _GoogleCalendarSection extends StatelessWidget {
           // Actions
           if (!isConnected)
             FilledButton.icon(
-              onPressed: () => _startOAuthFlow(context),
+              onPressed: () => controller.connectGoogle(),
               icon: const Icon(Icons.calendar_today, size: 18),
               label: Text(Tr.settingsGoogleCalendarConnect.tr),
               style: FilledButton.styleFrom(
@@ -176,7 +456,7 @@ class _GoogleCalendarSection extends StatelessWidget {
                 ),
               ],
             ),
-          // Pending auth URL — show after connectGoogle()
+          // Pending auth URL
           if (controller.pendingAuthUrl.value != null)
             SettingsAuthCodeInput(
               authUrl: controller.pendingAuthUrl.value!,
@@ -186,10 +466,6 @@ class _GoogleCalendarSection extends StatelessWidget {
         ],
       );
     });
-  }
-
-  void _startOAuthFlow(BuildContext context) {
-    controller.connectGoogle();
   }
 
   void _confirmDisconnect(BuildContext context) {

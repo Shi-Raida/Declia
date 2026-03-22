@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../core/enums/google_sync_status.dart';
+import '../../core/enums/settings_section.dart';
 import '../../domain/entities/google_calendar_connection.dart';
 import '../../usecases/google_calendar/params.dart';
 import '../../usecases/usecase.dart';
@@ -24,6 +25,7 @@ final class SettingsController extends GetxController {
 
   final connection = Rxn<GoogleCalendarConnection>();
   final syncStatus = GoogleSyncStatus.disconnected.obs;
+  final selectedSection = SettingsSection.integrations.obs;
   final isLoading = false.obs;
   final isSyncing = false.obs;
   final errorMessage = Rxn<String>();
