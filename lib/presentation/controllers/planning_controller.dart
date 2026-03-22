@@ -19,6 +19,7 @@ final class PlanningController extends GetxController {
 
   final currentView = CalendarView.month.obs;
   final focusedDate = DateTime.now().obs;
+  final selectedTab = 0.obs; // 0 = Calendrier, 1 = Éditeur
   final events = <CalendarEvent>[].obs;
   final isLoading = false.obs;
   final errorMessage = Rxn<String>();

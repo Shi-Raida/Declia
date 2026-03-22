@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/calendar_view.dart';
 import '../../../domain/entities/calendar_event.dart';
@@ -14,6 +15,8 @@ import '../../widgets/admin/admin_layout.dart';
 import 'availability_rules_list_dialog.dart';
 import 'external_event_dialog.dart';
 import 'planning_day_view.dart';
+import 'planning_editor_tab.dart';
+import 'planning_legend.dart';
 import 'planning_month_view.dart';
 import 'planning_session_dialog.dart';
 import 'planning_week_view.dart';
@@ -30,18 +33,121 @@ class PlanningPage extends GetView<PlanningController> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _PlanningToolbar(
-            controller: controller,
-            availabilityController: availabilityController,
-          ),
+          // Tab bar
+          _PlanningTabBar(controller: controller),
           const Divider(height: 1, color: AppColors.border),
+
+          // Tab content
           Expanded(
-            child: _PlanningBody(
-              controller: controller,
-              availabilityController: availabilityController,
+            child: Obx(
+              () => switch (controller.selectedTab.value) {
+                1 => PlanningEditorTab(
+                  availabilityController: availabilityController,
+                ),
+                _ => Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _PlanningToolbar(
+                      controller: controller,
+                      availabilityController: availabilityController,
+                    ),
+                    const Divider(height: 1, color: AppColors.border),
+                    Expanded(
+                      child: _PlanningBody(
+                        controller: controller,
+                        availabilityController: availabilityController,
+                      ),
+                    ),
+                    const PlanningLegend(),
+                  ],
+                ),
+              },
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PlanningTabBar extends StatelessWidget {
+  const _PlanningTabBar({required this.controller});
+
+  final PlanningController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final selected = controller.selectedTab.value;
+      return Container(
+        color: AppColors.bgCard,
+        child: Row(
+          children: [
+            _TabItem(
+              icon: Icons.calendar_month_outlined,
+              label: Tr.planningTabCalendar.tr,
+              isActive: selected == 0,
+              onTap: () => controller.selectedTab.value = 0,
+            ),
+            _TabItem(
+              icon: Icons.access_time_outlined,
+              label: Tr.planningTabEditor.tr,
+              isActive: selected == 1,
+              onTap: () => controller.selectedTab.value = 1,
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class _TabItem extends StatelessWidget {
+  const _TabItem({
+    required this.icon,
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: isActive ? AppColors.terracotta : Colors.transparent,
+              width: 2,
+            ),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 16,
+              color: isActive ? AppColors.terracotta : AppColors.pierre,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: GoogleFonts.outfit(
+                fontSize: 13,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                color: isActive ? AppColors.terracotta : AppColors.pierre,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
