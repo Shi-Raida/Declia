@@ -62,7 +62,8 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<Result<void, Failure>> signUp({
     required String email,
     required String password,
-    required String tenantSlug,
+    String? tenantSlug,
+    Map<String, dynamic> metadata = const {},
   }) async => throw UnimplementedError();
 
   @override

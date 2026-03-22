@@ -72,13 +72,10 @@ final class _FakeNavigationService implements NavigationService {
   void toDashboard() {}
   @override
   void toAdminPage(String route) {}
-  @override
   void toClientLogin({String? tenantSlug}) {}
   @override
   void toClientHome() {}
-  @override
   void toClientRegister({String? tenantSlug}) {}
-  @override
   void toClientForgotPassword() {}
   @override
   void toLegalPrivacy() {}

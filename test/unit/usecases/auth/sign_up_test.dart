@@ -31,7 +31,8 @@ final class _FakeAuthRepository implements AuthRepository {
   Future<Result<void, Failure>> signUp({
     required String email,
     required String password,
-    required String tenantSlug,
+    String? tenantSlug,
+    Map<String, dynamic> metadata = const {},
   }) async {
     if (shouldReturnEmailAlreadyInUse) {
       return const Err(EmailAlreadyInUseFailure('Email already in use'));
@@ -60,6 +61,7 @@ void main() {
         email: 'client@fleur.test',
         password: 'password123',
         tenantSlug: 'fleur-de-lumiere',
+        metadata: {},
       ));
 
       expect(result, isA<Ok<void, Failure>>());
@@ -73,6 +75,7 @@ void main() {
         email: 'existing@fleur.test',
         password: 'password123',
         tenantSlug: 'fleur-de-lumiere',
+        metadata: {},
       ));
 
       expect(result, isA<Err<void, Failure>>());

@@ -50,13 +50,13 @@ void main() {
       () {
         final middleware = AuthMiddleware(
           authState,
-          redirectRoute: AppRoutes.clientLogin,
+          redirectRoute: AppRoutes.login,
         );
 
         final result = middleware.redirect('/some-route');
 
         expect(result, isNotNull);
-        expect(result!.name, AppRoutes.clientLogin);
+        expect(result!.name, AppRoutes.login);
       },
     );
   });

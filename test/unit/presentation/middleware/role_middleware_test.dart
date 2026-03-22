@@ -106,12 +106,12 @@ void main() {
       final middleware = RoleMiddleware(authState, {
         UserRole.photographer,
         UserRole.tech,
-      }, redirectRoute: AppRoutes.clientLogin);
+      }, redirectRoute: AppRoutes.login);
 
       final result = middleware.redirect('/admin');
 
       expect(result, isNotNull);
-      expect(result!.name, AppRoutes.clientLogin);
+      expect(result!.name, AppRoutes.login);
     });
   });
 }
