@@ -17,6 +17,6 @@ final class ClientHomeController extends GetxController {
   Future<void> logout() async {
     _logger.debug('Client logging out');
     await _authState.signOut();
-    _nav.toClientLogin();
+    _nav.toLogin();
   }
 }

@@ -19,8 +19,12 @@ import '../pages/admin/planning_binding.dart';
 import '../pages/admin/planning_page.dart';
 import '../pages/admin/settings_binding.dart';
 import '../pages/admin/settings_page.dart';
+import '../pages/admin/gift_cards_page.dart';
+import '../pages/admin/orders_page.dart';
+import '../pages/admin/promotions_page.dart';
 import '../pages/admin/shop_page.dart';
 import '../pages/admin/statistics_page.dart';
+import '../pages/admin/tasks_page.dart';
 import 'app_routes.dart';
 
 List<GetMiddleware> _adminMiddlewares() => [
@@ -127,6 +131,34 @@ final List<GetPage<dynamic>> adminPages = [
       AdminShellBinding().dependencies();
       SettingsBinding().dependencies();
     }),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminOrders,
+    page: () => const OrdersPage(),
+    binding: AdminShellBinding(),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminGiftCards,
+    page: () => const GiftCardsPage(),
+    binding: AdminShellBinding(),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminPromotions,
+    page: () => const PromotionsPage(),
+    binding: AdminShellBinding(),
+    middlewares: _adminMiddlewares(),
+    transition: Transition.noTransition,
+  ),
+  GetPage<void>(
+    name: AppRoutes.adminTasks,
+    page: () => const TasksPage(),
+    binding: AdminShellBinding(),
     middlewares: _adminMiddlewares(),
     transition: Transition.noTransition,
   ),

@@ -12,9 +12,12 @@ abstract final class AppRoutes {
   static const String adminInvoicing = '/admin/invoicing';
   static const String adminStatistics = '/admin/statistics';
   static const String adminSettings = '/admin/settings';
-  static const String clientLogin = '/client/login';
-  static const String clientRegister = '/client/register';
-  static const String clientForgotPassword = '/client/forgot-password';
+  static const String adminOrders = '/admin/orders';
+  static const String adminGiftCards = '/admin/gift-cards';
+  static const String adminPromotions = '/admin/promotions';
+  static const String adminTasks = '/admin/tasks';
+  static const String authRegister = '/auth/register';
+  static const String authForgotPassword = '/auth/forgot-password';
   static const String clientHome = '/client/home';
   static const String legalPrivacy = '/legal/privacy';
   static const String legalNotices = '/legal/notices';
