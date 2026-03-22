@@ -5,12 +5,12 @@ import '../../theme/app_colors.dart';
 
 extension SessionTypeColor on SessionType {
   Color get color => switch (this) {
-    SessionType.family => AppColors.terracotta,
-    SessionType.equestrian => AppColors.or,
+    SessionType.family => AppColors.bleuOuvert,
+    SessionType.equestrian => AppColors.equestrian,
     SessionType.event => AppColors.bleuOuvert,
-    SessionType.maternity => const Color(0xFFB07DAD),
+    SessionType.maternity => AppColors.grossesse,
     SessionType.school => AppColors.info,
-    SessionType.portrait => AppColors.crepuscule,
+    SessionType.portrait => AppColors.or,
     SessionType.miniSession => AppColors.success,
     SessionType.other => AppColors.pierre,
   };
