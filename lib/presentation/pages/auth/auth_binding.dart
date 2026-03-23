@@ -1,12 +1,18 @@
 import 'package:get/get.dart';
 
 import '../../../core/logger/app_logger.dart';
+import '../../../core/utils/clock.dart';
 import '../../../usecases/auth/params.dart';
 import '../../../usecases/tenant/params.dart';
 import '../../../usecases/usecase.dart';
 import '../../controllers/auth_controller.dart';
 import '../../controllers/auth_state_controller.dart';
+import '../../controllers/forgot_password_controller.dart';
+import '../../controllers/login_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../routes/app_routes.dart';
+import '../../services/default_image_picker_service.dart';
+import '../../services/image_picker_service.dart';
 import '../../services/navigation_service.dart';
 
 class AuthBinding extends Bindings {
@@ -30,18 +36,50 @@ class AuthBinding extends Bindings {
 
     final tenantSlug = Get.parameters['tenant'];
 
-    Get.lazyPut<AuthController>(
-      () => AuthController(
+    if (!Get.isRegistered<ImagePickerService>()) {
+      Get.put<ImagePickerService>(const DefaultImagePickerService());
+    }
+
+    // Sub-controllers first (AuthController depends on them)
+    Get.lazyPut<LoginController>(
+      () => LoginController(
         Get.find<SignInUseCase>(),
-        Get.find<UseCase<void, SignUpParams>>(),
-        Get.find<UseCase<void, ResetPasswordParams>>(),
-        Get.find<UseCase<bool, CheckTenantSlugParams>>(),
         Get.find<AuthStateController>(),
         Get.find<NavigationService>(),
         Get.find<AppLogger>(),
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<RegisterController>(
+      () => RegisterController(
+        Get.find<UseCase<void, SignUpParams>>(),
+        Get.find<UseCase<bool, CheckTenantSlugParams>>(),
+        Get.find<AppLogger>(),
+        Get.find<ImagePickerService>(),
+        Get.find<Clock>(),
+        initialTenantSlug: tenantSlug,
+      ),
+      fenix: true,
+    );
+
+    Get.lazyPut<ForgotPasswordController>(
+      () => ForgotPasswordController(
+        Get.find<UseCase<void, ResetPasswordParams>>(),
+        Get.find<AppLogger>(),
+      ),
+      fenix: true,
+    );
+
+    // Orchestrator last (depends on sub-controllers)
+    Get.lazyPut<AuthController>(
+      () => AuthController(
+        Get.find<AuthStateController>(),
+        Get.find<LoginController>(),
+        Get.find<RegisterController>(),
+        Get.find<ForgotPasswordController>(),
         initialReason: initialViewArg is String ? initialViewArg : null,
         initialView: initialView,
-        initialTenantSlug: tenantSlug,
       ),
       fenix: true,
     );
