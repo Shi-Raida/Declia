@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Création de compte client</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bleu-crepuscule: #1E2A3A;
+    --terracotta: #B45A3C;
+    --or-solaire: #CFA044;
+    --bleu-ouvert: #3A6B8A;
+    --lin-clair: #F6F3ED;
+    --blanc: #FFFFFF;
+    --gris-doux: #E8E4DD;
+    --gris-texte: #6B6560;
+    --erreur: #C0392B;
+    --succes: #27AE60;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--lin-clair);
+    min-height: 100vh;
+    display: flex;
+    color: var(--bleu-crepuscule);
+  }
+
+  /* ─── LEFT PANEL ─── */
+  .side-visual {
+    flex: 1;
+    position: relative;
+    background: var(--bleu-crepuscule);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .side-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 70%, rgba(207,160,68,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 30%, rgba(58,107,138,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 90%, rgba(180,90,60,0.1) 0%, transparent 60%);
+  }
+
+  .side-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+
+  .visual-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 3rem;
+    max-width: 440px;
+  }
+
+  .visual-inner .logo-mark {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 2rem;
+  }
+
+  .visual-inner h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--blanc);
+    line-height: 1.25;
+    margin-bottom: 1rem;
+  }
+
+  .visual-inner h1 em {
+    font-style: italic;
+    color: var(--or-solaire);
+  }
+
+  .visual-inner p {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .steps-preview {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    text-align: left;
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+  }
+
+  .step-num.active {
+    background: var(--or-solaire);
+    color: var(--bleu-crepuscule);
+  }
+
+  .step-num.inactive {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .step-num.done {
+    background: rgba(39,174,96,0.2);
+    color: var(--succes);
+    border: 1px solid rgba(39,174,96,0.3);
+  }
+
+  .step-text {
+    padding-top: 0.3rem;
+  }
+
+  .step-text strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0.15rem;
+  }
+
+  .step-text span {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+  }
+
+  /* ─── RIGHT PANEL ─── */
+  .form-panel {
+    width: 600px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2.5rem 4rem;
+    background: var(--blanc);
+    position: relative;
+    overflow-y: auto;
+  }
+
+  .form-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--or-solaire) 0%, var(--terracotta) 50%, var(--bleu-ouvert) 100%);
+  }
+
+  /* Header */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .panel-header .back-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--gris-texte);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .panel-header .back-link:hover {
+    color: var(--terracotta);
+  }
+
+  .panel-header .back-link svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .panel-header .brand-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--bleu-crepuscule);
+  }
+
+  .badge-beta {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    background: rgba(207,160,68,0.15);
+    color: var(--or-solaire);
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-radius: 20px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+
+  .progress-segment {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--gris-doux);
+    transition: background 0.4s ease;
+  }
+
+  .progress-segment.active {
+    background: var(--or-solaire);
+  }
+
+  .progress-segment.done {
+    background: var(--succes);
+  }
+
+  /* Form title */
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--bleu-crepuscule);
+    margin-bottom: 0.35rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.85rem;
+    color: var(--gris-texte);
+    margin-bottom: 1.75rem;
+    line-height: 1.5;
+  }
+
+  /* Steps container */
+  .step-content {
+    display: none;
+  }
+
+  .step-content.visible {
+    display: block;
+    animation: fadeSlide 0.4s ease;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateX(16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Form fields */
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.15rem;
+  }
+
+  .form-group {
+    flex: 1;
+    margin-bottom: 1.15rem;
+    position: relative;
+  }
+
+  .form-row .form-group {
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--bleu-crepuscule);
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .form-group label .required {
+    color: var(--terracotta);
+    margin-left: 2px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--gris-doux);
+    border-radius: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    color: var(--bleu-crepuscule);
+    background: var(--blanc);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    outline: none;
+    appearance: none;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #B8B3AC;
+    font-weight: 300;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--bleu-ouvert);
+    box-shadow: 0 0 0 3px rgba(58,107,138,0.1);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  .form-group .input-with-icon {
+    position: relative;
+  }
+
+  .form-group .input-with-icon input {
+    padding-left: 2.6rem;
+  }
+
+  .form-group .input-with-icon .icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--gris-texte);
+    opacity: 0.45;
+  }
+
+  /* Checkbox & consent */
+  .consent-group {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .consent-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+    color: var(--gris-texte);
+    line-height: 1.5;
+  }
+
+  .consent-item input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 1.5px solid var(--gris-doux);
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    margin-top: 1px;
+  }
+
+  .consent-item input[type="checkbox"]:checked {
+    background: var(--bleu-ouvert);
+    border-color: var(--bleu-ouvert);
+  }
+
+  .consent-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .consent-item a {
+    color: var(--terracotta);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .consent-item a:hover {
+    color: var(--or-solaire);
+  }
+
+  /* Buttons */
+  .form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .btn {
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-secondary {
+    background: var(--lin-clair);
+    color: var(--gris-texte);
+    border: 1.5px solid var(--gris-doux);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--bleu-ouvert);
+    color: var(--bleu-crepuscule);
+  }
+
+  .btn-primary {
+    flex: 1;
+    background: var(--bleu-ouvert);
+    color: var(--blanc);
+  }
+
+  .btn-primary:hover {
+    background: #2F5A77;
+    box-shadow: 0 6px 20px rgba(58,107,138,0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn-success {
+    flex: 1;
+    background: var(--terracotta);
+    color: var(--blanc);
+  }
+
+  .btn-success:hover {
+    background: #9A4C32;
+    box-shadow: 0 6px 20px rgba(180,90,60,0.3);
+    transform: translateY(-1px);
+  }
+
+  .form-footer {
+    margin-top: 1.75rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--gris-texte);
+  }
+
+  .form-footer a {
+    color: var(--terracotta);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .form-footer a:hover {
+    color: var(--or-solaire);
+  }
+
+  /* Section divider inside form */
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--or-solaire);
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gris-doux);
+  }
+
+  /* Helper text */
+  .helper-text {
+    font-size: 0.75rem;
+    color: var(--gris-texte);
+    margin-top: 0.3rem;
+    font-weight: 300;
+  }
+
+  /* Password strength */
+  .password-strength {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.5rem;
+  }
+
+  .strength-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--gris-doux);
+    transition: background 0.3s ease;
+  }
+
+  /* Avatar placeholder */
+  .avatar-upload {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1.5px dashed var(--gris-doux);
+    border-radius: 12px;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .avatar-upload:hover {
+    border-color: var(--bleu-ouvert);
+  }
+
+  .avatar-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--lin-clair);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .avatar-circle svg {
+    width: 24px;
+    height: 24px;
+    color: var(--gris-texte);
+    opacity: 0.4;
+  }
+
+  .avatar-info strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--bleu-crepuscule);
+    margin-bottom: 0.15rem;
+  }
+
+  .avatar-info span {
+    font-size: 0.75rem;
+    color: var(--gris-texte);
+    font-weight: 300;
+  }
+
+  /* Animations */
+  .form-panel {
+    animation: panelIn 0.5s ease;
+  }
+
+  @keyframes panelIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .visual-inner {
+    animation: fadeIn 0.7s ease 0.15s both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .side-visual { display: none; }
+    .form-panel { width: 100%; padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LEFT VISUAL ═══════════ -->
+<div class="side-visual">
+  <div class="visual-inner">
+    <div class="logo-mark">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="28" stroke="rgba(207,160,68,0.3)" stroke-width="1"/>
+        <path d="M22 16 C22 16, 46 16, 46 32 C46 48, 22 48, 22 48 Z" stroke="#CFA044" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="32" cy="32" r="8" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>
+        <circle cx="32" cy="32" r="3" fill="#CFA044" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <h1>Rejoignez<br>l'expérience <em>Déclia</em></h1>
+    <p>Créez votre espace personnel pour accéder aux galeries, réserver vos séances et suivre vos commandes.</p>
+
+    <div class="steps-preview">
+      <div class="step-item">
+        <div class="step-num active" id="sideStep1">1</div>
+        <div class="step-text">
+          <strong>Informations personnelles</strong>
+          <span>Nom, prénom, coordonnées</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num inactive" id="sideStep2">2</div>
+        <div class="step-text">
+          <strong>Sécurité du compte</strong>
+          <span>Mot de passe et préférences</span>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num inactive" id="sideStep3">3</div>
+        <div class="step-text">
+          <strong>Confirmation</strong>
+          <span>Vérification et validation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RIGHT FORM ═══════════ -->
+<div class="form-panel">
+
+  <!-- Header -->
+  <div class="panel-header">
+    <a href="#" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Retour à la connexion
+    </a>
+    <div class="brand-mark">Déclia <span class="badge-beta">Bêta</span></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar">
+    <div class="progress-segment active" id="prog1"></div>
+    <div class="progress-segment" id="prog2"></div>
+    <div class="progress-segment" id="prog3"></div>
+  </div>
+
+  <!-- ════ ÉTAPE 1 : Informations personnelles ════ -->
+  <div class="step-content visible" id="step1">
+    <h2 class="form-title">Vos informations</h2>
+    <p class="form-subtitle">Renseignez vos coordonnées pour créer votre espace client.</p>
+
+    <!-- Avatar -->
+    <div class="avatar-upload">
+      <div class="avatar-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="avatar-info">
+        <strong>Photo de profil</strong>
+        <span>JPG ou PNG, max 2 Mo (optionnel)</span>
+      </div>
+    </div>
+
+    <div class="section-label">Identité</div>
+
+    <form onsubmit="return false;">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom <span class="required">*</span></label>
+          <input type="text" placeholder="Marie">
+        </div>
+        <div class="form-group">
+          <label>Nom <span class="required">*</span></label>
+          <input type="text" placeholder="Dupont">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Adresse e-mail <span class="required">*</span></label>
+        <div class="input-with-icon">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <input type="email" placeholder="marie.dupont@exemple.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone <span class="required">*</span></label>
+        <div class="input-with-icon">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <input type="tel" placeholder="06 12 34 56 78">
+        </div>
+      </div>
+
+      <div class="section-label">Adresse</div>
+
+      <div class="form-group">
+        <label>Adresse postale</label>
+        <input type="text" placeholder="12 rue des Lilas">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Code postal</label>
+          <input type="text" placeholder="81000">
+        </div>
+        <div class="form-group">
+          <label>Ville</label>
+          <input type="text" placeholder="Albi">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="goToStep(2)">Continuer →</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ════ ÉTAPE 2 : Sécurité ════ -->
+  <div class="step-content" id="step2">
+    <h2 class="form-title">Sécurité du compte</h2>
+    <p class="form-subtitle">Choisissez un mot de passe sécurisé pour protéger votre espace.</p>
+
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label>Mot de passe <span class="required">*</span></label>
+        <input type="password" placeholder="Minimum 8 caractères">
+        <div class="password-strength">
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+        </div>
+        <p class="helper-text">Min. 8 caractères, 1 majuscule, 1 chiffre, 1 caractère spécial</p>
+      </div>
+
+      <div class="form-group">
+        <label>Confirmer le mot de passe <span class="required">*</span></label>
+        <input type="password" placeholder="Retapez votre mot de passe">
+      </div>
+
+      <div class="section-label">Préférences</div>
+
+      <div class="form-group">
+        <label>Comment nous avez-vous connu ?</label>
+        <select>
+          <option value="" disabled selected>Sélectionner…</option>
+          <option>Recommandation d'un photographe</option>
+          <option>Réseaux sociaux</option>
+          <option>Recherche Google</option>
+          <option>Bouche-à-oreille</option>
+          <option>Autre</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Notes / Commentaire</label>
+        <textarea placeholder="Informations complémentaires (optionnel)"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-secondary" onclick="goToStep(1)">← Retour</button>
+        <button class="btn btn-primary" onclick="goToStep(3)">Continuer →</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ════ ÉTAPE 3 : Confirmation ════ -->
+  <div class="step-content" id="step3">
+    <h2 class="form-title">Presque terminé !</h2>
+    <p class="form-subtitle">Vérifiez vos informations et acceptez les conditions pour finaliser votre inscription.</p>
+
+    <!-- Récapitulatif -->
+    <div style="background: var(--lin-clair); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+      <div class="section-label" style="margin-top: 0;">Récapitulatif</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; font-size: 0.85rem;">
+        <div>
+          <span style="color: var(--gris-texte); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Nom</span><br>
+          <strong>Marie Dupont</strong>
+        </div>
+        <div>
+          <span style="color: var(--gris-texte); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">E-mail</span><br>
+          <strong>marie.dupont@exemple.com</strong>
+        </div>
+        <div>
+          <span style="color: var(--gris-texte); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Téléphone</span><br>
+          <strong>06 12 34 56 78</strong>
+        </div>
+        <div>
+          <span style="color: var(--gris-texte); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;">Ville</span><br>
+          <strong>Albi (81000)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consentements -->
+    <div class="consent-group">
+      <label class="consent-item">
+        <input type="checkbox">
+        J'accepte les <a href="#">conditions générales d'utilisation</a> et la <a href="#">politique de confidentialité</a> de Déclia. <span class="required">*</span>
+      </label>
+      <label class="consent-item">
+        <input type="checkbox">
+        J'accepte que mes photos soient stockées de manière sécurisée sur les serveurs Déclia.
+      </label>
+      <label class="consent-item">
+        <input type="checkbox">
+        Je souhaite recevoir des actualités et offres de mon photographe par e-mail.
+      </label>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="goToStep(2)">← Retour</button>
+      <button class="btn btn-success">Créer mon compte</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="form-footer">
+    Déjà un compte ? <a href="#">Se connecter</a>
+  </div>
+
+</div>
+
+<script>
+  let currentStep = 1;
+
+  function goToStep(step) {
+    // Hide all steps
+    document.querySelectorAll('.step-content').forEach(el => el.classList.remove('visible'));
+    // Show target step
+    document.getElementById('step' + step).classList.add('visible');
+
+    // Update progress bar
+    for (let i = 1; i <= 3; i++) {
+      const seg = document.getElementById('prog' + i);
+      seg.classList.remove('active', 'done');
+      if (i < step) seg.classList.add('done');
+      else if (i === step) seg.classList.add('active');
+    }
+
+    // Update side steps
+    for (let i = 1; i <= 3; i++) {
+      const sideStep = document.getElementById('sideStep' + i);
+      sideStep.classList.remove('active', 'inactive', 'done');
+      if (i < step) {
+        sideStep.classList.add('done');
+        sideStep.textContent = '✓';
+      } else if (i === step) {
+        sideStep.classList.add('active');
+        sideStep.textContent = i;
+      } else {
+        sideStep.classList.add('inactive');
+        sideStep.textContent = i;
+      }
+    }
+
+    currentStep = step;
+    // Scroll to top of form
+    document.querySelector('.form-panel').scrollTop = 0;
+  }
+</script>
+
+</body>
+</html>

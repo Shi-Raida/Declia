@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Cartes Cadeau</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bleu-crepuscule:#1E2A3A;--terracotta:#B45A3C;--or-solaire:#CFA044;--bleu-ouvert:#3A6B8A;--lin-clair:#F6F3ED;--blanc:#FFFFFF;--gris-doux:#E8E4DD;--gris-texte:#6B6560;--erreur:#C0392B;--succes:#27AE60;--warning:#E67E22;--sidebar-w:260px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Raleway',sans-serif;background:var(--lin-clair);color:var(--bleu-crepuscule);display:flex;min-height:100vh;}
+  .sidebar{width:var(--sidebar-w);background:var(--bleu-crepuscule);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+  .sidebar-brand{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .sidebar-brand .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--blanc);display:flex;align-items:center;gap:0.5rem;}
+  .sidebar-brand .logo svg{width:28px;height:28px;}
+  .badge-beta{font-family:'Raleway',sans-serif;font-size:0.55rem;font-weight:700;background:rgba(207,160,68,0.2);color:var(--or-solaire);padding:0.15rem 0.45rem;border-radius:10px;text-transform:uppercase;letter-spacing:0.1em;}
+  .sidebar-nav{padding:1rem 0;flex:1;}.nav-section{padding:0 1rem;margin-bottom:0.5rem;}
+  .nav-section-title{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgba(255,255,255,0.25);padding:0.75rem 0.5rem 0.4rem;}
+  .nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.2s;cursor:pointer;margin-bottom:2px;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8);}
+  .nav-item.active{background:rgba(58,107,138,0.25);color:var(--blanc);}.nav-item.active svg{opacity:1;color:var(--or-solaire);}
+  .nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.5;}
+  .nav-badge{margin-left:auto;background:var(--terracotta);color:var(--blanc);font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:10px;}
+  .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.75rem;}
+  .sidebar-footer .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--terracotta);display:flex;align-items:center;justify-content:center;color:var(--blanc);font-weight:700;font-size:0.8rem;}
+  .sidebar-footer .user-name{font-size:0.8rem;font-weight:600;color:var(--blanc);}
+  .sidebar-footer .user-role{font-size:0.68rem;color:rgba(255,255,255,0.4);}
+
+  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+  .topbar{background:var(--blanc);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gris-doux);position:sticky;top:0;z-index:50;}
+  .topbar-left h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;}
+  .topbar-left p{font-size:0.8rem;color:var(--gris-texte);margin-top:0.1rem;}
+  .topbar-actions{display:flex;align-items:center;gap:0.6rem;}
+  .btn{padding:0.6rem 1.15rem;border:none;border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;}
+  .btn svg{width:15px;height:15px;}
+  .btn-primary{background:var(--terracotta);color:var(--blanc);}.btn-primary:hover{background:#9A4C32;transform:translateY(-1px);}
+  .btn-outline{background:var(--blanc);color:var(--bleu-crepuscule);border:1.5px solid var(--gris-doux);}.btn-outline:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .content{padding:1.5rem 2rem;flex:1;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Stats */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+  .stat-card{background:var(--blanc);border-radius:12px;padding:1.1rem 1.3rem;border:1px solid rgba(232,228,221,0.6);display:flex;align-items:flex-start;gap:0.85rem;animation:fadeIn 0.4s ease both;}
+  .stat-card:nth-child(1){animation-delay:.03s}.stat-card:nth-child(2){animation-delay:.08s}.stat-card:nth-child(3){animation-delay:.13s}.stat-card:nth-child(4){animation-delay:.18s}
+  .stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-icon svg{width:18px;height:18px;}
+  .stat-icon.blue{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}
+  .stat-icon.gold{background:rgba(207,160,68,0.12);color:var(--or-solaire);}
+  .stat-icon.terra{background:rgba(180,90,60,0.1);color:var(--terracotta);}
+  .stat-icon.green{background:rgba(39,174,96,0.1);color:var(--succes);}
+  .stat-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--gris-texte);margin-bottom:0.25rem;}
+  .stat-value{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;line-height:1;}
+  .stat-trend{font-size:0.7rem;font-weight:600;margin-top:0.25rem;color:var(--succes);}
+
+  /* Gift card visual grid */
+  .gc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:1.5rem;}
+
+  .gc-card{
+    background:var(--blanc);border-radius:14px;overflow:hidden;
+    border:1px solid rgba(232,228,221,0.6);transition:all 0.25s;
+    animation:cardIn 0.4s ease both;
+  }
+  .gc-card:hover{box-shadow:0 8px 28px rgba(30,42,58,0.08);transform:translateY(-2px);}
+  .gc-card:nth-child(1){animation-delay:.05s}.gc-card:nth-child(2){animation-delay:.1s}
+  .gc-card:nth-child(3){animation-delay:.15s}.gc-card:nth-child(4){animation-delay:.2s}
+  .gc-card:nth-child(5){animation-delay:.25s}.gc-card:nth-child(6){animation-delay:.3s}
+  @keyframes cardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Gift card visual */
+  .gc-visual{
+    height:160px;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    padding:1.5rem;
+  }
+
+  .gc-visual.style-1{background:linear-gradient(135deg,var(--bleu-crepuscule) 0%,#2C3E56 50%,var(--bleu-ouvert) 100%);}
+  .gc-visual.style-2{background:linear-gradient(135deg,#4A2E3D 0%,var(--terracotta) 50%,#D4A03C 100%);}
+  .gc-visual.style-3{background:linear-gradient(135deg,#2C3E56 0%,var(--bleu-ouvert) 50%,#6B7F5A 100%);}
+  .gc-visual.style-4{background:linear-gradient(135deg,var(--bleu-crepuscule) 0%,#1E2A3A 100%);}
+  .gc-visual.style-5{background:linear-gradient(135deg,#6B7F5A 0%,#4A2E3D 100%);}
+
+  .gc-visual::before{
+    content:'';position:absolute;inset:0;
+    background:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.6;
+  }
+
+  .gc-visual-content{position:relative;z-index:2;text-align:center;width:100%;}
+  .gc-visual-logo{font-family:'Playfair Display',serif;font-size:1rem;color:rgba(255,255,255,0.5);margin-bottom:0.5rem;letter-spacing:0.05em;}
+  .gc-visual-amount{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;color:var(--blanc);}
+  .gc-visual-code{
+    font-family:'Raleway',sans-serif;font-size:0.72rem;font-weight:700;
+    color:rgba(255,255,255,0.5);letter-spacing:0.25em;
+    margin-top:0.5rem;
+  }
+
+  .gc-status-badge{
+    position:absolute;top:0.75rem;right:0.75rem;z-index:3;
+    padding:0.2rem 0.6rem;border-radius:20px;
+    font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;
+  }
+  .gc-status-badge.active{background:rgba(39,174,96,0.9);color:var(--blanc);}
+  .gc-status-badge.used{background:rgba(58,107,138,0.9);color:var(--blanc);}
+  .gc-status-badge.partial{background:rgba(207,160,68,0.9);color:var(--bleu-crepuscule);}
+  .gc-status-badge.expired{background:rgba(107,101,96,0.85);color:var(--blanc);}
+
+  /* Card body */
+  .gc-body{padding:1rem 1.15rem;}
+  .gc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;margin-bottom:0.25rem;}
+  .gc-subtitle{font-size:0.75rem;color:var(--gris-texte);margin-bottom:0.75rem;}
+
+  .gc-details{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.75rem;}
+  .gc-detail{display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;}
+  .gc-detail-label{color:var(--gris-texte);display:flex;align-items:center;gap:0.3rem;}
+  .gc-detail-label svg{width:13px;height:13px;opacity:0.4;}
+  .gc-detail-value{font-weight:600;}
+  .gc-detail-value.green{color:var(--succes);}
+  .gc-detail-value.red{color:var(--erreur);}
+  .gc-detail-value.orange{color:var(--warning);}
+
+  /* Usage bar */
+  .gc-usage-bar{margin:0.75rem 0;height:6px;background:var(--lin-clair);border-radius:4px;overflow:hidden;}
+  .gc-usage-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+  .gc-usage-fill.green{background:var(--succes);}
+  .gc-usage-fill.gold{background:var(--or-solaire);}
+  .gc-usage-fill.full{background:var(--bleu-ouvert);}
+  .gc-usage-fill.grey{background:var(--gris-texte);}
+
+  .gc-usage-labels{display:flex;justify-content:space-between;font-size:0.68rem;color:var(--gris-texte);margin-bottom:0.5rem;}
+
+  /* Card actions */
+  .gc-actions{
+    padding:0.65rem 1.15rem;border-top:1px solid rgba(232,228,221,0.4);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .gc-actions-left{display:flex;gap:0.25rem;}
+  .ga-btn{width:30px;height:30px;border:none;border-radius:6px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-texte);transition:all 0.15s;}
+  .ga-btn:hover{background:var(--lin-clair);color:var(--bleu-ouvert);}
+  .ga-btn.danger:hover{color:var(--erreur);background:rgba(192,57,43,0.06);}
+  .ga-btn svg{width:14px;height:14px;}
+  .gc-share-btn{
+    padding:0.3rem 0.7rem;border:1.5px solid var(--gris-doux);border-radius:6px;
+    background:var(--blanc);font-family:'Raleway',sans-serif;font-size:0.7rem;
+    font-weight:600;color:var(--bleu-crepuscule);cursor:pointer;
+    transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;
+  }
+  .gc-share-btn:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .gc-share-btn svg{width:12px;height:12px;}
+
+  /* Format badge (physical/digital) */
+  .gc-format-badge{
+    position:absolute;top:0.75rem;left:0.75rem;z-index:3;
+    padding:0.2rem 0.6rem;border-radius:6px;
+    font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;
+    display:flex;align-items:center;gap:0.3rem;backdrop-filter:blur(4px);
+  }
+  .gc-format-badge svg{width:11px;height:11px;}
+  .gc-format-badge.digital{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);}
+  .gc-format-badge.physical{background:rgba(207,160,68,0.85);color:var(--bleu-crepuscule);}
+
+  /* Shipping tracker for physical cards */
+  .gc-shipping{
+    margin:0.5rem 0 0.25rem;padding:0.55rem 0.75rem;
+    background:var(--lin-clair);border-radius:8px;
+    display:flex;align-items:center;gap:0.6rem;
+    font-size:0.72rem;
+  }
+  .gc-shipping-icon{
+    width:28px;height:28px;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .gc-shipping-icon svg{width:14px;height:14px;}
+  .gc-shipping-icon.prep{background:rgba(230,126,34,0.12);color:var(--warning);}
+  .gc-shipping-icon.sent{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}
+  .gc-shipping-icon.delivered{background:rgba(39,174,96,0.1);color:var(--succes);}
+  .gc-shipping-icon.pickup{background:rgba(142,107,175,0.08);color:#8E6BAF;}
+  .gc-shipping-info{flex:1;}
+  .gc-shipping-status{font-weight:600;color:var(--bleu-crepuscule);}
+  .gc-shipping-detail{font-size:0.65rem;color:var(--gris-texte);}
+  .gc-shipping-action{
+    padding:0.2rem 0.5rem;border:1px solid var(--gris-doux);border-radius:5px;
+    background:var(--blanc);font-family:'Raleway',sans-serif;font-size:0.62rem;
+    font-weight:600;color:var(--bleu-crepuscule);cursor:pointer;transition:all 0.15s;white-space:nowrap;
+  }
+  .gc-shipping-action:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+
+  /* Address in details */
+  .gc-address{
+    font-size:0.72rem;color:var(--gris-texte);font-style:italic;
+    padding:0.35rem 0.6rem;background:rgba(232,228,221,0.3);border-radius:6px;
+    margin-top:0.35rem;line-height:1.4;
+  }
+
+  /* Create card */
+  .gc-create{
+    background:var(--blanc);border-radius:14px;overflow:hidden;
+    border:2px dashed var(--gris-doux);transition:all 0.25s;
+    cursor:pointer;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    min-height:340px;text-align:center;padding:2rem;
+  }
+  .gc-create:hover{border-color:var(--terracotta);background:rgba(180,90,60,0.02);}
+  .gc-create-icon{
+    width:56px;height:56px;border-radius:14px;
+    background:rgba(180,90,60,0.08);color:var(--terracotta);
+    display:flex;align-items:center;justify-content:center;margin-bottom:1rem;
+  }
+  .gc-create-icon svg{width:24px;height:24px;}
+  .gc-create h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.35rem;}
+  .gc-create p{font-size:0.8rem;color:var(--gris-texte);max-width:200px;}
+
+  /* Filter */
+  .filter-bar{background:var(--blanc);border-radius:12px;padding:0.85rem 1.15rem;display:flex;align-items:center;gap:0.65rem;margin-bottom:1.25rem;border:1px solid rgba(232,228,221,0.6);flex-wrap:wrap;}
+  .search-box{flex:1;min-width:200px;position:relative;}
+  .search-box svg{position:absolute;left:0.8rem;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--gris-texte);opacity:0.4;}
+  .search-box input{width:100%;padding:0.6rem 1rem 0.6rem 2.3rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;color:var(--bleu-crepuscule);outline:none;}
+  .search-box input:focus{border-color:var(--bleu-ouvert);}
+  .search-box input::placeholder{color:#B8B3AC;font-weight:300;}
+  .filter-select{padding:0.6rem 2rem 0.6rem 0.85rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.8rem;color:var(--bleu-crepuscule);outline:none;appearance:none;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;cursor:pointer;}
+
+  /* Preset amounts */
+  .presets-section{margin-bottom:1.5rem;}
+  .presets-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.75rem;}
+  .presets-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0.75rem;}
+  .preset-card{
+    background:var(--blanc);border-radius:10px;border:1.5px solid var(--gris-doux);
+    padding:1rem;text-align:center;cursor:pointer;transition:all 0.2s;
+  }
+  .preset-card:hover{border-color:var(--or-solaire);transform:translateY(-2px);box-shadow:0 4px 12px rgba(30,42,58,0.06);}
+  .preset-amount{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;margin-bottom:0.2rem;}
+  .preset-label{font-size:0.7rem;color:var(--gris-texte);font-weight:500;}
+  .preset-card.custom{border-style:dashed;}
+  .preset-card.custom .preset-amount{font-size:1.1rem;color:var(--gris-texte);}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Principal</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients<span class="nav-badge">47</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Commerce</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Commandes<span class="nav-badge">3</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Outils</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="user-avatar">CL</div><div><div class="user-name">Capucine Laurent</div><div class="user-role">Photographe</div></div></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Cartes Cadeau</h1><p>9 cartes émises · 5 actives</p></div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter</button>
+      <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Créer une carte</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="stat-label">Cartes émises</div><div class="stat-value">9</div><div class="stat-trend">+3 ce mois</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><div class="stat-label">Actives</div><div class="stat-value">5</div><div class="stat-trend">Prêtes à utiliser</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="stat-label">Valeur totale</div><div class="stat-value">985 €</div><div class="stat-trend">dont 435 € utilisés</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div><div class="stat-label">Taux d'utilisation</div><div class="stat-value">44%</div><div class="stat-trend">435 € sur 985 €</div></div>
+      </div>
+    </div>
+
+    <!-- Preset amounts -->
+    <div class="presets-section">
+      <div class="presets-title">Créer rapidement une carte</div>
+      <div style="display:flex;gap:0.75rem;margin-bottom:1rem;">
+        <label style="flex:1;display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1.15rem;background:var(--blanc);border-radius:10px;border:1.5px solid var(--bleu-ouvert);cursor:pointer;transition:all 0.2s;">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(58,107,138,0.1);display:flex;align-items:center;justify-content:center;color:var(--bleu-ouvert);flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:0.85rem;">Carte numérique</div>
+            <div style="font-size:0.72rem;color:var(--gris-texte);">Envoi instantané par e-mail · PDF personnalisé</div>
+          </div>
+          <div style="margin-left:auto;width:18px;height:18px;border-radius:50%;border:2px solid var(--bleu-ouvert);display:flex;align-items:center;justify-content:center;">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--bleu-ouvert);"></div>
+          </div>
+        </label>
+        <label style="flex:1;display:flex;align-items:center;gap:0.75rem;padding:0.85rem 1.15rem;background:var(--blanc);border-radius:10px;border:1.5px solid var(--gris-doux);cursor:pointer;transition:all 0.2s;">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(207,160,68,0.1);display:flex;align-items:center;justify-content:center;color:var(--or-solaire);flex-shrink:0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:0.85rem;">Carte physique imprimée</div>
+            <div style="font-size:0.72rem;color:var(--gris-texte);">Impression premium · Envoi postal ou retrait · +5 €</div>
+          </div>
+          <div style="margin-left:auto;width:18px;height:18px;border-radius:50%;border:2px solid var(--gris-doux);"></div>
+        </label>
+      </div>
+      <div class="presets-grid">
+        <div class="preset-card"><div class="preset-amount">50 €</div><div class="preset-label">Mini séance</div></div>
+        <div class="preset-card"><div class="preset-amount">100 €</div><div class="preset-label">Séance portrait</div></div>
+        <div class="preset-card"><div class="preset-amount">150 €</div><div class="preset-label">Séance famille</div></div>
+        <div class="preset-card"><div class="preset-amount">250 €</div><div class="preset-label">Séance + tirages</div></div>
+        <div class="preset-card custom"><div class="preset-amount">✎ Libre</div><div class="preset-label">Montant personnalisé</div></div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Rechercher (code, acheteur, bénéficiaire)…">
+      </div>
+      <select class="filter-select"><option>Tous les statuts</option><option>Active</option><option>Partiellement utilisée</option><option>Utilisée</option><option>Expirée</option></select>
+      <select class="filter-select"><option>Plus récentes</option><option>Plus anciennes</option><option>Montant ↓</option></select>
+    </div>
+
+    <!-- Gift cards grid -->
+    <div class="gc-grid">
+
+      <!-- Card 1: Active -->
+      <div class="gc-card">
+        <div class="gc-visual style-1">
+          <span class="gc-format-badge digital"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> E-mail</span>
+          <span class="gc-status-badge active">Active</span>
+          <div class="gc-visual-content">
+            <div class="gc-visual-logo">Déclia</div>
+            <div class="gc-visual-amount">150 €</div>
+            <div class="gc-visual-code">GC-2026-ABCD</div>
+          </div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Carte Séance Famille</div>
+          <div class="gc-subtitle">Achetée par Marie Lefèvre · Pour sa sœur</div>
+          <div class="gc-details">
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Émise le</span><span class="gc-detail-value">15 mars 2026</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Expire le</span><span class="gc-detail-value">15 mars 2027</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Solde restant</span><span class="gc-detail-value green">150 €</span></div>
+          </div>
+          <div class="gc-usage-bar"><div class="gc-usage-fill green" style="width:0%;"></div></div>
+          <div class="gc-usage-labels"><span>0 € utilisés</span><span>150 € disponible</span></div>
+        </div>
+        <div class="gc-actions">
+          <div class="gc-actions-left">
+            <button class="ga-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="ga-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="ga-btn danger" title="Désactiver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+          </div>
+          <button class="gc-share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Envoyer</button>
+        </div>
+      </div>
+
+      <!-- Card 2: Partially used -->
+      <div class="gc-card">
+        <div class="gc-visual style-2">
+          <span class="gc-format-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Physique</span>
+          <span class="gc-status-badge partial">Partielle</span>
+          <div class="gc-visual-content">
+            <div class="gc-visual-logo">Déclia</div>
+            <div class="gc-visual-amount">250 €</div>
+            <div class="gc-visual-code">GC-2026-EFGH</div>
+          </div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Carte Séance + Tirages</div>
+          <div class="gc-subtitle">Achetée par Pierre Durand · Pour sa femme</div>
+          <div class="gc-shipping">
+            <div class="gc-shipping-icon delivered"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="gc-shipping-info">
+              <div class="gc-shipping-status">Livrée en main propre</div>
+              <div class="gc-shipping-detail">Remise le 5 fév. 2026 au studio</div>
+            </div>
+          </div>
+          <div class="gc-details">
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Émise le</span><span class="gc-detail-value">1 fév. 2026</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Expire le</span><span class="gc-detail-value">1 fév. 2027</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Solde restant</span><span class="gc-detail-value orange">85 €</span></div>
+          </div>
+          <div class="gc-usage-bar"><div class="gc-usage-fill gold" style="width:66%;"></div></div>
+          <div class="gc-usage-labels"><span>165 € utilisés</span><span>85 € restant</span></div>
+        </div>
+        <div class="gc-actions">
+          <div class="gc-actions-left">
+            <button class="ga-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="ga-btn" title="Historique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg></button>
+          </div>
+          <button class="gc-share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Envoyer</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Fully used -->
+      <div class="gc-card">
+        <div class="gc-visual style-3">
+          <span class="gc-format-badge digital"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> E-mail</span>
+          <span class="gc-status-badge used">Utilisée</span>
+          <div class="gc-visual-content">
+            <div class="gc-visual-logo">Déclia</div>
+            <div class="gc-visual-amount">100 €</div>
+            <div class="gc-visual-code">GC-2026-IJKL</div>
+          </div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Carte Portrait</div>
+          <div class="gc-subtitle">Achetée par Julie Martin · Pour Antoine Roux</div>
+          <div class="gc-details">
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Émise le</span><span class="gc-detail-value">10 jan. 2026</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Utilisée le</span><span class="gc-detail-value">5 mars 2026</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Solde restant</span><span class="gc-detail-value red">0 €</span></div>
+          </div>
+          <div class="gc-usage-bar"><div class="gc-usage-fill full" style="width:100%;"></div></div>
+          <div class="gc-usage-labels"><span>100 € utilisés</span><span>Épuisée</span></div>
+        </div>
+        <div class="gc-actions">
+          <div class="gc-actions-left">
+            <button class="ga-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="ga-btn" title="Historique"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg></button>
+          </div>
+          <button class="gc-share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Dupliquer</button>
+        </div>
+      </div>
+
+      <!-- Card 4: Active -->
+      <div class="gc-card">
+        <div class="gc-visual style-5">
+          <span class="gc-format-badge physical"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> Physique</span>
+          <span class="gc-status-badge active">Active</span>
+          <div class="gc-visual-content">
+            <div class="gc-visual-logo">Déclia</div>
+            <div class="gc-visual-amount">200 €</div>
+            <div class="gc-visual-code">GC-2026-MNOP</div>
+          </div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Carte Séance Équestre</div>
+          <div class="gc-subtitle">Achetée par Sophie Bernard · Pour sa fille</div>
+          <div class="gc-shipping">
+            <div class="gc-shipping-icon prep"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <div class="gc-shipping-info">
+              <div class="gc-shipping-status">En préparation</div>
+              <div class="gc-shipping-detail">Impression en cours · Envoi prévu le 22 mars</div>
+            </div>
+            <button class="gc-shipping-action">Marquer expédiée</button>
+          </div>
+          <div class="gc-address">📍 Sophie Bernard · 24 avenue Jean Jaurès, 81000 Albi</div>
+          <div class="gc-details">
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Émise le</span><span class="gc-detail-value">18 mars 2026</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Expire le</span><span class="gc-detail-value">18 mars 2027</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Solde restant</span><span class="gc-detail-value green">200 €</span></div>
+          </div>
+          <div class="gc-usage-bar"><div class="gc-usage-fill green" style="width:0%;"></div></div>
+          <div class="gc-usage-labels"><span>0 € utilisés</span><span>200 € disponible</span></div>
+        </div>
+        <div class="gc-actions">
+          <div class="gc-actions-left">
+            <button class="ga-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="ga-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          </div>
+          <button class="gc-share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Envoyer</button>
+        </div>
+      </div>
+
+      <!-- Card 5: Expired -->
+      <div class="gc-card" style="opacity:0.6;">
+        <div class="gc-visual style-4">
+          <span class="gc-format-badge digital"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> E-mail</span>
+          <span class="gc-status-badge expired">Expirée</span>
+          <div class="gc-visual-content">
+            <div class="gc-visual-logo">Déclia</div>
+            <div class="gc-visual-amount">50 €</div>
+            <div class="gc-visual-code">GC-2025-WXYZ</div>
+          </div>
+        </div>
+        <div class="gc-body">
+          <div class="gc-title">Carte Mini Séance</div>
+          <div class="gc-subtitle">Achetée par Léa Garnier · Non utilisée</div>
+          <div class="gc-details">
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Émise le</span><span class="gc-detail-value">15 déc. 2024</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Expirée le</span><span class="gc-detail-value red">15 déc. 2025</span></div>
+            <div class="gc-detail"><span class="gc-detail-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Non utilisée</span><span class="gc-detail-value red">50 € perdus</span></div>
+          </div>
+          <div class="gc-usage-bar"><div class="gc-usage-fill grey" style="width:100%;"></div></div>
+          <div class="gc-usage-labels"><span>Expirée</span><span>Non réclamée</span></div>
+        </div>
+        <div class="gc-actions">
+          <div class="gc-actions-left">
+            <button class="ga-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <button class="gc-share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Recréer</button>
+        </div>
+      </div>
+
+      <!-- Create card -->
+      <div class="gc-create">
+        <div class="gc-create-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <h3>Nouvelle carte</h3>
+        <p>Créez une carte cadeau personnalisée</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

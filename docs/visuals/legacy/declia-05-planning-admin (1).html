@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Planning & Disponibilités</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bleu-crepuscule: #1E2A3A;
+    --terracotta: #B45A3C;
+    --or-solaire: #CFA044;
+    --bleu-ouvert: #3A6B8A;
+    --lin-clair: #F6F3ED;
+    --blanc: #FFFFFF;
+    --gris-doux: #E8E4DD;
+    --gris-texte: #6B6560;
+    --erreur: #C0392B;
+    --succes: #27AE60;
+    --warning: #E67E22;
+    --sidebar-w: 260px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Raleway', sans-serif; background: var(--lin-clair); color: var(--bleu-crepuscule); display: flex; min-height: 100vh; }
+
+  /* ═══════════ SIDEBAR (compact) ═══════════ */
+  .sidebar {
+    width: var(--sidebar-w); background: var(--bleu-crepuscule);
+    display: flex; flex-direction: column; position: fixed; top:0; left:0; height: 100vh; z-index:100; overflow-y: auto;
+  }
+  .sidebar-brand { padding: 1.5rem 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .sidebar-brand .logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:600; color:var(--blanc); display:flex; align-items:center; gap:0.5rem; }
+  .sidebar-brand .logo svg { width:28px; height:28px; }
+  .badge-beta { font-family:'Raleway',sans-serif; font-size:0.55rem; font-weight:700; background:rgba(207,160,68,0.2); color:var(--or-solaire); padding:0.15rem 0.45rem; border-radius:10px; text-transform:uppercase; letter-spacing:0.1em; }
+  .sidebar-nav { padding:1rem 0; flex:1; }
+  .nav-section { padding:0 1rem; margin-bottom:0.5rem; }
+  .nav-section-title { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.16em; color:rgba(255,255,255,0.25); padding:0.75rem 0.5rem 0.4rem; }
+  .nav-item { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.75rem; border-radius:8px; font-size:0.82rem; font-weight:500; color:rgba(255,255,255,0.5); text-decoration:none; transition:all 0.2s; cursor:pointer; margin-bottom:2px; }
+  .nav-item:hover { background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.8); }
+  .nav-item.active { background:rgba(58,107,138,0.25); color:var(--blanc); }
+  .nav-item.active svg { opacity:1; color:var(--or-solaire); }
+  .nav-item svg { width:18px; height:18px; flex-shrink:0; opacity:0.5; }
+  .nav-badge { margin-left:auto; background:var(--terracotta); color:var(--blanc); font-size:0.65rem; font-weight:700; padding:0.1rem 0.45rem; border-radius:10px; }
+  .sidebar-footer { padding:1rem 1.5rem; border-top:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; gap:0.75rem; }
+  .sidebar-footer .user-avatar { width:36px; height:36px; border-radius:50%; background:var(--terracotta); display:flex; align-items:center; justify-content:center; color:var(--blanc); font-weight:700; font-size:0.8rem; }
+  .sidebar-footer .user-name { font-size:0.8rem; font-weight:600; color:var(--blanc); }
+  .sidebar-footer .user-role { font-size:0.68rem; color:rgba(255,255,255,0.4); }
+
+  /* ═══════════ MAIN ═══════════ */
+  .main { margin-left: var(--sidebar-w); flex:1; display:flex; flex-direction:column; min-height:100vh; }
+  .topbar { background:var(--blanc); padding:1rem 2rem; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--gris-doux); position:sticky; top:0; z-index:50; }
+  .topbar-left h1 { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:600; }
+  .topbar-left p { font-size:0.8rem; color:var(--gris-texte); margin-top:0.1rem; }
+  .topbar-actions { display:flex; align-items:center; gap:0.6rem; }
+  .btn { padding:0.6rem 1.15rem; border:none; border-radius:8px; font-family:'Raleway',sans-serif; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:0.4rem; }
+  .btn svg { width:15px; height:15px; }
+  .btn-primary { background:var(--terracotta); color:var(--blanc); }
+  .btn-primary:hover { background:#9A4C32; transform:translateY(-1px); }
+  .btn-outline { background:var(--blanc); color:var(--bleu-crepuscule); border:1.5px solid var(--gris-doux); }
+  .btn-outline:hover { border-color:var(--bleu-ouvert); color:var(--bleu-ouvert); }
+  .btn-success { background:var(--succes); color:var(--blanc); }
+  .btn-success:hover { background:#219A52; transform:translateY(-1px); }
+  .content { padding:1.5rem 2rem; flex:1; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ─── Tabs ─── */
+  .tab-bar { display:flex; gap:0; margin-bottom:1.25rem; border-bottom:2px solid var(--gris-doux); }
+  .tab-btn { padding:0.7rem 1.5rem; border:none; background:transparent; font-family:'Raleway',sans-serif; font-size:0.88rem; font-weight:600; color:var(--gris-texte); cursor:pointer; position:relative; transition:color 0.2s; display:flex; align-items:center; gap:0.4rem; }
+  .tab-btn svg { width:16px; height:16px; }
+  .tab-btn.active { color:var(--terracotta); }
+  .tab-btn.active::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:2px; background:var(--terracotta); border-radius:2px 2px 0 0; }
+  .tab-content { display:none; }
+  .tab-content.visible { display:block; animation: fadeSlide 0.35s ease; }
+  @keyframes fadeSlide { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ─── Calendar tab (simplified) ─── */
+  .calendar-card { background:var(--blanc); border-radius:12px; border:1px solid rgba(232,228,221,0.6); overflow:hidden; }
+  .cal-week-header { display:grid; grid-template-columns:70px repeat(7,1fr); border-bottom:1px solid var(--gris-doux); }
+  .cal-week-header .corner { padding:0.75rem; }
+  .cal-day-header { padding:0.65rem 0.5rem; text-align:center; border-left:1px solid rgba(232,228,221,0.5); }
+  .cal-day-header .day-name { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--gris-texte); }
+  .cal-day-header .day-num { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:600; margin-top:0.15rem; }
+  .cal-day-header.today .day-num { width:32px;height:32px;border-radius:50%;background:var(--terracotta);color:var(--blanc);display:inline-flex;align-items:center;justify-content:center; }
+  .cal-day-header.today .day-name { color:var(--terracotta); }
+  .cal-week-grid { display:grid; grid-template-columns:70px repeat(7,1fr); max-height:520px; overflow-y:auto; }
+  .cal-time-col { border-right:1px solid rgba(232,228,221,0.5); }
+  .cal-time-slot { height:60px; padding:0.25rem 0.5rem; font-size:0.68rem; font-weight:600; color:var(--gris-texte); text-align:right; border-bottom:1px solid rgba(232,228,221,0.3); }
+  .cal-day-col { border-left:1px solid rgba(232,228,221,0.3); position:relative; }
+  .cal-hour-cell { height:60px; border-bottom:1px solid rgba(232,228,221,0.3); position:relative; }
+  .cal-event { position:absolute; left:3px; right:3px; border-radius:6px; padding:0.3rem 0.45rem; font-size:0.7rem; font-weight:600; line-height:1.25; cursor:pointer; overflow:hidden; z-index:2; }
+  .cal-event .event-time { font-size:0.62rem; font-weight:400; opacity:0.8; }
+  .cal-event.famille { background:rgba(58,107,138,0.15); color:var(--bleu-ouvert); border-left:3px solid var(--bleu-ouvert); }
+  .cal-event.equestre { background:rgba(107,127,90,0.15); color:#5A6E4C; border-left:3px solid #6B7F5A; }
+  .cal-event.grossesse { background:rgba(142,107,175,0.12); color:#7A5B9E; border-left:3px solid #8E6BAF; }
+  .cal-event.portrait { background:rgba(207,160,68,0.12); color:#A6842F; border-left:3px solid var(--or-solaire); }
+  .cal-event.mariage { background:rgba(180,90,60,0.12); color:var(--terracotta); border-left:3px solid var(--terracotta); }
+  .cal-event.dispo { background:rgba(39,174,96,0.08); color:var(--succes); border-left:3px solid var(--succes); border-style:dashed; border-left-style:solid; }
+  .cal-event.bloque { background:rgba(107,101,96,0.08); color:var(--gris-texte); border-left:3px solid var(--gris-texte); }
+  .legend { padding:0.85rem 1.25rem; display:flex; flex-wrap:wrap; gap:0.65rem; border-top:1px solid var(--gris-doux); }
+  .legend-item { display:flex; align-items:center; gap:0.35rem; font-size:0.72rem; color:var(--gris-texte); }
+  .legend-color { width:10px; height:10px; border-radius:3px; }
+
+  /* ═══════════ EDITOR TAB ═══════════ */
+  .editor-intro {
+    background:var(--blanc); border-radius:12px; padding:1.15rem 1.5rem;
+    border:1px solid rgba(232,228,221,0.6); margin-bottom:1.25rem;
+    display:flex; align-items:center; gap:1rem;
+  }
+  .editor-intro .intro-icon {
+    width:42px; height:42px; border-radius:10px; background:rgba(39,174,96,0.1);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--succes);
+  }
+  .editor-intro .intro-icon svg { width:20px; height:20px; }
+  .editor-intro-text h2 { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:600; margin-bottom:0.15rem; }
+  .editor-intro-text p { font-size:0.8rem; color:var(--gris-texte); }
+
+  /* ─── WEEK GRID EDITOR ─── */
+  .week-grid-card {
+    background: var(--blanc); border-radius: 12px;
+    border: 1px solid rgba(232,228,221,0.6); overflow: hidden;
+  }
+
+  .week-grid-table {
+    width: 100%; border-collapse: collapse;
+    user-select: none;
+  }
+
+  .week-grid-table thead th {
+    padding: 0.75rem 0.25rem; text-align: center;
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--gris-texte);
+    border-bottom: 2px solid var(--gris-doux);
+    background: var(--lin-clair);
+    position: sticky; top: 0; z-index: 3;
+  }
+
+  .week-grid-table thead th:first-child {
+    width: 60px; text-align: right; padding-right: 0.75rem;
+  }
+
+  .week-grid-table thead th .th-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 600;
+    color: var(--bleu-crepuscule);
+    display: block; margin-top: 0.15rem;
+  }
+
+  .week-grid-table thead th.today-col {
+    background: rgba(180,90,60,0.06);
+  }
+  .week-grid-table thead th.today-col .th-date {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--terracotta); color: var(--blanc);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+  }
+
+  .week-grid-table tbody td {
+    text-align: center; padding: 0;
+    border-bottom: 1px solid rgba(232,228,221,0.35);
+    border-right: 1px solid rgba(232,228,221,0.25);
+  }
+
+  .week-grid-table tbody td:first-child {
+    font-size: 0.7rem; font-weight: 600; color: var(--gris-texte);
+    text-align: right; padding: 0 0.65rem 0 0;
+    width: 60px; border-right: 1.5px solid var(--gris-doux);
+    background: var(--blanc);
+  }
+
+  .week-grid-table tbody td:first-child.hour-label {
+    border-bottom: 1px solid rgba(232,228,221,0.5);
+  }
+
+  .week-grid-table tbody td:first-child.half-label {
+    color: var(--gris-doux); font-weight: 400;
+    border-bottom: 1px solid rgba(232,228,221,0.2);
+  }
+
+  .week-grid-table tbody td.today-col {
+    background: rgba(180,90,60,0.015);
+  }
+
+  /* ─── THE CELL ─── */
+  .cell {
+    width: 100%; height: 36px;
+    cursor: pointer; transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.02em;
+    position: relative;
+  }
+
+  .cell.empty {
+    background: var(--blanc);
+    color: transparent;
+  }
+  .cell.empty:hover {
+    background: rgba(39,174,96,0.08);
+    color: rgba(39,174,96,0.5);
+  }
+
+  .cell.available {
+    background: rgba(39,174,96,0.18);
+    color: var(--succes);
+  }
+  .cell.available:hover {
+    background: rgba(39,174,96,0.28);
+  }
+
+  .cell.booked {
+    background: rgba(58,107,138,0.15);
+    color: var(--bleu-ouvert);
+    cursor: default;
+    font-size: 0.58rem;
+  }
+
+  .cell.blocked {
+    background: rgba(107,101,96,0.1);
+    color: var(--gris-texte);
+    cursor: default;
+  }
+
+  /* Separator for full hours */
+  .week-grid-table tbody tr.hour-row td {
+    border-top: 1px solid rgba(232,228,221,0.6);
+  }
+
+  /* Quick fill row */
+  .quick-row {
+    padding: 0.85rem 1.25rem; border-top: 1px solid var(--gris-doux);
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  }
+  .quick-label { font-size:0.72rem; font-weight:600; color:var(--gris-texte); margin-right:0.25rem; }
+  .qf-btn {
+    padding: 0.35rem 0.75rem; border: 1.5px solid var(--gris-doux); border-radius: 6px;
+    background: var(--blanc); font-family:'Raleway',sans-serif; font-size:0.72rem;
+    font-weight:600; color:var(--bleu-crepuscule); cursor:pointer; transition:all 0.2s;
+  }
+  .qf-btn:hover { border-color:var(--succes); color:var(--succes); background:rgba(39,174,96,0.04); }
+  .qf-btn.danger { color: var(--gris-texte); }
+  .qf-btn.danger:hover { border-color:var(--erreur); color:var(--erreur); background:rgba(192,57,43,0.04); }
+
+  /* ─── Summary footer ─── */
+  .summary-footer {
+    padding: 1rem 1.5rem;
+    background: var(--lin-clair);
+    border-top: 1px solid var(--gris-doux);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+
+  .summary-chips { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .summary-chip {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.45rem 0.85rem; background: var(--blanc);
+    border-radius: 8px; border: 1px solid rgba(232,228,221,0.6);
+  }
+  .summary-chip .chip-day { font-size:0.72rem; font-weight:700; color:var(--bleu-crepuscule); min-width:30px; }
+  .summary-chip .chip-hours { font-size:0.72rem; font-weight:600; color:var(--succes); }
+
+  .summary-total-box {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1rem; background: var(--blanc);
+    border-radius: 8px; border: 1.5px solid rgba(39,174,96,0.3);
+  }
+  .summary-total-label { font-size:0.75rem; font-weight:600; color:var(--gris-texte); }
+  .summary-total-value { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:600; color:var(--succes); }
+
+  /* Legend */
+  .editor-legend {
+    display: flex; gap: 1.25rem; padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--gris-doux);
+  }
+  .editor-legend-item { display:flex; align-items:center; gap:0.4rem; font-size:0.72rem; color:var(--gris-texte); }
+  .editor-legend-box { width:24px; height:16px; border-radius:3px; }
+
+  /* Scrollable grid area */
+  .grid-scroll {
+    max-height: 560px;
+    overflow-y: auto;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title">Principal</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients<span class="nav-badge">47</span></a>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Commerce</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Commandes<span class="nav-badge">3</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Outils</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="user-avatar">CL</div><div><div class="user-name">Capucine Laurent</div><div class="user-role">Photographe</div></div></div>
+</nav>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Planning & Disponibilités</h1>
+      <p>Semaine du 16 au 22 mars 2026</p>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline" id="undoBtn" onclick="undoAction()" style="opacity:0.4;pointer-events:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        Annuler
+      </button>
+      <button class="btn btn-success" onclick="alert('Disponibilités enregistrées !')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Enregistrer
+      </button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-btn" onclick="switchTab('calendar',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Vue calendrier
+      </button>
+      <button class="tab-btn active" onclick="switchTab('editor',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Éditer mes disponibilités
+      </button>
+    </div>
+
+    <!-- ════ TAB CALENDAR ════ -->
+    <div class="tab-content" id="tab-calendar">
+      <div class="calendar-card">
+        <div class="cal-week-header">
+          <div class="corner"></div>
+          <div class="cal-day-header"><span class="day-name">Lun</span><div class="day-num">16</div></div>
+          <div class="cal-day-header"><span class="day-name">Mar</span><div class="day-num">17</div></div>
+          <div class="cal-day-header"><span class="day-name">Mer</span><div class="day-num">18</div></div>
+          <div class="cal-day-header"><span class="day-name">Jeu</span><div class="day-num">19</div></div>
+          <div class="cal-day-header today"><span class="day-name">Ven</span><div class="day-num">20</div></div>
+          <div class="cal-day-header"><span class="day-name">Sam</span><div class="day-num">21</div></div>
+          <div class="cal-day-header"><span class="day-name">Dim</span><div class="day-num">22</div></div>
+        </div>
+        <div class="cal-week-grid">
+          <div class="cal-time-col"><div class="cal-time-slot">8h</div><div class="cal-time-slot">9h</div><div class="cal-time-slot">10h</div><div class="cal-time-slot">11h</div><div class="cal-time-slot">12h</div><div class="cal-time-slot">13h</div><div class="cal-time-slot">14h</div><div class="cal-time-slot">15h</div><div class="cal-time-slot">16h</div><div class="cal-time-slot">17h</div><div class="cal-time-slot">18h</div><div class="cal-time-slot">19h</div></div>
+          <div class="cal-day-col"><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event dispo" style="top:0;height:235px;">Disponible<br><span class="event-time">9h – 13h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event dispo" style="top:30px;height:85px;">Dispo<br><span class="event-time">17h30–19h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+          <div class="cal-day-col"><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event famille" style="top:0;height:115px;">Famille Moreau<br><span class="event-time">10h–12h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event dispo" style="top:0;height:175px;">Disponible<br><span class="event-time">16h–19h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+          <div class="cal-day-col"><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event dispo" style="top:0;height:235px;">Disponible<br><span class="event-time">9h–13h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event bloque" style="top:0;height:115px;">Perso<br><span class="event-time">13h–15h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event equestre" style="top:0;height:115px;">Équestre Martin<br><span class="event-time">16h–18h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+          <div class="cal-day-col"><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event grossesse" style="top:0;height:115px;">Grossesse Camille<br><span class="event-time">10h–12h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event dispo" style="top:30px;height:85px;">Dispo<br><span class="event-time">17h30–19h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+          <div class="cal-day-col" style="background:rgba(180,90,60,0.02);"><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event portrait" style="top:0;height:55px;">Portrait Roux<br><span class="event-time">14h–15h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event famille" style="top:30px;height:85px;">Famille Lefèvre<br><span class="event-time">16h30–18h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+          <div class="cal-day-col"><div class="cal-hour-cell"><div class="cal-event dispo" style="top:0;height:235px;">Disponible<br><span class="event-time">8h–12h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"><div class="cal-event mariage" style="top:0;height:295px;">Mariage Bernard<br><span class="event-time">14h–19h</span></div></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+          <div class="cal-day-col"><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div><div class="cal-hour-cell"></div></div>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-color" style="background:var(--succes);"></div> Disponible</div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--bleu-ouvert);"></div> Famille</div>
+          <div class="legend-item"><div class="legend-color" style="background:#6B7F5A;"></div> Équestre</div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--terracotta);"></div> Mariage</div>
+          <div class="legend-item"><div class="legend-color" style="background:#8E6BAF;"></div> Grossesse</div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--or-solaire);"></div> Portrait</div>
+          <div class="legend-item"><div class="legend-color" style="background:var(--gris-texte);"></div> Indisponible</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB EDITOR ════ -->
+    <div class="tab-content visible" id="tab-editor">
+
+      <div class="editor-intro">
+        <div class="intro-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="editor-intro-text">
+          <h2>Sélectionnez vos créneaux</h2>
+          <p>Cliquez sur une case ou glissez sur plusieurs cases pour définir vos disponibilités. Les clients ne pourront réserver que sur les créneaux verts.</p>
+        </div>
+      </div>
+
+      <div class="week-grid-card">
+        <div class="grid-scroll">
+          <table class="week-grid-table" id="weekGrid">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Lun<span class="th-date">16</span></th>
+                <th>Mar<span class="th-date">17</span></th>
+                <th>Mer<span class="th-date">18</span></th>
+                <th>Jeu<span class="th-date">19</span></th>
+                <th class="today-col">Ven<span class="th-date">20</span></th>
+                <th>Sam<span class="th-date">21</span></th>
+                <th>Dim<span class="th-date">22</span></th>
+              </tr>
+            </thead>
+            <tbody id="gridBody">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="quick-row">
+          <span class="quick-label">Remplissage rapide :</span>
+          <button class="qf-btn" onclick="quickFill('morning')">Matin (8h–12h)</button>
+          <button class="qf-btn" onclick="quickFill('afternoon')">Après-midi (14h–18h)</button>
+          <button class="qf-btn" onclick="quickFill('golden')">Crépuscule (17h–19h30)</button>
+          <button class="qf-btn" onclick="quickFill('all')">Toute la journée</button>
+          <button class="qf-btn danger" onclick="quickFill('clear')">Tout effacer</button>
+        </div>
+
+        <div class="editor-legend">
+          <div class="editor-legend-item"><div class="editor-legend-box" style="background:rgba(39,174,96,0.18);border:1px solid rgba(39,174,96,0.3);"></div> Disponible</div>
+          <div class="editor-legend-item"><div class="editor-legend-box" style="background:rgba(58,107,138,0.15);border:1px solid rgba(58,107,138,0.3);"></div> Réservé</div>
+          <div class="editor-legend-item"><div class="editor-legend-box" style="background:var(--lin-clair);border:1px dashed var(--gris-doux);"></div> Non défini</div>
+        </div>
+
+        <div class="summary-footer" id="summaryFooter">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS = ['lun','mar','mer','jeu','ven','sam','dim'];
+const DAY_LABELS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const grid = {}; // grid[day][time] = 'empty' | 'available' | 'booked'
+const history = [];
+
+// Pre-set some data
+const presets = {
+  lun: { available: ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','17:30','18:00','18:30'] },
+  mar: { available: ['16:00','16:30','17:00','17:30','18:00','18:30'], booked: ['10:00','10:30','11:00','11:30'] },
+  mer: { available: ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30'], booked: ['16:00','16:30','17:00','17:30'] },
+  jeu: { available: ['17:30','18:00','18:30'], booked: ['10:00','10:30','11:00','11:30'] },
+  ven: { booked: ['14:00','14:30','16:30','17:00','17:30'] },
+  sam: { available: ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30'], booked: ['14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30'] },
+  dim: {}
+};
+
+// Init grid state
+DAYS.forEach(d => {
+  grid[d] = {};
+  for (let h = 7; h <= 20; h++) {
+    ['00','30'].forEach(m => {
+      const key = String(h).padStart(2,'0') + ':' + m;
+      const p = presets[d] || {};
+      if (p.booked && p.booked.includes(key)) grid[d][key] = 'booked';
+      else if (p.available && p.available.includes(key)) grid[d][key] = 'available';
+      else grid[d][key] = 'empty';
+    });
+  }
+});
+
+// Build table
+function buildGrid() {
+  const tbody = document.getElementById('gridBody');
+  tbody.innerHTML = '';
+
+  for (let h = 7; h <= 20; h++) {
+    ['00','30'].forEach((m, mi) => {
+      const key = String(h).padStart(2,'0') + ':' + m;
+      const tr = document.createElement('tr');
+      if (mi === 0) tr.className = 'hour-row';
+
+      // Time label
+      const tdTime = document.createElement('td');
+      tdTime.className = mi === 0 ? 'hour-label' : 'half-label';
+      tdTime.textContent = mi === 0 ? h + 'h' : h + 'h30';
+      tr.appendChild(tdTime);
+
+      // Day cells
+      DAYS.forEach((d, di) => {
+        const td = document.createElement('td');
+        if (di === 4) td.className = 'today-col';
+
+        const cell = document.createElement('div');
+        cell.className = 'cell ' + grid[d][key];
+        cell.dataset.day = d;
+        cell.dataset.time = key;
+
+        if (grid[d][key] === 'available') cell.textContent = '✓';
+        else if (grid[d][key] === 'booked') cell.textContent = '■';
+        else cell.textContent = '';
+
+        // Events
+        cell.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          if (grid[d][key] === 'booked') return;
+          isDragging = true;
+          dragMode = grid[d][key] === 'available' ? 'remove' : 'add';
+          toggleCell(cell, d, key);
+        });
+        cell.addEventListener('mouseenter', () => {
+          if (isDragging && grid[d][key] !== 'booked') {
+            toggleCellDrag(cell, d, key);
+          }
+        });
+
+        td.appendChild(cell);
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  }
+  updateSummary();
+}
+
+let isDragging = false;
+let dragMode = 'add';
+
+document.addEventListener('mouseup', () => {
+  if (isDragging) { isDragging = false; }
+});
+
+function toggleCell(cell, day, time) {
+  if (dragMode === 'add') {
+    grid[day][time] = 'available';
+    cell.className = 'cell available';
+    cell.textContent = '✓';
+  } else {
+    grid[day][time] = 'empty';
+    cell.className = 'cell empty';
+    cell.textContent = '';
+  }
+  updateSummary();
+}
+
+function toggleCellDrag(cell, day, time) {
+  if (dragMode === 'add' && grid[day][time] !== 'available') {
+    grid[day][time] = 'available';
+    cell.className = 'cell available';
+    cell.textContent = '✓';
+  } else if (dragMode === 'remove' && grid[day][time] === 'available') {
+    grid[day][time] = 'empty';
+    cell.className = 'cell empty';
+    cell.textContent = '';
+  }
+  updateSummary();
+}
+
+function quickFill(mode) {
+  DAYS.forEach(d => {
+    Object.keys(grid[d]).forEach(key => {
+      if (grid[d][key] === 'booked') return;
+      const [hStr, mStr] = key.split(':');
+      const t = parseInt(hStr) + parseInt(mStr) / 60;
+
+      let activate = false;
+      if (mode === 'morning') activate = t >= 8 && t < 12;
+      else if (mode === 'afternoon') activate = t >= 14 && t < 18;
+      else if (mode === 'golden') activate = t >= 17 && t < 19.5;
+      else if (mode === 'all') activate = t >= 8 && t < 20;
+      else if (mode === 'clear') { grid[d][key] = 'empty'; return; }
+
+      if (activate) grid[d][key] = 'available';
+    });
+  });
+  buildGrid();
+}
+
+function updateSummary() {
+  const footer = document.getElementById('summaryFooter');
+  let html = '<div class="summary-chips">';
+  let grandTotal = 0;
+
+  DAYS.forEach((d, i) => {
+    let count = 0;
+    Object.values(grid[d]).forEach(v => { if (v === 'available') count++; });
+    const mins = count * 30;
+    grandTotal += mins;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    const label = h + 'h' + (m > 0 ? m.toString().padStart(2,'0') : '');
+
+    html += `<div class="summary-chip">
+      <span class="chip-day">${DAY_LABELS[i]}</span>
+      <span class="chip-hours">${mins > 0 ? label : '—'}</span>
+    </div>`;
+  });
+
+  const gh = Math.floor(grandTotal / 60);
+  const gm = grandTotal % 60;
+  html += `</div>
+    <div class="summary-total-box">
+      <span class="summary-total-label">Total semaine</span>
+      <span class="summary-total-value">${gh}h${gm > 0 ? gm.toString().padStart(2,'0') : ''}</span>
+    </div>`;
+
+  footer.innerHTML = html;
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('visible'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('visible');
+}
+
+// Init
+buildGrid();
+</script>
+
+</body>
+</html>

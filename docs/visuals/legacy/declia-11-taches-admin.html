@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Tâches</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bleu-crepuscule:#1E2A3A;--terracotta:#B45A3C;--or-solaire:#CFA044;--bleu-ouvert:#3A6B8A;--lin-clair:#F6F3ED;--blanc:#FFFFFF;--gris-doux:#E8E4DD;--gris-texte:#6B6560;--erreur:#C0392B;--succes:#27AE60;--warning:#E67E22;--sidebar-w:260px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Raleway',sans-serif;background:var(--lin-clair);color:var(--bleu-crepuscule);display:flex;min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{width:var(--sidebar-w);background:var(--bleu-crepuscule);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+  .sidebar-brand{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .sidebar-brand .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--blanc);display:flex;align-items:center;gap:0.5rem;}
+  .sidebar-brand .logo svg{width:28px;height:28px;}
+  .badge-beta{font-family:'Raleway',sans-serif;font-size:0.55rem;font-weight:700;background:rgba(207,160,68,0.2);color:var(--or-solaire);padding:0.15rem 0.45rem;border-radius:10px;text-transform:uppercase;letter-spacing:0.1em;}
+  .sidebar-nav{padding:1rem 0;flex:1;}.nav-section{padding:0 1rem;margin-bottom:0.5rem;}
+  .nav-section-title{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgba(255,255,255,0.25);padding:0.75rem 0.5rem 0.4rem;}
+  .nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.2s;cursor:pointer;margin-bottom:2px;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8);}
+  .nav-item.active{background:rgba(58,107,138,0.25);color:var(--blanc);}.nav-item.active svg{opacity:1;color:var(--or-solaire);}
+  .nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.5;}
+  .nav-badge{margin-left:auto;background:var(--terracotta);color:var(--blanc);font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:10px;}
+  .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.75rem;}
+  .sidebar-footer .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--terracotta);display:flex;align-items:center;justify-content:center;color:var(--blanc);font-weight:700;font-size:0.8rem;}
+  .sidebar-footer .user-name{font-size:0.8rem;font-weight:600;color:var(--blanc);}
+  .sidebar-footer .user-role{font-size:0.68rem;color:rgba(255,255,255,0.4);}
+
+  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+  .topbar{background:var(--blanc);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gris-doux);position:sticky;top:0;z-index:50;}
+  .topbar-left h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;}
+  .topbar-left p{font-size:0.8rem;color:var(--gris-texte);margin-top:0.1rem;}
+  .topbar-actions{display:flex;align-items:center;gap:0.6rem;}
+  .btn{padding:0.6rem 1.15rem;border:none;border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;}
+  .btn svg{width:15px;height:15px;}
+  .btn-primary{background:var(--terracotta);color:var(--blanc);}.btn-primary:hover{background:#9A4C32;transform:translateY(-1px);}
+  .btn-outline{background:var(--blanc);color:var(--bleu-crepuscule);border:1.5px solid var(--gris-doux);}.btn-outline:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .content{padding:1.5rem 2rem;flex:1;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Controls bar */
+  .controls-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;}
+  .view-toggle{display:flex;background:var(--blanc);border-radius:10px;padding:3px;border:1.5px solid var(--gris-doux);}
+  .vt-btn{padding:0.5rem 1rem;border:none;border-radius:7px;font-family:'Raleway',sans-serif;font-size:0.8rem;font-weight:500;color:var(--gris-texte);background:transparent;cursor:pointer;transition:all 0.25s;display:flex;align-items:center;gap:0.35rem;}
+  .vt-btn svg{width:14px;height:14px;}
+  .vt-btn.active{background:var(--bleu-ouvert);color:var(--blanc);font-weight:600;box-shadow:0 2px 6px rgba(58,107,138,0.2);}
+
+  .filter-pills{display:flex;gap:0.4rem;}
+  .fpill{padding:0.4rem 0.85rem;border:1.5px solid var(--gris-doux);border-radius:20px;font-family:'Raleway',sans-serif;font-size:0.72rem;font-weight:600;color:var(--gris-texte);background:var(--blanc);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.3rem;}
+  .fpill:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .fpill.active{background:var(--bleu-crepuscule);border-color:var(--bleu-crepuscule);color:var(--blanc);}
+  .fpill .count{font-size:0.6rem;padding:0.05rem 0.35rem;border-radius:8px;margin-left:0.1rem;}
+  .fpill.active .count{background:rgba(255,255,255,0.2);}
+  .fpill:not(.active) .count{background:var(--lin-clair);}
+
+  /* ═══ KANBAN VIEW ═══ */
+  .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;align-items:flex-start;}
+  .kanban-col{display:flex;flex-direction:column;gap:0.65rem;}
+
+  .col-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0.75rem 0.85rem;background:var(--blanc);border-radius:10px;
+    border:1px solid rgba(232,228,221,0.6);
+  }
+  .col-header-left{display:flex;align-items:center;gap:0.5rem;}
+  .col-dot{width:10px;height:10px;border-radius:3px;}
+  .col-dot.todo{background:var(--bleu-ouvert);}
+  .col-dot.progress{background:var(--or-solaire);}
+  .col-dot.review{background:#8E6BAF;}
+  .col-dot.done{background:var(--succes);}
+  .col-title{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+  .col-count{font-size:0.65rem;font-weight:700;padding:0.1rem 0.4rem;border-radius:8px;background:var(--lin-clair);color:var(--gris-texte);}
+  .col-add{width:26px;height:26px;border:1.5px dashed var(--gris-doux);border-radius:6px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-texte);transition:all 0.2s;}
+  .col-add:hover{border-color:var(--terracotta);color:var(--terracotta);}
+  .col-add svg{width:13px;height:13px;}
+
+  /* Task card */
+  .task-card{
+    background:var(--blanc);border-radius:10px;
+    border:1px solid rgba(232,228,221,0.6);
+    padding:0.85rem 1rem;cursor:pointer;
+    transition:all 0.2s;position:relative;
+  }
+  .task-card:hover{box-shadow:0 4px 14px rgba(30,42,58,0.07);transform:translateY(-1px);}
+
+  .task-card .tc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.4rem;}
+  .tc-priority{width:6px;height:6px;border-radius:50%;margin-top:0.35rem;flex-shrink:0;}
+  .tc-priority.high{background:var(--erreur);}
+  .tc-priority.medium{background:var(--warning);}
+  .tc-priority.low{background:var(--succes);}
+
+  .tc-title{font-weight:600;font-size:0.85rem;line-height:1.3;flex:1;margin:0 0.5rem;}
+  .tc-menu{width:22px;height:22px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-doux);border-radius:4px;transition:all 0.15s;}
+  .tc-menu:hover{background:var(--lin-clair);color:var(--gris-texte);}
+  .tc-menu svg{width:14px;height:14px;}
+
+  .tc-desc{font-size:0.72rem;color:var(--gris-texte);line-height:1.4;margin-bottom:0.6rem;}
+
+  .tc-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-bottom:0.6rem;}
+  .tc-tag{padding:0.12rem 0.5rem;border-radius:4px;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;}
+  .tc-tag.retouche{background:rgba(58,107,138,0.08);color:var(--bleu-ouvert);}
+  .tc-tag.client{background:rgba(180,90,60,0.08);color:var(--terracotta);}
+  .tc-tag.galerie{background:rgba(107,127,90,0.1);color:#6B7F5A;}
+  .tc-tag.admin{background:rgba(207,160,68,0.1);color:var(--or-solaire);}
+  .tc-tag.compta{background:rgba(142,107,175,0.08);color:#8E6BAF;}
+  .tc-tag.com{background:rgba(230,126,34,0.08);color:var(--warning);}
+  .tc-tag.equestre{background:rgba(107,127,90,0.12);color:#6B7F5A;}
+  .tc-tag.mariage{background:rgba(180,90,60,0.1);color:var(--terracotta);}
+
+  .tc-footer{display:flex;align-items:center;justify-content:space-between;}
+  .tc-meta{display:flex;align-items:center;gap:0.6rem;}
+  .tc-meta-item{display:flex;align-items:center;gap:0.2rem;font-size:0.65rem;color:var(--gris-texte);}
+  .tc-meta-item svg{width:12px;height:12px;opacity:0.45;}
+  .tc-meta-item.overdue{color:var(--erreur);font-weight:600;}
+  .tc-meta-item.today{color:var(--warning);font-weight:600;}
+
+  .tc-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:700;color:var(--blanc);}
+
+  /* Subtasks progress */
+  .tc-subtasks{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem;}
+  .tc-sub-bar{flex:1;height:4px;background:var(--lin-clair);border-radius:2px;overflow:hidden;}
+  .tc-sub-fill{height:100%;border-radius:2px;background:var(--succes);}
+  .tc-sub-text{font-size:0.62rem;color:var(--gris-texte);font-weight:600;white-space:nowrap;}
+
+  /* Linked client/gallery */
+  .tc-link{
+    display:inline-flex;align-items:center;gap:0.3rem;
+    padding:0.15rem 0.5rem;background:var(--lin-clair);border-radius:5px;
+    font-size:0.65rem;font-weight:600;color:var(--gris-texte);margin-bottom:0.5rem;
+    cursor:pointer;transition:background 0.15s;
+  }
+  .tc-link:hover{background:var(--gris-doux);}
+  .tc-link svg{width:11px;height:11px;opacity:0.5;}
+
+  /* Checklist inside card */
+  .tc-checklist{margin-bottom:0.5rem;}
+  .tc-check-item{display:flex;align-items:center;gap:0.4rem;padding:0.15rem 0;font-size:0.72rem;}
+  .tc-check{
+    appearance:none;width:15px;height:15px;border:1.5px solid var(--gris-doux);
+    border-radius:4px;cursor:pointer;position:relative;flex-shrink:0;transition:all 0.15s;
+  }
+  .tc-check:checked{background:var(--succes);border-color:var(--succes);}
+  .tc-check:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--blanc);font-size:9px;font-weight:700;}
+  .tc-check-text.done{text-decoration:line-through;color:var(--gris-texte);}
+
+  /* Done task card */
+  .task-card.done-card{opacity:0.6;}
+  .task-card.done-card .tc-title{text-decoration:line-through;color:var(--gris-texte);}
+
+  /* Add task placeholder */
+  .add-task{
+    border:1.5px dashed var(--gris-doux);border-radius:10px;
+    padding:0.75rem;text-align:center;cursor:pointer;transition:all 0.2s;
+    font-size:0.78rem;font-weight:600;color:var(--gris-texte);
+    display:flex;align-items:center;justify-content:center;gap:0.35rem;
+  }
+  .add-task:hover{border-color:var(--terracotta);color:var(--terracotta);background:rgba(180,90,60,0.02);}
+  .add-task svg{width:14px;height:14px;}
+
+  /* Animations */
+  .task-card{animation:cardIn 0.3s ease both;}
+  @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Principal</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients<span class="nav-badge">47</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Commerce</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Commandes<span class="nav-badge">3</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Outils</div>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="user-avatar">CL</div><div><div class="user-name">Capucine Laurent</div><div class="user-role">Photographe</div></div></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Tâches</h1><p>14 tâches · 5 à faire aujourd'hui</p></div>
+    <div class="topbar-actions">
+      <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouvelle tâche</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Controls -->
+    <div class="controls-bar">
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <div class="view-toggle">
+          <button class="vt-btn active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Kanban</button>
+          <button class="vt-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Liste</button>
+        </div>
+      </div>
+      <div class="filter-pills">
+        <button class="fpill active">Toutes <span class="count">14</span></button>
+        <button class="fpill">Retouche <span class="count">4</span></button>
+        <button class="fpill">Client <span class="count">3</span></button>
+        <button class="fpill">Galerie <span class="count">3</span></button>
+        <button class="fpill">Admin <span class="count">2</span></button>
+        <button class="fpill">Com' <span class="count">2</span></button>
+      </div>
+    </div>
+
+    <!-- Kanban board -->
+    <div class="kanban">
+
+      <!-- ═══ À FAIRE ═══ -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-header-left"><div class="col-dot todo"></div><span class="col-title">À faire</span><span class="col-count">5</span></div>
+          <button class="col-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.05s;">
+          <div class="tc-top"><div class="tc-priority high"></div><div class="tc-title">Retoucher photos séance Durand</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-desc">62 photos à trier et retoucher. Livraison prévue avant le 25 mars.</div>
+          <div class="tc-tags"><span class="tc-tag retouche">Retouche</span><span class="tc-tag equestre">Équestre</span></div>
+          <div class="tc-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Pierre Durand</div>
+          <div class="tc-subtasks"><div class="tc-sub-bar"><div class="tc-sub-fill" style="width:15%;"></div></div><span class="tc-sub-text">10 / 62</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Aujourd'hui</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.1s;">
+          <div class="tc-top"><div class="tc-priority high"></div><div class="tc-title">Préparer devis mariage Bernard</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag client">Client</span><span class="tc-tag mariage">Mariage</span></div>
+          <div class="tc-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Sophie Bernard</div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 21 mars</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.15s;">
+          <div class="tc-top"><div class="tc-priority medium"></div><div class="tc-title">Contacter Antoine Roux pour portrait</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-desc">Confirmer le lieu et l'horaire de la séance du 28 mars.</div>
+          <div class="tc-tags"><span class="tc-tag client">Client</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 22 mars</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.2s;">
+          <div class="tc-top"><div class="tc-priority low"></div><div class="tc-title">Mettre à jour tarifs scolaires</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag admin">Admin</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 24 mars</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.25s;">
+          <div class="tc-top"><div class="tc-priority medium"></div><div class="tc-title">Publier post Instagram séance équestre</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag com">Com'</span><span class="tc-tag equestre">Équestre</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 25 mars</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-task"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Ajouter une tâche</div>
+      </div>
+
+      <!-- ═══ EN COURS ═══ -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-header-left"><div class="col-dot progress"></div><span class="col-title">En cours</span><span class="col-count">4</span></div>
+          <button class="col-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.08s;">
+          <div class="tc-top"><div class="tc-priority high"></div><div class="tc-title">Retouche séance grossesse Camille R.</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag retouche">Retouche</span></div>
+          <div class="tc-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Galerie Grossesse Camille</div>
+          <div class="tc-subtasks"><div class="tc-sub-bar"><div class="tc-sub-fill" style="width:65%;"></div></div><span class="tc-sub-text">25 / 38</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Aujourd'hui</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.13s;">
+          <div class="tc-top"><div class="tc-priority medium"></div><div class="tc-title">Préparer galerie famille Lefèvre</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-desc">Sélectionner les meilleures photos, appliquer le preset et organiser par moment.</div>
+          <div class="tc-tags"><span class="tc-tag galerie">Galerie</span></div>
+          <div class="tc-checklist">
+            <div class="tc-check-item"><input type="checkbox" class="tc-check" checked><span class="tc-check-text done">Tri des 45 photos</span></div>
+            <div class="tc-check-item"><input type="checkbox" class="tc-check" checked><span class="tc-check-text done">Retouche couleur</span></div>
+            <div class="tc-check-item"><input type="checkbox" class="tc-check"><span class="tc-check-text">Retouche portrait</span></div>
+            <div class="tc-check-item"><input type="checkbox" class="tc-check"><span class="tc-check-text">Mise en ligne galerie</span></div>
+          </div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 22 mars</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.18s;">
+          <div class="tc-top"><div class="tc-priority medium"></div><div class="tc-title">Relance facture Marie Lefèvre</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag compta">Compta</span><span class="tc-tag client">Client</span></div>
+          <div class="tc-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Facture F-2026-014 · 180 €</div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item overdue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Retard 15j</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.23s;">
+          <div class="tc-top"><div class="tc-priority low"></div><div class="tc-title">Rédiger article blog « Séance au crépuscule »</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag com">Com'</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 28 mars</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ EN RELECTURE ═══ -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-header-left"><div class="col-dot review"></div><span class="col-title">En relecture</span><span class="col-count">2</span></div>
+          <button class="col-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.08s;">
+          <div class="tc-top"><div class="tc-priority medium"></div><div class="tc-title">Valider sélection mariage Bernard</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-desc">Sophie doit valider la sélection de 185 photos avant publication de la galerie.</div>
+          <div class="tc-tags"><span class="tc-tag galerie">Galerie</span><span class="tc-tag mariage">Mariage</span></div>
+          <div class="tc-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Sophie Bernard · En attente de retour</div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 24 mars</div>
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> 185 photos</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card" style="animation-delay:0.13s;">
+          <div class="tc-top"><div class="tc-priority low"></div><div class="tc-title">Vérifier impression carte cadeau Bernard</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag admin">Admin</span></div>
+          <div class="tc-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Carte GC-2026-MNOP · 200 €</div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 22 mars</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ TERMINÉES ═══ -->
+      <div class="kanban-col">
+        <div class="col-header">
+          <div class="col-header-left"><div class="col-dot done"></div><span class="col-title">Terminées</span><span class="col-count">3</span></div>
+        </div>
+
+        <div class="task-card done-card" style="animation-delay:0.08s;">
+          <div class="tc-top"><div class="tc-priority low"></div><div class="tc-title">Envoyer galerie Lefèvre</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag galerie">Galerie</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Fait le 19 mars</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card done-card" style="animation-delay:0.13s;">
+          <div class="tc-top"><div class="tc-priority low"></div><div class="tc-title">Retouche séance famille Moreau</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag retouche">Retouche</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Fait le 18 mars</div>
+            </div>
+            <div class="tc-avatar" style="background:var(--terracotta);">CL</div>
+          </div>
+        </div>
+
+        <div class="task-card done-card" style="animation-delay:0.18s;">
+          <div class="tc-top"><div class="tc-priority low"></div><div class="tc-title">Créer promo Flash Équestre</div><button class="tc-menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></div>
+          <div class="tc-tags"><span class="tc-tag com">Com'</span></div>
+          <div class="tc-footer">
+            <div class="tc-meta">
+              <div class="tc-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Fait le 17 mars</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

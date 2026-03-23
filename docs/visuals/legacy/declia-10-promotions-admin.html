@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Promotions</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bleu-crepuscule:#1E2A3A;--terracotta:#B45A3C;--or-solaire:#CFA044;--bleu-ouvert:#3A6B8A;--lin-clair:#F6F3ED;--blanc:#FFFFFF;--gris-doux:#E8E4DD;--gris-texte:#6B6560;--erreur:#C0392B;--succes:#27AE60;--warning:#E67E22;--sidebar-w:260px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Raleway',sans-serif;background:var(--lin-clair);color:var(--bleu-crepuscule);display:flex;min-height:100vh;}
+  .sidebar{width:var(--sidebar-w);background:var(--bleu-crepuscule);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+  .sidebar-brand{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .sidebar-brand .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--blanc);display:flex;align-items:center;gap:0.5rem;}
+  .sidebar-brand .logo svg{width:28px;height:28px;}
+  .badge-beta{font-family:'Raleway',sans-serif;font-size:0.55rem;font-weight:700;background:rgba(207,160,68,0.2);color:var(--or-solaire);padding:0.15rem 0.45rem;border-radius:10px;text-transform:uppercase;letter-spacing:0.1em;}
+  .sidebar-nav{padding:1rem 0;flex:1;}.nav-section{padding:0 1rem;margin-bottom:0.5rem;}
+  .nav-section-title{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgba(255,255,255,0.25);padding:0.75rem 0.5rem 0.4rem;}
+  .nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.2s;cursor:pointer;margin-bottom:2px;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8);}
+  .nav-item.active{background:rgba(58,107,138,0.25);color:var(--blanc);}.nav-item.active svg{opacity:1;color:var(--or-solaire);}
+  .nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.5;}
+  .nav-badge{margin-left:auto;background:var(--terracotta);color:var(--blanc);font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:10px;}
+  .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.75rem;}
+  .sidebar-footer .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--terracotta);display:flex;align-items:center;justify-content:center;color:var(--blanc);font-weight:700;font-size:0.8rem;}
+  .sidebar-footer .user-name{font-size:0.8rem;font-weight:600;color:var(--blanc);}
+  .sidebar-footer .user-role{font-size:0.68rem;color:rgba(255,255,255,0.4);}
+
+  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+  .topbar{background:var(--blanc);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gris-doux);position:sticky;top:0;z-index:50;}
+  .topbar-left h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;}
+  .topbar-left p{font-size:0.8rem;color:var(--gris-texte);margin-top:0.1rem;}
+  .topbar-actions{display:flex;align-items:center;gap:0.6rem;}
+  .btn{padding:0.6rem 1.15rem;border:none;border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;}
+  .btn svg{width:15px;height:15px;}
+  .btn-primary{background:var(--terracotta);color:var(--blanc);}.btn-primary:hover{background:#9A4C32;transform:translateY(-1px);}
+  .btn-outline{background:var(--blanc);color:var(--bleu-crepuscule);border:1.5px solid var(--gris-doux);}.btn-outline:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .content{padding:1.5rem 2rem;flex:1;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* Stats */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+  .stat-card{background:var(--blanc);border-radius:12px;padding:1.1rem 1.3rem;border:1px solid rgba(232,228,221,0.6);display:flex;align-items:flex-start;gap:0.85rem;animation:fadeIn 0.4s ease both;}
+  .stat-card:nth-child(1){animation-delay:.03s}.stat-card:nth-child(2){animation-delay:.08s}.stat-card:nth-child(3){animation-delay:.13s}.stat-card:nth-child(4){animation-delay:.18s}
+  .stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-icon svg{width:18px;height:18px;}
+  .stat-icon.blue{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}
+  .stat-icon.gold{background:rgba(207,160,68,0.12);color:var(--or-solaire);}
+  .stat-icon.terra{background:rgba(180,90,60,0.1);color:var(--terracotta);}
+  .stat-icon.green{background:rgba(39,174,96,0.1);color:var(--succes);}
+  .stat-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--gris-texte);margin-bottom:0.25rem;}
+  .stat-value{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;line-height:1;}
+  .stat-trend{font-size:0.7rem;font-weight:600;margin-top:0.25rem;color:var(--succes);}
+
+  /* Tabs */
+  .tabs{display:flex;gap:0;margin-bottom:1.25rem;border-bottom:2px solid var(--gris-doux);}
+  .tab-btn{padding:0.7rem 1.3rem;border:none;background:transparent;font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gris-texte);cursor:pointer;position:relative;transition:color 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.4rem;}
+  .tab-btn.active{color:var(--terracotta);}
+  .tab-btn.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--terracotta);border-radius:2px 2px 0 0;}
+  .tab-count{padding:0.1rem 0.45rem;border-radius:10px;font-size:0.65rem;font-weight:700;}
+  .tab-btn.active .tab-count{background:var(--terracotta);color:var(--blanc);}
+  .tab-btn:not(.active) .tab-count{background:var(--lin-clair);color:var(--gris-texte);}
+
+  /* Filter */
+  .filter-bar{background:var(--blanc);border-radius:12px;padding:0.85rem 1.15rem;display:flex;align-items:center;gap:0.65rem;margin-bottom:1.25rem;border:1px solid rgba(232,228,221,0.6);flex-wrap:wrap;}
+  .search-box{flex:1;min-width:200px;position:relative;}
+  .search-box svg{position:absolute;left:0.8rem;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--gris-texte);opacity:0.4;}
+  .search-box input{width:100%;padding:0.6rem 1rem 0.6rem 2.3rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;color:var(--bleu-crepuscule);outline:none;}
+  .search-box input:focus{border-color:var(--bleu-ouvert);}
+  .search-box input::placeholder{color:#B8B3AC;font-weight:300;}
+  .filter-select{padding:0.6rem 2rem 0.6rem 0.85rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.8rem;color:var(--bleu-crepuscule);outline:none;appearance:none;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;cursor:pointer;}
+
+  /* Promo cards list */
+  .promo-list{display:flex;flex-direction:column;gap:0.85rem;margin-bottom:1.5rem;}
+
+  .promo-card{
+    background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,0.6);
+    overflow:hidden;transition:box-shadow 0.2s;
+    animation:fadeIn 0.35s ease both;
+  }
+  .promo-card:hover{box-shadow:0 4px 16px rgba(30,42,58,0.06);}
+  .promo-card:nth-child(1){animation-delay:.03s}.promo-card:nth-child(2){animation-delay:.06s}
+  .promo-card:nth-child(3){animation-delay:.09s}.promo-card:nth-child(4){animation-delay:.12s}
+  .promo-card:nth-child(5){animation-delay:.15s}.promo-card:nth-child(6){animation-delay:.18s}
+
+  .promo-main{display:grid;grid-template-columns:auto 1fr auto;gap:1.25rem;padding:1.15rem 1.5rem;align-items:center;}
+
+  /* Discount badge */
+  .promo-badge-wrap{display:flex;flex-direction:column;align-items:center;gap:0.3rem;}
+  .promo-badge{
+    width:72px;height:72px;border-radius:14px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  .promo-badge::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");}
+  .promo-badge .pct{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--blanc);line-height:1;position:relative;z-index:1;}
+  .promo-badge .off{font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.7);position:relative;z-index:1;}
+
+  .promo-badge.pct-bg{background:linear-gradient(135deg,var(--terracotta),#D4733C);}
+  .promo-badge.eur-bg{background:linear-gradient(135deg,var(--bleu-ouvert),#2F5A77);}
+  .promo-badge.free-bg{background:linear-gradient(135deg,var(--succes),#1E8449);}
+  .promo-badge.ref-bg{background:linear-gradient(135deg,#8E6BAF,#6A4C8A);}
+  .promo-badge.flash-bg{background:linear-gradient(135deg,var(--or-solaire),#B8872E);}
+  .promo-badge.pack-bg{background:linear-gradient(135deg,var(--bleu-crepuscule),var(--bleu-ouvert));}
+
+  .promo-type-label{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gris-texte);}
+
+  /* Promo info */
+  .promo-info{min-width:0;}
+  .promo-name{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:0.2rem;}
+  .promo-desc{font-size:0.78rem;color:var(--gris-texte);line-height:1.4;margin-bottom:0.5rem;}
+
+  .promo-meta{display:flex;gap:1.25rem;flex-wrap:wrap;}
+  .promo-meta-item{display:flex;align-items:center;gap:0.3rem;font-size:0.72rem;color:var(--gris-texte);}
+  .promo-meta-item svg{width:13px;height:13px;opacity:0.45;}
+  .promo-meta-item strong{font-weight:700;color:var(--bleu-crepuscule);}
+
+  .promo-code-box{
+    display:inline-flex;align-items:center;gap:0.4rem;
+    padding:0.3rem 0.7rem;background:var(--lin-clair);border-radius:6px;
+    font-family:'Courier New',monospace;font-size:0.8rem;font-weight:700;
+    letter-spacing:0.08em;color:var(--bleu-crepuscule);margin-top:0.5rem;
+    cursor:pointer;transition:background 0.2s;
+  }
+  .promo-code-box:hover{background:var(--gris-doux);}
+  .promo-code-box svg{width:13px;height:13px;color:var(--gris-texte);}
+
+  /* Right side: status + actions */
+  .promo-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.6rem;min-width:140px;}
+
+  .promo-status{display:inline-flex;align-items:center;gap:0.3rem;padding:0.25rem 0.65rem;border-radius:20px;font-size:0.7rem;font-weight:600;white-space:nowrap;}
+  .promo-status .dot{width:6px;height:6px;border-radius:50%;}
+  .ps-active{background:rgba(39,174,96,0.1);color:var(--succes);}.ps-active .dot{background:var(--succes);}
+  .ps-scheduled{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}.ps-scheduled .dot{background:var(--bleu-ouvert);}
+  .ps-expired{background:rgba(107,101,96,0.08);color:var(--gris-texte);}.ps-expired .dot{background:var(--gris-texte);}
+  .ps-paused{background:rgba(230,126,34,0.1);color:var(--warning);}.ps-paused .dot{background:var(--warning);}
+
+  /* Usage progress */
+  .promo-usage{width:100%;margin-top:0.15rem;}
+  .promo-usage-label{display:flex;justify-content:space-between;font-size:0.65rem;color:var(--gris-texte);margin-bottom:0.25rem;}
+  .promo-usage-bar{height:5px;background:var(--lin-clair);border-radius:3px;overflow:hidden;}
+  .promo-usage-fill{height:100%;border-radius:3px;}
+  .puf-green{background:var(--succes);}
+  .puf-gold{background:var(--or-solaire);}
+  .puf-terra{background:var(--terracotta);}
+
+  .promo-actions{display:flex;gap:0.25rem;}
+  .pa-btn{width:30px;height:30px;border:none;border-radius:6px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-texte);transition:all 0.15s;}
+  .pa-btn:hover{background:var(--lin-clair);color:var(--bleu-ouvert);}
+  .pa-btn.danger:hover{color:var(--erreur);background:rgba(192,57,43,0.06);}
+  .pa-btn svg{width:14px;height:14px;}
+
+  /* Conditions row */
+  .promo-conditions{
+    padding:0.65rem 1.5rem;border-top:1px solid rgba(232,228,221,0.35);
+    display:flex;gap:0.6rem;flex-wrap:wrap;
+  }
+  .cond-tag{
+    padding:0.2rem 0.6rem;border-radius:5px;font-size:0.65rem;font-weight:600;
+    background:var(--lin-clair);color:var(--gris-texte);
+    display:flex;align-items:center;gap:0.25rem;
+  }
+  .cond-tag svg{width:11px;height:11px;opacity:0.5;}
+
+  /* Flash sale highlight */
+  .promo-card.flash{border-left:4px solid var(--or-solaire);}
+  .promo-card.flash .promo-main{background:rgba(207,160,68,0.02);}
+
+  /* Expired card */
+  .promo-card.expired-card{opacity:0.55;}
+
+  /* Pagination */
+  .pagination-bar{display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:var(--gris-texte);}
+  .page-btns{display:flex;gap:0.3rem;}
+  .pg-btn{width:32px;height:32px;border:1.5px solid var(--gris-doux);border-radius:6px;background:var(--blanc);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Raleway',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gris-texte);transition:all 0.2s;}
+  .pg-btn:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .pg-btn.active{background:var(--bleu-ouvert);border-color:var(--bleu-ouvert);color:var(--blanc);}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Principal</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients<span class="nav-badge">47</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Commerce</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Commandes<span class="nav-badge">3</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Outils</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="user-avatar">CL</div><div><div class="user-name">Capucine Laurent</div><div class="user-role">Photographe</div></div></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Promotions</h1><p>8 promotions · 3 actives</p></div>
+    <div class="topbar-actions">
+      <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouvelle promotion</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="stat-label">Promos actives</div><div class="stat-value">3</div><div class="stat-trend">sur 8 créées</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><div class="stat-label">Utilisations</div><div class="stat-value">34</div><div class="stat-trend">+12 ce mois</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="stat-label">CA via promos</div><div class="stat-value">1 420 €</div><div class="stat-trend">33% du CA total</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
+        <div><div class="stat-label">Nouveaux clients via promo</div><div class="stat-value">7</div><div class="stat-trend">15% de conversions</div></div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active">Toutes <span class="tab-count">8</span></button>
+      <button class="tab-btn">Codes promo <span class="tab-count">3</span></button>
+      <button class="tab-btn">Offres saisonnières <span class="tab-count">2</span></button>
+      <button class="tab-btn">Ventes flash <span class="tab-count">1</span></button>
+      <button class="tab-btn">Parrainage <span class="tab-count">1</span></button>
+      <button class="tab-btn">Packs <span class="tab-count">1</span></button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Rechercher (nom, code, type)…">
+      </div>
+      <select class="filter-select"><option>Tous les statuts</option><option>Active</option><option>Programmée</option><option>En pause</option><option>Expirée</option></select>
+      <select class="filter-select"><option>Plus récentes</option><option>Plus utilisées</option><option>Par type</option></select>
+    </div>
+
+    <!-- Promo list -->
+    <div class="promo-list">
+
+      <!-- 1: Percentage discount - Active -->
+      <div class="promo-card">
+        <div class="promo-main">
+          <div class="promo-badge-wrap">
+            <div class="promo-badge pct-bg"><span class="pct">-20%</span><span class="off">réduction</span></div>
+            <span class="promo-type-label">Code promo</span>
+          </div>
+          <div class="promo-info">
+            <div class="promo-name">Offre Printemps Famille</div>
+            <div class="promo-desc">20% de réduction sur toutes les séances famille et grossesse. Valable du 1er au 31 mars 2026.</div>
+            <div class="promo-meta">
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 1 – 31 mars 2026</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong>8</strong> utilisations</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> <strong>480 €</strong> de CA généré</div>
+            </div>
+            <div class="promo-code-box">PRINTEMPS20 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+          </div>
+          <div class="promo-right">
+            <span class="promo-status ps-active"><span class="dot"></span> Active</span>
+            <div class="promo-usage">
+              <div class="promo-usage-label"><span>8 / 30 utilisations</span><span>27%</span></div>
+              <div class="promo-usage-bar"><div class="promo-usage-fill puf-green" style="width:27%;"></div></div>
+            </div>
+            <div class="promo-actions">
+              <button class="pa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="pa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="pa-btn" title="Mettre en pause"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg></button>
+              <button class="pa-btn danger" title="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="promo-conditions">
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Famille, Grossesse</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Max 30 utilisations</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Min. 100 € de commande</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> 1 fois par client</span>
+        </div>
+      </div>
+
+      <!-- 2: Flash sale -->
+      <div class="promo-card flash">
+        <div class="promo-main">
+          <div class="promo-badge-wrap">
+            <div class="promo-badge flash-bg"><span class="pct">-30%</span><span class="off">flash</span></div>
+            <span class="promo-type-label">Vente flash</span>
+          </div>
+          <div class="promo-info">
+            <div class="promo-name">Flash Week-end Équestre ⚡</div>
+            <div class="promo-desc">30% de réduction sur les séances équestres ce week-end uniquement. Offre limitée à 5 créneaux.</div>
+            <div class="promo-meta">
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 21 – 22 mars 2026</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong>3</strong> utilisations</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> <strong style="color:var(--warning);">Expire dans 2 jours</strong></div>
+            </div>
+            <div class="promo-code-box">FLASHEQUESTRE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+          </div>
+          <div class="promo-right">
+            <span class="promo-status ps-active"><span class="dot"></span> Active</span>
+            <div class="promo-usage">
+              <div class="promo-usage-label"><span>3 / 5 utilisations</span><span>60%</span></div>
+              <div class="promo-usage-bar"><div class="promo-usage-fill puf-gold" style="width:60%;"></div></div>
+            </div>
+            <div class="promo-actions">
+              <button class="pa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="pa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="promo-conditions">
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Équestre uniquement</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Max 5 places</span>
+        </div>
+      </div>
+
+      <!-- 3: Referral -->
+      <div class="promo-card">
+        <div class="promo-main">
+          <div class="promo-badge-wrap">
+            <div class="promo-badge ref-bg"><span class="pct">2×</span><span class="off">parrain</span></div>
+            <span class="promo-type-label">Parrainage</span>
+          </div>
+          <div class="promo-info">
+            <div class="promo-name">Programme Parrainage</div>
+            <div class="promo-desc">Le parrain et le filleul reçoivent chacun 25 € de réduction sur leur prochaine séance. Valable toute l'année.</div>
+            <div class="promo-meta">
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Permanent</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong>12</strong> parrainages</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg> <strong>5</strong> nouveaux clients</div>
+            </div>
+          </div>
+          <div class="promo-right">
+            <span class="promo-status ps-active"><span class="dot"></span> Active</span>
+            <div class="promo-usage">
+              <div class="promo-usage-label"><span>12 parrainages</span><span>Illimité</span></div>
+              <div class="promo-usage-bar"><div class="promo-usage-fill puf-green" style="width:40%;"></div></div>
+            </div>
+            <div class="promo-actions">
+              <button class="pa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="pa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="promo-conditions">
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Toutes catégories</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> 25 € parrain + 25 € filleul</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Nouveau client requis</span>
+        </div>
+      </div>
+
+      <!-- 4: Fixed amount - Scheduled -->
+      <div class="promo-card">
+        <div class="promo-main">
+          <div class="promo-badge-wrap">
+            <div class="promo-badge eur-bg"><span class="pct">-50€</span><span class="off">réduction</span></div>
+            <span class="promo-type-label">Code promo</span>
+          </div>
+          <div class="promo-info">
+            <div class="promo-name">Offre Fête des Mères</div>
+            <div class="promo-desc">50 € de réduction sur les séances famille et portrait. Offre programmée pour mai 2026.</div>
+            <div class="promo-meta">
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 1 – 31 mai 2026</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong>0</strong> utilisations</div>
+            </div>
+            <div class="promo-code-box">MAMAN50 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+          </div>
+          <div class="promo-right">
+            <span class="promo-status ps-scheduled"><span class="dot"></span> Programmée</span>
+            <div class="promo-usage">
+              <div class="promo-usage-label"><span>0 / 20 utilisations</span><span>Démarre le 1er mai</span></div>
+              <div class="promo-usage-bar"><div class="promo-usage-fill puf-green" style="width:0%;"></div></div>
+            </div>
+            <div class="promo-actions">
+              <button class="pa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="pa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+              <button class="pa-btn danger" title="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="promo-conditions">
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Famille, Portrait</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Max 20 utilisations</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Min. 150 € de commande</span>
+        </div>
+      </div>
+
+      <!-- 5: Pack bundle -->
+      <div class="promo-card">
+        <div class="promo-main">
+          <div class="promo-badge-wrap">
+            <div class="promo-badge pack-bg"><span class="pct" style="font-size:1.1rem;">PACK</span><span class="off">offre</span></div>
+            <span class="promo-type-label">Pack</span>
+          </div>
+          <div class="promo-info">
+            <div class="promo-name">Pack Naissance Complet</div>
+            <div class="promo-desc">Séance grossesse + séance nouveau-né + 20 tirages offerts. Économie de 120 € par rapport aux tarifs séparés.</div>
+            <div class="promo-meta">
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Permanent</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong>4</strong> vendus</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> <strong>450 €</strong> le pack</div>
+            </div>
+          </div>
+          <div class="promo-right">
+            <span class="promo-status ps-paused"><span class="dot"></span> En pause</span>
+            <div class="promo-actions" style="margin-top:0.5rem;">
+              <button class="pa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="pa-btn" title="Réactiver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+              <button class="pa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="promo-conditions">
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Grossesse + Nouveau-né</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> 20 tirages 15×20 inclus</span>
+          <span class="cond-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Éco. 120 € vs séparés</span>
+        </div>
+      </div>
+
+      <!-- 6: Expired -->
+      <div class="promo-card expired-card">
+        <div class="promo-main">
+          <div class="promo-badge-wrap">
+            <div class="promo-badge pct-bg" style="opacity:0.5;"><span class="pct">-15%</span><span class="off">réduction</span></div>
+            <span class="promo-type-label">Saisonnier</span>
+          </div>
+          <div class="promo-info">
+            <div class="promo-name">Offre Saint-Valentin</div>
+            <div class="promo-desc">15% sur les séances couple et portrait. Terminée le 28 février 2026.</div>
+            <div class="promo-meta">
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> 1 – 28 fév. 2026</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong>7</strong> utilisations</div>
+              <div class="promo-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> <strong>540 €</strong> de CA généré</div>
+            </div>
+          </div>
+          <div class="promo-right">
+            <span class="promo-status ps-expired"><span class="dot"></span> Expirée</span>
+            <div class="promo-actions" style="margin-top:0.5rem;">
+              <button class="pa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              <button class="pa-btn" title="Dupliquer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+              <button class="pa-btn danger" title="Supprimer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pagination-bar">
+      <span>Affichage 1–6 sur 8 promotions</span>
+      <div class="page-btns">
+        <button class="pg-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Paramètres</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bleu:#1E2A3A;--terra:#B45A3C;--or:#CFA044;--bleuO:#3A6B8A;--lin:#F6F3ED;--blanc:#FFF;--gris:#E8E4DD;--txt:#6B6560;--err:#C0392B;--ok:#27AE60;--warn:#E67E22;--sbw:260px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Raleway',sans-serif;background:var(--lin);color:var(--bleu);display:flex;min-height:100vh;}
+
+/* Sidebar app */
+.sidebar{width:var(--sbw);background:var(--bleu);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+.sidebar-brand{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+.sidebar-brand .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--blanc);display:flex;align-items:center;gap:0.5rem;}
+.sidebar-brand .logo svg{width:28px;height:28px;}
+.badge-beta{font-family:'Raleway';font-size:.55rem;font-weight:700;background:rgba(207,160,68,.2);color:var(--or);padding:.15rem .45rem;border-radius:10px;text-transform:uppercase;letter-spacing:.1em;}
+.sidebar-nav{padding:1rem 0;flex:1;}.nav-s{padding:0 1rem;margin-bottom:.5rem;}
+.nav-st{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.16em;color:rgba(255,255,255,.25);padding:.75rem .5rem .4rem;}
+.nav-i{display:flex;align-items:center;gap:.7rem;padding:.65rem .75rem;border-radius:8px;font-size:.82rem;font-weight:500;color:rgba(255,255,255,.5);text-decoration:none;transition:all .2s;cursor:pointer;margin-bottom:2px;}
+.nav-i:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);}
+.nav-i.active{background:rgba(58,107,138,.25);color:var(--blanc);}.nav-i.active svg{opacity:1;color:var(--or);}
+.nav-i svg{width:18px;height:18px;flex-shrink:0;opacity:.5;}
+.sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:.75rem;}
+.sidebar-footer .ua{width:36px;height:36px;border-radius:50%;background:var(--terra);display:flex;align-items:center;justify-content:center;color:var(--blanc);font-weight:700;font-size:.8rem;}
+.sidebar-footer .un{font-size:.8rem;font-weight:600;color:var(--blanc);}
+.sidebar-footer .ur{font-size:.68rem;color:rgba(255,255,255,.4);}
+
+.main{margin-left:var(--sbw);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:var(--blanc);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gris);position:sticky;top:0;z-index:50;}
+.topbar h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;}
+.topbar p{font-size:.8rem;color:var(--txt);margin-top:.1rem;}
+.topbar-act{display:flex;gap:.5rem;}
+.btn{padding:.6rem 1.15rem;border:none;border-radius:8px;font-family:'Raleway';font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.4rem;}
+.btn svg{width:15px;height:15px;}
+.btn-ok{background:var(--ok);color:var(--blanc);}.btn-ok:hover{background:#219A52;}
+.btn-o{background:var(--blanc);color:var(--bleu);border:1.5px solid var(--gris);}.btn-o:hover{border-color:var(--bleuO);color:var(--bleuO);}
+.btn-p{background:var(--terra);color:var(--blanc);}.btn-p:hover{background:#9A4C32;}
+.btn-sm{padding:.4rem .75rem;font-size:.72rem;}
+
+.content{display:flex;gap:0;flex:1;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══ SETTINGS SIDEBAR ═══ */
+.ss{width:250px;background:var(--blanc);border-right:1px solid var(--gris);padding:1.25rem 0;flex-shrink:0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.ss-cat{padding:0 .85rem;margin-bottom:.35rem;}
+.ss-cat-title{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--or);padding:.65rem .65rem .3rem;}
+.ss-item{display:flex;align-items:center;gap:.55rem;padding:.5rem .65rem;border-radius:7px;font-size:.78rem;font-weight:500;color:var(--txt);cursor:pointer;transition:all .15s;margin-bottom:1px;}
+.ss-item:hover{background:var(--lin);color:var(--bleu);}
+.ss-item.active{background:rgba(180,90,60,.06);color:var(--terra);font-weight:600;}
+.ss-item svg{width:15px;height:15px;opacity:.45;flex-shrink:0;}
+.ss-item.active svg{opacity:1;color:var(--terra);}
+.ss-item .new-badge{margin-left:auto;font-size:.5rem;font-weight:700;padding:.1rem .35rem;border-radius:8px;background:var(--terra);color:var(--blanc);text-transform:uppercase;letter-spacing:.06em;}
+
+/* ═══ SETTINGS CONTENT ═══ */
+.sc{flex:1;padding:1.75rem 2rem;overflow-y:auto;max-height:calc(100vh - 60px);}
+.sp{display:none;}.sp.v{display:block;animation:fadeIn .3s ease;}
+.sp-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:600;margin-bottom:.25rem;}
+.sp-desc{font-size:.8rem;color:var(--txt);margin-bottom:1.5rem;line-height:1.5;}
+
+/* Cards */
+.cd{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,.6);overflow:hidden;margin-bottom:1.15rem;}
+.cd-h{padding:.9rem 1.2rem;border-bottom:1px solid var(--gris);display:flex;align-items:center;gap:.5rem;}
+.cd-h svg{width:16px;height:16px;color:var(--or);}
+.cd-h h3{font-family:'Playfair Display',serif;font-size:.92rem;font-weight:600;}
+.cd-h .cd-badge{margin-left:auto;font-size:.58rem;font-weight:700;padding:.12rem .45rem;border-radius:8px;text-transform:uppercase;letter-spacing:.04em;}
+.cd-h .cd-badge.ai{background:rgba(142,107,175,.1);color:#8E6BAF;}
+.cd-b{padding:1rem 1.2rem;}
+
+/* Form */
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:0;}
+.fg{margin-bottom:.85rem;}
+.fl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--txt);margin-bottom:.25rem;display:block;}
+.fi{width:100%;padding:.55rem .8rem;border:1.5px solid var(--gris);border-radius:8px;font-family:'Raleway';font-size:.84rem;color:var(--bleu);outline:none;transition:border-color .2s;}
+.fi:focus{border-color:var(--bleuO);}
+.ft{width:100%;padding:.55rem .8rem;border:1.5px solid var(--gris);border-radius:8px;font-family:'Raleway';font-size:.84rem;outline:none;resize:vertical;min-height:65px;}
+.fs{width:100%;padding:.55rem 2rem .55rem .8rem;border:1.5px solid var(--gris);border-radius:8px;font-family:'Raleway';font-size:.84rem;outline:none;appearance:none;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right .7rem center;cursor:pointer;}
+.fh{font-size:.65rem;color:var(--txt);margin-top:.15rem;}
+
+/* Toggles */
+.tr{display:flex;align-items:center;justify-content:space-between;padding:.6rem 0;border-bottom:1px solid rgba(232,228,221,.3);}
+.tr:last-child{border-bottom:none;}
+.tr-i{flex:1;margin-right:.75rem;}
+.tr-l{font-size:.84rem;font-weight:600;}
+.tr-d{font-size:.7rem;color:var(--txt);margin-top:.05rem;}
+.ts{width:40px;height:22px;border-radius:12px;background:var(--gris);position:relative;cursor:pointer;transition:background .25s;flex-shrink:0;appearance:none;}
+.ts::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--blanc);box-shadow:0 1px 3px rgba(0,0,0,.15);transition:transform .25s;}
+.ts:checked{background:var(--ok);}.ts:checked::after{transform:translateX(18px);}
+
+/* Color swatches */
+.cg{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;}
+.cf label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--txt);margin-bottom:.25rem;display:block;}
+.cw{display:flex;align-items:center;gap:.4rem;}
+.csw{width:34px;height:34px;border-radius:8px;border:2px solid rgba(232,228,221,.6);cursor:pointer;transition:transform .15s;}
+.csw:hover{transform:scale(1.08);}
+.chx{font-size:.72rem;font-family:'Courier New',monospace;font-weight:600;}
+
+/* Font selector with free input */
+.font-selector{margin-bottom:.75rem;}
+.font-opt{padding:.7rem .9rem;border:1.5px solid var(--gris);border-radius:8px;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:all .2s;margin-bottom:.4rem;}
+.font-opt:hover{border-color:var(--bleuO);}
+.font-opt.active{border-color:var(--or);background:rgba(207,160,68,.03);}
+.fo-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--gris);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.font-opt.active .fo-radio{border-color:var(--or);}
+.font-opt.active .fo-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--or);}
+.fo-info{flex:1;min-width:0;}
+.fo-name{font-size:.78rem;font-weight:600;}
+.fo-sample{font-size:.95rem;color:var(--txt);margin-top:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.font-custom{padding:.7rem .9rem;border:1.5px dashed var(--gris);border-radius:8px;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:all .2s;margin-bottom:.4rem;}
+.font-custom:hover{border-color:var(--terra);}
+.fc-icon{width:32px;height:32px;border-radius:8px;background:rgba(180,90,60,.08);display:flex;align-items:center;justify-content:center;color:var(--terra);flex-shrink:0;}
+.fc-icon svg{width:14px;height:14px;}
+.font-custom-input{display:none;margin-top:.4rem;padding:.6rem .8rem;border:1.5px solid var(--gris);border-radius:8px;font-family:'Raleway';font-size:.82rem;width:100%;outline:none;}
+.font-custom-input.visible{display:block;}
+.font-custom-input:focus{border-color:var(--bleuO);}
+.font-preview-live{margin-top:.3rem;padding:.5rem .75rem;background:var(--lin);border-radius:6px;font-size:1rem;color:var(--bleu);display:none;}
+.font-preview-live.visible{display:block;}
+
+/* Page editor */
+.page-block{padding:.85rem 1rem;border:1.5px solid var(--gris);border-radius:10px;margin-bottom:.65rem;display:flex;align-items:center;gap:.85rem;cursor:pointer;transition:all .2s;}
+.page-block:hover{border-color:var(--bleuO);background:rgba(58,107,138,.02);}
+.pb-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pb-icon svg{width:18px;height:18px;}
+.pb-icon.blue{background:rgba(58,107,138,.1);color:var(--bleuO);}
+.pb-icon.terra{background:rgba(180,90,60,.08);color:var(--terra);}
+.pb-icon.gold{background:rgba(207,160,68,.1);color:var(--or);}
+.pb-icon.green{background:rgba(39,174,96,.08);color:var(--ok);}
+.pb-icon.purple{background:rgba(142,107,175,.08);color:#8E6BAF;}
+.pb-info{flex:1;}.pb-name{font-weight:600;font-size:.85rem;}
+.pb-desc{font-size:.7rem;color:var(--txt);}
+.pb-status{font-size:.68rem;font-weight:600;display:flex;align-items:center;gap:.25rem;}
+.pb-status.on{color:var(--ok);}.pb-status.off{color:var(--txt);}
+.pb-status .dot{width:6px;height:6px;border-radius:50%;}
+.pb-status.on .dot{background:var(--ok);}.pb-status.off .dot{background:var(--gris);}
+.pb-edit{padding:.3rem .6rem;border:1.5px solid var(--gris);border-radius:6px;background:var(--blanc);font-family:'Raleway';font-size:.68rem;font-weight:600;cursor:pointer;transition:all .15s;}
+.pb-edit:hover{border-color:var(--bleuO);color:var(--bleuO);}
+
+/* Prestation cards */
+.presta-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.presta-card{padding:.85rem 1rem;border:1.5px solid var(--gris);border-radius:10px;transition:all .2s;cursor:pointer;}
+.presta-card:hover{border-color:var(--bleuO);transform:translateY(-1px);}
+.pc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;}
+.pc-name{font-weight:700;font-size:.88rem;}
+.pc-price{font-family:'Playfair Display',serif;font-weight:600;font-size:1rem;color:var(--terra);}
+.pc-meta{font-size:.7rem;color:var(--txt);}
+.pc-tags{display:flex;gap:.25rem;margin-top:.35rem;}
+.pc-tag{padding:.1rem .4rem;border-radius:4px;font-size:.58rem;font-weight:700;text-transform:uppercase;}
+.pc-tag.fam{background:rgba(58,107,138,.08);color:var(--bleuO);}
+.pc-tag.equ{background:rgba(107,127,90,.1);color:#6B7F5A;}
+.pc-tag.mar{background:rgba(180,90,60,.08);color:var(--terra);}
+.pc-tag.gro{background:rgba(142,107,175,.08);color:#8E6BAF;}
+.pc-tag.por{background:rgba(207,160,68,.08);color:var(--or);}
+.presta-add{padding:.85rem 1rem;border:1.5px dashed var(--gris);border-radius:10px;text-align:center;cursor:pointer;transition:all .2s;font-size:.82rem;font-weight:600;color:var(--txt);display:flex;align-items:center;justify-content:center;gap:.35rem;}
+.presta-add:hover{border-color:var(--terra);color:var(--terra);}
+.presta-add svg{width:14px;height:14px;}
+
+/* AI module cards */
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+.ai-card{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,.6);overflow:hidden;transition:box-shadow .2s;}
+.ai-card:hover{box-shadow:0 4px 14px rgba(30,42,58,.05);}
+.ai-top{padding:1rem 1.15rem;display:flex;align-items:flex-start;gap:.85rem;}
+.ai-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;}
+.ai-icon.ret{background:rgba(58,107,138,.1);}.ai-icon.red{background:rgba(180,90,60,.08);}
+.ai-icon.tri{background:rgba(207,160,68,.1);}.ai-icon.tar{background:rgba(39,174,96,.08);}
+.ai-name{font-weight:700;font-size:.88rem;margin-bottom:.15rem;}
+.ai-desc{font-size:.72rem;color:var(--txt);line-height:1.4;}
+.ai-bottom{padding:.65rem 1.15rem;border-top:1px solid rgba(232,228,221,.4);display:flex;align-items:center;justify-content:space-between;}
+.ai-status{font-size:.7rem;font-weight:600;display:flex;align-items:center;gap:.25rem;}
+.ai-status.on{color:var(--ok);}.ai-status.off{color:var(--txt);}
+
+/* Support section */
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.support-card{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,.6);padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;}
+.support-card:hover{box-shadow:0 6px 20px rgba(30,42,58,.06);transform:translateY(-2px);}
+.sup-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.5rem;}
+.sup-icon.chat{background:rgba(58,107,138,.1);}.sup-icon.mail{background:rgba(180,90,60,.08);}
+.sup-icon.faq{background:rgba(207,160,68,.1);}.sup-icon.bug{background:rgba(192,57,43,.06);}
+.sup-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;margin-bottom:.25rem;}
+.sup-desc{font-size:.75rem;color:var(--txt);line-height:1.4;}
+.sup-badge{display:inline-block;margin-top:.6rem;padding:.25rem .65rem;border-radius:20px;font-size:.65rem;font-weight:700;}
+.sup-badge.online{background:rgba(39,174,96,.1);color:var(--ok);}
+.sup-badge.h24{background:rgba(58,107,138,.08);color:var(--bleuO);}
+
+/* Ticket form */
+.ticket-form{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,.6);padding:1.25rem;margin-top:1rem;}
+.tf-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;margin-bottom:.85rem;}
+</style>
+</head>
+<body>
+
+<!-- Sidebar app -->
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-s"><div class="nav-st">Principal</div>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-s"><div class="nav-st">Commerce</div>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>Commandes</a>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-s"><div class="nav-st">Outils</div>
+      <a class="nav-i" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-i active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="ua">CL</div><div><div class="un">Capucine Laurent</div><div class="ur">Photographe</div></div></div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div><h1>Paramètres</h1><p>Configurez et personnalisez entièrement votre espace Déclia</p></div>
+    <div class="topbar-act">
+      <button class="btn btn-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer tout</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Settings nav -->
+    <div class="ss">
+      <div class="ss-cat">
+        <div class="ss-cat-title">Mon studio</div>
+        <div class="ss-item active" onclick="show('studio',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Informations</div>
+        <div class="ss-item" onclick="show('legal',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Légal, CGV & RGPD</div>
+      </div>
+      <div class="ss-cat">
+        <div class="ss-cat-title">Identité & Design</div>
+        <div class="ss-item" onclick="show('branding',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z"/></svg> Couleurs & Logo</div>
+        <div class="ss-item" onclick="show('fonts',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg> Typographie</div>
+        <div class="ss-item" onclick="show('watermark',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Filigrane</div>
+        <div class="ss-item" onclick="show('gallery-design',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Design galeries</div>
+      </div>
+      <div class="ss-cat">
+        <div class="ss-cat-title">Mon site vitrine</div>
+        <div class="ss-item" onclick="show('pages',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Pages du site</div>
+        <div class="ss-item" onclick="show('prestations',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Prestations & Tarifs</div>
+        <div class="ss-item" onclick="show('portfolio',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg> Portfolio</div>
+        <div class="ss-item" onclick="show('testimonials',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> Témoignages</div>
+        <div class="ss-item" onclick="show('seo',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> SEO & Domaine</div>
+      </div>
+      <div class="ss-cat">
+        <div class="ss-cat-title">Automatisations</div>
+        <div class="ss-item" onclick="show('emails',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> E-mails auto</div>
+        <div class="ss-item" onclick="show('notifs',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notifications</div>
+        <div class="ss-item" onclick="show('ia',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Modules IA <span class="new-badge">Nouveau</span></div>
+      </div>
+      <div class="ss-cat">
+        <div class="ss-cat-title">Technique</div>
+        <div class="ss-item" onclick="show('integrations',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Intégrations</div>
+        <div class="ss-item" onclick="show('booking',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg> Page de réservation</div>
+        <div class="ss-item" onclick="show('support',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Aide & Support</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="sc">
+
+      <!-- ════ STUDIO ════ -->
+      <div class="sp v" id="p-studio">
+        <div class="sp-title">Informations du studio</div>
+        <div class="sp-desc">Ces données apparaissent sur vos factures, e-mails, page de réservation et site vitrine.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><h3>Identité</h3></div>
+          <div class="cd-b">
+            <div class="fr"><div class="fg"><label class="fl">Nom du studio</label><input class="fi" value="Fleur de Lumière"></div><div class="fg"><label class="fl">Photographe</label><input class="fi" value="Capucine Laurent"></div></div>
+            <div class="fr"><div class="fg"><label class="fl">E-mail</label><input class="fi" value="contact@fleurdelumiere.fr"></div><div class="fg"><label class="fl">Téléphone</label><input class="fi" value="06 XX XX XX XX"></div></div>
+            <div class="fg"><label class="fl">Adresse / Zone géographique</label><input class="fi" value="Tarn (81) · Toulouse · Occitanie"></div>
+            <div class="fg"><label class="fl">Site web</label><input class="fi" value="https://fleurdelumiere.fr"></div>
+            <div class="fg"><label class="fl">Bio courte (pour la vitrine)</label><textarea class="ft">Photographe passionnée spécialisée dans les séances famille, équestres et de grossesse. Je capture vos plus beaux moments en lumière naturelle, au crépuscule, dans le Tarn et la région toulousaine.</textarea></div>
+            <div class="fg"><label class="fl">Réseaux sociaux</label>
+              <div class="fr"><div class="fg"><input class="fi" placeholder="Instagram (@)"></div><div class="fg"><input class="fi" placeholder="Facebook (URL)"></div></div>
+              <div class="fr"><div class="fg"><input class="fi" placeholder="TikTok (@)"></div><div class="fg"><input class="fi" placeholder="Pinterest (URL)"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ LÉGAL ════ -->
+      <div class="sp" id="p-legal">
+        <div class="sp-title">Légal, CGV & RGPD</div>
+        <div class="sp-desc">Informations légales obligatoires, conditions générales de vente et conformité RGPD.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><h3>Informations légales</h3></div>
+          <div class="cd-b">
+            <div class="fr"><div class="fg"><label class="fl">SIRET</label><input class="fi" value="XXX XXX XXX XXXXX"></div><div class="fg"><label class="fl">Statut</label><select class="fs"><option selected>Auto-entrepreneur</option><option>EIRL</option><option>SARL / EURL</option><option>SAS / SASU</option></select></div></div>
+            <div class="fr"><div class="fg"><label class="fl">Code APE</label><input class="fi" value="7420Z — Activités photographiques"></div><div class="fg"><label class="fl">TVA</label><select class="fs"><option selected>Franchise (art. 293B CGI)</option><option>TVA normale</option></select></div></div>
+          </div>
+        </div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><h3>CGV & Politique d'annulation</h3></div>
+          <div class="cd-b">
+            <div class="fg"><label class="fl">Conditions générales de vente</label><textarea class="ft" style="min-height:120px;" placeholder="Rédigez vos CGV ou collez-les ici. Elles seront affichées sur votre site et jointes aux devis/factures."></textarea><div class="fh">Conseil : incluez vos délais de livraison, politique de retouches incluses, conditions de report/annulation.</div></div>
+            <div class="fg"><label class="fl">Politique d'annulation</label><textarea class="ft" placeholder="Ex: Toute annulation à moins de 48h de la séance entraîne le paiement de 50% du montant..."></textarea></div>
+            <div class="fg"><label class="fl">Politique de droit à l'image</label><textarea class="ft" placeholder="Modèle d'autorisation de droit à l'image que le client signe lors de la réservation."></textarea></div>
+          </div>
+        </div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><h3>RGPD & Cookies</h3></div>
+          <div class="cd-b">
+            <div class="tr"><div class="tr-i"><div class="tr-l">Bandeau cookies</div><div class="tr-d">Afficher un bandeau de consentement aux cookies sur votre site</div></div><input type="checkbox" class="ts" checked></div>
+            <div class="tr"><div class="tr-i"><div class="tr-l">Politique de confidentialité</div><div class="tr-d">Page de politique de confidentialité générée automatiquement</div></div><input type="checkbox" class="ts" checked></div>
+            <div class="fg" style="margin-top:.75rem;"><label class="fl">Texte personnalisé RGPD</label><textarea class="ft" placeholder="Texte additionnel sur le traitement des données personnelles de vos clients..."></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ BRANDING ════ -->
+      <div class="sp" id="p-branding">
+        <div class="sp-title">Couleurs & Logo</div>
+        <div class="sp-desc">Votre identité visuelle appliquée partout : galeries, e-mails, site vitrine, page de réservation.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg><h3>Logo</h3></div>
+          <div class="cd-b">
+            <div style="display:flex;gap:1rem;margin-bottom:.75rem;">
+              <div style="display:flex;align-items:center;gap:1rem;padding:.85rem;border:1.5px dashed var(--gris);border-radius:10px;flex:1;cursor:pointer;">
+                <div style="width:60px;height:60px;border-radius:10px;background:var(--bleu);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 28 28" fill="none" width="28"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="none"/></svg></div>
+                <div><strong style="font-size:.85rem;">Logo principal</strong><br><span style="font-size:.7rem;color:var(--txt);">PNG/SVG, fond transparent · Max 2 Mo</span></div>
+                <button class="btn btn-o btn-sm" style="margin-left:auto;">Changer</button>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem;padding:.85rem;border:1.5px dashed var(--gris);border-radius:10px;flex:1;cursor:pointer;">
+                <div style="width:60px;height:60px;border-radius:10px;background:var(--lin);display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--txt);font-weight:600;">Favicon</div>
+                <div><strong style="font-size:.85rem;">Favicon</strong><br><span style="font-size:.7rem;color:var(--txt);">Icône onglet navigateur · 32×32px</span></div>
+                <button class="btn btn-o btn-sm" style="margin-left:auto;">Ajouter</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/></svg><h3>Palette de couleurs</h3></div>
+          <div class="cd-b">
+            <div class="cg">
+              <div class="cf"><label>Principale</label><div class="cw"><div class="csw" style="background:#B45A3C;"></div><span class="chx">#B45A3C</span></div></div>
+              <div class="cf"><label>Secondaire</label><div class="cw"><div class="csw" style="background:#1E2A3A;"></div><span class="chx">#1E2A3A</span></div></div>
+              <div class="cf"><label>Accent</label><div class="cw"><div class="csw" style="background:#CFA044;"></div><span class="chx">#CFA044</span></div></div>
+              <div class="cf"><label>Fond</label><div class="cw"><div class="csw" style="background:#F6F3ED;"></div><span class="chx">#F6F3ED</span></div></div>
+              <div class="cf"><label>Texte</label><div class="cw"><div class="csw" style="background:#6B6560;"></div><span class="chx">#6B6560</span></div></div>
+            </div>
+            <div class="fh" style="margin-top:.75rem;">Cliquez sur un carré pour ouvrir le sélecteur de couleur. Ces couleurs s'appliquent à l'ensemble de votre espace.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ TYPOGRAPHIE (LIBRE) ════ -->
+      <div class="sp" id="p-fonts">
+        <div class="sp-title">Typographie</div>
+        <div class="sp-desc">Choisissez vos polices parmi les suggestions ou entrez n'importe quelle police Google Fonts.</div>
+
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg><h3>Police des titres</h3></div>
+          <div class="cd-b">
+            <div class="font-selector">
+              <div class="font-opt active"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Playfair Display</div><div class="fo-sample" style="font-family:'Playfair Display',serif;">Vos souvenirs vous attendent</div></div></div>
+              <div class="font-opt"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Cormorant Garamond</div><div class="fo-sample" style="font-family:'Cormorant Garamond',serif;">Vos souvenirs vous attendent</div></div></div>
+              <div class="font-opt"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Libre Baskerville</div><div class="fo-sample" style="font-family:'Libre Baskerville',serif;">Vos souvenirs vous attendent</div></div></div>
+              <div class="font-opt"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Lora</div><div class="fo-sample" style="font-family:'Lora',serif;">Vos souvenirs vous attendent</div></div></div>
+              <div class="font-custom" onclick="document.getElementById('customTitleFont').classList.toggle('visible');document.getElementById('previewTitle').classList.toggle('visible');">
+                <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                <div><div style="font-weight:600;font-size:.82rem;">Autre police…</div><div style="font-size:.7rem;color:var(--txt);">Tapez le nom d'une police Google Fonts</div></div>
+              </div>
+              <input class="font-custom-input" id="customTitleFont" placeholder="Ex : Dancing Script, Great Vibes, Bebas Neue…" oninput="document.getElementById('previewTitle').style.fontFamily=this.value;document.getElementById('previewTitle').textContent='Aperçu : '+this.value;">
+              <div class="font-preview-live" id="previewTitle">Aperçu de votre police personnalisée</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg><h3>Police du corps de texte</h3></div>
+          <div class="cd-b">
+            <div class="font-selector">
+              <div class="font-opt active"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Raleway</div><div class="fo-sample" style="font-family:'Raleway',sans-serif;">Photographe spécialisée en séances famille et équestres</div></div></div>
+              <div class="font-opt"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Montserrat</div><div class="fo-sample" style="font-family:'Montserrat',sans-serif;">Photographe spécialisée en séances famille et équestres</div></div></div>
+              <div class="font-opt"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">DM Sans</div><div class="fo-sample" style="font-family:'DM Sans',sans-serif;">Photographe spécialisée en séances famille et équestres</div></div></div>
+              <div class="font-opt"><div class="fo-radio"></div><div class="fo-info"><div class="fo-name">Poppins</div><div class="fo-sample" style="font-family:'Poppins',sans-serif;">Photographe spécialisée en séances famille et équestres</div></div></div>
+              <div class="font-custom" onclick="document.getElementById('customBodyFont').classList.toggle('visible');document.getElementById('previewBody').classList.toggle('visible');">
+                <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+                <div><div style="font-weight:600;font-size:.82rem;">Autre police…</div><div style="font-size:.7rem;color:var(--txt);">Tapez le nom d'une police Google Fonts</div></div>
+              </div>
+              <input class="font-custom-input" id="customBodyFont" placeholder="Ex : Open Sans, Nunito, Source Sans Pro…" oninput="document.getElementById('previewBody').style.fontFamily=this.value;document.getElementById('previewBody').textContent='Aperçu : '+this.value;">
+              <div class="font-preview-live" id="previewBody">Aperçu de votre police personnalisée</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ PAGES VITRINE ════ -->
+      <div class="sp" id="p-pages">
+        <div class="sp-title">Pages du site vitrine</div>
+        <div class="sp-desc">Personnalisez chaque page de votre site. Modifiez les textes, images et l'ordre des sections.</div>
+        <div class="cd"><div class="cd-b">
+          <div class="page-block"><div class="pb-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="pb-info"><div class="pb-name">Page d'accueil</div><div class="pb-desc">Hero, présentation, dernières galeries, témoignages, appel à l'action</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="pb-info"><div class="pb-name">À propos</div><div class="pb-desc">Votre histoire, votre approche, votre philosophie, photo de vous</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="pb-info"><div class="pb-name">Portfolio</div><div class="pb-desc">Sélection de vos meilleures photos par catégorie</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div class="pb-info"><div class="pb-name">Prestations</div><div class="pb-desc">Catalogue de vos séances, descriptions, durées et tarifs</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="pb-info"><div class="pb-name">Tarifs</div><div class="pb-desc">Grille tarifaire détaillée, packs et options</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div><div class="pb-info"><div class="pb-name">Témoignages</div><div class="pb-desc">Avis clients avec photos et notes</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="pb-info"><div class="pb-name">Contact</div><div class="pb-desc">Formulaire de contact, coordonnées, carte, horaires</div></div><div class="pb-status on"><span class="dot"></span> Publiée</div><button class="pb-edit">Éditer</button></div>
+          <div class="page-block"><div class="pb-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="pb-info"><div class="pb-name">FAQ</div><div class="pb-desc">Questions fréquentes sur vos prestations</div></div><div class="pb-status off"><span class="dot"></span> Masquée</div><button class="pb-edit">Éditer</button></div>
+        </div></div>
+      </div>
+
+      <!-- ════ PRESTATIONS ════ -->
+      <div class="sp" id="p-prestations">
+        <div class="sp-title">Prestations & Tarifs</div>
+        <div class="sp-desc">Gérez votre catalogue de séances. Chaque prestation est visible sur votre vitrine et votre page de réservation.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/></svg><h3>Mes prestations</h3></div>
+          <div class="cd-b">
+            <div class="presta-grid">
+              <div class="presta-card"><div class="pc-top"><span class="pc-name">Séance Famille</span><span class="pc-price">180 €</span></div><div class="pc-meta">1h30 · Extérieur · 30 photos min.</div><div class="pc-tags"><span class="pc-tag fam">Famille</span></div></div>
+              <div class="presta-card"><div class="pc-top"><span class="pc-name">Shooting Équestre</span><span class="pc-price">220 €</span></div><div class="pc-meta">2h · Écuries/extérieur · 40 photos min.</div><div class="pc-tags"><span class="pc-tag equ">Équestre</span></div></div>
+              <div class="presta-card"><div class="pc-top"><span class="pc-name">Séance Grossesse</span><span class="pc-price">160 €</span></div><div class="pc-meta">1h · Studio/extérieur · 25 photos min.</div><div class="pc-tags"><span class="pc-tag gro">Grossesse</span></div></div>
+              <div class="presta-card"><div class="pc-top"><span class="pc-name">Mariage — Pack Premium</span><span class="pc-price">2 200 €</span></div><div class="pc-meta">Journée complète · Illimité</div><div class="pc-tags"><span class="pc-tag mar">Mariage</span></div></div>
+              <div class="presta-card"><div class="pc-top"><span class="pc-name">Portrait Professionnel</span><span class="pc-price">120 €</span></div><div class="pc-meta">45 min · Studio/extérieur · 15 photos</div><div class="pc-tags"><span class="pc-tag por">Portrait</span></div></div>
+              <div class="presta-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Ajouter une prestation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ PORTFOLIO ════ -->
+      <div class="sp" id="p-portfolio">
+        <div class="sp-title">Portfolio</div>
+        <div class="sp-desc">Sélectionnez vos meilleures photos pour votre vitrine. Organisez-les par catégorie.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg><h3>Catégories du portfolio</h3></div>
+          <div class="cd-b">
+            <div class="page-block"><div class="pb-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="pb-info"><div class="pb-name">Famille</div><div class="pb-desc">12 photos sélectionnées</div></div><button class="pb-edit">Gérer</button></div>
+            <div class="page-block"><div class="pb-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="pb-info"><div class="pb-name">Équestre</div><div class="pb-desc">15 photos sélectionnées</div></div><button class="pb-edit">Gérer</button></div>
+            <div class="page-block"><div class="pb-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="pb-info"><div class="pb-name">Mariage</div><div class="pb-desc">8 photos sélectionnées</div></div><button class="pb-edit">Gérer</button></div>
+            <div class="page-block"><div class="pb-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><div class="pb-info"><div class="pb-name">Grossesse & Nouveau-né</div><div class="pb-desc">10 photos sélectionnées</div></div><button class="pb-edit">Gérer</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ TÉMOIGNAGES ════ -->
+      <div class="sp" id="p-testimonials">
+        <div class="sp-title">Témoignages</div>
+        <div class="sp-desc">Gérez les avis clients affichés sur votre site vitrine.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><h3>Avis clients</h3></div>
+          <div class="cd-b">
+            <div class="tr"><div class="tr-i"><div class="tr-l">Demande automatique d'avis</div><div class="tr-d">Envoyer un e-mail après livraison de la galerie finale</div></div><input type="checkbox" class="ts" checked></div>
+            <div class="tr"><div class="tr-i"><div class="tr-l">Modération des avis</div><div class="tr-d">Valider manuellement chaque avis avant publication</div></div><input type="checkbox" class="ts" checked></div>
+            <div class="tr"><div class="tr-i"><div class="tr-l">Afficher les notes (étoiles)</div><div class="tr-d">Montrer la notation sur 5 étoiles</div></div><input type="checkbox" class="ts" checked></div>
+            <div style="margin-top:.85rem;padding:.85rem 1rem;border:1.5px solid var(--gris);border-radius:10px;">
+              <div style="display:flex;align-items:flex-start;gap:.75rem;">
+                <div style="font-size:1.5rem;">⭐⭐⭐⭐⭐</div>
+                <div style="flex:1;"><strong style="font-size:.85rem;">Marie Lefèvre</strong><div style="font-size:.78rem;color:var(--txt);margin-top:.2rem;font-style:italic;">« Capucine a su capturer des moments incroyables avec ma famille. Les photos au crépuscule sont magiques ! »</div><div style="font-size:.68rem;color:var(--txt);margin-top:.25rem;">Séance famille · Mars 2026</div></div>
+                <div style="display:flex;gap:.25rem;"><button class="pb-edit">Éditer</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ SEO & DOMAINE ════ -->
+      <div class="sp" id="p-seo">
+        <div class="sp-title">SEO & Domaine</div>
+        <div class="sp-desc">Optimisez votre référencement et connectez votre propre nom de domaine.</div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><h3>Référencement (SEO)</h3></div>
+          <div class="cd-b">
+            <div class="fg"><label class="fl">Méta-titre</label><input class="fi" value="Fleur de Lumière — Photographe famille & équestre | Tarn"><div class="fh">60 caractères max. · Apparaît dans les résultats Google</div></div>
+            <div class="fg"><label class="fl">Méta-description</label><textarea class="ft">Photographe professionnelle spécialisée dans les séances famille, équestres et grossesse dans le Tarn et la région toulousaine. Séances en lumière naturelle.</textarea><div class="fh">160 caractères max.</div></div>
+            <div class="fg"><label class="fl">Mots-clés</label><input class="fi" value="photographe tarn, photographe famille albi, shooting équestre toulouse, séance grossesse occitanie"></div>
+            <div class="tr"><div class="tr-i"><div class="tr-l">Google Analytics</div><div class="tr-d">Suivez vos visiteurs avec Google Analytics</div></div><input type="checkbox" class="ts"></div>
+            <div class="fg" style="margin-top:.5rem;"><label class="fl">ID Google Analytics</label><input class="fi" placeholder="G-XXXXXXXXXX"></div>
+          </div>
+        </div>
+        <div class="cd"><div class="cd-h"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><h3>Domaine personnalisé</h3></div>
+          <div class="cd-b">
+            <div class="fg"><label class="fl">URL actuelle</label><div style="padding:.6rem .85rem;background:var(--lin);border-radius:8px;font-family:'Courier New',monospace;font-size:.82rem;">https://declia.com/fleur-de-lumiere</div></div>
+            <div class="fg"><label class="fl">Domaine personnalisé</label><input class="fi" placeholder="www.fleurdelumiere.fr"><div class="fh">Connectez votre propre nom de domaine. Instructions DNS fournies après activation.</div></div>
+            <button class="btn btn-p btn-sm" style="margin-top:.25rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Connecter mon domaine</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ MODULES IA ════ -->
+      <div class="sp" id="p-ia">
+        <div class="sp-title">Modules Intelligence Artificielle</div>
+        <div class="sp-desc">Activez et configurez les assistants IA qui vous font gagner du temps au quotidien.</div>
+        <div class="ai-grid">
+          <div class="ai-card"><div class="ai-top"><div class="ai-icon ret">🎨</div><div><div class="ai-name">IA Retouche</div><div class="ai-desc">Application automatique de presets, suggestions de recadrage, correction colorimétrique intelligente. L'IA apprend votre style au fil du temps.</div></div></div><div class="ai-bottom"><div class="ai-status on"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--ok);"></span> Activé</div><input type="checkbox" class="ts" checked></div></div>
+          <div class="ai-card"><div class="ai-top"><div class="ai-icon red">✍️</div><div><div class="ai-name">IA Rédaction</div><div class="ai-desc">Génération automatique de descriptions de galeries, légendes Instagram, e-mails clients et textes pour votre site vitrine.</div></div></div><div class="ai-bottom"><div class="ai-status on"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--ok);"></span> Activé</div><input type="checkbox" class="ts" checked></div></div>
+          <div class="ai-card"><div class="ai-top"><div class="ai-icon tri">📸</div><div><div class="ai-name">IA Tri & Sélection</div><div class="ai-desc">Tri automatique de vos photos : détection des doublons, des yeux fermés, des photos floues. Suggestion des meilleures images.</div></div></div><div class="ai-bottom"><div class="ai-status on"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--ok);"></span> Activé</div><input type="checkbox" class="ts" checked></div></div>
+          <div class="ai-card"><div class="ai-top"><div class="ai-icon tar">💰</div><div><div class="ai-name">IA Tarification</div><div class="ai-desc">Suggestions de prix basées sur votre marché local, votre expérience et les tendances du secteur. Analyse concurrentielle intégrée.</div></div></div><div class="ai-bottom"><div class="ai-status off"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--gris);"></span> Désactivé</div><input type="checkbox" class="ts"></div></div>
+        </div>
+      </div>
+
+      <!-- ════ AIDE & SUPPORT ════ -->
+      <div class="sp" id="p-support">
+        <div class="sp-title">Aide & Support</div>
+        <div class="sp-desc">Un problème technique ? Une question ? Notre équipe est là pour vous aider.</div>
+
+        <div class="support-grid">
+          <div class="support-card"><div class="sup-icon chat">💬</div><div class="sup-title">Chat en direct</div><div class="sup-desc">Discutez en temps réel avec un membre de l'équipe Déclia.</div><span class="sup-badge online">En ligne maintenant</span></div>
+          <div class="support-card"><div class="sup-icon mail">📧</div><div class="sup-title">Envoyer un ticket</div><div class="sup-desc">Décrivez votre problème, nous vous répondons sous 24h.</div><span class="sup-badge h24">Réponse &lt; 24h</span></div>
+          <div class="support-card"><div class="sup-icon faq">📖</div><div class="sup-title">Centre d'aide</div><div class="sup-desc">Guides, tutoriels vidéo et FAQ pour tout maîtriser.</div></div>
+          <div class="support-card"><div class="sup-icon bug">🐛</div><div class="sup-title">Signaler un bug</div><div class="sup-desc">Quelque chose ne fonctionne pas ? Aidez-nous à l'améliorer.</div></div>
+        </div>
+
+        <div class="ticket-form">
+          <div class="tf-title">Nouveau ticket de support</div>
+          <div class="fr"><div class="fg"><label class="fl">Sujet</label><select class="fs"><option>Problème technique</option><option>Question sur une fonctionnalité</option><option>Demande d'amélioration</option><option>Facturation / Abonnement</option><option>Autre</option></select></div><div class="fg"><label class="fl">Priorité</label><select class="fs"><option>Normale</option><option>Haute — Bloquant</option><option>Basse — Suggestion</option></select></div></div>
+          <div class="fg"><label class="fl">Description du problème</label><textarea class="ft" style="min-height:100px;" placeholder="Décrivez votre problème ou question en détail. Ajoutez des captures d'écran si possible."></textarea></div>
+          <div class="fg"><label class="fl">Capture d'écran (optionnel)</label><div style="padding:.75rem;border:1.5px dashed var(--gris);border-radius:8px;text-align:center;cursor:pointer;font-size:.78rem;color:var(--txt);">Glissez une image ici ou <span style="color:var(--terra);font-weight:600;">parcourir</span></div></div>
+          <button class="btn btn-p" style="margin-top:.25rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Envoyer le ticket</button>
+        </div>
+      </div>
+
+      <!-- Placeholder panels for remaining sections -->
+      <div class="sp" id="p-watermark"><div class="sp-title">Filigrane</div><div class="sp-desc">Configurez votre watermark. Voir la version précédente pour le détail complet (aperçu, opacité, position, type texte/logo).</div><div class="cd"><div class="cd-b" style="text-align:center;padding:2rem;color:var(--txt);">Section identique à la version précédente — aperçu photo avec filigrane en diagonale, réglages opacité/taille/position, application auto sur galeries de sélection.</div></div></div>
+      <div class="sp" id="p-gallery-design"><div class="sp-title">Design galeries</div><div class="sp-desc">Choisissez le thème et la mise en page de vos galeries client.</div><div class="cd"><div class="cd-b" style="text-align:center;padding:2rem;color:var(--txt);">Section identique à la version précédente — 3 thèmes (Crépuscule, Minimaliste, Sombre), grille/mosaïque/diaporama, colonnes, espacement, coins.</div></div></div>
+      <div class="sp" id="p-emails"><div class="sp-title">E-mails automatiques</div><div class="sp-desc">Personnalisez les 7 modèles d'e-mails envoyés à vos clients.</div><div class="cd"><div class="cd-b" style="text-align:center;padding:2rem;color:var(--txt);">Section identique à la version précédente — 7 templates personnalisables (confirmation, galerie prête, rappel, commande, facture, relance, avis).</div></div></div>
+      <div class="sp" id="p-notifs"><div class="sp-title">Notifications</div><div class="sp-desc">Alertes et rappels automatiques.</div><div class="cd"><div class="cd-b" style="text-align:center;padding:2rem;color:var(--txt);">Section identique à la version précédente — toggles alertes photographe + rappels automatiques clients.</div></div></div>
+      <div class="sp" id="p-integrations"><div class="sp-title">Intégrations</div><div class="sp-desc">Connectez vos outils.</div><div class="cd"><div class="cd-b" style="text-align:center;padding:2rem;color:var(--txt);">Section identique à la version précédente — Google Agenda, Stripe, Instagram, Facebook, Mailchimp/Brevo, Export comptable.</div></div></div>
+      <div class="sp" id="p-booking"><div class="sp-title">Page de réservation</div><div class="sp-desc">Personnalisez votre page de réservation en ligne.</div><div class="cd"><div class="cd-b" style="text-align:center;padding:2rem;color:var(--txt);">Section identique à la version précédente — aperçu navigateur, URL personnalisée, titre, description, bouton.</div></div></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.sp').forEach(p => p.classList.remove('v'));
+  document.querySelectorAll('.ss-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('p-' + id).classList.add('v');
+  el.classList.add('active');
+  document.querySelector('.sc').scrollTop = 0;
+}
+</script>
+</body>
+</html>

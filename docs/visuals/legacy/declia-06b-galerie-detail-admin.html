@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Galerie : Famille Lefèvre</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bleu-crepuscule:#1E2A3A;--terracotta:#B45A3C;--or-solaire:#CFA044;--bleu-ouvert:#3A6B8A;--lin-clair:#F6F3ED;--blanc:#FFFFFF;--gris-doux:#E8E4DD;--gris-texte:#6B6560;--erreur:#C0392B;--succes:#27AE60;--warning:#E67E22;--sidebar-w:260px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Raleway',sans-serif;background:var(--lin-clair);color:var(--bleu-crepuscule);display:flex;min-height:100vh;}
+
+  /* Sidebar compact */
+  .sidebar{width:var(--sidebar-w);background:var(--bleu-crepuscule);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+  .sidebar-brand{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .sidebar-brand .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--blanc);display:flex;align-items:center;gap:0.5rem;}
+  .sidebar-brand .logo svg{width:28px;height:28px;}
+  .badge-beta{font-family:'Raleway',sans-serif;font-size:0.55rem;font-weight:700;background:rgba(207,160,68,0.2);color:var(--or-solaire);padding:0.15rem 0.45rem;border-radius:10px;text-transform:uppercase;letter-spacing:0.1em;}
+  .sidebar-nav{padding:1rem 0;flex:1;}.nav-section{padding:0 1rem;margin-bottom:0.5rem;}
+  .nav-section-title{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgba(255,255,255,0.25);padding:0.75rem 0.5rem 0.4rem;}
+  .nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.2s;cursor:pointer;margin-bottom:2px;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8);}
+  .nav-item.active{background:rgba(58,107,138,0.25);color:var(--blanc);}.nav-item.active svg{opacity:1;color:var(--or-solaire);}
+  .nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.5;}
+  .nav-badge{margin-left:auto;background:var(--terracotta);color:var(--blanc);font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:10px;}
+  .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.75rem;}
+  .sidebar-footer .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--terracotta);display:flex;align-items:center;justify-content:center;color:var(--blanc);font-weight:700;font-size:0.8rem;}
+  .sidebar-footer .user-name{font-size:0.8rem;font-weight:600;color:var(--blanc);}
+  .sidebar-footer .user-role{font-size:0.68rem;color:rgba(255,255,255,0.4);}
+
+  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+  /* Topbar with breadcrumb */
+  .topbar{background:var(--blanc);padding:0.85rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gris-doux);position:sticky;top:0;z-index:50;}
+  .breadcrumb{display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;}
+  .breadcrumb a{color:var(--gris-texte);text-decoration:none;font-weight:500;transition:color 0.15s;}
+  .breadcrumb a:hover{color:var(--terracotta);}
+  .breadcrumb .sep{color:var(--gris-doux);}
+  .breadcrumb .current{font-weight:700;color:var(--bleu-crepuscule);}
+  .topbar-actions{display:flex;align-items:center;gap:0.5rem;}
+  .btn{padding:0.55rem 1rem;border:none;border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.35rem;}
+  .btn svg{width:14px;height:14px;}
+  .btn-primary{background:var(--terracotta);color:var(--blanc);}.btn-primary:hover{background:#9A4C32;transform:translateY(-1px);}
+  .btn-outline{background:var(--blanc);color:var(--bleu-crepuscule);border:1.5px solid var(--gris-doux);}.btn-outline:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .btn-success{background:var(--succes);color:var(--blanc);}.btn-success:hover{background:#219A52;}
+  .btn-gold{background:var(--or-solaire);color:var(--bleu-crepuscule);}.btn-gold:hover{background:#DCAD50;}
+  .btn-sm{padding:0.4rem 0.75rem;font-size:0.72rem;}
+  .content{padding:1.25rem 2rem;flex:1;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ═══ GALLERY HEADER ═══ */
+  .gallery-header{
+    background:var(--blanc);border-radius:14px;border:1px solid rgba(232,228,221,0.6);
+    padding:1.5rem;margin-bottom:1.25rem;display:flex;gap:1.5rem;align-items:flex-start;
+  }
+  .gh-cover{width:120px;height:90px;border-radius:10px;background:linear-gradient(135deg,#8BA4B8,#5A7A94);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .gh-cover::after{content:'📷';font-size:1.5rem;position:relative;z-index:1;}
+  .gh-info{flex:1;min-width:0;}
+  .gh-top{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.3rem;}
+  .gh-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;}
+  .gh-type-badge{padding:0.2rem 0.6rem;border-radius:5px;font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+  .gh-type-badge.selection{background:rgba(207,160,68,0.12);color:var(--or-solaire);}
+  .gh-type-badge.finale{background:rgba(39,174,96,0.1);color:var(--succes);}
+  .gh-type-badge.brouillon{background:rgba(107,101,96,0.08);color:var(--gris-texte);}
+  .gh-status{padding:0.2rem 0.6rem;border-radius:20px;font-size:0.65rem;font-weight:600;display:inline-flex;align-items:center;gap:0.25rem;}
+  .gh-status .dot{width:6px;height:6px;border-radius:50%;}
+  .gh-status.published{background:rgba(39,174,96,0.1);color:var(--succes);}.gh-status.published .dot{background:var(--succes);}
+  .gh-status.draft{background:rgba(107,101,96,0.08);color:var(--gris-texte);}.gh-status.draft .dot{background:var(--gris-texte);}
+  .gh-status.private{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}.gh-status.private .dot{background:var(--bleu-ouvert);}
+  .gh-subtitle{font-size:0.82rem;color:var(--gris-texte);margin-bottom:0.6rem;}
+  .gh-meta{display:flex;gap:1.25rem;flex-wrap:wrap;}
+  .gh-meta-item{display:flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:var(--gris-texte);}
+  .gh-meta-item svg{width:13px;height:13px;opacity:0.45;}
+  .gh-meta-item strong{font-weight:700;color:var(--bleu-crepuscule);}
+  .gh-right{display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end;flex-shrink:0;}
+
+  /* ═══ TAB NAVIGATION ═══ */
+  .tab-nav{display:flex;gap:0;border-bottom:2px solid var(--gris-doux);margin-bottom:1.25rem;overflow-x:auto;}
+  .tn-btn{padding:0.65rem 1.15rem;border:none;background:transparent;font-family:'Raleway',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gris-texte);cursor:pointer;position:relative;transition:color 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.35rem;}
+  .tn-btn svg{width:14px;height:14px;}
+  .tn-btn.active{color:var(--terracotta);}
+  .tn-btn.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--terracotta);border-radius:2px 2px 0 0;}
+
+  /* Tab content */
+  .tab-panel{display:none;}.tab-panel.visible{display:block;animation:fadeIn 0.3s ease;}
+
+  /* ═══ TAB 1: PHOTOS & DOSSIERS ═══ */
+  .photos-toolbar{
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--blanc);border-radius:10px;padding:0.75rem 1rem;
+    border:1px solid rgba(232,228,221,0.6);margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;
+  }
+  .pt-left{display:flex;align-items:center;gap:0.5rem;}
+  .pt-right{display:flex;align-items:center;gap:0.5rem;}
+  .search-sm{position:relative;}
+  .search-sm svg{position:absolute;left:0.7rem;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--gris-texte);opacity:0.4;}
+  .search-sm input{padding:0.45rem 0.75rem 0.45rem 2rem;border:1.5px solid var(--gris-doux);border-radius:7px;font-family:'Raleway',sans-serif;font-size:0.78rem;outline:none;width:180px;}
+  .search-sm input:focus{border-color:var(--bleu-ouvert);}
+  .filter-sm{padding:0.45rem 1.6rem 0.45rem 0.7rem;border:1.5px solid var(--gris-doux);border-radius:7px;font-family:'Raleway',sans-serif;font-size:0.75rem;outline:none;appearance:none;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.5rem center;cursor:pointer;}
+  .icon-btn{width:32px;height:32px;border:1.5px solid var(--gris-doux);border-radius:7px;background:var(--blanc);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-texte);transition:all 0.15s;}
+  .icon-btn:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .icon-btn.active{background:var(--bleu-ouvert);border-color:var(--bleu-ouvert);color:var(--blanc);}
+  .icon-btn svg{width:14px;height:14px;}
+  .sel-info{font-size:0.72rem;color:var(--gris-texte);font-weight:600;padding:0.3rem 0.6rem;background:rgba(58,107,138,0.06);border-radius:6px;}
+
+  /* Folder bar */
+  .folder-bar{
+    display:flex;align-items:center;gap:0.5rem;margin-bottom:1rem;
+    padding:0.6rem 0;border-bottom:1px solid rgba(232,228,221,0.4);
+    overflow-x:auto;
+  }
+  .folder-tab{
+    padding:0.45rem 0.85rem;border-radius:8px;font-size:0.78rem;font-weight:600;
+    background:var(--blanc);border:1.5px solid var(--gris-doux);color:var(--gris-texte);
+    cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.35rem;
+  }
+  .folder-tab:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .folder-tab.active{background:var(--bleu-crepuscule);border-color:var(--bleu-crepuscule);color:var(--blanc);}
+  .folder-tab svg{width:13px;height:13px;}
+  .folder-tab .f-count{font-size:0.6rem;padding:0.05rem 0.35rem;border-radius:6px;}
+  .folder-tab.active .f-count{background:rgba(255,255,255,0.2);}
+  .folder-tab:not(.active) .f-count{background:var(--lin-clair);}
+  .folder-add{
+    width:32px;height:32px;border:1.5px dashed var(--gris-doux);border-radius:8px;
+    background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:var(--gris-texte);transition:all 0.15s;flex-shrink:0;
+  }
+  .folder-add:hover{border-color:var(--terracotta);color:var(--terracotta);}
+  .folder-add svg{width:13px;height:13px;}
+
+  /* Photo grid */
+  .photo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0.65rem;margin-bottom:1.25rem;}
+  .photo-item{
+    position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;
+    cursor:pointer;transition:all 0.2s;
+  }
+  .photo-item:hover{transform:scale(1.02);box-shadow:0 4px 16px rgba(0,0,0,0.1);}
+  .photo-item .pi-bg{width:100%;height:100%;object-fit:cover;}
+  .photo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--gris-texte);font-weight:600;}
+
+  /* Photo overlay */
+  .pi-overlay{position:absolute;inset:0;opacity:0;transition:opacity 0.2s;display:flex;flex-direction:column;justify-content:space-between;padding:0.5rem;}
+  .photo-item:hover .pi-overlay{opacity:1;}
+  .pi-overlay-top{display:flex;justify-content:space-between;}
+  .pi-overlay-bottom{display:flex;justify-content:space-between;align-items:flex-end;}
+
+  .pi-check{
+    width:22px;height:22px;border-radius:5px;border:2px solid rgba(255,255,255,0.7);
+    background:rgba(0,0,0,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:all 0.15s;
+  }
+  .pi-check.checked{background:var(--bleu-ouvert);border-color:var(--bleu-ouvert);}
+  .pi-check.checked::after{content:'✓';color:var(--blanc);font-size:11px;font-weight:700;}
+
+  .pi-actions{display:flex;gap:0.2rem;}
+  .pi-act{
+    width:26px;height:26px;border-radius:5px;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);
+    border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:var(--blanc);transition:background 0.15s;
+  }
+  .pi-act:hover{background:rgba(0,0,0,0.6);}
+  .pi-act svg{width:13px;height:13px;}
+
+  .pi-info{display:flex;align-items:center;gap:0.35rem;}
+  .pi-badge{padding:0.12rem 0.4rem;border-radius:4px;font-size:0.55rem;font-weight:700;text-transform:uppercase;backdrop-filter:blur(4px);}
+  .pi-badge.fav{background:rgba(207,160,68,0.85);color:var(--bleu-crepuscule);}
+  .pi-badge.comment{background:rgba(58,107,138,0.85);color:var(--blanc);}
+  .pi-badge.selected{background:rgba(39,174,96,0.85);color:var(--blanc);}
+
+  .pi-price{
+    padding:0.15rem 0.45rem;border-radius:4px;
+    background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);
+    font-size:0.62rem;font-weight:700;color:var(--blanc);
+  }
+
+  /* Photo with different gradient colors for placeholder */
+  .ph-1{background:linear-gradient(135deg,#8BA4B8,#5A7A94);}
+  .ph-2{background:linear-gradient(135deg,#A8C4A0,#7A9E72);}
+  .ph-3{background:linear-gradient(135deg,#D4A87C,#B8906A);}
+  .ph-4{background:linear-gradient(135deg,#C8A8C0,#A890A0);}
+  .ph-5{background:linear-gradient(135deg,#B8C8D8,#8898A8);}
+  .ph-6{background:linear-gradient(135deg,#D4C4A8,#B8A888);}
+  .ph-7{background:linear-gradient(135deg,#A8B8A0,#889878);}
+  .ph-8{background:linear-gradient(135deg,#C8B8A8,#A89888);}
+  .ph-9{background:linear-gradient(135deg,#9AACBC,#7A8C9C);}
+  .ph-10{background:linear-gradient(135deg,#BCCCB0,#9CAC90);}
+
+  /* ═══ TAB 2: BOÎTE CADEAU ═══ */
+  .gift-layout{display:grid;grid-template-columns:1fr 400px;gap:1.5rem;}
+
+  .gift-preview{
+    background:var(--blanc);border-radius:14px;border:1px solid rgba(232,228,221,0.6);
+    overflow:hidden;
+  }
+  .gift-preview-header{padding:1rem 1.25rem;border-bottom:1px solid var(--gris-doux);display:flex;align-items:center;justify-content:space-between;}
+  .gift-preview-header h3{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;}
+
+  .gift-preview-box{
+    padding:2.5rem;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;min-height:350px;
+    background:var(--bleu-crepuscule);position:relative;overflow:hidden;
+  }
+  .gift-preview-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(207,160,68,0.1),transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(58,107,138,0.1),transparent 50%);}
+
+  .gp-envelope{
+    width:220px;height:160px;background:linear-gradient(135deg,rgba(207,160,68,0.15),rgba(180,90,60,0.1));
+    border-radius:16px;border:1.5px solid rgba(207,160,68,0.3);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    position:relative;z-index:2;backdrop-filter:blur(8px);
+    box-shadow:0 12px 40px rgba(0,0,0,0.2);
+    transition:transform 0.3s;cursor:pointer;
+  }
+  .gp-envelope:hover{transform:scale(1.03) translateY(-4px);}
+  .gp-envelope .gp-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:rgba(255,255,255,0.5);margin-bottom:0.5rem;}
+  .gp-envelope .gp-msg{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:500;color:var(--blanc);text-align:center;line-height:1.3;max-width:180px;}
+  .gp-envelope .gp-from{font-size:0.7rem;color:rgba(255,255,255,0.4);margin-top:0.75rem;}
+  .gp-music-note{position:absolute;bottom:1.5rem;right:1.5rem;z-index:2;display:flex;align-items:center;gap:0.4rem;color:rgba(255,255,255,0.35);font-size:0.68rem;}
+  .gp-music-note svg{width:14px;height:14px;}
+
+  /* Gift settings panel */
+  .gift-settings{display:flex;flex-direction:column;gap:1rem;}
+  .gs-card{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,0.6);overflow:hidden;}
+  .gs-card-header{padding:0.85rem 1.15rem;border-bottom:1px solid var(--gris-doux);display:flex;align-items:center;gap:0.5rem;}
+  .gs-card-header svg{width:16px;height:16px;color:var(--or-solaire);}
+  .gs-card-header h4{font-family:'Playfair Display',serif;font-size:0.92rem;font-weight:600;}
+  .gs-card-body{padding:1rem 1.15rem;}
+  .gs-field{margin-bottom:0.85rem;}
+  .gs-field:last-child{margin-bottom:0;}
+  .gs-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--gris-texte);margin-bottom:0.3rem;display:block;}
+  .gs-input{width:100%;padding:0.55rem 0.8rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;outline:none;transition:border-color 0.2s;}
+  .gs-input:focus{border-color:var(--bleu-ouvert);}
+  .gs-textarea{width:100%;padding:0.55rem 0.8rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;outline:none;resize:vertical;min-height:60px;}
+  .gs-select{width:100%;padding:0.55rem 2rem 0.55rem 0.8rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;outline:none;appearance:none;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;}
+
+  /* Music selector */
+  .music-options{display:flex;flex-direction:column;gap:0.4rem;}
+  .music-option{
+    display:flex;align-items:center;gap:0.65rem;padding:0.55rem 0.75rem;
+    border:1.5px solid var(--gris-doux);border-radius:8px;cursor:pointer;transition:all 0.2s;
+  }
+  .music-option:hover{border-color:var(--bleu-ouvert);}
+  .music-option.active{border-color:var(--or-solaire);background:rgba(207,160,68,0.04);}
+  .music-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--gris-doux);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .music-option.active .music-radio{border-color:var(--or-solaire);}
+  .music-option.active .music-radio::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--or-solaire);}
+  .music-name{font-size:0.8rem;font-weight:600;flex:1;}
+  .music-dur{font-size:0.68rem;color:var(--gris-texte);}
+  .music-play{width:26px;height:26px;border-radius:50%;background:var(--lin-clair);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-texte);transition:all 0.15s;}
+  .music-play:hover{background:var(--or-solaire);color:var(--blanc);}
+  .music-play svg{width:12px;height:12px;}
+
+  /* Animation selector */
+  .anim-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;}
+  .anim-option{
+    padding:0.75rem 0.5rem;border:1.5px solid var(--gris-doux);border-radius:8px;
+    text-align:center;cursor:pointer;transition:all 0.2s;
+  }
+  .anim-option:hover{border-color:var(--bleu-ouvert);}
+  .anim-option.active{border-color:var(--or-solaire);background:rgba(207,160,68,0.04);}
+  .anim-option .anim-icon{font-size:1.5rem;margin-bottom:0.25rem;}
+  .anim-option .anim-name{font-size:0.68rem;font-weight:600;}
+
+  /* ═══ TAB 3: DROITS & ACCÈS ═══ */
+  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+  .s-card{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,0.6);overflow:hidden;}
+  .s-card-header{padding:0.85rem 1.15rem;border-bottom:1px solid var(--gris-doux);font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;display:flex;align-items:center;gap:0.5rem;}
+  .s-card-header svg{width:16px;height:16px;color:var(--or-solaire);}
+  .s-card-body{padding:1rem 1.15rem;}
+
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0;border-bottom:1px solid rgba(232,228,221,0.3);}
+  .toggle-row:last-child{border-bottom:none;}
+  .toggle-label{font-size:0.82rem;font-weight:500;}
+  .toggle-desc{font-size:0.68rem;color:var(--gris-texte);}
+  .toggle-switch{
+    width:38px;height:22px;border-radius:12px;background:var(--gris-doux);
+    position:relative;cursor:pointer;transition:background 0.25s;flex-shrink:0;appearance:none;
+  }
+  .toggle-switch::after{
+    content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;
+    border-radius:50%;background:var(--blanc);box-shadow:0 1px 3px rgba(0,0,0,0.15);
+    transition:transform 0.25s;
+  }
+  .toggle-switch:checked{background:var(--succes);}
+  .toggle-switch:checked::after{transform:translateX(16px);}
+
+  .link-copy{
+    display:flex;align-items:center;gap:0.5rem;padding:0.65rem 0.85rem;
+    background:var(--lin-clair);border-radius:8px;margin-top:0.5rem;
+  }
+  .link-url{flex:1;font-size:0.75rem;font-family:'Courier New',monospace;color:var(--bleu-crepuscule);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .link-copy-btn{padding:0.3rem 0.6rem;border:1.5px solid var(--gris-doux);border-radius:6px;background:var(--blanc);font-family:'Raleway',sans-serif;font-size:0.68rem;font-weight:600;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:0.25rem;}
+  .link-copy-btn:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .link-copy-btn svg{width:12px;height:12px;}
+
+  /* ═══ TAB 4: ACTIVITÉ CLIENT ═══ */
+  .activity-grid{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;}
+  .act-card{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,0.6);overflow:hidden;}
+  .act-header{padding:0.85rem 1.15rem;border-bottom:1px solid var(--gris-doux);font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;}
+
+  .act-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;padding:1rem 1.15rem;border-bottom:1px solid var(--gris-doux);}
+  .act-stat{text-align:center;}
+  .act-stat-val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;}
+  .act-stat-label{font-size:0.65rem;color:var(--gris-texte);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;}
+
+  .act-timeline{padding:0.75rem 1.15rem;}
+  .act-item{display:flex;gap:0.65rem;padding:0.55rem 0;border-bottom:1px solid rgba(232,228,221,0.25);}
+  .act-item:last-child{border-bottom:none;}
+  .act-dot{width:8px;height:8px;border-radius:50%;margin-top:0.3rem;flex-shrink:0;}
+  .act-dot.view{background:var(--bleu-ouvert);}.act-dot.fav{background:var(--or-solaire);}.act-dot.dl{background:var(--succes);}.act-dot.comment{background:#8E6BAF;}
+  .act-text{font-size:0.78rem;line-height:1.4;flex:1;}
+  .act-text strong{font-weight:600;}
+  .act-time{font-size:0.65rem;color:var(--gris-texte);white-space:nowrap;}
+
+  /* Heatmap placeholder */
+  .heatmap{padding:1rem 1.15rem;}
+  .heatmap-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--gris-texte);margin-bottom:0.6rem;}
+  .heatmap-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0.4rem;}
+  .hm-cell{
+    aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;
+    font-size:0.6rem;font-weight:600;color:var(--blanc);position:relative;cursor:pointer;
+  }
+  .hm-cell.hot{background:rgba(180,90,60,0.7);}.hm-cell.warm{background:rgba(207,160,68,0.5);color:var(--bleu-crepuscule);}
+  .hm-cell.mild{background:rgba(58,107,138,0.3);color:var(--bleu-crepuscule);}.hm-cell.cold{background:rgba(232,228,221,0.6);color:var(--gris-texte);}
+
+  /* ═══ TAB 5: TARIFICATION ═══ */
+  .pricing-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+  .pr-card{background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,0.6);overflow:hidden;}
+  .pr-header{padding:0.85rem 1.15rem;border-bottom:1px solid var(--gris-doux);font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;display:flex;align-items:center;gap:0.5rem;}
+  .pr-header svg{width:16px;height:16px;color:var(--or-solaire);}
+  .pr-body{padding:1rem 1.15rem;}
+
+  .price-row{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0;border-bottom:1px solid rgba(232,228,221,0.3);}
+  .price-row:last-child{border-bottom:none;}
+  .price-product{font-size:0.82rem;font-weight:600;}
+  .price-format{font-size:0.7rem;color:var(--gris-texte);}
+  .price-input{width:70px;padding:0.35rem 0.5rem;border:1.5px solid var(--gris-doux);border-radius:6px;font-family:'Raleway',sans-serif;font-size:0.82rem;text-align:right;outline:none;}
+  .price-input:focus{border-color:var(--bleu-ouvert);}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Principal</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clients</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Commerce</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>Commandes</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Outils</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="user-avatar">CL</div><div><div class="user-name">Capucine Laurent</div><div class="user-role">Photographe</div></div></div>
+</nav>
+
+<div class="main">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="breadcrumb">
+      <a href="#">Galeries</a><span class="sep">›</span>
+      <span class="current">Famille Lefèvre — Mars 2026</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Prévisualiser</button>
+      <button class="btn btn-outline btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Partager</button>
+      <button class="btn btn-success btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Publier</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Gallery header -->
+    <div class="gallery-header">
+      <div class="gh-cover"></div>
+      <div class="gh-info">
+        <div class="gh-top">
+          <h1 class="gh-title">Famille Lefèvre — Mars 2026</h1>
+          <span class="gh-type-badge selection">Sélection</span>
+          <span class="gh-status published"><span class="dot"></span> Publiée</span>
+        </div>
+        <div class="gh-subtitle">Client : Marie Lefèvre · Séance famille au Parc de Rochegude · 15 mars 2026</div>
+        <div class="gh-meta">
+          <div class="gh-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> <strong>45</strong> photos</div>
+          <div class="gh-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> <strong>4</strong> dossiers</div>
+          <div class="gh-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> <strong>128</strong> vues</div>
+          <div class="gh-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> <strong>18</strong> favorites client</div>
+          <div class="gh-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> <strong>5</strong> commentaires</div>
+        </div>
+      </div>
+      <div class="gh-right">
+        <button class="btn btn-gold btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg> Importer</button>
+        <button class="btn btn-outline btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Modifier</button>
+      </div>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="tab-nav">
+      <button class="tn-btn active" onclick="showTab('photos',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Photos & Dossiers</button>
+      <button class="tn-btn" onclick="showTab('gift',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> Boîte cadeau</button>
+      <button class="tn-btn" onclick="showTab('rights',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Droits & Accès</button>
+      <button class="tn-btn" onclick="showTab('activity',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg> Activité client</button>
+      <button class="tn-btn" onclick="showTab('pricing',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Tarification</button>
+    </div>
+
+    <!-- ════ TAB 1: PHOTOS & DOSSIERS ════ -->
+    <div class="tab-panel visible" id="tab-photos">
+      <div class="photos-toolbar">
+        <div class="pt-left">
+          <div class="search-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" placeholder="Rechercher…"></div>
+          <select class="filter-sm"><option>Toutes les photos</option><option>Favorites client</option><option>Avec commentaires</option><option>Non vues</option></select>
+          <span class="sel-info">3 sélectionnées</span>
+        </div>
+        <div class="pt-right">
+          <button class="icon-btn" title="Drag & drop (réorganiser)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><circle cx="6" cy="9" r="1"/><circle cx="6" cy="15" r="1"/></svg></button>
+          <button class="icon-btn" title="Retouche rapide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="icon-btn" title="Déplacer vers dossier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="icon-btn danger" title="Supprimer" style="color:var(--gris-texte);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Folder tabs -->
+      <div class="folder-bar">
+        <div class="folder-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Toutes <span class="f-count">45</span></div>
+        <div class="folder-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Arrivée au parc <span class="f-count">8</span></div>
+        <div class="folder-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Jeux en famille <span class="f-count">15</span></div>
+        <div class="folder-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Portraits <span class="f-count">12</span></div>
+        <div class="folder-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Crépuscule <span class="f-count">10</span></div>
+        <button class="folder-add" title="Nouveau dossier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+      </div>
+
+      <!-- Photo grid -->
+      <div class="photo-grid">
+        <div class="photo-item ph-1"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check checked"></div><div class="pi-actions"><button class="pi-act" title="Retoucher"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><button class="pi-act" title="Agrandir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge fav">♥ Favorite</span></div><span class="pi-price">15 €</span></div></div></div>
+        <div class="photo-item ph-2"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge comment">💬 2</span></div><span class="pi-price">12 €</span></div></div></div>
+        <div class="photo-item ph-3"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check checked"></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge fav">♥ Favorite</span><span class="pi-badge selected">✓ Sélectionnée</span></div><span class="pi-price">18 €</span></div></div></div>
+        <div class="photo-item ph-4"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><span class="pi-price">12 €</span></div></div></div>
+        <div class="photo-item ph-5"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check checked"></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge fav">♥ Favorite</span></div><span class="pi-price">15 €</span></div></div></div>
+        <div class="photo-item ph-6"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge comment">💬 1</span></div><span class="pi-price">12 €</span></div></div></div>
+        <div class="photo-item ph-7"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><span class="pi-price">12 €</span></div></div></div>
+        <div class="photo-item ph-8"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge fav">♥ Favorite</span></div><span class="pi-price">15 €</span></div></div></div>
+        <div class="photo-item ph-9"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><span class="pi-price">18 €</span></div></div></div>
+        <div class="photo-item ph-10"><div class="pi-overlay"><div class="pi-overlay-top"><div class="pi-check"></div></div><div class="pi-overlay-bottom"><div class="pi-info"><span class="pi-badge comment">💬 2</span></div><span class="pi-price">12 €</span></div></div></div>
+      </div>
+    </div>
+
+    <!-- ════ TAB 2: BOÎTE CADEAU ════ -->
+    <div class="tab-panel" id="tab-gift">
+      <div class="gift-layout">
+        <div class="gift-preview">
+          <div class="gift-preview-header"><h3>Aperçu de l'ouverture</h3><button class="btn btn-outline btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Tester l'animation</button></div>
+          <div class="gift-preview-box">
+            <div class="gp-envelope">
+              <div class="gp-logo">Déclia</div>
+              <div class="gp-msg">Vos souvenirs vous attendent…</div>
+              <div class="gp-from">De la part de Capucine</div>
+            </div>
+            <div class="gp-music-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> River Flows in You</div>
+          </div>
+        </div>
+        <div class="gift-settings">
+          <div class="gs-card">
+            <div class="gs-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><h4>Message d'accueil</h4></div>
+            <div class="gs-card-body">
+              <div class="gs-field"><label class="gs-label">Titre</label><input class="gs-input" value="Vos souvenirs vous attendent…"></div>
+              <div class="gs-field"><label class="gs-label">Message personnalisé</label><textarea class="gs-textarea">Marie, voici les plus beaux moments de votre séance au Parc de Rochegude. J'espère qu'ils vous feront revivre cette belle journée en famille. — Capucine</textarea></div>
+              <div class="gs-field"><label class="gs-label">Signé par</label><input class="gs-input" value="Capucine · Fleur de Lumière"></div>
+            </div>
+          </div>
+          <div class="gs-card">
+            <div class="gs-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><h4>Musique d'ambiance</h4></div>
+            <div class="gs-card-body">
+              <div class="music-options">
+                <div class="music-option active"><div class="music-radio"></div><span class="music-name">River Flows in You</span><span class="music-dur">4:02</span><button class="music-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button></div>
+                <div class="music-option"><div class="music-radio"></div><span class="music-name">Sunset Memories</span><span class="music-dur">3:28</span><button class="music-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button></div>
+                <div class="music-option"><div class="music-radio"></div><span class="music-name">Golden Hour</span><span class="music-dur">3:45</span><button class="music-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></button></div>
+                <div class="music-option"><div class="music-radio"></div><span class="music-name">Aucune musique</span><span class="music-dur">—</span></div>
+              </div>
+              <div style="margin-top:0.75rem;"><label class="gs-label">Ou importer un fichier MP3</label><button class="btn btn-outline btn-sm" style="margin-top:0.25rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Importer</button></div>
+            </div>
+          </div>
+          <div class="gs-card">
+            <div class="gs-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><h4>Animation d'ouverture</h4></div>
+            <div class="gs-card-body">
+              <div class="anim-grid">
+                <div class="anim-option active"><div class="anim-icon">✉️</div><div class="anim-name">Enveloppe</div></div>
+                <div class="anim-option"><div class="anim-icon">🎁</div><div class="anim-name">Boîte cadeau</div></div>
+                <div class="anim-option"><div class="anim-icon">🌸</div><div class="anim-name">Pétales</div></div>
+                <div class="anim-option"><div class="anim-icon">✨</div><div class="anim-name">Étoiles</div></div>
+                <div class="anim-option"><div class="anim-icon">📷</div><div class="anim-name">Obturateur</div></div>
+                <div class="anim-option"><div class="anim-icon">🎞️</div><div class="anim-name">Pellicule</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB 3: DROITS & ACCÈS ════ -->
+    <div class="tab-panel" id="tab-rights">
+      <div class="settings-grid">
+        <div class="s-card">
+          <div class="s-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Protection & Accès</div>
+          <div class="s-card-body">
+            <div class="toggle-row"><div><div class="toggle-label">Mot de passe</div><div class="toggle-desc">Protéger l'accès par un mot de passe</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Lien privé</div><div class="toggle-desc">Accès uniquement via un lien unique</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Durée d'accès limitée</div><div class="toggle-desc">Expiration automatique de la galerie</div></div><input type="checkbox" class="toggle-switch"></div>
+            <div class="link-copy"><span class="link-url">https://app.declia.com/g/fam-lefevre-mars26-x8k2</span><button class="link-copy-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copier</button></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Droits du client</div>
+          <div class="s-card-body">
+            <div class="toggle-row"><div><div class="toggle-label">Téléchargement HD</div><div class="toggle-desc">Le client peut télécharger en haute résolution</div></div><input type="checkbox" class="toggle-switch"></div>
+            <div class="toggle-row"><div><div class="toggle-label">Téléchargement web</div><div class="toggle-desc">Téléchargement en résolution web uniquement</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Partage sur réseaux</div><div class="toggle-desc">Le client peut partager sur ses réseaux sociaux</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Commander des tirages</div><div class="toggle-desc">Boutique de tirages intégrée à la galerie</div></div><input type="checkbox" class="toggle-switch" checked></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> Interactions client</div>
+          <div class="s-card-body">
+            <div class="toggle-row"><div><div class="toggle-label">Favoris / Likes</div><div class="toggle-desc">Le client peut marquer ses photos préférées</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Commentaires</div><div class="toggle-desc">Le client peut commenter chaque photo</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Sélection de photos</div><div class="toggle-desc">Le client sélectionne ses photos pour la galerie finale</div></div><input type="checkbox" class="toggle-switch" checked></div>
+            <div class="toggle-row"><div><div class="toggle-label">Limite de sélection</div><div class="toggle-desc">Nombre max de photos sélectionnables</div></div><input type="number" value="25" style="width:60px;padding:0.35rem 0.5rem;border:1.5px solid var(--gris-doux);border-radius:6px;text-align:center;font-family:'Raleway',sans-serif;font-size:0.82rem;"></div>
+          </div>
+        </div>
+        <div class="s-card">
+          <div class="s-card-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Type de galerie</div>
+          <div class="s-card-body">
+            <div class="gs-field"><label class="gs-label">Statut de la galerie</label>
+              <select class="gs-select"><option>Galerie de sélection (le client choisit)</option><option>Galerie finale (livrée)</option><option>Brouillon (non visible)</option></select>
+            </div>
+            <div class="gs-field" style="margin-top:0.75rem;"><label class="gs-label">Convertir en galerie finale</label>
+              <div style="font-size:0.78rem;color:var(--gris-texte);margin-bottom:0.5rem;">Une fois la sélection validée par le client, convertissez cette galerie en galerie finale contenant uniquement les photos retenues.</div>
+              <button class="btn btn-outline btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/></svg> Créer la galerie finale depuis la sélection</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB 4: ACTIVITÉ CLIENT ════ -->
+    <div class="tab-panel" id="tab-activity">
+      <div class="activity-grid">
+        <div class="act-card">
+          <div class="act-header">Fil d'activité</div>
+          <div class="act-stats">
+            <div class="act-stat"><div class="act-stat-val">128</div><div class="act-stat-label">Vues</div></div>
+            <div class="act-stat"><div class="act-stat-val">18</div><div class="act-stat-label">Favorites</div></div>
+            <div class="act-stat"><div class="act-stat-val">12</div><div class="act-stat-label">Downloads</div></div>
+            <div class="act-stat"><div class="act-stat-val">5</div><div class="act-stat-label">Commentaires</div></div>
+          </div>
+          <div class="act-timeline">
+            <div class="act-item"><div class="act-dot fav"></div><div class="act-text"><strong>Marie</strong> a ajouté la photo #12 en favorite</div><div class="act-time">Il y a 2h</div></div>
+            <div class="act-item"><div class="act-dot comment"></div><div class="act-text"><strong>Marie</strong> a commenté la photo #08 : « Celle-ci est magnifique, on la sent vraiment naturelle »</div><div class="act-time">Il y a 3h</div></div>
+            <div class="act-item"><div class="act-dot view"></div><div class="act-text"><strong>Marie</strong> a consulté la galerie (14 photos vues)</div><div class="act-time">Il y a 3h</div></div>
+            <div class="act-item"><div class="act-dot dl"></div><div class="act-text"><strong>Marie</strong> a téléchargé 3 photos (web)</div><div class="act-time">Hier 19h</div></div>
+            <div class="act-item"><div class="act-dot fav"></div><div class="act-text"><strong>Marie</strong> a ajouté 5 photos en favorites</div><div class="act-time">Hier 18h</div></div>
+            <div class="act-item"><div class="act-dot view"></div><div class="act-text"><strong>Marie</strong> a ouvert la boîte cadeau pour la 1ère fois</div><div class="act-time">Hier 17h30</div></div>
+            <div class="act-item"><div class="act-dot comment"></div><div class="act-text"><strong>Marie</strong> a commenté la photo #03 : « J'adore le crépuscule en arrière-plan ! »</div><div class="act-time">16 mars</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+          <div class="act-card">
+            <div class="act-header">Photos les plus vues</div>
+            <div class="heatmap">
+              <div class="heatmap-title">Engagement par photo (top 10)</div>
+              <div class="heatmap-grid">
+                <div class="hm-cell hot">Photo #12<br>42 vues</div>
+                <div class="hm-cell hot">Photo #08<br>38 vues</div>
+                <div class="hm-cell warm">Photo #03<br>28 vues</div>
+                <div class="hm-cell warm">Photo #15<br>22 vues</div>
+                <div class="hm-cell mild">Photo #21<br>15 vues</div>
+                <div class="hm-cell mild">Photo #07<br>12 vues</div>
+                <div class="hm-cell mild">Photo #33<br>10 vues</div>
+                <div class="hm-cell cold">Photo #41<br>6 vues</div>
+                <div class="hm-cell cold">Photo #18<br>4 vues</div>
+                <div class="hm-cell cold">Photo #29<br>2 vues</div>
+              </div>
+            </div>
+          </div>
+          <div class="act-card">
+            <div class="act-header">Sélection du client</div>
+            <div style="padding:1rem 1.15rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                <span style="font-size:0.82rem;font-weight:600;">18 / 25 photos sélectionnées</span>
+                <span style="font-size:0.72rem;color:var(--or-solaire);font-weight:600;">72% du quota</span>
+              </div>
+              <div style="height:8px;background:var(--lin-clair);border-radius:4px;overflow:hidden;margin-bottom:0.75rem;">
+                <div style="width:72%;height:100%;background:var(--or-solaire);border-radius:4px;"></div>
+              </div>
+              <div style="font-size:0.75rem;color:var(--gris-texte);">La sélection est en cours. Le client peut encore ajouter 7 photos.</div>
+              <button class="btn btn-outline btn-sm" style="margin-top:0.75rem;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Relancer le client</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ TAB 5: TARIFICATION ════ -->
+    <div class="tab-panel" id="tab-pricing">
+      <div class="pricing-layout">
+        <div class="pr-card">
+          <div class="pr-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Tirages photo</div>
+          <div class="pr-body">
+            <div class="price-row"><div><div class="price-product">Tirage 10×15 cm</div><div class="price-format">Mat ou brillant</div></div><input class="price-input" value="5 €"></div>
+            <div class="price-row"><div><div class="price-product">Tirage 15×20 cm</div><div class="price-format">Mat ou brillant</div></div><input class="price-input" value="8 €"></div>
+            <div class="price-row"><div><div class="price-product">Tirage 20×30 cm</div><div class="price-format">Mat ou brillant</div></div><input class="price-input" value="12 €"></div>
+            <div class="price-row"><div><div class="price-product">Tirage 30×40 cm</div><div class="price-format">Mat ou brillant</div></div><input class="price-input" value="18 €"></div>
+            <div class="price-row"><div><div class="price-product">Tirage 40×60 cm</div><div class="price-format">Premium mat</div></div><input class="price-input" value="28 €"></div>
+          </div>
+        </div>
+        <div class="pr-card">
+          <div class="pr-header"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Produits premium</div>
+          <div class="pr-body">
+            <div class="price-row"><div><div class="price-product">Toile canvas</div><div class="price-format">40×60 cm, châssis bois</div></div><input class="price-input" value="65 €"></div>
+            <div class="price-row"><div><div class="price-product">Cadre bois naturel</div><div class="price-format">30×40 cm, verre anti-reflet</div></div><input class="price-input" value="35 €"></div>
+            <div class="price-row"><div><div class="price-product">Cadre bois noir</div><div class="price-format">30×40 cm, verre anti-reflet</div></div><input class="price-input" value="35 €"></div>
+            <div class="price-row"><div><div class="price-product">Photo HD numérique</div><div class="price-format">Fichier haute résolution</div></div><input class="price-input" value="15 €"></div>
+            <div class="price-row"><div><div class="price-product">Pack complet HD</div><div class="price-format">Toutes les photos de la galerie</div></div><input class="price-input" value="120 €"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('visible'));
+  document.querySelectorAll('.tn-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('visible');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

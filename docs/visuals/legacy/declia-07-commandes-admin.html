@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Commandes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bleu-crepuscule:#1E2A3A;--terracotta:#B45A3C;--or-solaire:#CFA044;--bleu-ouvert:#3A6B8A;
+    --lin-clair:#F6F3ED;--blanc:#FFFFFF;--gris-doux:#E8E4DD;--gris-texte:#6B6560;
+    --erreur:#C0392B;--succes:#27AE60;--warning:#E67E22;--sidebar-w:260px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Raleway',sans-serif;background:var(--lin-clair);color:var(--bleu-crepuscule);display:flex;min-height:100vh;}
+
+  /* ═══ SIDEBAR ═══ */
+  .sidebar{width:var(--sidebar-w);background:var(--bleu-crepuscule);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto;}
+  .sidebar-brand{padding:1.5rem 1.5rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .sidebar-brand .logo{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:600;color:var(--blanc);display:flex;align-items:center;gap:0.5rem;}
+  .sidebar-brand .logo svg{width:28px;height:28px;}
+  .badge-beta{font-family:'Raleway',sans-serif;font-size:0.55rem;font-weight:700;background:rgba(207,160,68,0.2);color:var(--or-solaire);padding:0.15rem 0.45rem;border-radius:10px;text-transform:uppercase;letter-spacing:0.1em;}
+  .sidebar-nav{padding:1rem 0;flex:1;}
+  .nav-section{padding:0 1rem;margin-bottom:0.5rem;}
+  .nav-section-title{font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgba(255,255,255,0.25);padding:0.75rem 0.5rem 0.4rem;}
+  .nav-item{display:flex;align-items:center;gap:0.7rem;padding:0.65rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.5);text-decoration:none;transition:all 0.2s;cursor:pointer;margin-bottom:2px;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.8);}
+  .nav-item.active{background:rgba(58,107,138,0.25);color:var(--blanc);}
+  .nav-item.active svg{opacity:1;color:var(--or-solaire);}
+  .nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:0.5;}
+  .nav-badge{margin-left:auto;background:var(--terracotta);color:var(--blanc);font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:10px;}
+  .sidebar-footer{padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:0.75rem;}
+  .sidebar-footer .user-avatar{width:36px;height:36px;border-radius:50%;background:var(--terracotta);display:flex;align-items:center;justify-content:center;color:var(--blanc);font-weight:700;font-size:0.8rem;}
+  .sidebar-footer .user-name{font-size:0.8rem;font-weight:600;color:var(--blanc);}
+  .sidebar-footer .user-role{font-size:0.68rem;color:rgba(255,255,255,0.4);}
+
+  /* ═══ MAIN ═══ */
+  .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+  .topbar{background:var(--blanc);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gris-doux);position:sticky;top:0;z-index:50;}
+  .topbar-left h1{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;}
+  .topbar-left p{font-size:0.8rem;color:var(--gris-texte);margin-top:0.1rem;}
+  .topbar-actions{display:flex;align-items:center;gap:0.6rem;}
+  .btn{padding:0.6rem 1.15rem;border:none;border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:0.4rem;}
+  .btn svg{width:15px;height:15px;}
+  .btn-primary{background:var(--terracotta);color:var(--blanc);}
+  .btn-primary:hover{background:#9A4C32;transform:translateY(-1px);box-shadow:0 4px 12px rgba(180,90,60,0.25);}
+  .btn-outline{background:var(--blanc);color:var(--bleu-crepuscule);border:1.5px solid var(--gris-doux);}
+  .btn-outline:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .content{padding:1.5rem 2rem;flex:1;animation:fadeIn 0.4s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ═══ STATS ═══ */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+  .stat-card{background:var(--blanc);border-radius:12px;padding:1.1rem 1.3rem;border:1px solid rgba(232,228,221,0.6);display:flex;align-items:flex-start;gap:0.85rem;animation:fadeIn 0.4s ease both;}
+  .stat-card:nth-child(1){animation-delay:0.03s}.stat-card:nth-child(2){animation-delay:0.08s}
+  .stat-card:nth-child(3){animation-delay:0.13s}.stat-card:nth-child(4){animation-delay:0.18s}
+  .stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .stat-icon svg{width:18px;height:18px;}
+  .stat-icon.blue{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}
+  .stat-icon.gold{background:rgba(207,160,68,0.12);color:var(--or-solaire);}
+  .stat-icon.terra{background:rgba(180,90,60,0.1);color:var(--terracotta);}
+  .stat-icon.green{background:rgba(39,174,96,0.1);color:var(--succes);}
+  .stat-icon.orange{background:rgba(230,126,34,0.1);color:var(--warning);}
+  .stat-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--gris-texte);margin-bottom:0.25rem;}
+  .stat-value{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:600;line-height:1;}
+  .stat-trend{font-size:0.7rem;font-weight:600;margin-top:0.25rem;color:var(--succes);}
+
+  /* ═══ PIPELINE TABS ═══ */
+  .pipeline{display:flex;gap:0;margin-bottom:1.25rem;border-bottom:2px solid var(--gris-doux);overflow-x:auto;}
+  .pipe-tab{padding:0.7rem 1.3rem;border:none;background:transparent;font-family:'Raleway',sans-serif;font-size:0.82rem;font-weight:600;color:var(--gris-texte);cursor:pointer;position:relative;transition:color 0.2s;white-space:nowrap;display:flex;align-items:center;gap:0.4rem;}
+  .pipe-tab.active{color:var(--terracotta);}
+  .pipe-tab.active::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--terracotta);border-radius:2px 2px 0 0;}
+  .pipe-tab .pipe-count{padding:0.1rem 0.45rem;border-radius:10px;font-size:0.65rem;font-weight:700;min-width:20px;text-align:center;}
+  .pipe-tab.active .pipe-count{background:var(--terracotta);color:var(--blanc);}
+  .pipe-tab:not(.active) .pipe-count{background:var(--lin-clair);color:var(--gris-texte);}
+
+  /* ═══ FILTER BAR ═══ */
+  .filter-bar{background:var(--blanc);border-radius:12px;padding:0.85rem 1.15rem;display:flex;align-items:center;gap:0.65rem;margin-bottom:1rem;border:1px solid rgba(232,228,221,0.6);flex-wrap:wrap;}
+  .search-box{flex:1;min-width:200px;position:relative;}
+  .search-box svg{position:absolute;left:0.8rem;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--gris-texte);opacity:0.4;}
+  .search-box input{width:100%;padding:0.6rem 1rem 0.6rem 2.3rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.82rem;color:var(--bleu-crepuscule);outline:none;transition:border-color 0.2s;}
+  .search-box input:focus{border-color:var(--bleu-ouvert);}
+  .search-box input::placeholder{color:#B8B3AC;font-weight:300;}
+  .filter-select{padding:0.6rem 2rem 0.6rem 0.85rem;border:1.5px solid var(--gris-doux);border-radius:8px;font-family:'Raleway',sans-serif;font-size:0.8rem;color:var(--bleu-crepuscule);outline:none;appearance:none;background:var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;cursor:pointer;}
+
+  /* ═══ ORDER CARDS ═══ */
+  .orders-list{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem;}
+
+  .order-card{
+    background:var(--blanc);border-radius:12px;border:1px solid rgba(232,228,221,0.6);
+    padding:1.15rem 1.5rem;display:grid;
+    grid-template-columns:auto 1fr auto auto auto auto;
+    align-items:center;gap:1.25rem;
+    transition:box-shadow 0.2s;cursor:pointer;
+    animation:fadeIn 0.35s ease both;
+  }
+  .order-card:hover{box-shadow:0 4px 16px rgba(30,42,58,0.06);}
+  .order-card:nth-child(1){animation-delay:0.03s}
+  .order-card:nth-child(2){animation-delay:0.06s}
+  .order-card:nth-child(3){animation-delay:0.09s}
+  .order-card:nth-child(4){animation-delay:0.12s}
+  .order-card:nth-child(5){animation-delay:0.15s}
+  .order-card:nth-child(6){animation-delay:0.18s}
+  .order-card:nth-child(7){animation-delay:0.21s}
+
+  /* Order number */
+  .order-num{
+    font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;
+    color:var(--bleu-crepuscule);white-space:nowrap;
+  }
+  .order-num .order-date{font-family:'Raleway',sans-serif;font-size:0.7rem;color:var(--gris-texte);font-weight:400;display:block;margin-top:0.15rem;}
+
+  /* Client info */
+  .order-client{display:flex;align-items:center;gap:0.65rem;}
+  .oc-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.72rem;color:var(--blanc);flex-shrink:0;}
+  .oc-name{font-weight:600;font-size:0.85rem;line-height:1.2;}
+  .oc-email{font-size:0.72rem;color:var(--gris-texte);font-weight:300;}
+
+  /* Items summary */
+  .order-items{display:flex;flex-direction:column;gap:0.2rem;}
+  .oi-line{display:flex;align-items:center;gap:0.4rem;font-size:0.78rem;}
+  .oi-line svg{width:13px;height:13px;opacity:0.4;flex-shrink:0;}
+  .oi-type{
+    display:inline-block;padding:0.1rem 0.45rem;border-radius:4px;
+    font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;
+  }
+  .oi-type.tirage{background:rgba(58,107,138,0.08);color:var(--bleu-ouvert);}
+  .oi-type.album{background:rgba(180,90,60,0.08);color:var(--terracotta);}
+  .oi-type.digital{background:rgba(207,160,68,0.1);color:var(--or-solaire);}
+  .oi-type.cadre{background:rgba(107,127,90,0.1);color:#6B7F5A;}
+  .oi-type.toile{background:rgba(142,107,175,0.08);color:#8E6BAF;}
+
+  /* Amount */
+  .order-amount{text-align:right;}
+  .oa-value{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:600;}
+  .oa-method{font-size:0.68rem;color:var(--gris-texte);}
+
+  /* Status */
+  .order-status{
+    display:inline-flex;align-items:center;gap:0.3rem;
+    padding:0.3rem 0.75rem;border-radius:20px;
+    font-size:0.72rem;font-weight:600;white-space:nowrap;
+  }
+  .order-status .dot{width:7px;height:7px;border-radius:50%;}
+
+  .os-pending{background:rgba(230,126,34,0.1);color:var(--warning);}
+  .os-pending .dot{background:var(--warning);}
+  .os-confirmed{background:rgba(58,107,138,0.1);color:var(--bleu-ouvert);}
+  .os-confirmed .dot{background:var(--bleu-ouvert);}
+  .os-production{background:rgba(142,107,175,0.1);color:#8E6BAF;}
+  .os-production .dot{background:#8E6BAF;}
+  .os-shipped{background:rgba(207,160,68,0.1);color:var(--or-solaire);}
+  .os-shipped .dot{background:var(--or-solaire);}
+  .os-delivered{background:rgba(39,174,96,0.1);color:var(--succes);}
+  .os-delivered .dot{background:var(--succes);}
+  .os-cancelled{background:rgba(192,57,43,0.08);color:var(--erreur);}
+  .os-cancelled .dot{background:var(--erreur);}
+
+  /* Actions */
+  .order-actions{display:flex;gap:0.3rem;}
+  .oa-btn{width:32px;height:32px;border:none;border-radius:6px;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gris-texte);transition:all 0.15s;}
+  .oa-btn:hover{background:var(--lin-clair);color:var(--bleu-ouvert);}
+  .oa-btn.danger:hover{color:var(--erreur);background:rgba(192,57,43,0.06);}
+  .oa-btn svg{width:14px;height:14px;}
+
+  /* ═══ PROGRESS TRACKER (inside order detail) ═══ */
+  .progress-tracker{
+    display:flex;align-items:center;gap:0;
+    padding:0.75rem 0;
+  }
+  .pt-step{display:flex;align-items:center;gap:0.35rem;font-size:0.68rem;font-weight:600;white-space:nowrap;}
+  .pt-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;border:2px solid var(--gris-doux);color:var(--gris-texte);background:var(--blanc);}
+  .pt-dot.done{background:var(--succes);border-color:var(--succes);color:var(--blanc);}
+  .pt-dot.current{background:var(--bleu-ouvert);border-color:var(--bleu-ouvert);color:var(--blanc);}
+  .pt-line{flex:1;height:2px;background:var(--gris-doux);min-width:20px;margin:0 0.15rem;}
+  .pt-line.done{background:var(--succes);}
+
+  /* ═══ EXPANDED ORDER DETAIL ═══ */
+  .order-detail{
+    background:var(--blanc);border-radius:12px;border:1.5px solid var(--bleu-ouvert);
+    padding:1.5rem;margin-bottom:0.75rem;
+    animation:fadeIn 0.3s ease;
+  }
+  .od-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;}
+  .od-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;}
+  .od-subtitle{font-size:0.8rem;color:var(--gris-texte);margin-top:0.15rem;}
+
+  .od-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+  .od-section-title{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--or-solaire);margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;}
+  .od-section-title::after{content:'';flex:1;height:1px;background:var(--gris-doux);}
+
+  .od-field{margin-bottom:0.5rem;}
+  .od-field-label{font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--gris-texte);}
+  .od-field-value{font-size:0.85rem;font-weight:500;margin-top:0.1rem;}
+
+  .od-items-table{width:100%;border-collapse:collapse;margin-bottom:1rem;}
+  .od-items-table th{padding:0.6rem 0.75rem;text-align:left;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gris-texte);border-bottom:1.5px solid var(--gris-doux);background:var(--lin-clair);}
+  .od-items-table td{padding:0.65rem 0.75rem;font-size:0.82rem;border-bottom:1px solid rgba(232,228,221,0.4);}
+  .od-items-table tr:last-child td{border-bottom:none;}
+  .od-items-table .total-row td{font-weight:700;border-top:1.5px solid var(--gris-doux);padding-top:0.75rem;}
+
+  .od-actions{display:flex;gap:0.5rem;justify-content:flex-end;padding-top:1rem;border-top:1px solid var(--gris-doux);}
+
+  /* Pagination */
+  .pagination-bar{display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:var(--gris-texte);}
+  .page-btns{display:flex;gap:0.3rem;}
+  .pg-btn{width:32px;height:32px;border:1.5px solid var(--gris-doux);border-radius:6px;background:var(--blanc);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Raleway',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gris-texte);transition:all 0.2s;}
+  .pg-btn:hover{border-color:var(--bleu-ouvert);color:var(--bleu-ouvert);}
+  .pg-btn.active{background:var(--bleu-ouvert);border-color:var(--bleu-ouvert);color:var(--blanc);}
+  .pg-btn svg{width:14px;height:14px;}
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar">
+  <div class="sidebar-brand"><div class="logo"><svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>Déclia <span class="badge-beta">Bêta</span></div></div>
+  <div class="sidebar-nav">
+    <div class="nav-section"><div class="nav-section-title">Principal</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients<span class="nav-badge">47</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Commerce</div>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Commandes<span class="nav-badge">3</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Facturation</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section"><div class="nav-section-title">Outils</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09c.003.658.396 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer"><div class="user-avatar">CL</div><div><div class="user-name">Capucine Laurent</div><div class="user-role">Photographe</div></div></div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Commandes</h1><p>23 commandes · 3 en attente</p></div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter</button>
+      <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouvelle commande</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></div>
+        <div><div class="stat-label">Total commandes</div><div class="stat-value">23</div><div class="stat-trend">+6 ce mois</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="stat-label">En attente</div><div class="stat-value">3</div><div class="stat-trend" style="color:var(--warning);">À traiter</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="stat-label">CA commandes</div><div class="stat-value">3 840 €</div><div class="stat-trend">+22% vs N-1</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><div class="stat-label">Livrées ce mois</div><div class="stat-value">8</div><div class="stat-trend">100% à l'heure</div></div>
+      </div>
+    </div>
+
+    <!-- Pipeline tabs -->
+    <div class="pipeline">
+      <button class="pipe-tab active">Toutes <span class="pipe-count">23</span></button>
+      <button class="pipe-tab">En attente <span class="pipe-count">3</span></button>
+      <button class="pipe-tab">Confirmées <span class="pipe-count">2</span></button>
+      <button class="pipe-tab">En production <span class="pipe-count">4</span></button>
+      <button class="pipe-tab">Expédiées <span class="pipe-count">2</span></button>
+      <button class="pipe-tab">Livrées <span class="pipe-count">11</span></button>
+      <button class="pipe-tab">Annulées <span class="pipe-count">1</span></button>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="filter-bar">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Rechercher une commande (n°, client, produit)…">
+      </div>
+      <select class="filter-select">
+        <option>Tous les types</option>
+        <option>Tirages</option>
+        <option>Albums</option>
+        <option>Téléchargements</option>
+        <option>Cadres</option>
+        <option>Toiles</option>
+      </select>
+      <select class="filter-select">
+        <option>Plus récentes</option>
+        <option>Plus anciennes</option>
+        <option>Montant ↓</option>
+        <option>Montant ↑</option>
+      </select>
+    </div>
+
+    <!-- Expanded detail (example for first order) -->
+    <div class="order-detail">
+      <div class="od-header">
+        <div>
+          <div class="od-title">Commande #CMD-2026-042</div>
+          <div class="od-subtitle">Passée le 18 mars 2026 à 14h32 · Marie Lefèvre</div>
+        </div>
+        <span class="order-status os-pending"><span class="dot"></span> En attente</span>
+      </div>
+
+      <!-- Progress tracker -->
+      <div class="progress-tracker">
+        <div class="pt-step"><div class="pt-dot done">✓</div> Passée</div>
+        <div class="pt-line done"></div>
+        <div class="pt-step"><div class="pt-dot current">2</div> Validation</div>
+        <div class="pt-line"></div>
+        <div class="pt-step"><div class="pt-dot">3</div> Production</div>
+        <div class="pt-line"></div>
+        <div class="pt-step"><div class="pt-dot">4</div> Expédition</div>
+        <div class="pt-line"></div>
+        <div class="pt-step"><div class="pt-dot">5</div> Livrée</div>
+      </div>
+
+      <div class="od-grid">
+        <div>
+          <div class="od-section-title">Client</div>
+          <div class="od-field"><div class="od-field-label">Nom</div><div class="od-field-value">Marie Lefèvre</div></div>
+          <div class="od-field"><div class="od-field-label">E-mail</div><div class="od-field-value">marie.lefevre@mail.com</div></div>
+          <div class="od-field"><div class="od-field-label">Téléphone</div><div class="od-field-value">06 12 34 56 78</div></div>
+        </div>
+        <div>
+          <div class="od-section-title">Livraison</div>
+          <div class="od-field"><div class="od-field-label">Mode</div><div class="od-field-value">Retrait en main propre</div></div>
+          <div class="od-field"><div class="od-field-label">Lieu</div><div class="od-field-value">Studio, Albi</div></div>
+          <div class="od-field"><div class="od-field-label">Date souhaitée</div><div class="od-field-value">28 mars 2026</div></div>
+        </div>
+        <div>
+          <div class="od-section-title">Paiement</div>
+          <div class="od-field"><div class="od-field-label">Méthode</div><div class="od-field-value">Carte bancaire</div></div>
+          <div class="od-field"><div class="od-field-label">Statut</div><div class="od-field-value" style="color:var(--succes);font-weight:600;">Payé</div></div>
+          <div class="od-field"><div class="od-field-label">Galerie source</div><div class="od-field-value">Famille Lefèvre — Mars</div></div>
+        </div>
+      </div>
+
+      <table class="od-items-table">
+        <thead><tr><th>Produit</th><th>Format</th><th>Qté</th><th>Prix unit.</th><th style="text-align:right">Total</th></tr></thead>
+        <tbody>
+          <tr><td><span class="oi-type tirage">Tirage</span> Photo famille #12</td><td>20×30 cm mat</td><td>2</td><td>12,00 €</td><td style="text-align:right">24,00 €</td></tr>
+          <tr><td><span class="oi-type tirage">Tirage</span> Photo famille #08</td><td>30×40 cm brillant</td><td>1</td><td>18,00 €</td><td style="text-align:right">18,00 €</td></tr>
+          <tr><td><span class="oi-type cadre">Cadre</span> Cadre bois naturel</td><td>30×40 cm</td><td>1</td><td>35,00 €</td><td style="text-align:right">35,00 €</td></tr>
+          <tr><td><span class="oi-type digital">Digital</span> Pack 8 photos HD</td><td>—</td><td>1</td><td>45,00 €</td><td style="text-align:right">45,00 €</td></tr>
+          <tr class="total-row"><td colspan="4">Total commande</td><td style="text-align:right;font-family:'Playfair Display',serif;font-size:1.1rem;">122,00 €</td></tr>
+        </tbody>
+      </table>
+
+      <div class="od-actions">
+        <button class="btn btn-outline" style="color:var(--erreur);border-color:rgba(192,57,43,0.3);">Refuser</button>
+        <button class="btn btn-outline">Envoyer un message</button>
+        <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Valider la commande</button>
+      </div>
+    </div>
+
+    <!-- Order list -->
+    <div class="orders-list">
+
+      <div class="order-card">
+        <div class="order-num">#CMD-041<span class="order-date">17 mars 2026</span></div>
+        <div class="order-client"><div class="oc-avatar" style="background:var(--terracotta);">PD</div><div><div class="oc-name">Pierre Durand</div><div class="oc-email">p.durand@outlook.fr</div></div></div>
+        <div class="order-items">
+          <div class="oi-line"><span class="oi-type tirage">Tirages</span> 5 × 15×20 cm</div>
+          <div class="oi-line"><span class="oi-type album">Album</span> Album 30 pages</div>
+        </div>
+        <div class="order-amount"><div class="oa-value">285 €</div><div class="oa-method">CB · Payé</div></div>
+        <span class="order-status os-confirmed"><span class="dot"></span> Confirmée</span>
+        <div class="order-actions">
+          <button class="oa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="oa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="oa-btn" title="Facture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-num">#CMD-040<span class="order-date">15 mars 2026</span></div>
+        <div class="order-client"><div class="oc-avatar" style="background:var(--or-solaire);color:var(--bleu-crepuscule);">SB</div><div><div class="oc-name">Sophie Bernard</div><div class="oc-email">sophie.b@gmail.com</div></div></div>
+        <div class="order-items">
+          <div class="oi-line"><span class="oi-type tirage">Tirages</span> 8 × formats variés</div>
+        </div>
+        <div class="order-amount"><div class="oa-value">156 €</div><div class="oa-method">CB · Payé</div></div>
+        <span class="order-status os-production"><span class="dot"></span> En production</span>
+        <div class="order-actions">
+          <button class="oa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="oa-btn" title="Modifier"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="oa-btn" title="Facture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-num">#CMD-039<span class="order-date">12 mars 2026</span></div>
+        <div class="order-client"><div class="oc-avatar" style="background:#6B7F5A;">JM</div><div><div class="oc-name">Julie Martin</div><div class="oc-email">j.martin@free.fr</div></div></div>
+        <div class="order-items">
+          <div class="oi-line"><span class="oi-type toile">Toile</span> 60×40 cm</div>
+          <div class="oi-line"><span class="oi-type digital">Digital</span> Pack complet HD</div>
+        </div>
+        <div class="order-amount"><div class="oa-value">195 €</div><div class="oa-method">Virement · Payé</div></div>
+        <span class="order-status os-shipped"><span class="dot"></span> Expédiée</span>
+        <div class="order-actions">
+          <button class="oa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="oa-btn" title="Suivi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg></button>
+          <button class="oa-btn" title="Facture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-num">#CMD-038<span class="order-date">10 mars 2026</span></div>
+        <div class="order-client"><div class="oc-avatar" style="background:var(--bleu-crepuscule);">AR</div><div><div class="oc-name">Antoine Roux</div><div class="oc-email">antoine.roux@yahoo.fr</div></div></div>
+        <div class="order-items">
+          <div class="oi-line"><span class="oi-type digital">Digital</span> 12 photos HD</div>
+        </div>
+        <div class="order-amount"><div class="oa-value">65 €</div><div class="oa-method">CB · Payé</div></div>
+        <span class="order-status os-delivered"><span class="dot"></span> Livrée</span>
+        <div class="order-actions">
+          <button class="oa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="oa-btn" title="Facture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-num">#CMD-037<span class="order-date">8 mars 2026</span></div>
+        <div class="order-client"><div class="oc-avatar" style="background:var(--bleu-ouvert);">ML</div><div><div class="oc-name">Marie Lefèvre</div><div class="oc-email">marie.lefevre@mail.com</div></div></div>
+        <div class="order-items">
+          <div class="oi-line"><span class="oi-type album">Album</span> Album prestige 40 pages</div>
+          <div class="oi-line"><span class="oi-type tirage">Tirages</span> 10 × 20×30</div>
+        </div>
+        <div class="order-amount"><div class="oa-value">380 €</div><div class="oa-method">CB · Payé</div></div>
+        <span class="order-status os-delivered"><span class="dot"></span> Livrée</span>
+        <div class="order-actions">
+          <button class="oa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="oa-btn" title="Facture"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+        </div>
+      </div>
+
+      <div class="order-card" style="opacity:0.6;">
+        <div class="order-num">#CMD-035<span class="order-date">2 mars 2026</span></div>
+        <div class="order-client"><div class="oc-avatar" style="background:#8E6BAF;">LG</div><div><div class="oc-name">Léa Garnier</div><div class="oc-email">lea.garnier@laposte.net</div></div></div>
+        <div class="order-items">
+          <div class="oi-line"><span class="oi-type tirage">Tirages</span> 3 × 10×15</div>
+        </div>
+        <div class="order-amount"><div class="oa-value">18 €</div><div class="oa-method" style="color:var(--erreur);">Remboursé</div></div>
+        <span class="order-status os-cancelled"><span class="dot"></span> Annulée</span>
+        <div class="order-actions">
+          <button class="oa-btn" title="Voir"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-bar">
+      <span>Affichage 1–7 sur 23 commandes</span>
+      <div class="page-btns">
+        <button class="pg-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="pg-btn active">1</button>
+        <button class="pg-btn">2</button>
+        <button class="pg-btn">3</button>
+        <button class="pg-btn">4</button>
+        <button class="pg-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

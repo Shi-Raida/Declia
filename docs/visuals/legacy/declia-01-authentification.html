@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bleu-crepuscule: #1E2A3A;
+    --terracotta: #B45A3C;
+    --or-solaire: #CFA044;
+    --bleu-ouvert: #3A6B8A;
+    --lin-clair: #F6F3ED;
+    --blanc: #FFFFFF;
+    --gris-doux: #E8E4DD;
+    --gris-texte: #6B6560;
+    --erreur: #C0392B;
+    --succes: #27AE60;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--lin-clair);
+    min-height: 100vh;
+    display: flex;
+    color: var(--bleu-crepuscule);
+  }
+
+  /* ─── LEFT PANEL: VISUAL ─── */
+  .auth-visual {
+    flex: 1;
+    position: relative;
+    background: var(--bleu-crepuscule);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .auth-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(207,160,68,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(58,107,138,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(180,90,60,0.08) 0%, transparent 70%);
+  }
+
+  .auth-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+
+  .visual-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 3rem;
+    max-width: 480px;
+  }
+
+  .visual-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2.5rem;
+    position: relative;
+  }
+
+  .visual-logo svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .visual-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 500;
+    color: var(--blanc);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .visual-content h1 em {
+    font-style: italic;
+    color: var(--or-solaire);
+  }
+
+  .visual-content p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .visual-features {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+    padding-left: 2rem;
+  }
+
+  .visual-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
+  .visual-feature .icon-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--or-solaire);
+    flex-shrink: 0;
+  }
+
+  /* ─── RIGHT PANEL: FORM ─── */
+  .auth-form-panel {
+    width: 560px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 4rem;
+    background: var(--blanc);
+    position: relative;
+  }
+
+  .auth-form-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--or-solaire) 0%, var(--terracotta) 50%, var(--bleu-ouvert) 100%);
+  }
+
+  .form-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .form-header .brand-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--bleu-crepuscule);
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  .form-header .brand-sub {
+    font-size: 0.75rem;
+    color: var(--gris-texte);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 500;
+  }
+
+  /* ─── SWITCH CLIENT / PHOTOGRAPHE ─── */
+  .auth-switch {
+    display: flex;
+    background: var(--lin-clair);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .auth-switch-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background: var(--blanc);
+    border-radius: 9px;
+    box-shadow: 0 2px 8px rgba(30,42,58,0.08);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .auth-switch.photographe .auth-switch-indicator {
+    transform: translateX(100%);
+  }
+
+  .auth-switch-btn {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    border: none;
+    background: transparent;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--gris-texte);
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s ease;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .auth-switch-btn.active {
+    color: var(--bleu-crepuscule);
+    font-weight: 600;
+  }
+
+  .auth-switch-btn svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+  }
+
+  .auth-switch-btn.active svg {
+    opacity: 1;
+  }
+
+  /* ─── FORM AREA ─── */
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--bleu-crepuscule);
+    margin-bottom: 0.5rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.875rem;
+    color: var(--gris-texte);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--bleu-crepuscule);
+    margin-bottom: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    padding-left: 2.75rem;
+    border: 1.5px solid var(--gris-doux);
+    border-radius: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    color: var(--bleu-crepuscule);
+    background: var(--blanc);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    outline: none;
+  }
+
+  .form-group input::placeholder {
+    color: #B8B3AC;
+    font-weight: 300;
+  }
+
+  .form-group input:focus {
+    border-color: var(--bleu-ouvert);
+    box-shadow: 0 0 0 3px rgba(58,107,138,0.1);
+  }
+
+  .form-group .input-icon {
+    position: absolute;
+    left: 1rem;
+    top: calc(50% + 10px);
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--gris-texte);
+    opacity: 0.5;
+  }
+
+  .form-group .toggle-password {
+    position: absolute;
+    right: 1rem;
+    top: calc(50% + 10px);
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gris-texte);
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    padding: 4px;
+  }
+
+  .form-group .toggle-password:hover {
+    opacity: 0.8;
+  }
+
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.75rem;
+    font-size: 0.85rem;
+  }
+
+  .form-options label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--gris-texte);
+    cursor: pointer;
+    font-weight: 400;
+  }
+
+  .form-options label input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--gris-doux);
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .form-options label input[type="checkbox"]:checked {
+    background: var(--bleu-ouvert);
+    border-color: var(--bleu-ouvert);
+  }
+
+  .form-options label input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .form-options a {
+    color: var(--terracotta);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .form-options a:hover {
+    color: var(--or-solaire);
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.03em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-client {
+    background: var(--bleu-ouvert);
+    color: var(--blanc);
+  }
+
+  .btn-client:hover {
+    background: #2F5A77;
+    box-shadow: 0 6px 20px rgba(58,107,138,0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn-photographe {
+    background: var(--terracotta);
+    color: var(--blanc);
+  }
+
+  .btn-photographe:hover {
+    background: #9A4C32;
+    box-shadow: 0 6px 20px rgba(180,90,60,0.3);
+    transform: translateY(-1px);
+  }
+
+
+
+  .form-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--gris-texte);
+  }
+
+  .form-footer a {
+    color: var(--terracotta);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+
+  .form-footer a:hover {
+    color: var(--or-solaire);
+  }
+
+  /* ─── PHOTOGRAPHE-SPECIFIC FIELD ─── */
+  .photographe-only {
+    display: none;
+    animation: fadeSlideIn 0.35s ease;
+  }
+
+  .photographe-only.visible {
+    display: block;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .auth-form-panel {
+    animation: fadeIn 0.5s ease;
+  }
+
+  .visual-content {
+    animation: fadeIn 0.7s ease 0.15s both;
+  }
+
+  /* ─── BADGE BETA ─── */
+  .badge-beta {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    background: rgba(207,160,68,0.15);
+    color: var(--or-solaire);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .auth-visual { display: none; }
+    .auth-form-panel { width: 100%; padding: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LEFT: VISUAL PANEL ═══════════ -->
+<div class="auth-visual">
+  <div class="visual-content">
+    <div class="visual-logo">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- D-shaped aperture logo -->
+        <circle cx="40" cy="40" r="36" stroke="rgba(207,160,68,0.3)" stroke-width="1"/>
+        <path d="M28 20 C28 20, 56 20, 56 40 C56 60, 28 60, 28 60 Z" stroke="#CFA044" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="40" cy="40" r="10" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>
+        <circle cx="40" cy="40" r="4" fill="#CFA044" opacity="0.6"/>
+        <!-- Aperture blades hint -->
+        <line x1="40" y1="26" x2="40" y2="30" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <line x1="40" y1="50" x2="40" y2="54" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <line x1="26" y1="40" x2="30" y2="40" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <line x1="50" y1="40" x2="54" y2="40" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <h1>Votre studio<br>devient <em>intelligent</em></h1>
+    <p>Gestion de clientèle, réservations, galeries et facturation — tout au même endroit.</p>
+
+    <div class="visual-features">
+      <div class="visual-feature">
+        <span class="icon-dot"></span>
+        Réservation en ligne simplifiée
+      </div>
+      <div class="visual-feature">
+        <span class="icon-dot"></span>
+        Galeries privées sécurisées
+      </div>
+      <div class="visual-feature">
+        <span class="icon-dot"></span>
+        Facturation automatisée
+      </div>
+      <div class="visual-feature">
+        <span class="icon-dot"></span>
+        Intelligence artificielle intégrée
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ RIGHT: FORM PANEL ═══════════ -->
+<div class="auth-form-panel">
+
+  <div class="form-header">
+    <div class="brand-mark">Déclia <span class="badge-beta">Bêta</span></div>
+    <div class="brand-sub">Plateforme pour photographes professionnels</div>
+  </div>
+
+  <!-- SWITCH CLIENT / PHOTOGRAPHE -->
+  <div class="auth-switch" id="authSwitch">
+    <div class="auth-switch-indicator"></div>
+    <button class="auth-switch-btn active" data-role="client" onclick="switchRole('client')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      Client
+    </button>
+    <button class="auth-switch-btn" data-role="photographe" onclick="switchRole('photographe')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+      Photographe
+    </button>
+  </div>
+
+  <!-- FORM TITLE -->
+  <h2 class="form-title" id="formTitle">Connexion Client</h2>
+  <p class="form-subtitle" id="formSubtitle">Accédez à vos galeries, réservations et commandes.</p>
+
+  <!-- FORM -->
+  <form onsubmit="return false;">
+
+    <!-- Code photographe (hidden by default) -->
+    <div class="form-group photographe-only" id="codeField">
+      <label for="code">Code photographe</label>
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      <input type="text" id="code" placeholder="Ex : STUDIO-XXXX" autocomplete="off">
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Adresse e-mail</label>
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+      <input type="email" id="email" placeholder="vous@exemple.com" autocomplete="email">
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      <button type="button" class="toggle-password" onclick="togglePassword()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Options -->
+    <div class="form-options">
+      <label>
+        <input type="checkbox" checked>
+        Se souvenir de moi
+      </label>
+      <a href="#">Mot de passe oublié ?</a>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" class="btn-primary btn-client" id="btnSubmit">
+      Se connecter
+    </button>
+  </form>
+
+
+
+  <!-- Footer -->
+  <div class="form-footer" id="formFooter">
+    Pas encore de compte ? <a href="#">Créer un compte client</a>
+  </div>
+
+</div>
+
+<script>
+  let currentRole = 'client';
+
+  function switchRole(role) {
+    if (role === currentRole) return;
+    currentRole = role;
+
+    const switchEl = document.getElementById('authSwitch');
+    const btns = switchEl.querySelectorAll('.auth-switch-btn');
+    const title = document.getElementById('formTitle');
+    const subtitle = document.getElementById('formSubtitle');
+    const btn = document.getElementById('btnSubmit');
+    const codeField = document.getElementById('codeField');
+    const footer = document.getElementById('formFooter');
+
+    // Update switch
+    btns.forEach(b => b.classList.toggle('active', b.dataset.role === role));
+    switchEl.classList.toggle('photographe', role === 'photographe');
+
+    // Update form content
+    if (role === 'photographe') {
+      title.textContent = 'Espace Photographe';
+      subtitle.textContent = 'Gérez votre studio, vos galeries et vos clients.';
+      btn.textContent = 'Accéder à mon espace';
+      btn.className = 'btn-primary btn-photographe';
+      codeField.classList.add('visible');
+      footer.innerHTML = 'Nouveau sur Déclia ? <a href="#">Créer un compte photographe</a>';
+    } else {
+      title.textContent = 'Connexion Client';
+      subtitle.textContent = 'Accédez à vos galeries, réservations et commandes.';
+      btn.textContent = 'Se connecter';
+      btn.className = 'btn-primary btn-client';
+      codeField.classList.remove('visible');
+      footer.innerHTML = 'Pas encore de compte ? <a href="#">Créer un compte client</a>';
+    }
+  }
+
+  function togglePassword() {
+    const input = document.getElementById('password');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+</script>
+
+</body>
+</html>

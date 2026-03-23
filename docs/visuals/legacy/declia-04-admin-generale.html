@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déclia — Tableau de bord</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bleu-crepuscule: #1E2A3A;
+    --terracotta: #B45A3C;
+    --or-solaire: #CFA044;
+    --bleu-ouvert: #3A6B8A;
+    --lin-clair: #F6F3ED;
+    --blanc: #FFFFFF;
+    --gris-doux: #E8E4DD;
+    --gris-texte: #6B6560;
+    --erreur: #C0392B;
+    --succes: #27AE60;
+    --warning: #E67E22;
+    --sidebar-w: 260px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--lin-clair);
+    color: var(--bleu-crepuscule);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ═══════════ SIDEBAR ═══════════ */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--bleu-crepuscule);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-brand {
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .sidebar-brand .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--blanc);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sidebar-brand .logo svg { width: 28px; height: 28px; }
+
+  .badge-beta {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    background: rgba(207,160,68,0.2);
+    color: var(--or-solaire);
+    padding: 0.15rem 0.45rem;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .sidebar-nav { padding: 1rem 0; flex: 1; }
+
+  .nav-section { padding: 0 1rem; margin-bottom: 0.5rem; }
+
+  .nav-section-title {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(255,255,255,0.25);
+    padding: 0.75rem 0.5rem 0.4rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    margin-bottom: 2px;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8); }
+
+  .nav-item.active { background: rgba(58,107,138,0.25); color: var(--blanc); }
+  .nav-item.active svg { opacity: 1; color: var(--or-solaire); }
+
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.5; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--terracotta);
+    color: var(--blanc);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sidebar-footer .user-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--terracotta);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blanc); font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
+  }
+
+  .sidebar-footer .user-name { font-size: 0.8rem; font-weight: 600; color: var(--blanc); }
+  .sidebar-footer .user-role { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+
+  /* ═══════════ MAIN ═══════════ */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* Top bar */
+  .topbar {
+    background: var(--blanc);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gris-doux);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topbar-left h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .topbar-left p { font-size: 0.8rem; color: var(--gris-texte); margin-top: 0.1rem; }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .btn-icon {
+    width: 38px; height: 38px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; background: var(--blanc);
+    border: 1.5px solid var(--gris-doux); cursor: pointer;
+    transition: all 0.2s; color: var(--gris-texte); position: relative;
+  }
+
+  .btn-icon:hover { border-color: var(--bleu-ouvert); color: var(--bleu-ouvert); }
+  .btn-icon svg { width: 16px; height: 16px; }
+
+  .notif-dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    border: 2px solid var(--blanc);
+  }
+
+  .period-select {
+    padding: 0.55rem 2rem 0.55rem 0.85rem;
+    border: 1.5px solid var(--gris-doux);
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--bleu-crepuscule);
+    outline: none;
+    appearance: none;
+    background: var(--blanc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 0.7rem center;
+    cursor: pointer;
+  }
+
+  /* ═══════════ CONTENT ═══════════ */
+  .content { padding: 1.5rem 2rem; flex: 1; }
+
+  /* Welcome banner */
+  .welcome-banner {
+    background: var(--bleu-crepuscule);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .welcome-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(207,160,68,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 80%, rgba(58,107,138,0.15) 0%, transparent 50%);
+  }
+
+  .welcome-text { position: relative; z-index: 2; }
+
+  .welcome-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--blanc);
+    margin-bottom: 0.4rem;
+  }
+
+  .welcome-text h2 em { font-style: italic; color: var(--or-solaire); }
+
+  .welcome-text p {
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .welcome-actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .btn {
+    padding: 0.65rem 1.25rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  .btn svg { width: 15px; height: 15px; }
+
+  .btn-gold { background: var(--or-solaire); color: var(--bleu-crepuscule); }
+  .btn-gold:hover { background: #DCAD50; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(207,160,68,0.3); }
+
+  .btn-ghost { background: rgba(255,255,255,0.1); color: var(--blanc); border: 1px solid rgba(255,255,255,0.15); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.18); }
+
+  .btn-primary { background: var(--terracotta); color: var(--blanc); }
+  .btn-primary:hover { background: #9A4C32; transform: translateY(-1px); }
+
+  .btn-outline { background: var(--blanc); color: var(--bleu-crepuscule); border: 1.5px solid var(--gris-doux); }
+  .btn-outline:hover { border-color: var(--bleu-ouvert); color: var(--bleu-ouvert); }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--blanc);
+    border-radius: 12px;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid rgba(232,228,221,0.6);
+    transition: box-shadow 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .stat-card:hover { box-shadow: 0 4px 16px rgba(30,42,58,0.06); }
+
+  .stat-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  .stat-icon svg { width: 20px; height: 20px; }
+  .stat-icon.blue { background: rgba(58,107,138,0.1); color: var(--bleu-ouvert); }
+  .stat-icon.gold { background: rgba(207,160,68,0.12); color: var(--or-solaire); }
+  .stat-icon.terra { background: rgba(180,90,60,0.1); color: var(--terracotta); }
+  .stat-icon.green { background: rgba(39,174,96,0.1); color: var(--succes); }
+
+  .stat-label {
+    font-size: 0.72rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--gris-texte); margin-bottom: 0.3rem;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 600; line-height: 1;
+  }
+
+  .stat-trend { font-size: 0.72rem; font-weight: 600; margin-top: 0.3rem; }
+  .stat-trend.up { color: var(--succes); }
+  .stat-trend.down { color: var(--erreur); }
+
+  /* Grid layout */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--blanc);
+    border-radius: 12px;
+    border: 1px solid rgba(232,228,221,0.6);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--gris-doux);
+  }
+
+  .card-header h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .card-header .see-all {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--terracotta);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .card-header .see-all:hover { color: var(--or-solaire); }
+
+  .card-body { padding: 0; }
+
+  /* ─── Upcoming sessions ─── */
+  .session-item {
+    padding: 1rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(232,228,221,0.4);
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  .session-item:hover { background: rgba(246,243,237,0.5); }
+  .session-item:last-child { border-bottom: none; }
+
+  .session-date {
+    width: 48px; height: 52px;
+    background: var(--lin-clair);
+    border-radius: 10px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .session-date .day {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700; line-height: 1;
+    color: var(--bleu-crepuscule);
+  }
+
+  .session-date .month {
+    font-size: 0.6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--gris-texte);
+  }
+
+  .session-info { flex: 1; min-width: 0; }
+
+  .session-info .session-title {
+    font-weight: 600; font-size: 0.88rem;
+    color: var(--bleu-crepuscule);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .session-info .session-meta {
+    font-size: 0.75rem; color: var(--gris-texte); font-weight: 400;
+    margin-top: 0.15rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+
+  .session-info .session-meta span {
+    display: flex; align-items: center; gap: 0.25rem;
+  }
+
+  .session-info .session-meta svg { width: 12px; height: 12px; opacity: 0.5; }
+
+  .session-tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .session-tag.famille { background: rgba(58,107,138,0.08); color: var(--bleu-ouvert); }
+  .session-tag.equestre { background: rgba(107,127,90,0.12); color: #6B7F5A; }
+  .session-tag.mariage { background: rgba(180,90,60,0.1); color: var(--terracotta); }
+  .session-tag.portrait { background: rgba(207,160,68,0.1); color: var(--or-solaire); }
+  .session-tag.grossesse { background: rgba(142,107,175,0.1); color: #8E6BAF; }
+
+  /* ─── Activity feed ─── */
+  .activity-item {
+    padding: 0.85rem 1.4rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    border-bottom: 1px solid rgba(232,228,221,0.4);
+  }
+
+  .activity-item:last-child { border-bottom: none; }
+
+  .activity-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    margin-top: 0.35rem; flex-shrink: 0;
+  }
+
+  .activity-dot.blue { background: var(--bleu-ouvert); }
+  .activity-dot.green { background: var(--succes); }
+  .activity-dot.gold { background: var(--or-solaire); }
+  .activity-dot.terra { background: var(--terracotta); }
+  .activity-dot.grey { background: var(--gris-texte); }
+
+  .activity-text {
+    font-size: 0.82rem; color: var(--bleu-crepuscule); line-height: 1.4;
+    flex: 1;
+  }
+
+  .activity-text strong { font-weight: 600; }
+
+  .activity-time {
+    font-size: 0.7rem; color: var(--gris-texte);
+    font-weight: 400; white-space: nowrap;
+    margin-top: 0.1rem;
+  }
+
+  /* ─── Revenue chart placeholder ─── */
+  .chart-placeholder {
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    height: 240px;
+  }
+
+  .chart-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1rem;
+  }
+
+  .chart-total {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  .chart-total-sub {
+    font-size: 0.75rem;
+    color: var(--gris-texte);
+  }
+
+  .chart-legend {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.72rem;
+    color: var(--gris-texte);
+  }
+
+  .chart-legend span {
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+
+  .legend-dot {
+    width: 8px; height: 8px; border-radius: 2px;
+  }
+
+  .chart-bars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .chart-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .bar-stack {
+    width: 100%;
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .bar {
+    width: 14px;
+    border-radius: 3px 3px 0 0;
+    transition: opacity 0.2s;
+  }
+
+  .bar:hover { opacity: 0.8; }
+
+  .bar.current { background: var(--bleu-ouvert); }
+  .bar.previous { background: var(--gris-doux); }
+
+  .chart-bar-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--gris-texte);
+    text-transform: uppercase;
+  }
+
+  /* ─── Quick actions ─── */
+  .quick-actions {
+    padding: 1rem 1.4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .quick-action {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--gris-doux);
+    background: var(--blanc);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .quick-action:hover {
+    border-color: var(--bleu-ouvert);
+    background: rgba(58,107,138,0.02);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(30,42,58,0.05);
+  }
+
+  .quick-action .qa-icon {
+    width: 34px; height: 34px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .quick-action .qa-icon svg { width: 16px; height: 16px; }
+
+  .qa-icon.blue { background: rgba(58,107,138,0.1); color: var(--bleu-ouvert); }
+  .qa-icon.terra { background: rgba(180,90,60,0.1); color: var(--terracotta); }
+  .qa-icon.gold { background: rgba(207,160,68,0.12); color: var(--or-solaire); }
+  .qa-icon.green { background: rgba(39,174,96,0.1); color: var(--succes); }
+
+  .quick-action .qa-text {
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--bleu-crepuscule);
+  }
+
+  /* ─── Tasks widget ─── */
+  .task-item {
+    padding: 0.75rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border-bottom: 1px solid rgba(232,228,221,0.4);
+    transition: background 0.15s;
+  }
+
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: rgba(246,243,237,0.5); }
+
+  .task-check {
+    appearance: none;
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--gris-doux);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .task-check:checked {
+    background: var(--succes); border-color: var(--succes);
+  }
+
+  .task-check:checked::after {
+    content: '✓'; position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    color: var(--blanc); font-size: 10px; font-weight: 700;
+  }
+
+  .task-text { flex: 1; font-size: 0.82rem; line-height: 1.3; }
+  .task-text.done { text-decoration: line-through; color: var(--gris-texte); }
+
+  .task-priority {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  .task-priority.high { background: var(--erreur); }
+  .task-priority.medium { background: var(--warning); }
+  .task-priority.low { background: var(--succes); }
+
+  .task-due {
+    font-size: 0.7rem; color: var(--gris-texte); white-space: nowrap;
+  }
+
+  /* ─── Pending orders ─── */
+  .order-item {
+    padding: 0.85rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    border-bottom: 1px solid rgba(232,228,221,0.4);
+  }
+
+  .order-item:last-child { border-bottom: none; }
+
+  .order-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.7rem; color: var(--blanc); flex-shrink: 0;
+  }
+
+  .order-info { flex: 1; }
+  .order-info .order-name { font-weight: 600; font-size: 0.82rem; }
+  .order-info .order-detail { font-size: 0.72rem; color: var(--gris-texte); }
+
+  .order-amount {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600; font-size: 0.95rem;
+  }
+
+  .order-status {
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .order-status.pending { background: rgba(230,126,34,0.1); color: var(--warning); }
+  .order-status.paid { background: rgba(39,174,96,0.1); color: var(--succes); }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .content { animation: fadeIn 0.4s ease; }
+
+  .stat-card { animation: fadeIn 0.4s ease both; }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">
+      <svg viewBox="0 0 28 28" fill="none"><path d="M8 4C8 4 22 4 22 14C22 24 8 24 8 24Z" stroke="#CFA044" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="14" cy="14" r="4" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#CFA044" opacity="0.7"/></svg>
+      Déclia
+      <span class="badge-beta">Bêta</span>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title">Principal</div>
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Tableau de bord
+      </a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clients<span class="nav-badge">47</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Planning</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeries</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Commerce</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Commandes<span class="nav-badge">3</span></a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Facturation</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Cartes cadeau</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Promotions</a>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-title">Outils</div>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 9 8 12 2 12"/></svg>Tâches</a>
+      <a class="nav-item" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09c-.658.003-1.25.396-1.51 1z"/></svg>Paramètres</a>
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-avatar">CL</div>
+    <div>
+      <div class="user-name">Capucine Laurent</div>
+      <div class="user-role">Photographe</div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Tableau de bord</h1>
+      <p>Vendredi 20 mars 2026</p>
+    </div>
+    <div class="topbar-right">
+      <select class="period-select">
+        <option>Ce mois</option>
+        <option>Cette semaine</option>
+        <option>Ce trimestre</option>
+        <option>Cette année</option>
+      </select>
+      <button class="btn-icon" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="btn-icon" title="Aide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Welcome banner -->
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h2>Bonjour, <em>Capucine</em></h2>
+        <p>Vous avez 3 séances prévues cette semaine et 2 commandes en attente de validation.</p>
+      </div>
+      <div class="welcome-actions">
+        <button class="btn btn-gold">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nouvelle séance
+        </button>
+        <button class="btn btn-ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Créer une galerie
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon terra">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Chiffre d'affaires</div>
+          <div class="stat-value">4 280 €</div>
+          <div class="stat-trend up">↑ +18% vs mois dernier</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Séances ce mois</div>
+          <div class="stat-value">12</div>
+          <div class="stat-trend up">↑ +3 vs mois dernier</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon gold">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Nouveaux clients</div>
+          <div class="stat-value">5</div>
+          <div class="stat-trend up">↑ +2 vs mois dernier</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Photos livrées</div>
+          <div class="stat-value">342</div>
+          <div class="stat-trend up">8 galeries publiées</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row: Sessions + Activity -->
+    <div class="grid-2">
+
+      <!-- Upcoming sessions -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Séances à venir</h3>
+          <a class="see-all">Voir le planning →</a>
+        </div>
+        <div class="card-body">
+          <div class="session-item">
+            <div class="session-date"><span class="day">21</span><span class="month">mars</span></div>
+            <div class="session-info">
+              <div class="session-title">Séance famille Lefèvre</div>
+              <div class="session-meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 16h30 – 18h00</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Parc de Rochegude</span>
+              </div>
+            </div>
+            <span class="session-tag famille">Famille</span>
+          </div>
+          <div class="session-item">
+            <div class="session-date"><span class="day">23</span><span class="month">mars</span></div>
+            <div class="session-info">
+              <div class="session-title">Shooting équestre — Julie Martin</div>
+              <div class="session-meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 17h00 – 19h00</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Écuries du Tarn</span>
+              </div>
+            </div>
+            <span class="session-tag equestre">Équestre</span>
+          </div>
+          <div class="session-item">
+            <div class="session-date"><span class="day">25</span><span class="month">mars</span></div>
+            <div class="session-info">
+              <div class="session-title">Séance grossesse — Camille R.</div>
+              <div class="session-meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 10h00 – 11h30</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Studio</span>
+              </div>
+            </div>
+            <span class="session-tag grossesse">Grossesse</span>
+          </div>
+          <div class="session-item">
+            <div class="session-date"><span class="day">28</span><span class="month">mars</span></div>
+            <div class="session-info">
+              <div class="session-title">Portrait pro — Antoine Roux</div>
+              <div class="session-meta">
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 14h00 – 15h00</span>
+                <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> En extérieur</span>
+              </div>
+            </div>
+            <span class="session-tag portrait">Portrait</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Activité récente</h3>
+          <a class="see-all">Tout voir →</a>
+        </div>
+        <div class="card-body">
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text"><strong>Sophie Bernard</strong> a validé sa commande de tirages (8 photos).</div>
+            <div class="activity-time">Il y a 25 min</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text"><strong>Pierre Durand</strong> a réservé une séance équestre le 30 mars.</div>
+            <div class="activity-time">Il y a 2h</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot gold"></div>
+            <div class="activity-text">Nouveau client inscrit : <strong>Antoine Roux</strong> (portrait professionnel).</div>
+            <div class="activity-time">Il y a 5h</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot terra"></div>
+            <div class="activity-text"><strong>Marie Lefèvre</strong> a téléchargé 12 photos de sa galerie.</div>
+            <div class="activity-time">Hier, 19h30</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot green"></div>
+            <div class="activity-text">Paiement reçu : <strong>680 €</strong> de Pierre Durand.</div>
+            <div class="activity-time">Hier, 14h15</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot grey"></div>
+            <div class="activity-text">Galerie « Famille Lefèvre — Mars » publiée (45 photos).</div>
+            <div class="activity-time">Hier, 10h00</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot blue"></div>
+            <div class="activity-text"><strong>Léa Garnier</strong> a consulté sa galerie scolaire.</div>
+            <div class="activity-time">20 mars</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row: Chart + Quick actions + Tasks -->
+    <div class="grid-3">
+
+      <!-- Revenue chart -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Revenus</h3>
+          <a class="see-all">Détails →</a>
+        </div>
+        <div class="card-body">
+          <div class="chart-placeholder">
+            <div class="chart-header-row">
+              <div>
+                <div class="chart-total">4 280 €</div>
+                <div class="chart-total-sub">Mars 2026</div>
+              </div>
+              <div class="chart-legend">
+                <span><span class="legend-dot" style="background:var(--bleu-ouvert)"></span> Ce mois</span>
+                <span><span class="legend-dot" style="background:var(--gris-doux)"></span> Mois dernier</span>
+              </div>
+            </div>
+            <div class="chart-bars">
+              <div class="chart-bar-group">
+                <div class="bar-stack"><div class="bar previous" style="height:50px"></div><div class="bar current" style="height:65px"></div></div>
+                <span class="chart-bar-label">S1</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="bar-stack"><div class="bar previous" style="height:40px"></div><div class="bar current" style="height:80px"></div></div>
+                <span class="chart-bar-label">S2</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="bar-stack"><div class="bar previous" style="height:60px"></div><div class="bar current" style="height:95px"></div></div>
+                <span class="chart-bar-label">S3</span>
+              </div>
+              <div class="chart-bar-group">
+                <div class="bar-stack"><div class="bar previous" style="height:55px"></div><div class="bar current" style="height:70px"></div></div>
+                <span class="chart-bar-label">S4</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Actions rapides</h3>
+        </div>
+        <div class="card-body">
+          <div class="quick-actions">
+            <a class="quick-action">
+              <div class="qa-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
+              <span class="qa-text">Ajouter un client</span>
+            </a>
+            <a class="quick-action">
+              <div class="qa-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              <span class="qa-text">Planifier une séance</span>
+            </a>
+            <a class="quick-action">
+              <div class="qa-icon gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+              <span class="qa-text">Créer une facture</span>
+            </a>
+            <a class="quick-action">
+              <div class="qa-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <span class="qa-text">Publier une galerie</span>
+            </a>
+            <a class="quick-action">
+              <div class="qa-icon terra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <span class="qa-text">Carte cadeau</span>
+            </a>
+            <a class="quick-action">
+              <div class="qa-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+              <span class="qa-text">Créer une promo</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Tâches du jour</h3>
+          <a class="see-all">Toutes les tâches →</a>
+        </div>
+        <div class="card-body">
+          <div class="task-item">
+            <input type="checkbox" class="task-check" checked>
+            <span class="task-text done">Envoyer galerie Lefèvre</span>
+            <div class="task-priority low"></div>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-check">
+            <span class="task-text">Retoucher photos séance Durand</span>
+            <div class="task-priority high"></div>
+            <span class="task-due">Aujourd'hui</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-check">
+            <span class="task-text">Préparer devis mariage Bernard</span>
+            <div class="task-priority high"></div>
+            <span class="task-due">Demain</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-check">
+            <span class="task-text">Contacter Antoine Roux (portrait)</span>
+            <div class="task-priority medium"></div>
+            <span class="task-due">22 mars</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-check">
+            <span class="task-text">Mettre à jour tarifs scolaires</span>
+            <div class="task-priority low"></div>
+            <span class="task-due">24 mars</span>
+          </div>
+          <div class="task-item">
+            <input type="checkbox" class="task-check">
+            <span class="task-text">Publier post Instagram</span>
+            <div class="task-priority medium"></div>
+            <span class="task-due">25 mars</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
