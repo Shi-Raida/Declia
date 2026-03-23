@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/legal_form.dart';
 import '../../controllers/register_controller.dart';
-import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../translations/translation_keys.dart';
 import '../../utils/input_formatters.dart';
 import '../../utils/validators.dart';
 import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
+import 'register_form_helpers.dart';
 
 /// Photographer step 1: studio info + business address.
 class RegisterStepStudio extends GetView<RegisterController> {
@@ -27,9 +25,12 @@ class RegisterStepStudio extends GetView<RegisterController> {
           SectionDivider(label: Tr.auth.register.sectionStudio.tr),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.auth.register.fieldStudioName.tr, required: true),
+          registerFieldLabel(
+            Tr.auth.register.fieldStudioName.tr,
+            required: true,
+          ),
           const SizedBox(height: 6),
-          _field(
+          registerTextField(
             controller: controller.studioNameController,
             hint: Tr.auth.register.fieldStudioName.tr,
             icon: Icons.camera_alt_outlined,
@@ -37,9 +38,9 @@ class RegisterStepStudio extends GetView<RegisterController> {
           ),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.auth.register.fieldCompanyName.tr),
+          registerFieldLabel(Tr.auth.register.fieldCompanyName.tr),
           const SizedBox(height: 6),
-          _field(
+          registerTextField(
             controller: controller.companyNameController,
             hint: Tr.auth.register.fieldCompanyName.tr,
             icon: Icons.business_outlined,
@@ -53,9 +54,9 @@ class RegisterStepStudio extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label(Tr.auth.register.fieldSiret.tr),
+                    registerFieldLabel(Tr.auth.register.fieldSiret.tr),
                     const SizedBox(height: 6),
-                    _field(
+                    registerTextField(
                       controller: controller.siretController,
                       hint: Tr.auth.register.fieldSiret.tr,
                       keyboard: TextInputType.number,
@@ -69,7 +70,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label(Tr.auth.register.fieldLegalForm.tr),
+                    registerFieldLabel(Tr.auth.register.fieldLegalForm.tr),
                     const SizedBox(height: 6),
                     Obx(
                       () => DropdownButtonFormField<LegalForm?>(
@@ -102,7 +103,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
             }
             return Padding(
               padding: const EdgeInsets.only(top: AppSpacing.sm),
-              child: _field(
+              child: registerTextField(
                 controller: controller.legalFormOtherController,
                 hint: Tr.common.legalForm.otherSpecify.tr,
                 required: true,
@@ -111,9 +112,9 @@ class RegisterStepStudio extends GetView<RegisterController> {
           }),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.auth.register.fieldVatNumber.tr),
+          registerFieldLabel(Tr.auth.register.fieldVatNumber.tr),
           const SizedBox(height: 6),
-          _field(
+          registerTextField(
             controller: controller.vatNumberController,
             hint: 'FRXX XXX XXX XXX',
             formatters: [VatNumberFormatter()],
@@ -125,7 +126,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
           SectionDivider(label: Tr.auth.register.sectionBizAddress.tr),
           const SizedBox(height: AppSpacing.md),
 
-          _field(
+          registerTextField(
             controller: controller.bizStreetController,
             hint: Tr.auth.register.fieldBizStreet.tr,
             icon: Icons.home_outlined,
@@ -136,7 +137,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
             children: [
               SizedBox(
                 width: 130,
-                child: _field(
+                child: registerTextField(
                   controller: controller.bizPostalCodeController,
                   hint: Tr.auth.register.fieldBizPostalCode.tr,
                   keyboard: TextInputType.number,
@@ -145,7 +146,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(
-                child: _field(
+                child: registerTextField(
                   controller: controller.bizCityController,
                   hint: Tr.auth.register.fieldBizCity.tr,
                 ),
@@ -154,7 +155,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
           ),
           const SizedBox(height: AppSpacing.sm),
 
-          _field(
+          registerTextField(
             controller: controller.bizCountryController,
             hint: Tr.auth.register.fieldBizCountry.tr,
             icon: Icons.flag_outlined,
@@ -162,70 +163,6 @@ class RegisterStepStudio extends GetView<RegisterController> {
             onFieldSubmitted: (_) => controller.goToNextStep(),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _label(String text, {bool required = false}) {
-    return Row(
-      children: [
-        Text(
-          text.toUpperCase(),
-          style: GoogleFonts.outfit(
-            fontSize: 12.8,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.3,
-            color: AppColors.grisTexte,
-          ),
-        ),
-        if (required)
-          Text(
-            ' *',
-            style: GoogleFonts.outfit(
-              fontSize: 12.8,
-              fontWeight: FontWeight.w600,
-              color: AppColors.error,
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget _field({
-    required TextEditingController controller,
-    required String hint,
-    IconData? icon,
-    bool required = false,
-    TextInputType? keyboard,
-    TextInputAction action = TextInputAction.next,
-    List<TextInputFormatter>? formatters,
-    ValueChanged<String>? onFieldSubmitted,
-    FormFieldValidator<String>? validator,
-  }) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 200),
-      curve: Curves.easeOutCubic,
-      alignment: Alignment.topCenter,
-      child: TextFormField(
-        controller: controller,
-        keyboardType: keyboard,
-        textInputAction: action,
-        inputFormatters: formatters,
-        onFieldSubmitted: onFieldSubmitted,
-        decoration: InputDecoration(
-          hintText: hint,
-          prefixIcon: icon != null ? Icon(icon, size: 18) : null,
-        ),
-        validator:
-            validator ??
-            (required
-                ? (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return Tr.auth.register.fieldRequired.tr;
-                    }
-                    return null;
-                  }
-                : null),
       ),
     );
   }

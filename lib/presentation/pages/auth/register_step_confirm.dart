@@ -1,17 +1,16 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/legal_form.dart';
 import '../../controllers/register_controller.dart';
-import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 import '../admin/acquisition_source_tr.dart';
+import 'register_consent_widgets.dart';
 import 'register_step_studio.dart';
 
 /// Step 3 (shared): summary card + consent checkboxes.
@@ -169,14 +168,14 @@ class RegisterStepConfirm extends GetView<RegisterController> {
           const SizedBox(height: AppSpacing.lg),
 
           // Consent checkboxes — CGU + privacy policy (both roles)
-          _cguConsentRow(
+          registerCguConsentRow(
             value: controller.cguAccepted.value,
             onChanged: (v) => controller.cguAccepted.value = v,
             accentColor: accentColor,
           ),
           // Marketing (both roles)
           const SizedBox(height: AppSpacing.sm),
-          _consentRow(
+          registerConsentRow(
             value: controller.emailMarketingAccepted.value,
             onChanged: (v) => controller.emailMarketingAccepted.value = v,
             label: Tr.auth.register.consentMarketing.tr,
@@ -221,101 +220,6 @@ class RegisterStepConfirm extends GetView<RegisterController> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 2),
       child: Text(text.trim(), style: AppTypography.bodySmall()),
-    );
-  }
-
-  /// CGU consent row with tappable links for CGU and privacy policy.
-  Widget _cguConsentRow({
-    required bool value,
-    required ValueChanged<bool> onChanged,
-    required Color accentColor,
-  }) {
-    final style = AppTypography.bodySmall();
-    final linkStyle = style.copyWith(
-      color: accentColor,
-      decoration: TextDecoration.underline,
-      decorationColor: accentColor,
-    );
-
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: Checkbox(
-              value: value,
-              onChanged: (v) => onChanged(v ?? false),
-              activeColor: accentColor,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: Tr.auth.register.consentCguPrefix.tr,
-                    style: style,
-                  ),
-                  TextSpan(
-                    text: Tr.auth.register.consentCguLink.tr,
-                    style: linkStyle,
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => Get.toNamed(AppRoutes.legalNotices),
-                  ),
-                  TextSpan(
-                    text: Tr.auth.register.consentCguMiddle.tr,
-                    style: style,
-                  ),
-                  TextSpan(
-                    text: Tr.auth.register.consentPrivacyLink.tr,
-                    style: linkStyle,
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => Get.toNamed(AppRoutes.legalPrivacy),
-                  ),
-                  TextSpan(text: ' *', style: style),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _consentRow({
-    required bool value,
-    required ValueChanged<bool> onChanged,
-    required String label,
-    required Color accentColor,
-  }) {
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: Checkbox(
-              value: value,
-              onChanged: (v) => onChanged(v ?? false),
-              activeColor: accentColor,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: VisualDensity.compact,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(child: Text(label, style: AppTypography.bodySmall())),
-        ],
-      ),
     );
   }
 }

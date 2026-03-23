@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/acquisition_source.dart';
 import '../../controllers/register_controller.dart';
@@ -10,6 +9,7 @@ import '../../translations/translation_keys.dart';
 import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 import '../admin/acquisition_source_tr.dart';
+import 'register_form_helpers.dart';
 
 /// Step 2 (shared): password, confirm password, acquisition source & notes.
 class RegisterStepSecurity extends GetView<RegisterController> {
@@ -21,7 +21,7 @@ class RegisterStepSecurity extends GetView<RegisterController> {
       key: controller.registerStep2Key,
       child: StaggeredFadeSlideColumn(
         children: [
-          _label(Tr.auth.login.password.tr, required: true),
+          registerFieldLabel(Tr.auth.login.password.tr, required: true),
           const SizedBox(height: 6),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -100,7 +100,10 @@ class RegisterStepSecurity extends GetView<RegisterController> {
           }),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.auth.clientRegister.confirmPassword.tr, required: true),
+          registerFieldLabel(
+            Tr.auth.clientRegister.confirmPassword.tr,
+            required: true,
+          ),
           const SizedBox(height: 6),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -132,7 +135,7 @@ class RegisterStepSecurity extends GetView<RegisterController> {
           SectionDivider(label: Tr.auth.register.sectionPreferences.tr),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.auth.register.fieldAcquisitionSource.tr),
+          registerFieldLabel(Tr.auth.register.fieldAcquisitionSource.tr),
           const SizedBox(height: 6),
           Obx(
             () => DropdownButtonFormField<AcquisitionSource?>(
@@ -151,7 +154,7 @@ class RegisterStepSecurity extends GetView<RegisterController> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          _label(Tr.auth.register.fieldNotes.tr),
+          registerFieldLabel(Tr.auth.register.fieldNotes.tr),
           const SizedBox(height: 6),
           TextFormField(
             controller: controller.notesController,
@@ -164,31 +167,6 @@ class RegisterStepSecurity extends GetView<RegisterController> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _label(String text, {bool required = false}) {
-    return Row(
-      children: [
-        Text(
-          text.toUpperCase(),
-          style: GoogleFonts.outfit(
-            fontSize: 12.8,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.3,
-            color: AppColors.grisTexte,
-          ),
-        ),
-        if (required)
-          Text(
-            ' *',
-            style: GoogleFonts.outfit(
-              fontSize: 12.8,
-              fontWeight: FontWeight.w600,
-              color: AppColors.error,
-            ),
-          ),
-      ],
     );
   }
 }
