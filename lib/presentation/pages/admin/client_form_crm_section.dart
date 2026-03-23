@@ -7,7 +7,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import 'client_form_shared_widgets.dart';
-import 'clients_filter_bar.dart' show AcquisitionSourceTr;
+import 'acquisition_source_tr.dart';
 
 class ClientFormCrmSection extends StatelessWidget {
   const ClientFormCrmSection({super.key, required this.controller});

@@ -14,7 +14,7 @@ import 'client_detail_galleries_section.dart';
 import 'client_detail_orders_section.dart';
 import 'client_detail_sessions_section.dart';
 import 'client_detail_stats_card.dart';
-import 'clients_filter_bar.dart' show AcquisitionSourceTr;
+import 'acquisition_source_tr.dart';
 
 class ClientDetailPage extends GetView<ClientDetailController> {
   const ClientDetailPage({super.key});

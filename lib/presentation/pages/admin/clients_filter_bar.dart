@@ -10,6 +10,9 @@ import '../../controllers/clients_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
+import '../../widgets/styled_dropdown.dart';
+import 'acquisition_source_tr.dart';
+import 'clients_tag_filter_row.dart';
 import 'history_enum_extensions.dart';
 
 class ClientsFilterBar extends StatefulWidget {
@@ -78,7 +81,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 ),
                 const SizedBox(width: 12),
                 // Status dropdown
-                _StyledDropdown<ClientStatus?>(
+                StyledDropdown<ClientStatus?>(
                   value: q.statusFilter,
                   hint: Tr.adminClientsAllStatuses.tr,
                   items: [
@@ -94,7 +97,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 ),
                 const SizedBox(width: 12),
                 // Session type dropdown
-                _StyledDropdown<SessionType?>(
+                StyledDropdown<SessionType?>(
                   value: q.sessionTypeFilter,
                   hint: Tr.adminClientsAllCategories.tr,
                   items: [
@@ -111,7 +114,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 ),
                 const SizedBox(width: 12),
                 // Source dropdown
-                _StyledDropdown<AcquisitionSource?>(
+                StyledDropdown<AcquisitionSource?>(
                   value: q.acquisitionSource,
                   hint: Tr.adminClientsFilterBySource.tr,
                   items: [
@@ -130,7 +133,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 ),
                 const SizedBox(width: 12),
                 // Sort dropdown
-                _StyledDropdown<ClientSortField>(
+                StyledDropdown<ClientSortField>(
                   value: q.sortField,
                   hint: Tr.adminClientsSortBy.tr,
                   items: [
@@ -232,144 +235,11 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
             // Tag filter row
             if (ctrl.availableTags.isNotEmpty || q.tags.isNotEmpty) ...[
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Text(
-                    '${Tr.adminClientsFilterByTag.tr}: ',
-                    style: AppTypography.bodySmall().copyWith(
-                      color: AppColors.pierre,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 160,
-                    height: 32,
-                    child: Autocomplete<String>(
-                      optionsBuilder: (textEditingValue) {
-                        final input = textEditingValue.text.toLowerCase();
-                        if (input.isEmpty) return const [];
-                        return ctrl.availableTags.where(
-                          (tag) =>
-                              tag.toLowerCase().contains(input) &&
-                              !q.tags.contains(tag),
-                        );
-                      },
-                      onSelected: (tag) => ctrl.addTag(tag),
-                      fieldViewBuilder:
-                          (
-                            context,
-                            textController,
-                            focusNode,
-                            onFieldSubmitted,
-                          ) {
-                            return TextField(
-                              controller: textController,
-                              focusNode: focusNode,
-                              style: AppTypography.bodySmall(),
-                              decoration: InputDecoration(
-                                hintText: Tr.adminClientsFilterTagHint.tr,
-                                hintStyle: AppTypography.bodySmall(),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 0,
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.border,
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.border,
-                                  ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  borderSide: const BorderSide(
-                                    color: AppColors.terracotta,
-                                  ),
-                                ),
-                              ),
-                              onSubmitted: (value) {
-                                final tag = value.trim();
-                                if (tag.isNotEmpty) {
-                                  ctrl.addTag(tag);
-                                  textController.clear();
-                                }
-                              },
-                            );
-                          },
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  ...q.tags.map(
-                    (tag) => Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: InputChip(
-                        label: Text(tag, style: AppTypography.bodySmall()),
-                        onDeleted: () => ctrl.removeTag(tag),
-                        backgroundColor: AppColors.terracottaLight,
-                        deleteIconColor: AppColors.pierre,
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              ClientsTagFilterRow(controller: ctrl, query: q),
             ],
           ],
         ),
       );
     });
   }
-}
-
-class _StyledDropdown<T> extends StatelessWidget {
-  const _StyledDropdown({
-    required this.value,
-    required this.hint,
-    required this.items,
-    required this.onChanged,
-  });
-
-  final T value;
-  final String hint;
-  final List<DropdownMenuItem<T>> items;
-  final ValueChanged<T?> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.bg,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: DropdownButton<T>(
-        value: value,
-        hint: Text(hint, style: AppTypography.bodySmall()),
-        underline: const SizedBox(),
-        style: AppTypography.bodySmall().copyWith(color: AppColors.encre),
-        items: items,
-        onChanged: onChanged,
-        isDense: true,
-      ),
-    );
-  }
-}
-
-/// Translates [AcquisitionSource] to its localisation key.
-extension AcquisitionSourceTr on AcquisitionSource {
-  String get trKey => switch (this) {
-    AcquisitionSource.referral => Tr.acquisitionSourceReferral,
-    AcquisitionSource.socialMedia => Tr.acquisitionSourceSocialMedia,
-    AcquisitionSource.website => Tr.acquisitionSourceWebsite,
-    AcquisitionSource.wordOfMouth => Tr.acquisitionSourceWordOfMouth,
-    AcquisitionSource.event => Tr.acquisitionSourceEvent,
-    AcquisitionSource.other => Tr.acquisitionSourceOther,
-  };
 }
