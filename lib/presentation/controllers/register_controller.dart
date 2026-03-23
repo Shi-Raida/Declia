@@ -65,14 +65,22 @@ final class RegisterController extends GetxController
     if (_initialTenantSlug != null) {
       tenantSlugController.text = _initialTenantSlug;
     }
-    // Reset wizard to step 0 when role changes during registration
+    // Password strength listener
+    passwordController.addListener(_updatePasswordStrength);
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    // Reset wizard to step 0 when role changes during registration.
+    // Must be in onReady (not onInit) to avoid circular DI resolution:
+    // AuthController constructor -> Get.find<RegisterController>()
+    // -> RegisterController.onInit() -> orchestrator -> Get.find<AuthController>()
     ever(orchestrator.selectedRole, (_) {
       if (orchestrator.currentView.value == AuthView.register) {
         registerStep.value = 0;
       }
     });
-    // Password strength listener
-    passwordController.addListener(_updatePasswordStrength);
   }
 
   void _updatePasswordStrength() {
@@ -140,13 +148,7 @@ final class RegisterController extends GetxController
   Future<void> register() async {
     // Validate CGU consent on final step
     if (!cguAccepted.value) {
-      errorMessage.value = Tr.registerConsentCguRequired.tr;
-      return;
-    }
-
-    // Client must provide an invitation code
-    if (isClient && tenantSlugController.text.trim().isEmpty) {
-      errorMessage.value = Tr.registerFieldInvitationCodeRequired.tr;
+      errorMessage.value = Tr.auth.register.consentCguRequired.tr;
       return;
     }
 
@@ -164,7 +166,7 @@ final class RegisterController extends GetxController
       );
       if (!isValid) {
         isLoading.value = false;
-        errorMessage.value = Tr.clientRegisterInvalidLink.tr;
+        errorMessage.value = Tr.auth.clientRegister.invalidLink.tr;
         return;
       }
     }
@@ -183,7 +185,8 @@ final class RegisterController extends GetxController
       err: (failure) {
         _logger.warning('Registration failed', error: failure);
         errorMessage.value = switch (failure) {
-          EmailAlreadyInUseFailure() => Tr.clientRegisterEmailAlreadyInUse.tr,
+          EmailAlreadyInUseFailure() =>
+            Tr.auth.clientRegister.emailAlreadyInUse.tr,
           _ => translateAuthFailure(failure),
         };
       },
