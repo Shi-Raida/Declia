@@ -8,6 +8,8 @@ final class GetxNavigationService implements NavigationService {
   @override
   String get currentRoute => Get.currentRoute;
 
+  // -- Auth --
+
   @override
   void toLogin({String? reason}) =>
       Get.offAllNamed(AppRoutes.login, arguments: reason);
@@ -23,6 +25,8 @@ final class GetxNavigationService implements NavigationService {
     }
   }
 
+  // -- Shell --
+
   @override
   void toDashboard() => Get.offAllNamed(AppRoutes.adminDashboard);
 
@@ -34,6 +38,8 @@ final class GetxNavigationService implements NavigationService {
 
   @override
   void toLegalPrivacy() => Get.toNamed(AppRoutes.legalPrivacy);
+
+  // -- Client --
 
   @override
   void toClientDetail(String id, {dynamic arguments}) =>
