@@ -5,7 +5,7 @@ import '../../domain/entities/availability_rule.dart';
 import '../../domain/entities/calendar_event.dart';
 import '../../domain/entities/external_calendar_event.dart';
 import '../../domain/entities/time_slot.dart';
-import '../../usecases/availability/compute_effective_availability.dart';
+import '../../domain/services/compute_effective_availability.dart';
 import '../../usecases/availability/params.dart';
 import '../../usecases/usecase.dart';
 

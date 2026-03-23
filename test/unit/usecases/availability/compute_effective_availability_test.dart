@@ -6,7 +6,7 @@ import 'package:declia/domain/entities/availability_rule.dart';
 import 'package:declia/domain/entities/calendar_event.dart';
 import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/domain/entities/session.dart';
-import 'package:declia/usecases/availability/compute_effective_availability.dart';
+import 'package:declia/domain/services/compute_effective_availability.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Wednesday 2026-03-18 (weekday = 3)
