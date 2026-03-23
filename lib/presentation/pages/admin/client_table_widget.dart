@@ -65,7 +65,7 @@ class ClientsTable extends StatelessWidget {
                 ),
               ),
               DataColumn(
-                label: Text(Tr.adminClientsTableName.tr),
+                label: Text(Tr.admin.clients.tableName.tr),
                 onSort: (_, ascending) => controller.setSort(
                   ClientSortField.name,
                   ascending
@@ -73,12 +73,12 @@ class ClientsTable extends StatelessWidget {
                       : SortDirection.descending,
                 ),
               ),
-              DataColumn(label: Text(Tr.adminClientsTablePhone.tr)),
-              DataColumn(label: Text(Tr.adminClientsTableCategory.tr)),
-              DataColumn(label: Text(Tr.adminClientsTableStatus.tr)),
-              DataColumn(label: Text(Tr.adminClientsTableLastShooting.tr)),
-              DataColumn(label: Text(Tr.adminClientsTableRevenue.tr)),
-              DataColumn(label: Text(Tr.adminClientsTableActions.tr)),
+              DataColumn(label: Text(Tr.admin.clients.tablePhone.tr)),
+              DataColumn(label: Text(Tr.admin.clients.tableCategory.tr)),
+              DataColumn(label: Text(Tr.admin.clients.tableStatus.tr)),
+              DataColumn(label: Text(Tr.admin.clients.tableLastShooting.tr)),
+              DataColumn(label: Text(Tr.admin.clients.tableRevenue.tr)),
+              DataColumn(label: Text(Tr.admin.clients.tableActions.tr)),
             ],
             rows: controller.clients
                 .map((vm) => _buildRow(context, vm))
@@ -185,19 +185,19 @@ class _ActionsCell extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.visibility_outlined, size: 18),
           color: AppColors.bleuOuvert,
-          tooltip: Tr.adminClientDetailView.tr,
+          tooltip: Tr.admin.clientDetail.view.tr,
           onPressed: () => controller.viewClient(vm),
         ),
         IconButton(
           icon: const Icon(Icons.edit_outlined, size: 18),
           color: AppColors.pierre,
-          tooltip: Tr.adminClientDetailEdit.tr,
+          tooltip: Tr.admin.clientDetail.edit.tr,
           onPressed: () => controller.editClient(vm),
         ),
         IconButton(
           icon: const Icon(Icons.delete_outline, size: 18),
           color: AppColors.error,
-          tooltip: Tr.adminClientDetailDelete.tr,
+          tooltip: Tr.admin.clientDetail.delete.tr,
           onPressed: () => _confirmDelete(context),
         ),
       ],
@@ -209,18 +209,18 @@ class _ActionsCell extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          Tr.adminClientsDeleteConfirm.tr,
+          Tr.admin.clients.deleteConfirm.tr,
           style: AppTypography.heading4(),
         ),
         content: Text(
-          Tr.adminClientsDeleteBody.tr,
+          Tr.admin.clients.deleteBody.tr,
           style: AppTypography.bodyMedium(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(
-              Tr.adminClientFormCancel.tr,
+              Tr.admin.clientForm.cancel.tr,
               style: AppTypography.button().copyWith(color: AppColors.pierre),
             ),
           ),
@@ -234,7 +234,7 @@ class _ActionsCell extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
             child: Text(
-              Tr.adminClientDetailDelete.tr,
+              Tr.admin.clientDetail.delete.tr,
               style: AppTypography.button(),
             ),
           ),

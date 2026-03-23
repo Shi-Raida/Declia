@@ -40,8 +40,8 @@ class AuthLoginForm extends GetView<LoginController> {
                   children: [
                     Text(
                       isClient
-                          ? Tr.loginTitleClient.tr
-                          : Tr.loginTitlePhotographer.tr,
+                          ? Tr.auth.login.titleClient.tr
+                          : Tr.auth.login.titlePhotographer.tr,
                       style: GoogleFonts.cormorantGaramond(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
@@ -51,8 +51,8 @@ class AuthLoginForm extends GetView<LoginController> {
                     const SizedBox(height: 4),
                     Text(
                       isClient
-                          ? Tr.loginSubtitleClient.tr
-                          : Tr.loginSubtitlePhotographer.tr,
+                          ? Tr.auth.login.subtitleClient.tr
+                          : Tr.auth.login.subtitlePhotographer.tr,
                       style: AppTypography.bodySmall(),
                     ),
                   ],
@@ -68,7 +68,7 @@ class AuthLoginForm extends GetView<LoginController> {
 
             // Email field
             Text(
-              Tr.loginEmail.tr.toUpperCase(),
+              Tr.auth.login.email.tr.toUpperCase(),
               style: GoogleFonts.outfit(
                 fontSize: 12.8,
                 fontWeight: FontWeight.w600,
@@ -86,15 +86,15 @@ class AuthLoginForm extends GetView<LoginController> {
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  hintText: Tr.loginEmailHint.tr,
+                  hintText: Tr.auth.login.emailHint.tr,
                   prefixIcon: const Icon(Icons.mail_outline, size: 18),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return Tr.loginEmailRequired.tr;
+                    return Tr.auth.login.emailRequired.tr;
                   }
                   if (!GetUtils.isEmail(value.trim())) {
-                    return Tr.loginEmailInvalid.tr;
+                    return Tr.auth.login.emailInvalid.tr;
                   }
                   return null;
                 },
@@ -104,7 +104,7 @@ class AuthLoginForm extends GetView<LoginController> {
 
             // Password field
             Text(
-              Tr.loginPassword.tr.toUpperCase(),
+              Tr.auth.login.password.tr.toUpperCase(),
               style: GoogleFonts.outfit(
                 fontSize: 12.8,
                 fontWeight: FontWeight.w600,
@@ -141,7 +141,7 @@ class AuthLoginForm extends GetView<LoginController> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return Tr.loginPasswordRequired.tr;
+                      return Tr.auth.login.passwordRequired.tr;
                     }
                     return null;
                   },
@@ -164,7 +164,10 @@ class AuthLoginForm extends GetView<LoginController> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                Text(Tr.loginRememberMe.tr, style: AppTypography.bodySmall()),
+                Text(
+                  Tr.auth.login.rememberMe.tr,
+                  style: AppTypography.bodySmall(),
+                ),
                 const Spacer(),
                 TextButton(
                   onPressed: controller.goToForgotPassword,
@@ -175,7 +178,7 @@ class AuthLoginForm extends GetView<LoginController> {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    Tr.loginForgotPassword.tr,
+                    Tr.auth.login.forgotPassword.tr,
                     style: AppTypography.bodySmall().copyWith(
                       color: accentColor,
                     ),
@@ -212,8 +215,8 @@ class AuthLoginForm extends GetView<LoginController> {
                         )
                       : Text(
                           isClient
-                              ? Tr.loginSubmit.tr
-                              : Tr.loginSubmitPhotographer.tr,
+                              ? Tr.auth.login.submit.tr
+                              : Tr.auth.login.submitPhotographer.tr,
                           style: AppTypography.button().copyWith(
                             color: Colors.white,
                           ),
@@ -228,7 +231,7 @@ class AuthLoginForm extends GetView<LoginController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  Tr.loginFooterNoAccount.tr,
+                  Tr.auth.login.footerNoAccount.tr,
                   style: AppTypography.bodySmall(),
                 ),
                 const SizedBox(width: 4),
@@ -236,8 +239,8 @@ class AuthLoginForm extends GetView<LoginController> {
                   onTap: controller.goToRegister,
                   child: Text(
                     isClient
-                        ? Tr.loginFooterCreateAccount.tr
-                        : Tr.loginFooterCreateAccountPhotographer.tr,
+                        ? Tr.auth.login.footerCreateAccount.tr
+                        : Tr.auth.login.footerCreateAccountPhotographer.tr,
                     style: AppTypography.bodySmall().copyWith(
                       color: accentColor,
                       fontWeight: FontWeight.w600,

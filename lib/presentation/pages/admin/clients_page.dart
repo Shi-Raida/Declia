@@ -17,12 +17,12 @@ class ClientsPage extends GetView<ClientsController> {
   @override
   Widget build(BuildContext context) {
     return AdminLayout(
-      title: Tr.adminClientsTitle.tr,
+      title: Tr.admin.clients.title.tr,
       topbarActions: [
         OutlinedButton.icon(
           onPressed: () {},
           icon: const Icon(Icons.download_outlined, size: 18),
-          label: Text(Tr.adminClientsExport.tr),
+          label: Text(Tr.admin.clients.export.tr),
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.pierre,
             side: const BorderSide(color: AppColors.border),
@@ -35,7 +35,7 @@ class ClientsPage extends GetView<ClientsController> {
         FilledButton.icon(
           onPressed: () => controller.createNewClient(),
           icon: const Icon(Icons.add, size: 18),
-          label: Text(Tr.adminClientsNew.tr),
+          label: Text(Tr.admin.clients.add.tr),
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.terracotta,
             foregroundColor: Colors.white,
@@ -58,7 +58,7 @@ class ClientsPage extends GetView<ClientsController> {
                     child: StatCard(
                       icon: Icons.people_outline,
                       iconColor: AppColors.bleuOuvert,
-                      label: Tr.adminClientsTotalClients.tr,
+                      label: Tr.admin.clients.totalClients.tr,
                       value: '${controller.totalCount.value}',
                     ),
                   ),
@@ -67,7 +67,7 @@ class ClientsPage extends GetView<ClientsController> {
                     child: StatCard(
                       icon: Icons.check_circle_outline,
                       iconColor: AppColors.success,
-                      label: Tr.adminClientsActive.tr,
+                      label: Tr.admin.clients.active.tr,
                       value: '—',
                     ),
                   ),
@@ -76,7 +76,7 @@ class ClientsPage extends GetView<ClientsController> {
                     child: StatCard(
                       icon: Icons.person_add_outlined,
                       iconColor: AppColors.or,
-                      label: Tr.adminClientsStatNew.tr,
+                      label: Tr.admin.clients.statNew.tr,
                       value: '—',
                     ),
                   ),
@@ -85,7 +85,7 @@ class ClientsPage extends GetView<ClientsController> {
                     child: StatCard(
                       icon: Icons.euro_outlined,
                       iconColor: AppColors.terracotta,
-                      label: Tr.adminClientsAvgRevenue.tr,
+                      label: Tr.admin.clients.avgRevenue.tr,
                       value: '—',
                     ),
                   ),
@@ -125,7 +125,7 @@ class _ClientsContent extends StatelessWidget {
       if (controller.clients.isEmpty) {
         return Center(
           child: Text(
-            Tr.adminClientsEmpty.tr,
+            Tr.admin.clients.empty.tr,
             style: AppTypography.bodyMedium().copyWith(color: AppColors.pierre),
           ),
         );

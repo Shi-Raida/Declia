@@ -25,16 +25,16 @@ class SettingsSidebar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         children: [
           _SettingsSidebarSection(
-            title: Tr.settingsSectionMyStudio.tr,
+            title: Tr.admin.settings.section.myStudio.tr,
             items: [
               _SettingsSidebarItem(
-                label: Tr.settingsSectionStudio.tr,
+                label: Tr.admin.settings.section.studio.tr,
                 icon: Icons.store_outlined,
                 section: SettingsSection.studio,
                 controller: controller,
               ),
               _SettingsSidebarItem(
-                label: Tr.settingsSectionLegal.tr,
+                label: Tr.admin.settings.section.legal.tr,
                 icon: Icons.gavel_outlined,
                 section: SettingsSection.legal,
                 controller: controller,
@@ -42,16 +42,16 @@ class SettingsSidebar extends StatelessWidget {
             ],
           ),
           _SettingsSidebarSection(
-            title: Tr.settingsSectionIdentity.tr,
+            title: Tr.admin.settings.section.identity.tr,
             items: [
               _SettingsSidebarItem(
-                label: Tr.settingsSectionColors.tr,
+                label: Tr.admin.settings.section.colors.tr,
                 icon: Icons.palette_outlined,
                 section: SettingsSection.colors,
                 controller: controller,
               ),
               _SettingsSidebarItem(
-                label: Tr.settingsSectionTypography.tr,
+                label: Tr.admin.settings.section.typography.tr,
                 icon: Icons.text_fields_outlined,
                 section: SettingsSection.typography,
                 controller: controller,
@@ -59,10 +59,10 @@ class SettingsSidebar extends StatelessWidget {
             ],
           ),
           _SettingsSidebarSection(
-            title: Tr.settingsSectionConnections.tr,
+            title: Tr.admin.settings.section.connections.tr,
             items: [
               _SettingsSidebarItem(
-                label: Tr.settingsSectionIntegrations.tr,
+                label: Tr.admin.settings.section.integrations.tr,
                 icon: Icons.extension_outlined,
                 section: SettingsSection.integrations,
                 controller: controller,

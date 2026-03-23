@@ -124,8 +124,9 @@ final class ClientFormController extends GetxController {
       country: countryCtrl.text.trim().isEmpty ? null : countryCtrl.text.trim(),
     );
 
-    final company =
-        companyCtrl.text.trim().isEmpty ? null : companyCtrl.text.trim();
+    final company = companyCtrl.text.trim().isEmpty
+        ? null
+        : companyCtrl.text.trim();
 
     final client = isEditing
         ? existingClient!.copyWith(

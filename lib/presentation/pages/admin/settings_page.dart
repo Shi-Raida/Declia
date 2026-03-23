@@ -20,7 +20,7 @@ class SettingsPage extends GetView<SettingsController> {
     final isMobile = width < AppBreakpoints.mobile;
 
     return AdminLayout(
-      title: Tr.adminSidebarSettings.tr,
+      title: Tr.admin.sidebar.settings.tr,
       body: isMobile
           ? _MobileSettingsLayout(controller: controller)
           : _DesktopSettingsLayout(controller: controller),
@@ -157,7 +157,10 @@ class _PlaceholderPanel extends StatelessWidget {
           const SizedBox(height: 16),
           Text(title, style: AppTypography.heading4()),
           const SizedBox(height: 8),
-          Text(Tr.settingsPlaceholder.tr, style: AppTypography.bodySmall()),
+          Text(
+            Tr.admin.settings.placeholder.tr,
+            style: AppTypography.bodySmall(),
+          ),
         ],
       ),
     );

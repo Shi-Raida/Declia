@@ -23,13 +23,12 @@ class RegisterStepPersonal extends GetView<RegisterController> {
         children: [
           // ── INVITATION CODE (client only) ──
           if (controller.isClient) ...[
-            _label(Tr.registerFieldInvitationCode.tr, required: true),
+            _label(Tr.auth.register.fieldInvitationCode.tr),
             const SizedBox(height: 6),
             _field(
               controller: controller.tenantSlugController,
-              hint: Tr.registerFieldInvitationCodeHint.tr,
+              hint: Tr.auth.register.fieldInvitationCodeHint.tr,
               icon: Icons.vpn_key_outlined,
-              required: true,
               action: TextInputAction.next,
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -40,7 +39,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
           const SizedBox(height: AppSpacing.lg),
 
           // ── IDENTITÉ ──────────────────────
-          SectionDivider(label: Tr.registerSectionIdentity.tr),
+          SectionDivider(label: Tr.auth.register.sectionIdentity.tr),
           const SizedBox(height: AppSpacing.md),
 
           Row(
@@ -50,11 +49,11 @@ class RegisterStepPersonal extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label(Tr.registerFieldFirstName.tr, required: true),
+                    _label(Tr.auth.register.fieldFirstName.tr, required: true),
                     const SizedBox(height: 6),
                     _field(
                       controller: controller.firstNameController,
-                      hint: Tr.registerFieldFirstName.tr,
+                      hint: Tr.auth.register.fieldFirstName.tr,
                       icon: Icons.person_outline,
                       required: true,
                       action: TextInputAction.next,
@@ -67,11 +66,11 @@ class RegisterStepPersonal extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label(Tr.registerFieldLastName.tr, required: true),
+                    _label(Tr.auth.register.fieldLastName.tr, required: true),
                     const SizedBox(height: 6),
                     _field(
                       controller: controller.lastNameController,
-                      hint: Tr.registerFieldLastName.tr,
+                      hint: Tr.auth.register.fieldLastName.tr,
                       icon: Icons.person_outline,
                       required: true,
                       action: TextInputAction.next,
@@ -83,16 +82,16 @@ class RegisterStepPersonal extends GetView<RegisterController> {
           ),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.loginEmail.tr, required: true),
+          _label(Tr.auth.login.email.tr, required: true),
           const SizedBox(height: 6),
           _emailField(),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.registerFieldPhone.tr, required: true),
+          _label(Tr.auth.register.fieldPhone.tr, required: true),
           const SizedBox(height: 6),
           _field(
             controller: controller.phoneController,
-            hint: Tr.registerFieldPhone.tr,
+            hint: Tr.auth.register.fieldPhone.tr,
             icon: Icons.phone_outlined,
             required: true,
             keyboard: TextInputType.phone,
@@ -103,11 +102,11 @@ class RegisterStepPersonal extends GetView<RegisterController> {
 
           // Company (client only, optional)
           if (controller.isClient) ...[
-            _label(Tr.registerFieldCompany.tr),
+            _label(Tr.auth.register.fieldCompany.tr),
             const SizedBox(height: 6),
             _field(
               controller: controller.clientCompanyController,
-              hint: Tr.registerFieldCompany.tr,
+              hint: Tr.auth.register.fieldCompany.tr,
               icon: Icons.business_outlined,
               action: TextInputAction.next,
             ),
@@ -115,12 +114,12 @@ class RegisterStepPersonal extends GetView<RegisterController> {
           const SizedBox(height: AppSpacing.lg),
 
           // ── ADRESSE ───────────────────────
-          SectionDivider(label: Tr.registerSectionAddress.tr),
+          SectionDivider(label: Tr.auth.register.sectionAddress.tr),
           const SizedBox(height: AppSpacing.md),
 
           _field(
             controller: controller.streetController,
-            hint: Tr.registerFieldStreet.tr,
+            hint: Tr.auth.register.fieldStreet.tr,
             icon: Icons.home_outlined,
             action: TextInputAction.next,
           ),
@@ -132,7 +131,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
                 width: 130,
                 child: _field(
                   controller: controller.postalCodeController,
-                  hint: Tr.registerFieldPostalCode.tr,
+                  hint: Tr.auth.register.fieldPostalCode.tr,
                   keyboard: TextInputType.number,
                   action: TextInputAction.next,
                   formatters: [PostalCodeFormatter()],
@@ -142,7 +141,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
               Expanded(
                 child: _field(
                   controller: controller.cityController,
-                  hint: Tr.registerFieldCity.tr,
+                  hint: Tr.auth.register.fieldCity.tr,
                   action: TextInputAction.next,
                 ),
               ),
@@ -152,7 +151,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
 
           _field(
             controller: controller.countryController,
-            hint: Tr.registerFieldCountry.tr,
+            hint: Tr.auth.register.fieldCountry.tr,
             icon: Icons.flag_outlined,
             action: TextInputAction.done,
             onFieldSubmitted: (_) => controller.goToNextStep(),
@@ -205,7 +204,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    Tr.registerAvatarTitle.tr,
+                    Tr.auth.register.avatarTitle.tr,
                     style: GoogleFonts.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -214,7 +213,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    Tr.registerAvatarHint.tr,
+                    Tr.auth.register.avatarHint.tr,
                     style: GoogleFonts.outfit(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w400,
@@ -240,15 +239,15 @@ class RegisterStepPersonal extends GetView<RegisterController> {
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: Tr.loginEmailHint.tr,
+          hintText: Tr.auth.login.emailHint.tr,
           prefixIcon: const Icon(Icons.mail_outline, size: 18),
         ),
         validator: (value) {
           if (value == null || value.trim().isEmpty) {
-            return Tr.loginEmailRequired.tr;
+            return Tr.auth.login.emailRequired.tr;
           }
           if (!GetUtils.isEmail(value.trim())) {
-            return Tr.loginEmailInvalid.tr;
+            return Tr.auth.login.emailInvalid.tr;
           }
           return null;
         },
@@ -308,7 +307,7 @@ class RegisterStepPersonal extends GetView<RegisterController> {
         validator: required
             ? (value) {
                 if (value == null || value.trim().isEmpty) {
-                  return Tr.registerFieldRequired.tr;
+                  return Tr.auth.register.fieldRequired.tr;
                 }
                 return null;
               }

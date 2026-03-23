@@ -38,19 +38,19 @@ class ExternalEventDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _InfoRow(
-              label: Tr.adminHistoryColDate.tr,
+              label: Tr.admin.history.colDate.tr,
               value: event.isAllDay
                   ? formatDate(event.startAt)
                   : '${formatDate(event.startAt)} $hour:$minute – $endHour:$endMinute',
             ),
             if (event.location != null && event.location!.isNotEmpty)
               _InfoRow(
-                label: Tr.adminHistoryColLocation.tr,
+                label: Tr.admin.history.colLocation.tr,
                 value: event.location!,
               ),
             _InfoRow(
-              label: Tr.adminPlanningExternalSource.tr,
-              value: Tr.adminPlanningExternalEvent.tr,
+              label: Tr.admin.planning.externalSource.tr,
+              value: Tr.admin.planning.externalEvent.tr,
             ),
           ],
         ),
@@ -59,7 +59,7 @@ class ExternalEventDialog extends StatelessWidget {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            Tr.adminClientFormCancel.tr,
+            Tr.admin.clientForm.cancel.tr,
             style: AppTypography.button().copyWith(color: AppColors.pierre),
           ),
         ),

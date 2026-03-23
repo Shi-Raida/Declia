@@ -39,7 +39,10 @@ class RegisterNavigationBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text(Tr.registerBtnBack.tr, style: AppTypography.button()),
+              child: Text(
+                Tr.auth.register.btnBack.tr,
+                style: AppTypography.button(),
+              ),
             ),
           ),
         if (step > 0) const SizedBox(width: 12),
@@ -73,8 +76,8 @@ class RegisterNavigationBar extends StatelessWidget {
                     )
                   : Text(
                       isLastStep
-                          ? Tr.registerBtnSubmit.tr
-                          : Tr.registerBtnContinue.tr,
+                          ? Tr.auth.register.btnSubmit.tr
+                          : Tr.auth.register.btnContinue.tr,
                       style: AppTypography.button().copyWith(
                         color: Colors.white,
                       ),

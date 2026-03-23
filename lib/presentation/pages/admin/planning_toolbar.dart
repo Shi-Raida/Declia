@@ -43,15 +43,15 @@ class PlanningToolbar extends StatelessWidget {
               segments: [
                 ButtonSegment(
                   value: CalendarView.month,
-                  label: Text(Tr.adminPlanningViewMonth.tr),
+                  label: Text(Tr.admin.planning.viewMonth.tr),
                 ),
                 ButtonSegment(
                   value: CalendarView.week,
-                  label: Text(Tr.adminPlanningViewWeek.tr),
+                  label: Text(Tr.admin.planning.viewWeek.tr),
                 ),
                 ButtonSegment(
                   value: CalendarView.day,
-                  label: Text(Tr.adminPlanningViewDay.tr),
+                  label: Text(Tr.admin.planning.viewDay.tr),
                 ),
               ],
               selected: {controller.currentView.value},
@@ -72,7 +72,7 @@ class PlanningToolbar extends StatelessWidget {
             TextButton(
               onPressed: controller.goToToday,
               child: Text(
-                Tr.adminPlanningToday.tr,
+                Tr.admin.planning.today.tr,
                 style: AppTypography.button().copyWith(
                   color: AppColors.terracotta,
                 ),
@@ -102,13 +102,13 @@ class PlanningToolbar extends StatelessWidget {
                     ? AppColors.terracotta
                     : AppColors.pierre,
               ),
-              tooltip: Tr.adminAvailabilityToggle.tr,
+              tooltip: Tr.admin.availability.toggle.tr,
               onPressed: availabilityController.toggleAvailability,
             ),
             // Manage availability rules
             IconButton(
               icon: const Icon(Icons.tune),
-              tooltip: Tr.adminAvailabilityManage.tr,
+              tooltip: Tr.admin.availability.manage.tr,
               onPressed: () => _showRulesDialog(context),
               style: IconButton.styleFrom(
                 foregroundColor: AppColors.crepuscule,

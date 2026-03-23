@@ -45,7 +45,7 @@ class ActivityFeedCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 16, 12),
             child: Text(
-              Tr.dashboardRecentActivity.tr,
+              Tr.admin.dashboard.recentActivity.tr,
               style: AppTypography.heading4(),
             ),
           ),

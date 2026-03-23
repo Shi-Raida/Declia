@@ -51,7 +51,7 @@ class UpcomingSessionsCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  Tr.dashboardUpcomingSessions.tr,
+                  Tr.admin.dashboard.upcomingSessions.tr,
                   style: AppTypography.heading4(),
                 ),
                 const Spacer(),
@@ -67,7 +67,7 @@ class UpcomingSessionsCard extends StatelessWidget {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    Tr.dashboardSeeAll.tr,
+                    Tr.admin.dashboard.seeAll.tr,
                     style: AppTypography.bodySmall().copyWith(
                       color: AppColors.bleuOuvert,
                     ),

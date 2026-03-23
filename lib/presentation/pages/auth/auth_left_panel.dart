@@ -84,20 +84,35 @@ class AuthLeftPanel extends GetView<AuthController> {
 
     final steps = isClient
         ? [
-            (Tr.registerStepPersonal.tr, Tr.registerStepPersonalDesc.tr),
-            (Tr.registerStepSecurity.tr, Tr.registerStepSecurityDesc.tr),
             (
-              Tr.registerStepConfirmation.tr,
-              Tr.registerStepConfirmationDesc.tr,
+              Tr.auth.register.stepPersonal.tr,
+              Tr.auth.register.stepPersonalDesc.tr,
+            ),
+            (
+              Tr.auth.register.stepSecurity.tr,
+              Tr.auth.register.stepSecurityDesc.tr,
+            ),
+            (
+              Tr.auth.register.stepConfirmation.tr,
+              Tr.auth.register.stepConfirmationDesc.tr,
             ),
           ]
         : [
-            (Tr.registerStepBusiness.tr, Tr.registerStepBusinessDesc.tr),
-            (Tr.registerStepStudio.tr, Tr.registerStepStudioDesc.tr),
-            (Tr.registerStepSecurity.tr, Tr.registerStepSecurityDesc.tr),
             (
-              Tr.registerStepConfirmation.tr,
-              Tr.registerStepConfirmationDesc.tr,
+              Tr.auth.register.stepBusiness.tr,
+              Tr.auth.register.stepBusinessDesc.tr,
+            ),
+            (
+              Tr.auth.register.stepStudio.tr,
+              Tr.auth.register.stepStudioDesc.tr,
+            ),
+            (
+              Tr.auth.register.stepSecurity.tr,
+              Tr.auth.register.stepSecurityDesc.tr,
+            ),
+            (
+              Tr.auth.register.stepConfirmation.tr,
+              Tr.auth.register.stepConfirmationDesc.tr,
             ),
           ];
 
@@ -130,8 +145,8 @@ class AuthLeftPanel extends GetView<AuthController> {
                     children: [
                       TextSpan(
                         text: isClient
-                            ? Tr.registerLeftTaglineClient.tr
-                            : Tr.registerLeftTaglinePhotographer.tr,
+                            ? Tr.auth.register.leftTaglineClient.tr
+                            : Tr.auth.register.leftTaglinePhotographer.tr,
                         style: GoogleFonts.cormorantGaramond(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
@@ -141,8 +156,12 @@ class AuthLeftPanel extends GetView<AuthController> {
                       ),
                       TextSpan(
                         text: isClient
-                            ? Tr.registerLeftTaglineClientHighlight.tr
-                            : Tr.registerLeftTaglinePhotographerHighlight.tr,
+                            ? Tr.auth.register.leftTaglineClientHighlight.tr
+                            : Tr
+                                  .auth
+                                  .register
+                                  .leftTaglinePhotographerHighlight
+                                  .tr,
                         style: GoogleFonts.cormorantGaramond(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
@@ -157,8 +176,8 @@ class AuthLeftPanel extends GetView<AuthController> {
                 const SizedBox(height: 12),
                 Text(
                   isClient
-                      ? Tr.registerLeftSubtitleClient.tr
-                      : Tr.registerLeftSubtitlePhotographer.tr,
+                      ? Tr.auth.register.leftSubtitleClient.tr
+                      : Tr.auth.register.leftSubtitlePhotographer.tr,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
                     fontSize: 14,

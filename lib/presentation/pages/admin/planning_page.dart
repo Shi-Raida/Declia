@@ -29,7 +29,7 @@ class PlanningPage extends GetView<PlanningController> {
   @override
   Widget build(BuildContext context) {
     return AdminLayout(
-      title: Tr.adminPlanningTitle.tr,
+      title: Tr.admin.planning.title.tr,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -85,13 +85,13 @@ class _PlanningTabBar extends StatelessWidget {
           children: [
             _TabItem(
               icon: Icons.calendar_month_outlined,
-              label: Tr.planningTabCalendar.tr,
+              label: Tr.admin.planning.tabCalendar.tr,
               isActive: selected == 0,
               onTap: () => controller.selectedTab.value = 0,
             ),
             _TabItem(
               icon: Icons.access_time_outlined,
-              label: Tr.planningTabEditor.tr,
+              label: Tr.admin.planning.tabEditor.tr,
               isActive: selected == 1,
               onTap: () => controller.selectedTab.value = 1,
             ),

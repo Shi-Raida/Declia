@@ -26,13 +26,13 @@ class ClientDetailOrdersSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.adminHistoryOrders.tr.toUpperCase(),
+            Tr.admin.history.orders.tr.toUpperCase(),
             style: AppTypography.label(),
           ),
           const SizedBox(height: 12),
           if (orders.isEmpty)
             Text(
-              Tr.adminHistoryOrdersEmpty.tr,
+              Tr.admin.history.ordersEmpty.tr,
               style: AppTypography.bodyMedium().copyWith(
                 color: AppColors.pierre,
               ),

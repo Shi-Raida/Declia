@@ -57,27 +57,27 @@ class ClientDetailPage extends GetView<ClientDetailController> {
                   }),
                   // Identity
                   DetailSection(
-                    title: Tr.adminClientFormSectionIdentity.tr,
+                    title: Tr.admin.clientForm.sectionIdentity.tr,
                     rows: [
                       DetailRow(
-                        label: Tr.adminClientFormFirstName.tr,
+                        label: Tr.admin.clientForm.firstName.tr,
                         value: client.firstName,
                       ),
                       DetailRow(
-                        label: Tr.adminClientFormLastName.tr,
+                        label: Tr.admin.clientForm.lastName.tr,
                         value: client.lastName,
                       ),
                       DetailRow(
-                        label: Tr.adminClientFormEmail.tr,
-                        value: client.email ?? Tr.adminClientDetailNoEmail.tr,
+                        label: Tr.admin.clientForm.email.tr,
+                        value: client.email ?? Tr.admin.clientDetail.noEmail.tr,
                       ),
                       DetailRow(
-                        label: Tr.adminClientFormPhone.tr,
-                        value: client.phone ?? Tr.adminClientDetailNoPhone.tr,
+                        label: Tr.admin.clientForm.phone.tr,
+                        value: client.phone ?? Tr.admin.clientDetail.noPhone.tr,
                       ),
                       if (client.dateOfBirth != null)
                         DetailRow(
-                          label: Tr.adminClientFormDob.tr,
+                          label: Tr.admin.clientForm.dob.tr,
                           value: formatDate(client.dateOfBirth!),
                         ),
                     ],
@@ -85,58 +85,58 @@ class ClientDetailPage extends GetView<ClientDetailController> {
                   const SizedBox(height: 16),
                   // Address
                   DetailSection(
-                    title: Tr.adminClientFormSectionAddress.tr,
+                    title: Tr.admin.clientForm.sectionAddress.tr,
                     rows: [
                       DetailRow(
-                        label: Tr.adminClientFormSectionAddress.tr,
+                        label: Tr.admin.clientForm.sectionAddress.tr,
                         value:
                             _formatAddress(client) ??
-                            Tr.adminClientDetailNoAddress.tr,
+                            Tr.admin.clientDetail.noAddress.tr,
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   // CRM
                   DetailSection(
-                    title: Tr.adminClientFormSectionCrm.tr,
+                    title: Tr.admin.clientForm.sectionCrm.tr,
                     rows: [
                       if (client.acquisitionSource != null)
                         DetailRow(
-                          label: Tr.adminClientFormAcquisitionSource.tr,
+                          label: Tr.admin.clientForm.acquisitionSource.tr,
                           value: client.acquisitionSource!.trKey.tr,
                         ),
                       DetailRow(
-                        label: Tr.adminClientFormTags.tr,
+                        label: Tr.admin.clientForm.tags.tr,
                         value: client.tags.isEmpty
                             ? '—'
                             : client.tags.join(', '),
                       ),
                       DetailRow(
-                        label: Tr.adminClientFormNotes.tr,
-                        value: client.notes ?? Tr.adminClientDetailNoNotes.tr,
+                        label: Tr.admin.clientForm.notes.tr,
+                        value: client.notes ?? Tr.admin.clientDetail.noNotes.tr,
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   // GDPR
                   DetailSection(
-                    title: Tr.adminClientFormSectionGdpr.tr,
+                    title: Tr.admin.clientForm.sectionGdpr.tr,
                     rows: [
                       if (client.gdprConsentDate != null)
                         DetailRow(
-                          label: Tr.adminClientFormGdprConsentDate.tr,
+                          label: Tr.admin.clientForm.gdprConsentDate.tr,
                           value: formatDate(client.gdprConsentDate!),
                         ),
                       DetailRow(
-                        label: Tr.adminClientFormGdprEmail.tr,
+                        label: Tr.admin.clientForm.gdprEmail.tr,
                         value: _boolLabel(client.commEmail),
                       ),
                       DetailRow(
-                        label: Tr.adminClientFormGdprSms.tr,
+                        label: Tr.admin.clientForm.gdprSms.tr,
                         value: _boolLabel(client.commSms),
                       ),
                       DetailRow(
-                        label: Tr.adminClientFormGdprPhone.tr,
+                        label: Tr.admin.clientForm.gdprPhone.tr,
                         value: _boolLabel(client.commPhone),
                       ),
                     ],
@@ -201,7 +201,7 @@ class _DetailActions extends StatelessWidget {
         OutlinedButton.icon(
           onPressed: controller.editClient,
           icon: const Icon(Icons.edit_outlined, size: 16),
-          label: Text(Tr.adminClientDetailEdit.tr),
+          label: Text(Tr.admin.clientDetail.edit.tr),
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.crepuscule,
             side: const BorderSide(color: AppColors.border),
@@ -212,7 +212,7 @@ class _DetailActions extends StatelessWidget {
         OutlinedButton.icon(
           onPressed: () => _confirmDelete(context, controller),
           icon: const Icon(Icons.delete_outline, size: 16),
-          label: Text(Tr.adminClientDetailDelete.tr),
+          label: Text(Tr.admin.clientDetail.delete.tr),
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.error,
             side: const BorderSide(color: AppColors.error),
@@ -228,18 +228,18 @@ class _DetailActions extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          Tr.adminClientsDeleteConfirm.tr,
+          Tr.admin.clients.deleteConfirm.tr,
           style: AppTypography.heading4(),
         ),
         content: Text(
-          Tr.adminClientsDeleteBody.tr,
+          Tr.admin.clients.deleteBody.tr,
           style: AppTypography.bodyMedium(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(
-              Tr.adminClientFormCancel.tr,
+              Tr.admin.clientForm.cancel.tr,
               style: AppTypography.button().copyWith(color: AppColors.pierre),
             ),
           ),
@@ -253,7 +253,7 @@ class _DetailActions extends StatelessWidget {
               foregroundColor: Colors.white,
             ),
             child: Text(
-              Tr.adminClientDetailDelete.tr,
+              Tr.admin.clientDetail.delete.tr,
               style: AppTypography.button(),
             ),
           ),

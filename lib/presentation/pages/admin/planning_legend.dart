@@ -28,12 +28,12 @@ class PlanningLegend extends StatelessWidget {
           ),
           _LegendItem(
             color: AppColors.success,
-            label: Tr.planningLegendAvailable.tr,
+            label: Tr.admin.planning.legendAvailable.tr,
             dashed: true,
           ),
           _LegendItem(
             color: AppColors.pierre,
-            label: Tr.planningLegendBlocked.tr,
+            label: Tr.admin.planning.legendBlocked.tr,
           ),
         ],
       ),
@@ -42,14 +42,14 @@ class PlanningLegend extends StatelessWidget {
 
   String _sessionTypeLabel(SessionType type) {
     return switch (type) {
-      SessionType.family => Tr.sessionTypeFamily.tr,
-      SessionType.equestrian => Tr.sessionTypeEquestrian.tr,
-      SessionType.event => Tr.sessionTypeEvent.tr,
-      SessionType.maternity => Tr.sessionTypeMaternity.tr,
-      SessionType.school => Tr.sessionTypeSchool.tr,
-      SessionType.portrait => Tr.sessionTypePortrait.tr,
-      SessionType.miniSession => Tr.sessionTypeMiniSession.tr,
-      SessionType.other => Tr.sessionTypeOther.tr,
+      SessionType.family => Tr.common.sessionType.family.tr,
+      SessionType.equestrian => Tr.common.sessionType.equestrian.tr,
+      SessionType.event => Tr.common.sessionType.event.tr,
+      SessionType.maternity => Tr.common.sessionType.maternity.tr,
+      SessionType.school => Tr.common.sessionType.school.tr,
+      SessionType.portrait => Tr.common.sessionType.portrait.tr,
+      SessionType.miniSession => Tr.common.sessionType.miniSession.tr,
+      SessionType.other => Tr.common.sessionType.other.tr,
     };
   }
 }

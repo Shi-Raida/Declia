@@ -11,10 +11,10 @@ class InvoicingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdminLayout(
-      title: Tr.adminSidebarInvoicing.tr,
+      title: Tr.admin.sidebar.invoicing.tr,
       body: Center(
         child: Text(
-          Tr.adminPlaceholderComingSoon.tr,
+          Tr.admin.placeholder.comingSoon.tr,
           style: AppTypography.heading3(),
         ),
       ),

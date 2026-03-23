@@ -30,7 +30,7 @@ class PlanningSessionDialog extends StatelessWidget {
 
     return AlertDialog(
       title: Text(
-        Tr.adminPlanningSessionDetail.tr,
+        Tr.admin.planning.sessionDetail.tr,
         style: AppTypography.heading4(),
       ),
       content: SizedBox(
@@ -40,32 +40,32 @@ class PlanningSessionDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _InfoRow(
-              label: Tr.adminHistoryColDate.tr,
+              label: Tr.admin.history.colDate.tr,
               value: '${formatDate(scheduled)} $hour:$minute',
             ),
             _InfoRow(
-              label: Tr.adminPlanningDuration.tr,
+              label: Tr.admin.planning.duration.tr,
               value: _formatDuration(session.durationMinutes),
             ),
             _InfoRow(
-              label: Tr.adminHistoryColType.tr,
+              label: Tr.admin.history.colType.tr,
               value: session.type.trKey.tr,
             ),
             _InfoRow(
-              label: Tr.adminHistoryColStatus.tr,
+              label: Tr.admin.history.colStatus.tr,
               value: session.status.trKey.tr,
             ),
             if (session.location != null && session.location!.isNotEmpty)
               _InfoRow(
-                label: Tr.adminHistoryColLocation.tr,
+                label: Tr.admin.history.colLocation.tr,
                 value: session.location!,
               ),
             _InfoRow(
-              label: Tr.adminHistoryColPayment.tr,
+              label: Tr.admin.history.colPayment.tr,
               value: session.paymentStatus.trKey.tr,
             ),
             _InfoRow(
-              label: Tr.adminHistoryColAmount.tr,
+              label: Tr.admin.history.colAmount.tr,
               value: '${session.amount.toStringAsFixed(2)} €',
             ),
             const Divider(height: 24),
@@ -82,7 +82,7 @@ class PlanningSessionDialog extends StatelessWidget {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            Tr.adminClientFormCancel.tr,
+            Tr.admin.clientForm.cancel.tr,
             style: AppTypography.button().copyWith(color: AppColors.pierre),
           ),
         ),
@@ -98,7 +98,7 @@ class PlanningSessionDialog extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
           child: Text(
-            Tr.adminPlanningViewClient.tr,
+            Tr.admin.planning.viewClient.tr,
             style: AppTypography.button(),
           ),
         ),

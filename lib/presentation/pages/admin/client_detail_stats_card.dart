@@ -27,17 +27,17 @@ class ClientDetailStatsCard extends StatelessWidget {
       child: Row(
         children: [
           _StatCell(
-            label: Tr.adminHistoryStatSessions.tr,
+            label: Tr.admin.history.statSessions.tr,
             value: history.sessionCount.toString(),
           ),
           _StatDivider(),
           _StatCell(
-            label: Tr.adminHistoryStatTotalSpent.tr,
+            label: Tr.admin.history.statTotalSpent.tr,
             value: '${totalSpent.toStringAsFixed(2)} €',
           ),
           _StatDivider(),
           _StatCell(
-            label: Tr.adminHistoryStatLastShooting.tr,
+            label: Tr.admin.history.statLastShooting.tr,
             value: lastShooting != null ? formatDate(lastShooting) : '—',
           ),
         ],

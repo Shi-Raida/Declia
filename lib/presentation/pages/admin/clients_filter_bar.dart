@@ -50,7 +50,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                     child: TextField(
                       onChanged: (v) => ctrl.searchQuery.value = v,
                       decoration: InputDecoration(
-                        hintText: Tr.adminClientsSearch.tr,
+                        hintText: Tr.admin.clients.search.tr,
                         hintStyle: AppTypography.bodySmall(),
                         prefixIcon: const Icon(
                           Icons.search,
@@ -83,11 +83,11 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 // Status dropdown
                 StyledDropdown<ClientStatus?>(
                   value: q.statusFilter,
-                  hint: Tr.adminClientsAllStatuses.tr,
+                  hint: Tr.admin.clients.allStatuses.tr,
                   items: [
                     DropdownMenuItem(
                       value: null,
-                      child: Text(Tr.adminClientsAllStatuses.tr),
+                      child: Text(Tr.admin.clients.allStatuses.tr),
                     ),
                     ...ClientStatus.values.map(
                       (s) => DropdownMenuItem(value: s, child: Text(s.label)),
@@ -99,11 +99,11 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 // Session type dropdown
                 StyledDropdown<SessionType?>(
                   value: q.sessionTypeFilter,
-                  hint: Tr.adminClientsAllCategories.tr,
+                  hint: Tr.admin.clients.allCategories.tr,
                   items: [
                     DropdownMenuItem(
                       value: null,
-                      child: Text(Tr.adminClientsAllCategories.tr),
+                      child: Text(Tr.admin.clients.allCategories.tr),
                     ),
                     ...SessionType.values.map(
                       (t) =>
@@ -116,11 +116,11 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 // Source dropdown
                 StyledDropdown<AcquisitionSource?>(
                   value: q.acquisitionSource,
-                  hint: Tr.adminClientsFilterBySource.tr,
+                  hint: Tr.admin.clients.filterBySource.tr,
                   items: [
                     DropdownMenuItem(
                       value: null,
-                      child: Text(Tr.adminClientsAllSources.tr),
+                      child: Text(Tr.admin.clients.allSources.tr),
                     ),
                     ...AcquisitionSource.values.map(
                       (src) => DropdownMenuItem(
@@ -135,15 +135,15 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 // Sort dropdown
                 StyledDropdown<ClientSortField>(
                   value: q.sortField,
-                  hint: Tr.adminClientsSortBy.tr,
+                  hint: Tr.admin.clients.sortBy.tr,
                   items: [
                     DropdownMenuItem(
                       value: ClientSortField.name,
-                      child: Text(Tr.adminClientsSortName.tr),
+                      child: Text(Tr.admin.clients.sortName.tr),
                     ),
                     DropdownMenuItem(
                       value: ClientSortField.createdAt,
-                      child: Text(Tr.adminClientsSortDate.tr),
+                      child: Text(Tr.admin.clients.sortDate.tr),
                     ),
                   ],
                   onChanged: (field) {
@@ -167,7 +167,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                 const SizedBox(width: 8),
                 // Count + clear
                 Text(
-                  Tr.adminClientsCount.trParams({
+                  Tr.admin.clients.count.trParams({
                     'count': '${ctrl.totalCount.value}',
                   }),
                   style: AppTypography.bodySmall(),
@@ -178,7 +178,7 @@ class _ClientsFilterBarState extends State<ClientsFilterBar> {
                     onPressed: ctrl.clearFilters,
                     icon: const Icon(Icons.filter_alt_off, size: 16),
                     label: Text(
-                      Tr.adminClientsClearFilters.tr,
+                      Tr.admin.clients.clearFilters.tr,
                       style: AppTypography.bodySmall(),
                     ),
                     style: TextButton.styleFrom(

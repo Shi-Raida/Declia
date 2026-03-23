@@ -39,7 +39,7 @@ class RegisterStepConfirm extends GetView<RegisterController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  Tr.registerSummaryTitle.tr,
+                  Tr.auth.register.summaryTitle.tr,
                   style: GoogleFonts.cormorantGaramond(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -49,7 +49,7 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                 const SizedBox(height: AppSpacing.md),
 
                 // Identity
-                _sectionLabel(Tr.registerSummaryIdentity.tr),
+                _sectionLabel(Tr.auth.register.summaryIdentity.tr),
                 _summaryRow(
                   '${controller.firstNameController.text} '
                   '${controller.lastNameController.text}',
@@ -57,19 +57,19 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                 if (isClient &&
                     controller.tenantSlugController.text.trim().isNotEmpty)
                   _summaryRow(
-                    '${Tr.registerFieldInvitationCode.tr}: '
+                    '${Tr.auth.register.fieldInvitationCode.tr}: '
                     '${controller.tenantSlugController.text}',
                   ),
                 if (isClient &&
                     controller.clientCompanyController.text.trim().isNotEmpty)
                   _summaryRow(
-                    '${Tr.registerFieldCompany.tr}: '
+                    '${Tr.auth.register.fieldCompany.tr}: '
                     '${controller.clientCompanyController.text}',
                   ),
                 const SizedBox(height: AppSpacing.sm),
 
                 // Contact
-                _sectionLabel(Tr.registerSummaryContact.tr),
+                _sectionLabel(Tr.auth.register.summaryContact.tr),
                 _summaryRow(controller.emailController.text),
                 if (controller.phoneController.text.trim().isNotEmpty)
                   _summaryRow(controller.phoneController.text),
@@ -81,7 +81,7 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                       controller.streetController,
                       controller.cityController,
                     ])) ...[
-                  _sectionLabel(Tr.registerSummaryAddress.tr),
+                  _sectionLabel(Tr.auth.register.summaryAddress.tr),
                   if (controller.streetController.text.trim().isNotEmpty)
                     _summaryRow(controller.streetController.text),
                   _summaryRow(
@@ -97,7 +97,7 @@ class RegisterStepConfirm extends GetView<RegisterController> {
 
                 // Studio (photographer)
                 if (!isClient) ...[
-                  _sectionLabel(Tr.registerSectionStudio.tr),
+                  _sectionLabel(Tr.auth.register.sectionStudio.tr),
                   _summaryRow(controller.studioNameController.text),
                   if (controller.companyNameController.text.trim().isNotEmpty)
                     _summaryRow(controller.companyNameController.text),
@@ -111,20 +111,20 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                           controller.vatNumberController,
                         ]) ||
                     (!isClient && controller.legalForm.value != null)) ...[
-                  _sectionLabel(Tr.registerSummaryBusiness.tr),
+                  _sectionLabel(Tr.auth.register.summaryBusiness.tr),
                   if (controller.siretController.text.trim().isNotEmpty)
                     _summaryRow(
-                      '${Tr.registerFieldSiret.tr}: '
+                      '${Tr.auth.register.fieldSiret.tr}: '
                       '${controller.siretController.text}',
                     ),
                   if (controller.legalForm.value != null)
                     _summaryRow(
-                      '${Tr.registerFieldLegalForm.tr}: '
+                      '${Tr.auth.register.fieldLegalForm.tr}: '
                       '${_legalFormDisplay()}',
                     ),
                   if (controller.vatNumberController.text.trim().isNotEmpty)
                     _summaryRow(
-                      '${Tr.registerFieldVatNumber.tr}: '
+                      '${Tr.auth.register.fieldVatNumber.tr}: '
                       '${controller.vatNumberController.text}',
                     ),
                   const SizedBox(height: AppSpacing.sm),
@@ -136,7 +136,7 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                       controller.bizStreetController,
                       controller.bizCityController,
                     ])) ...[
-                  _sectionLabel(Tr.registerSectionBizAddress.tr),
+                  _sectionLabel(Tr.auth.register.sectionBizAddress.tr),
                   if (controller.bizStreetController.text.trim().isNotEmpty)
                     _summaryRow(controller.bizStreetController.text),
                   _summaryRow(
@@ -153,10 +153,10 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                 // Preferences
                 if (controller.acquisitionSource.value != null ||
                     controller.notesController.text.trim().isNotEmpty) ...[
-                  _sectionLabel(Tr.registerSectionPreferences.tr),
+                  _sectionLabel(Tr.auth.register.sectionPreferences.tr),
                   if (controller.acquisitionSource.value != null)
                     _summaryRow(
-                      '${Tr.registerFieldAcquisitionSource.tr}: '
+                      '${Tr.auth.register.fieldAcquisitionSource.tr}: '
                       '${controller.acquisitionSource.value!.trKey.tr}',
                     ),
                   if (controller.notesController.text.trim().isNotEmpty)
@@ -179,7 +179,7 @@ class RegisterStepConfirm extends GetView<RegisterController> {
           _consentRow(
             value: controller.emailMarketingAccepted.value,
             onChanged: (v) => controller.emailMarketingAccepted.value = v,
-            label: Tr.registerConsentMarketing.tr,
+            label: Tr.auth.register.consentMarketing.tr,
             accentColor: accentColor,
           ),
         ],
@@ -259,16 +259,22 @@ class RegisterStepConfirm extends GetView<RegisterController> {
             child: Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: Tr.registerConsentCguPrefix.tr, style: style),
                   TextSpan(
-                    text: Tr.registerConsentCguLink.tr,
+                    text: Tr.auth.register.consentCguPrefix.tr,
+                    style: style,
+                  ),
+                  TextSpan(
+                    text: Tr.auth.register.consentCguLink.tr,
                     style: linkStyle,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => Get.toNamed(AppRoutes.legalNotices),
                   ),
-                  TextSpan(text: Tr.registerConsentCguMiddle.tr, style: style),
                   TextSpan(
-                    text: Tr.registerConsentPrivacyLink.tr,
+                    text: Tr.auth.register.consentCguMiddle.tr,
+                    style: style,
+                  ),
+                  TextSpan(
+                    text: Tr.auth.register.consentPrivacyLink.tr,
                     style: linkStyle,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () => Get.toNamed(AppRoutes.legalPrivacy),

@@ -45,7 +45,7 @@ class PlanningEditorTab extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    Tr.planningEditorIntro.tr,
+                    Tr.admin.planning.editorIntro.tr,
                     style: AppTypography.bodySmall().copyWith(
                       color: AppColors.bleuOuvert,
                     ),
@@ -60,25 +60,25 @@ class PlanningEditorTab extends StatelessWidget {
           Row(
             children: [
               _QuickFillButton(
-                label: Tr.planningQuickFillWeek.tr,
+                label: Tr.admin.planning.quickFillWeek.tr,
                 icon: Icons.calendar_view_week_outlined,
                 onPressed: () => _quickFillWeek(context),
               ),
               const SizedBox(width: 8),
               _QuickFillButton(
-                label: Tr.planningQuickFillMorning.tr,
+                label: Tr.admin.planning.quickFillMorning.tr,
                 icon: Icons.wb_sunny_outlined,
                 onPressed: () => _quickFillMorning(context),
               ),
               const SizedBox(width: 8),
               _QuickFillButton(
-                label: Tr.planningQuickFillAfternoon.tr,
+                label: Tr.admin.planning.quickFillAfternoon.tr,
                 icon: Icons.wb_twilight_outlined,
                 onPressed: () => _quickFillAfternoon(context),
               ),
               const Spacer(),
               _QuickFillButton(
-                label: Tr.planningQuickFillClear.tr,
+                label: Tr.admin.planning.quickFillClear.tr,
                 icon: Icons.clear_all,
                 onPressed: () => _confirmClearAll(context),
                 destructive: true,
@@ -119,7 +119,7 @@ class PlanningEditorTab extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: AppColors.pierre,
                 ),
-                child: Text(Tr.planningEditorCancel.tr),
+                child: Text(Tr.admin.planning.editorCancel.tr),
               ),
               const SizedBox(width: 12),
               FilledButton(
@@ -130,7 +130,7 @@ class PlanningEditorTab extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   backgroundColor: AppColors.terracotta,
                 ),
-                child: Text(Tr.planningEditorSave.tr),
+                child: Text(Tr.admin.planning.editorSave.tr),
               ),
             ],
           ),
@@ -163,18 +163,18 @@ class PlanningEditorTab extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(
-          Tr.planningQuickFillClear.tr,
+          Tr.admin.planning.quickFillClear.tr,
           style: AppTypography.heading4(),
         ),
         content: Text(
-          Tr.planningEditorClearConfirm.tr,
+          Tr.admin.planning.editorClearConfirm.tr,
           style: AppTypography.bodyMedium(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(
-              Tr.planningEditorCancel.tr,
+              Tr.admin.planning.editorCancel.tr,
               style: AppTypography.button().copyWith(color: AppColors.pierre),
             ),
           ),
@@ -190,7 +190,7 @@ class PlanningEditorTab extends StatelessWidget {
             },
             style: FilledButton.styleFrom(backgroundColor: AppColors.error),
             child: Text(
-              Tr.planningQuickFillClear.tr,
+              Tr.admin.planning.quickFillClear.tr,
               style: AppTypography.button(),
             ),
           ),

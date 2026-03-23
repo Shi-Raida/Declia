@@ -30,13 +30,13 @@ class ClientDetailCommunicationsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.adminHistoryCommunications.tr.toUpperCase(),
+            Tr.admin.history.communications.tr.toUpperCase(),
             style: AppTypography.label(),
           ),
           const SizedBox(height: 12),
           if (communicationLogs.isEmpty)
             Text(
-              Tr.adminHistoryCommunicationsEmpty.tr,
+              Tr.admin.history.communicationsEmpty.tr,
               style: AppTypography.bodyMedium().copyWith(
                 color: AppColors.pierre,
               ),

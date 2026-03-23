@@ -42,8 +42,8 @@ class AuthLeftPanelFeatures extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: isClient
-                            ? Tr.loginClientTagline.tr
-                            : Tr.loginTagline.tr,
+                            ? Tr.auth.login.clientTagline.tr
+                            : Tr.auth.login.tagline.tr,
                         style: GoogleFonts.cormorantGaramond(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
@@ -53,8 +53,8 @@ class AuthLeftPanelFeatures extends StatelessWidget {
                       ),
                       TextSpan(
                         text: isClient
-                            ? Tr.loginClientTaglineHighlight.tr
-                            : Tr.loginTaglineHighlight.tr,
+                            ? Tr.auth.login.clientTaglineHighlight.tr
+                            : Tr.auth.login.taglineHighlight.tr,
                         style: GoogleFonts.cormorantGaramond(
                           fontSize: 32,
                           fontWeight: FontWeight.w600,
@@ -68,7 +68,9 @@ class AuthLeftPanelFeatures extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  isClient ? Tr.loginClientSubtitle.tr : Tr.loginSubtitle.tr,
+                  isClient
+                      ? Tr.auth.login.clientSubtitle.tr
+                      : Tr.auth.login.subtitle.tr,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
                     fontSize: 14,
@@ -98,16 +100,16 @@ class AuthLeftPanelFeatures extends StatelessWidget {
             children:
                 (isClient
                         ? [
-                            Tr.loginClientFeature1.tr,
-                            Tr.loginClientFeature2.tr,
-                            Tr.loginClientFeature3.tr,
-                            Tr.loginClientFeature4.tr,
+                            Tr.auth.login.clientFeature1.tr,
+                            Tr.auth.login.clientFeature2.tr,
+                            Tr.auth.login.clientFeature3.tr,
+                            Tr.auth.login.clientFeature4.tr,
                           ]
                         : [
-                            Tr.loginFeature1.tr,
-                            Tr.loginFeature2.tr,
-                            Tr.loginFeature3.tr,
-                            Tr.loginFeature4.tr,
+                            Tr.auth.login.feature1.tr,
+                            Tr.auth.login.feature2.tr,
+                            Tr.auth.login.feature3.tr,
+                            Tr.auth.login.feature4.tr,
                           ])
                     .map(
                       (feature) => Padding(

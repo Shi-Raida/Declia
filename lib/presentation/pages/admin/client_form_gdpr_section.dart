@@ -16,7 +16,7 @@ class ClientFormGdprSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClientFormSectionCard(
-      title: Tr.adminClientFormSectionGdpr.tr,
+      title: Tr.admin.clientForm.sectionGdpr.tr,
       children: [
         Obx(
           () => Column(
@@ -34,7 +34,7 @@ class ClientFormGdprSection extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '${Tr.adminClientFormGdprConsentDate.tr}: '
+                        '${Tr.admin.clientForm.gdprConsentDate.tr}: '
                         '${formatDate(controller.existingClient!.gdprConsentDate!)}',
                         style: AppTypography.bodySmall().copyWith(
                           color: AppColors.success,
@@ -44,17 +44,17 @@ class ClientFormGdprSection extends StatelessWidget {
                   ),
                 ),
               _GdprCheckbox(
-                label: Tr.adminClientFormGdprEmail.tr,
+                label: Tr.admin.clientForm.gdprEmail.tr,
                 value: controller.commEmail.value,
                 onChanged: (v) => controller.commEmail.value = v ?? false,
               ),
               _GdprCheckbox(
-                label: Tr.adminClientFormGdprSms.tr,
+                label: Tr.admin.clientForm.gdprSms.tr,
                 value: controller.commSms.value,
                 onChanged: (v) => controller.commSms.value = v ?? false,
               ),
               _GdprCheckbox(
-                label: Tr.adminClientFormGdprPhone.tr,
+                label: Tr.admin.clientForm.gdprPhone.tr,
                 value: controller.commPhone.value,
                 onChanged: (v) => controller.commPhone.value = v ?? false,
               ),

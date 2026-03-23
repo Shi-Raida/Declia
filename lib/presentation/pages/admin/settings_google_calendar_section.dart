@@ -22,12 +22,12 @@ class GoogleCalendarSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.settingsGoogleCalendarTitle.tr,
+            Tr.admin.settings.googleCalendar.title.tr,
             style: AppTypography.heading3(),
           ),
           const SizedBox(height: 4),
           Text(
-            Tr.settingsGoogleCalendarDesc.tr,
+            Tr.admin.settings.googleCalendar.desc.tr,
             style: AppTypography.bodySmall().copyWith(color: AppColors.pierre),
           ),
           const SizedBox(height: 24),
@@ -62,8 +62,8 @@ class GoogleCalendarSection extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       isConnected
-                          ? Tr.settingsGoogleCalendarConnected.tr
-                          : Tr.settingsGoogleCalendarDisconnected.tr,
+                          ? Tr.admin.settings.googleCalendar.connected.tr
+                          : Tr.admin.settings.googleCalendar.disconnected.tr,
                       style: AppTypography.bodyMedium().copyWith(
                         fontWeight: FontWeight.w600,
                         color: isConnected
@@ -76,19 +76,19 @@ class GoogleCalendarSection extends StatelessWidget {
                 if (isConnected) ...[
                   const SizedBox(height: 12),
                   _InfoRow(
-                    label: Tr.settingsGoogleCalendarId.tr,
+                    label: Tr.admin.settings.googleCalendar.id.tr,
                     value: conn.calendarId,
                   ),
                   if (conn.lastSyncAt != null)
                     _InfoRow(
-                      label: Tr.settingsGoogleCalendarLastSync.tr,
+                      label: Tr.admin.settings.googleCalendar.lastSync.tr,
                       value: _formatDateTime(conn.lastSyncAt!),
                     ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
                       Text(
-                        Tr.settingsGoogleCalendarSyncEnabled.tr,
+                        Tr.admin.settings.googleCalendar.syncEnabled.tr,
                         style: AppTypography.bodySmall(),
                       ),
                       const Spacer(),
@@ -109,7 +109,7 @@ class GoogleCalendarSection extends StatelessWidget {
             FilledButton.icon(
               onPressed: () => controller.connectGoogle(),
               icon: const Icon(Icons.calendar_today, size: 18),
-              label: Text(Tr.settingsGoogleCalendarConnect.tr),
+              label: Text(Tr.admin.settings.googleCalendar.connect.tr),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.crepuscule,
                 foregroundColor: Colors.white,
@@ -133,8 +133,8 @@ class GoogleCalendarSection extends StatelessWidget {
                       : const Icon(Icons.sync, size: 16),
                   label: Text(
                     controller.isSyncing.value
-                        ? Tr.settingsGoogleCalendarSyncing.tr
-                        : Tr.settingsGoogleCalendarSyncNow.tr,
+                        ? Tr.admin.settings.googleCalendar.syncing.tr
+                        : Tr.admin.settings.googleCalendar.syncNow.tr,
                   ),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.crepuscule,
@@ -146,7 +146,7 @@ class GoogleCalendarSection extends StatelessWidget {
                 OutlinedButton.icon(
                   onPressed: () => _confirmDisconnect(context),
                   icon: const Icon(Icons.link_off, size: 16),
-                  label: Text(Tr.settingsGoogleCalendarDisconnect.tr),
+                  label: Text(Tr.admin.settings.googleCalendar.disconnect.tr),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.error,
                     side: const BorderSide(color: AppColors.error),
@@ -172,18 +172,18 @@ class GoogleCalendarSection extends StatelessWidget {
       context: context,
       builder: (_) => AlertDialog(
         title: Text(
-          Tr.settingsGoogleCalendarDisconnect.tr,
+          Tr.admin.settings.googleCalendar.disconnect.tr,
           style: AppTypography.heading4(),
         ),
         content: Text(
-          Tr.settingsGoogleCalendarDisconnectConfirm.tr,
+          Tr.admin.settings.googleCalendar.disconnectConfirm.tr,
           style: AppTypography.bodySmall(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              Tr.adminClientFormCancel.tr,
+              Tr.admin.clientForm.cancel.tr,
               style: AppTypography.button().copyWith(color: AppColors.pierre),
             ),
           ),
@@ -194,7 +194,7 @@ class GoogleCalendarSection extends StatelessWidget {
             },
             style: FilledButton.styleFrom(backgroundColor: AppColors.error),
             child: Text(
-              Tr.settingsGoogleCalendarDisconnect.tr,
+              Tr.admin.settings.googleCalendar.disconnect.tr,
               style: AppTypography.button(),
             ),
           ),

@@ -138,8 +138,8 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
     return AlertDialog(
       title: Text(
         _isEditing
-            ? Tr.adminAvailabilityEditRule.tr
-            : Tr.adminAvailabilityAddRule.tr,
+            ? Tr.admin.availability.editRule.tr
+            : Tr.admin.availability.addRule.tr,
         style: AppTypography.heading4(),
       ),
       content: SingleChildScrollView(
@@ -172,7 +172,7 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
               DropdownButtonFormField<int>(
                 value: _dayOfWeek, // ignore: deprecated_member_use
                 decoration: InputDecoration(
-                  labelText: Tr.adminAvailabilityDayOfWeek.tr,
+                  labelText: Tr.admin.availability.dayOfWeek.tr,
                   border: const OutlineInputBorder(),
                 ),
                 items: List.generate(
@@ -190,7 +190,7 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
                 onTap: _pickDate,
                 child: InputDecorator(
                   decoration: InputDecoration(
-                    labelText: Tr.adminAvailabilityDate.tr,
+                    labelText: Tr.admin.availability.date.tr,
                     border: const OutlineInputBorder(),
                     suffixIcon: const Icon(Icons.calendar_today, size: 18),
                   ),
@@ -214,7 +214,7 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
                       onTap: _pickStartTime,
                       child: InputDecorator(
                         decoration: InputDecoration(
-                          labelText: Tr.adminAvailabilityStartTime.tr,
+                          labelText: Tr.admin.availability.startTime.tr,
                           border: const OutlineInputBorder(),
                         ),
                         child: Text(
@@ -231,7 +231,7 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
                       onTap: _pickEndTime,
                       child: InputDecorator(
                         decoration: InputDecoration(
-                          labelText: Tr.adminAvailabilityEndTime.tr,
+                          labelText: Tr.admin.availability.endTime.tr,
                           border: const OutlineInputBorder(),
                         ),
                         child: Text(
@@ -248,7 +248,7 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
             TextField(
               controller: _labelController,
               decoration: InputDecoration(
-                labelText: Tr.adminAvailabilityLabel.tr,
+                labelText: Tr.admin.availability.label.tr,
                 border: const OutlineInputBorder(),
               ),
             ),
@@ -260,26 +260,26 @@ class _AvailabilityRuleDialogState extends State<AvailabilityRuleDialog> {
           TextButton(
             onPressed: _delete,
             child: Text(
-              Tr.adminAvailabilityDelete.tr,
+              Tr.admin.availability.delete.tr,
               style: const TextStyle(color: AppColors.error),
             ),
           ),
         const Spacer(),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(Tr.adminClientFormCancel.tr),
+          child: Text(Tr.admin.clientForm.cancel.tr),
         ),
         FilledButton(
           onPressed: _save,
-          child: Text(Tr.adminAvailabilitySave.tr),
+          child: Text(Tr.admin.availability.save.tr),
         ),
       ],
     );
   }
 
   String _ruleTypeLabel(AvailabilityRuleType type) => switch (type) {
-    AvailabilityRuleType.recurring => Tr.adminAvailabilityRecurring.tr,
-    AvailabilityRuleType.override => Tr.adminAvailabilityOverride.tr,
-    AvailabilityRuleType.blocked => Tr.adminAvailabilityBlocked.tr,
+    AvailabilityRuleType.recurring => Tr.admin.availability.recurring.tr,
+    AvailabilityRuleType.override => Tr.admin.availability.override.tr,
+    AvailabilityRuleType.blocked => Tr.admin.availability.blocked.tr,
   };
 }

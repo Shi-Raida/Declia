@@ -49,8 +49,8 @@ final class LoginController extends GetxController
       err: (failure) {
         _logger.warning('Login failed', error: failure);
         errorMessage.value = switch (failure) {
-          UnauthorisedRoleFailure() => Tr.loginUnauthorizedRole.tr,
-          InvalidCredentialsFailure() => Tr.loginInvalidCredentials.tr,
+          UnauthorisedRoleFailure() => Tr.auth.login.unauthorizedRole.tr,
+          InvalidCredentialsFailure() => Tr.auth.login.invalidCredentials.tr,
           _ => translateAuthFailure(failure),
         };
       },

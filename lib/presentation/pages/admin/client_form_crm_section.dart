@@ -17,12 +17,12 @@ class ClientFormCrmSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClientFormSectionCard(
-      title: Tr.adminClientFormSectionCrm.tr,
+      title: Tr.admin.clientForm.sectionCrm.tr,
       children: [
         _AcquisitionSourceField(controller: controller),
         _TagsField(controller: controller),
         ClientFormTextField(
-          label: Tr.adminClientFormNotes.tr,
+          label: Tr.admin.clientForm.notes.tr,
           controller: controller.notesCtrl,
           maxLines: 4,
         ),
@@ -43,7 +43,7 @@ class _AcquisitionSourceField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.adminClientFormAcquisitionSource.tr,
+            Tr.admin.clientForm.acquisitionSource.tr,
             style: AppTypography.bodySmall().copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.encre,
@@ -102,7 +102,7 @@ class _TagsField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          Tr.adminClientFormTags.tr,
+          Tr.admin.clientForm.tags.tr,
           style: AppTypography.bodySmall().copyWith(
             fontWeight: FontWeight.w600,
             color: AppColors.encre,

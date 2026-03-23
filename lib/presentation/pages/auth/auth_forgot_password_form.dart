@@ -41,7 +41,7 @@ class _SuccessView extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          Tr.authForgotSuccess.tr,
+          Tr.auth.forgot.success.tr,
           textAlign: TextAlign.center,
           style: AppTypography.bodyMedium(),
         ),
@@ -49,7 +49,7 @@ class _SuccessView extends StatelessWidget {
         TextButton(
           onPressed: controller.goToLogin,
           child: Text(
-            Tr.authForgotBackToLogin.tr,
+            Tr.auth.forgot.backToLogin.tr,
             style: AppTypography.bodySmall().copyWith(
               color: controller.accentColor,
               fontWeight: FontWeight.w600,
@@ -79,8 +79,8 @@ class _FormView extends StatelessWidget {
             // Title
             Text(
               isClient
-                  ? Tr.authForgotTitle.tr
-                  : Tr.authForgotTitlePhotographer.tr,
+                  ? Tr.auth.forgot.title.tr
+                  : Tr.auth.forgot.titlePhotographer.tr,
               style: GoogleFonts.cormorantGaramond(
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
@@ -90,8 +90,8 @@ class _FormView extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               isClient
-                  ? Tr.authForgotSubtitle.tr
-                  : Tr.authForgotSubtitlePhotographer.tr,
+                  ? Tr.auth.forgot.subtitle.tr
+                  : Tr.auth.forgot.subtitlePhotographer.tr,
               style: AppTypography.bodySmall(),
             ),
             const SizedBox(height: 20),
@@ -103,7 +103,7 @@ class _FormView extends StatelessWidget {
 
             // Email field
             Text(
-              Tr.loginEmail.tr.toUpperCase(),
+              Tr.auth.login.email.tr.toUpperCase(),
               style: GoogleFonts.outfit(
                 fontSize: 12.8,
                 fontWeight: FontWeight.w600,
@@ -122,15 +122,15 @@ class _FormView extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) => controller.submitForgotPassword(),
                 decoration: InputDecoration(
-                  hintText: Tr.loginEmailHint.tr,
+                  hintText: Tr.auth.login.emailHint.tr,
                   prefixIcon: const Icon(Icons.mail_outline, size: 18),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return Tr.loginEmailRequired.tr;
+                    return Tr.auth.login.emailRequired.tr;
                   }
                   if (!GetUtils.isEmail(value.trim())) {
-                    return Tr.loginEmailInvalid.tr;
+                    return Tr.auth.login.emailInvalid.tr;
                   }
                   return null;
                 },
@@ -164,7 +164,7 @@ class _FormView extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          Tr.authForgotSubmit.tr,
+                          Tr.auth.forgot.submit.tr,
                           style: AppTypography.button().copyWith(
                             color: Colors.white,
                           ),
@@ -185,7 +185,7 @@ class _FormView extends StatelessWidget {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  Tr.authForgotBackToLogin.tr,
+                  Tr.auth.forgot.backToLogin.tr,
                   style: AppTypography.bodySmall().copyWith(
                     color: accentColor,
                     fontWeight: FontWeight.w600,

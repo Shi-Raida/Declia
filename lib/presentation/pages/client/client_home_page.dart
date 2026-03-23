@@ -14,11 +14,11 @@ class ClientHomePage extends GetView<ClientHomeController> {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(
-        title: Text(Tr.clientHomeTitle.tr),
+        title: Text(Tr.auth.clientHome.title.tr),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: Tr.clientHomeLogout.tr,
+            tooltip: Tr.auth.clientHome.logout.tr,
             onPressed: controller.logout,
           ),
         ],
@@ -30,7 +30,7 @@ class ClientHomePage extends GetView<ClientHomeController> {
             return const CircularProgressIndicator();
           }
           return Text(
-            Tr.clientHomeWelcome.tr.replaceAll('@email', user.email),
+            Tr.auth.clientHome.welcome.tr.replaceAll('@email', user.email),
             style: AppTypography.heading3().copyWith(
               color: AppColors.crepuscule,
             ),

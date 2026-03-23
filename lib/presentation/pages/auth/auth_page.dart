@@ -103,7 +103,7 @@ class _RightPanel extends GetView<AuthController> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    Tr.loginBrandSubtitle.tr.toUpperCase(),
+                    Tr.auth.login.brandSubtitle.tr.toUpperCase(),
                     style: GoogleFonts.outfit(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
@@ -131,7 +131,7 @@ class _RightPanel extends GetView<AuthController> {
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                Tr.authForgotBackToLogin.tr,
+                                Tr.auth.forgot.backToLogin.tr,
                                 style: GoogleFonts.outfit(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
@@ -154,8 +154,8 @@ class _RightPanel extends GetView<AuthController> {
                         child: AuthRoleToggle(
                           selectedIndex: controller.selectedRole.value,
                           labels: [
-                            Tr.loginRoleClient.tr,
-                            Tr.loginRolePhotographer.tr,
+                            Tr.auth.login.roleClient.tr,
+                            Tr.auth.login.rolePhotographer.tr,
                           ],
                           icons: [
                             Icons.person_outline,

@@ -50,9 +50,12 @@ class _DefaultPanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(Tr.cookieBannerTitle.tr, style: AppTypography.heading4()),
+        Text(Tr.common.cookieBanner.title.tr, style: AppTypography.heading4()),
         const SizedBox(height: AppSpacing.sm),
-        Text(Tr.cookieBannerDescription.tr, style: AppTypography.bodySmall()),
+        Text(
+          Tr.common.cookieBanner.description.tr,
+          style: AppTypography.bodySmall(),
+        ),
         const SizedBox(height: AppSpacing.md),
         Wrap(
           spacing: AppSpacing.sm,
@@ -60,20 +63,20 @@ class _DefaultPanel extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: controller.acceptAll,
-              child: Text(Tr.cookieBannerAcceptAll.tr),
+              child: Text(Tr.common.cookieBanner.acceptAll.tr),
             ),
             OutlinedButton(
               onPressed: controller.refuseAll,
-              child: Text(Tr.cookieBannerRefuseAll.tr),
+              child: Text(Tr.common.cookieBanner.refuseAll.tr),
             ),
             TextButton(
               onPressed: controller.toggleCustomize,
-              child: Text(Tr.cookieBannerCustomize.tr),
+              child: Text(Tr.common.cookieBanner.customize.tr),
             ),
             TextButton(
               onPressed: controller.openPrivacyPolicy,
               child: Text(
-                Tr.cookieBannerPrivacyPolicy.tr,
+                Tr.common.cookieBanner.privacyPolicy.tr,
                 style: AppTypography.bodySmall().copyWith(
                   decoration: TextDecoration.underline,
                 ),
@@ -97,7 +100,10 @@ class _CustomizePanel extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(Tr.cookieBannerCustomize.tr, style: AppTypography.heading4()),
+        Text(
+          Tr.common.cookieBanner.customize.tr,
+          style: AppTypography.heading4(),
+        ),
         const SizedBox(height: AppSpacing.md),
         ...ConsentType.values.map(
           (type) => Obx(
@@ -118,11 +124,11 @@ class _CustomizePanel extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: controller.saveCustom,
-              child: Text(Tr.cookieBannerSavePreferences.tr),
+              child: Text(Tr.common.cookieBanner.savePreferences.tr),
             ),
             TextButton(
               onPressed: controller.toggleCustomize,
-              child: Text(Tr.cookieBannerRefuseAll.tr),
+              child: Text(Tr.common.cookieBanner.refuseAll.tr),
             ),
           ],
         ),
@@ -131,8 +137,8 @@ class _CustomizePanel extends StatelessWidget {
   }
 
   String _typeLabel(ConsentType type) => switch (type) {
-    ConsentType.analytics => Tr.cookieBannerAnalytics,
-    ConsentType.marketing => Tr.cookieBannerMarketing,
-    ConsentType.functional => Tr.cookieBannerFunctional,
+    ConsentType.analytics => Tr.common.cookieBanner.analytics,
+    ConsentType.marketing => Tr.common.cookieBanner.marketing,
+    ConsentType.functional => Tr.common.cookieBanner.functional,
   };
 }

@@ -22,7 +22,7 @@ class ClientsTagFilterRow extends StatelessWidget {
     return Row(
       children: [
         Text(
-          '${Tr.adminClientsFilterByTag.tr}: ',
+          '${Tr.admin.clients.filterByTag.tr}: ',
           style: AppTypography.bodySmall().copyWith(color: AppColors.pierre),
         ),
         SizedBox(
@@ -46,7 +46,7 @@ class ClientsTagFilterRow extends StatelessWidget {
                     focusNode: focusNode,
                     style: AppTypography.bodySmall(),
                     decoration: InputDecoration(
-                      hintText: Tr.adminClientsFilterTagHint.tr,
+                      hintText: Tr.admin.clients.filterTagHint.tr,
                       hintStyle: AppTypography.bodySmall(),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 8,

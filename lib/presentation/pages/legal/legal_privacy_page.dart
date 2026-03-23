@@ -10,11 +10,11 @@ class LegalPrivacyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(Tr.legalPrivacyTitle.tr)),
+      appBar: AppBar(title: Text(Tr.common.legal.privacyTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          Tr.legalPrivacyContent.tr,
+          Tr.common.legal.privacyContent.tr,
           style: AppTypography.bodyMedium(),
         ),
       ),

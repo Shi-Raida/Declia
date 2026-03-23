@@ -43,14 +43,14 @@ class AvailabilityRulesListDialog extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              Tr.adminAvailabilityTitle.tr,
+              Tr.admin.availability.title.tr,
               style: AppTypography.heading4(),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => _openAddDialog(context),
-            tooltip: Tr.adminAvailabilityAddRule.tr,
+            tooltip: Tr.admin.availability.addRule.tr,
           ),
         ],
       ),
@@ -60,7 +60,7 @@ class AvailabilityRulesListDialog extends StatelessWidget {
             ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(
-                  Tr.adminAvailabilityEmpty.tr,
+                  Tr.admin.availability.empty.tr,
                   style: AppTypography.bodySmall().copyWith(
                     color: AppColors.pierre,
                   ),
@@ -99,16 +99,16 @@ class AvailabilityRulesListDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(Tr.adminClientFormCancel.tr),
+          child: Text(Tr.admin.clientForm.cancel.tr),
         ),
       ],
     );
   }
 
   String _typeLabel(AvailabilityRuleType type) => switch (type) {
-    AvailabilityRuleType.recurring => Tr.adminAvailabilityRecurring.tr,
-    AvailabilityRuleType.override => Tr.adminAvailabilityOverride.tr,
-    AvailabilityRuleType.blocked => Tr.adminAvailabilityBlocked.tr,
+    AvailabilityRuleType.recurring => Tr.admin.availability.recurring.tr,
+    AvailabilityRuleType.override => Tr.admin.availability.override.tr,
+    AvailabilityRuleType.blocked => Tr.admin.availability.blocked.tr,
   };
 
   void _openAddDialog(BuildContext context) {

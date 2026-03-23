@@ -116,7 +116,7 @@ class PlanningDayView extends StatelessWidget {
                             if (events.isEmpty)
                               Center(
                                 child: Text(
-                                  Tr.adminPlanningNoSessions.tr,
+                                  Tr.admin.planning.noSessions.tr,
                                   style: AppTypography.bodySmall(),
                                 ),
                               ),
@@ -211,7 +211,7 @@ class _EmptyDay extends StatelessWidget {
           ),
         Center(
           child: Text(
-            Tr.adminPlanningNoSessions.tr,
+            Tr.admin.planning.noSessions.tr,
             style: AppTypography.bodySmall(),
           ),
         ),

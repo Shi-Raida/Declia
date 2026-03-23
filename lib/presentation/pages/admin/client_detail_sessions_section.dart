@@ -26,13 +26,13 @@ class ClientDetailSessionsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.adminHistorySessions.tr.toUpperCase(),
+            Tr.admin.history.sessions.tr.toUpperCase(),
             style: AppTypography.label(),
           ),
           const SizedBox(height: 12),
           if (sessions.isEmpty)
             Text(
-              Tr.adminHistorySessionsEmpty.tr,
+              Tr.admin.history.sessionsEmpty.tr,
               style: AppTypography.bodyMedium().copyWith(
                 color: AppColors.pierre,
               ),
@@ -47,13 +47,13 @@ class ClientDetailSessionsSection extends StatelessWidget {
                 ),
                 dataTextStyle: AppTypography.bodyMedium(),
                 columns: [
-                  DataColumn(label: Text(Tr.adminHistoryColDate.tr)),
-                  DataColumn(label: Text(Tr.adminHistoryColType.tr)),
-                  DataColumn(label: Text(Tr.adminHistoryColLocation.tr)),
-                  DataColumn(label: Text(Tr.adminHistoryColStatus.tr)),
-                  DataColumn(label: Text(Tr.adminHistoryColPayment.tr)),
+                  DataColumn(label: Text(Tr.admin.history.colDate.tr)),
+                  DataColumn(label: Text(Tr.admin.history.colType.tr)),
+                  DataColumn(label: Text(Tr.admin.history.colLocation.tr)),
+                  DataColumn(label: Text(Tr.admin.history.colStatus.tr)),
+                  DataColumn(label: Text(Tr.admin.history.colPayment.tr)),
                   DataColumn(
-                    label: Text(Tr.adminHistoryColAmount.tr),
+                    label: Text(Tr.admin.history.colAmount.tr),
                     numeric: true,
                   ),
                 ],

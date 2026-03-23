@@ -9,8 +9,8 @@ String? validateFrenchVat(String? value) {
 
   final raw = value.replaceAll(' ', '').toUpperCase();
 
-  if (raw.length != 13) return Tr.registerVatInvalid;
-  if (!raw.startsWith('FR')) return Tr.registerVatInvalid;
+  if (raw.length != 13) return Tr.auth.register.vatInvalid;
+  if (!raw.startsWith('FR')) return Tr.auth.register.vatInvalid;
 
   final keyPart = raw.substring(2, 4);
   final sirenPart = raw.substring(4);
@@ -18,10 +18,10 @@ String? validateFrenchVat(String? value) {
   final key = int.tryParse(keyPart);
   final siren = int.tryParse(sirenPart);
 
-  if (key == null || siren == null) return Tr.registerVatInvalid;
+  if (key == null || siren == null) return Tr.auth.register.vatInvalid;
 
   final expected = (12 + 3 * (siren % 97)) % 97;
-  if (key != expected) return Tr.registerVatInvalid;
+  if (key != expected) return Tr.auth.register.vatInvalid;
 
   return null;
 }

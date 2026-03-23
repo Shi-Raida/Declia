@@ -33,14 +33,14 @@ class PlanningMonthView extends StatelessWidget {
   final List<ExternalCalendarEvent> Function(DateTime)? externalEventsForDate;
   final void Function(ExternalCalendarEvent)? onExternalEventTap;
 
-  static const _dayHeaders = [
-    Tr.adminPlanningMonday,
-    Tr.adminPlanningTuesday,
-    Tr.adminPlanningWednesday,
-    Tr.adminPlanningThursday,
-    Tr.adminPlanningFriday,
-    Tr.adminPlanningSaturday,
-    Tr.adminPlanningSunday,
+  static final _dayHeaders = [
+    Tr.admin.planning.monday,
+    Tr.admin.planning.tuesday,
+    Tr.admin.planning.wednesday,
+    Tr.admin.planning.thursday,
+    Tr.admin.planning.friday,
+    Tr.admin.planning.saturday,
+    Tr.admin.planning.sunday,
   ];
 
   @override

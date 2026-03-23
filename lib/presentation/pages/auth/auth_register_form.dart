@@ -47,7 +47,7 @@ class _SuccessView extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          Tr.authRegisterSuccess.tr,
+          Tr.auth.register.success.tr,
           textAlign: TextAlign.center,
           style: AppTypography.bodyMedium(),
         ),
@@ -55,7 +55,7 @@ class _SuccessView extends StatelessWidget {
         TextButton(
           onPressed: controller.goToLogin,
           child: Text(
-            Tr.authForgotBackToLogin.tr,
+            Tr.auth.forgot.backToLogin.tr,
             style: AppTypography.bodySmall().copyWith(
               color: controller.accentColor,
               fontWeight: FontWeight.w600,
@@ -87,8 +87,8 @@ class _WizardView extends StatelessWidget {
           // Title
           Text(
             isClient
-                ? Tr.authRegisterTitleClient.tr
-                : Tr.authRegisterTitlePhotographer.tr,
+                ? Tr.auth.register.titleClient.tr
+                : Tr.auth.register.titlePhotographer.tr,
             style: GoogleFonts.cormorantGaramond(
               fontSize: 28,
               fontWeight: FontWeight.w600,
@@ -98,8 +98,8 @@ class _WizardView extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             isClient
-                ? Tr.authRegisterSubtitleClient.tr
-                : Tr.authRegisterSubtitlePhotographer.tr,
+                ? Tr.auth.register.subtitleClient.tr
+                : Tr.auth.register.subtitlePhotographer.tr,
             style: AppTypography.bodySmall(),
           ),
           const SizedBox(height: 20),
@@ -154,14 +154,14 @@ class _WizardView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                Tr.authRegisterFooterHaveAccount.tr,
+                Tr.auth.register.footerHaveAccount.tr,
                 style: AppTypography.bodySmall(),
               ),
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: controller.goToLogin,
                 child: Text(
-                  Tr.authRegisterFooterSignIn.tr,
+                  Tr.auth.register.footerSignIn.tr,
                   style: AppTypography.bodySmall().copyWith(
                     color: accentColor,
                     fontWeight: FontWeight.w600,

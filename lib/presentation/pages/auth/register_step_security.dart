@@ -21,7 +21,7 @@ class RegisterStepSecurity extends GetView<RegisterController> {
       key: controller.registerStep2Key,
       child: StaggeredFadeSlideColumn(
         children: [
-          _label(Tr.loginPassword.tr, required: true),
+          _label(Tr.auth.login.password.tr, required: true),
           const SizedBox(height: 6),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -35,7 +35,7 @@ class RegisterStepSecurity extends GetView<RegisterController> {
                 decoration: InputDecoration(
                   hintText: '••••••••',
                   prefixIcon: const Icon(Icons.lock_outline, size: 18),
-                  helperText: Tr.registerPasswordHint.tr,
+                  helperText: Tr.auth.register.passwordHint.tr,
                   helperMaxLines: 2,
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -52,14 +52,14 @@ class RegisterStepSecurity extends GetView<RegisterController> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return Tr.loginPasswordRequired.tr;
+                    return Tr.auth.login.passwordRequired.tr;
                   }
                   if (value.length < 8 ||
                       !value.contains(RegExp(r'[A-Z]')) ||
                       !value.contains(RegExp(r'[a-z]')) ||
                       !value.contains(RegExp(r'[0-9]')) ||
                       !value.contains(RegExp(r'[^A-Za-z0-9]'))) {
-                    return Tr.registerPasswordTooWeak.tr;
+                    return Tr.auth.register.passwordTooWeak.tr;
                   }
                   return null;
                 },
@@ -100,7 +100,7 @@ class RegisterStepSecurity extends GetView<RegisterController> {
           }),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.clientRegisterConfirmPassword.tr, required: true),
+          _label(Tr.auth.clientRegister.confirmPassword.tr, required: true),
           const SizedBox(height: 6),
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -117,10 +117,10 @@ class RegisterStepSecurity extends GetView<RegisterController> {
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return Tr.clientRegisterConfirmPasswordRequired.tr;
+                  return Tr.auth.clientRegister.confirmPasswordRequired.tr;
                 }
                 if (value != controller.passwordController.text) {
-                  return Tr.clientRegisterPasswordMismatch.tr;
+                  return Tr.auth.clientRegister.passwordMismatch.tr;
                 }
                 return null;
               },
@@ -129,10 +129,10 @@ class RegisterStepSecurity extends GetView<RegisterController> {
           const SizedBox(height: AppSpacing.lg),
 
           // ── PRÉFÉRENCES ───────────────────
-          SectionDivider(label: Tr.registerSectionPreferences.tr),
+          SectionDivider(label: Tr.auth.register.sectionPreferences.tr),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.registerFieldAcquisitionSource.tr),
+          _label(Tr.auth.register.fieldAcquisitionSource.tr),
           const SizedBox(height: 6),
           Obx(
             () => DropdownButtonFormField<AcquisitionSource?>(
@@ -151,14 +151,14 @@ class RegisterStepSecurity extends GetView<RegisterController> {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          _label(Tr.registerFieldNotes.tr),
+          _label(Tr.auth.register.fieldNotes.tr),
           const SizedBox(height: 6),
           TextFormField(
             controller: controller.notesController,
             maxLines: 3,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
-              hintText: Tr.registerFieldNotes.tr,
+              hintText: Tr.auth.register.fieldNotes.tr,
               prefixIcon: const Icon(Icons.notes_outlined, size: 18),
             ),
           ),

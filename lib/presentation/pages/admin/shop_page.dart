@@ -11,10 +11,10 @@ class ShopPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdminLayout(
-      title: Tr.adminSidebarShop.tr,
+      title: Tr.admin.sidebar.shop.tr,
       body: Center(
         child: Text(
-          Tr.adminPlaceholderComingSoon.tr,
+          Tr.admin.placeholder.comingSoon.tr,
           style: AppTypography.heading3(),
         ),
       ),

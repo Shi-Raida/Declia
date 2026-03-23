@@ -10,11 +10,11 @@ class LegalNoticesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(Tr.legalNoticesTitle.tr)),
+      appBar: AppBar(title: Text(Tr.common.legal.noticesTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          Tr.legalNoticesContent.tr,
+          Tr.common.legal.noticesContent.tr,
           style: AppTypography.bodyMedium(),
         ),
       ),

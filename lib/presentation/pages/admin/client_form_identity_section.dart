@@ -16,17 +16,17 @@ class ClientFormIdentitySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClientFormSectionCard(
-      title: Tr.adminClientFormSectionIdentity.tr,
+      title: Tr.admin.clientForm.sectionIdentity.tr,
       children: [
         ClientFormRow(
           children: [
             ClientFormTextField(
-              label: Tr.adminClientFormFirstName.tr,
+              label: Tr.admin.clientForm.firstName.tr,
               controller: controller.firstNameCtrl,
               required: true,
             ),
             ClientFormTextField(
-              label: Tr.adminClientFormLastName.tr,
+              label: Tr.admin.clientForm.lastName.tr,
               controller: controller.lastNameCtrl,
               required: true,
             ),
@@ -35,19 +35,19 @@ class ClientFormIdentitySection extends StatelessWidget {
         ClientFormRow(
           children: [
             ClientFormTextField(
-              label: Tr.adminClientFormEmail.tr,
+              label: Tr.admin.clientForm.email.tr,
               controller: controller.emailCtrl,
               keyboardType: TextInputType.emailAddress,
             ),
             ClientFormTextField(
-              label: Tr.adminClientFormPhone.tr,
+              label: Tr.admin.clientForm.phone.tr,
               controller: controller.phoneCtrl,
               keyboardType: TextInputType.phone,
             ),
           ],
         ),
         ClientFormTextField(
-          label: Tr.adminClientFormCompany.tr,
+          label: Tr.admin.clientForm.company.tr,
           controller: controller.companyCtrl,
         ),
         _DobField(controller: controller),
@@ -70,7 +70,7 @@ class _DobField extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              Tr.adminClientFormDob.tr,
+              Tr.admin.clientForm.dob.tr,
               style: AppTypography.bodySmall().copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColors.encre,

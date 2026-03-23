@@ -44,7 +44,7 @@ final class AuthController extends GetxController {
     super.onInit();
     if (initialReason == RouteArgs.unauthorizedRole) {
       _authState.signOut();
-      _login.errorMessage.value = Tr.loginUnauthorizedRole.tr;
+      _login.errorMessage.value = Tr.auth.login.unauthorizedRole.tr;
     }
   }
 

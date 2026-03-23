@@ -25,13 +25,13 @@ class ClientDetailGalleriesSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.adminHistoryGalleries.tr.toUpperCase(),
+            Tr.admin.history.galleries.tr.toUpperCase(),
             style: AppTypography.label(),
           ),
           const SizedBox(height: 12),
           if (galleries.isEmpty)
             Text(
-              Tr.adminHistoryGalleriesEmpty.tr,
+              Tr.admin.history.galleriesEmpty.tr,
               style: AppTypography.bodyMedium().copyWith(
                 color: AppColors.pierre,
               ),
@@ -65,7 +65,7 @@ class _GalleryRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            '${gallery.photoCount} ${Tr.adminHistoryPhotos.tr}',
+            '${gallery.photoCount} ${Tr.admin.history.photos.tr}',
             style: AppTypography.bodySmall().copyWith(color: AppColors.pierre),
           ),
         ],

@@ -45,7 +45,7 @@ class _SettingsAuthCodeInputState extends State<SettingsAuthCodeInput> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Tr.settingsGoogleCalendarAuthCode.tr,
+            Tr.admin.settings.googleCalendar.authCode.tr,
             style: AppTypography.bodyMedium().copyWith(
               fontWeight: FontWeight.w600,
             ),
@@ -77,7 +77,7 @@ class _SettingsAuthCodeInputState extends State<SettingsAuthCodeInput> {
           TextField(
             controller: _controller,
             decoration: InputDecoration(
-              labelText: Tr.settingsGoogleCalendarAuthCodeHint.tr,
+              labelText: Tr.admin.settings.googleCalendar.authCodeHint.tr,
               border: const OutlineInputBorder(),
             ),
             style: AppTypography.bodySmall(),
@@ -92,13 +92,13 @@ class _SettingsAuthCodeInputState extends State<SettingsAuthCodeInput> {
                   foregroundColor: Colors.white,
                   textStyle: AppTypography.button(),
                 ),
-                child: Text(Tr.settingsGoogleCalendarConnect.tr),
+                child: Text(Tr.admin.settings.googleCalendar.connect.tr),
               ),
               const SizedBox(width: 8),
               TextButton(
                 onPressed: widget.onCancel,
                 child: Text(
-                  Tr.adminClientFormCancel.tr,
+                  Tr.admin.clientForm.cancel.tr,
                   style: AppTypography.button().copyWith(
                     color: AppColors.pierre,
                   ),

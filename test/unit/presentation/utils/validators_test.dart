@@ -29,25 +29,25 @@ void main() {
     });
 
     test('returns error for wrong prefix', () {
-      expect(validateFrenchVat('DE32123456789'), Tr.registerVatInvalid);
+      expect(validateFrenchVat('DE32123456789'), Tr.auth.register.vatInvalid);
     });
 
     test('returns error for wrong length', () {
-      expect(validateFrenchVat('FR3212345678'), Tr.registerVatInvalid);
-      expect(validateFrenchVat('FR321234567890'), Tr.registerVatInvalid);
+      expect(validateFrenchVat('FR3212345678'), Tr.auth.register.vatInvalid);
+      expect(validateFrenchVat('FR321234567890'), Tr.auth.register.vatInvalid);
     });
 
     test('returns error for bad check digit', () {
       // key 33 instead of 32
-      expect(validateFrenchVat('FR33123456789'), Tr.registerVatInvalid);
+      expect(validateFrenchVat('FR33123456789'), Tr.auth.register.vatInvalid);
     });
 
     test('returns error for non-numeric key', () {
-      expect(validateFrenchVat('FRAA123456789'), Tr.registerVatInvalid);
+      expect(validateFrenchVat('FRAA123456789'), Tr.auth.register.vatInvalid);
     });
 
     test('returns error for non-numeric SIREN', () {
-      expect(validateFrenchVat('FR32ABCDEFGHI'), Tr.registerVatInvalid);
+      expect(validateFrenchVat('FR32ABCDEFGHI'), Tr.auth.register.vatInvalid);
     });
   });
 }

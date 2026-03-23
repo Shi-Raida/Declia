@@ -24,24 +24,24 @@ class RegisterStepStudio extends GetView<RegisterController> {
       child: StaggeredFadeSlideColumn(
         children: [
           // ── STUDIO ────────────────────────
-          SectionDivider(label: Tr.registerSectionStudio.tr),
+          SectionDivider(label: Tr.auth.register.sectionStudio.tr),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.registerFieldStudioName.tr, required: true),
+          _label(Tr.auth.register.fieldStudioName.tr, required: true),
           const SizedBox(height: 6),
           _field(
             controller: controller.studioNameController,
-            hint: Tr.registerFieldStudioName.tr,
+            hint: Tr.auth.register.fieldStudioName.tr,
             icon: Icons.camera_alt_outlined,
             required: true,
           ),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.registerFieldCompanyName.tr),
+          _label(Tr.auth.register.fieldCompanyName.tr),
           const SizedBox(height: 6),
           _field(
             controller: controller.companyNameController,
-            hint: Tr.registerFieldCompanyName.tr,
+            hint: Tr.auth.register.fieldCompanyName.tr,
             icon: Icons.business_outlined,
           ),
           const SizedBox(height: AppSpacing.md),
@@ -53,11 +53,11 @@ class RegisterStepStudio extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label(Tr.registerFieldSiret.tr),
+                    _label(Tr.auth.register.fieldSiret.tr),
                     const SizedBox(height: 6),
                     _field(
                       controller: controller.siretController,
-                      hint: Tr.registerFieldSiret.tr,
+                      hint: Tr.auth.register.fieldSiret.tr,
                       keyboard: TextInputType.number,
                       formatters: [SiretFormatter()],
                     ),
@@ -69,13 +69,13 @@ class RegisterStepStudio extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label(Tr.registerFieldLegalForm.tr),
+                    _label(Tr.auth.register.fieldLegalForm.tr),
                     const SizedBox(height: 6),
                     Obx(
                       () => DropdownButtonFormField<LegalForm?>(
                         initialValue: controller.legalForm.value,
                         decoration: InputDecoration(
-                          hintText: Tr.registerFieldLegalForm.tr,
+                          hintText: Tr.auth.register.fieldLegalForm.tr,
                         ),
                         items: [
                           const DropdownMenuItem(value: null, child: Text('—')),
@@ -104,14 +104,14 @@ class RegisterStepStudio extends GetView<RegisterController> {
               padding: const EdgeInsets.only(top: AppSpacing.sm),
               child: _field(
                 controller: controller.legalFormOtherController,
-                hint: Tr.legalFormOtherSpecify.tr,
+                hint: Tr.common.legalForm.otherSpecify.tr,
                 required: true,
               ),
             );
           }),
           const SizedBox(height: AppSpacing.md),
 
-          _label(Tr.registerFieldVatNumber.tr),
+          _label(Tr.auth.register.fieldVatNumber.tr),
           const SizedBox(height: 6),
           _field(
             controller: controller.vatNumberController,
@@ -122,12 +122,12 @@ class RegisterStepStudio extends GetView<RegisterController> {
           const SizedBox(height: AppSpacing.lg),
 
           // ── ADRESSE PROFESSIONNELLE ───────
-          SectionDivider(label: Tr.registerSectionBizAddress.tr),
+          SectionDivider(label: Tr.auth.register.sectionBizAddress.tr),
           const SizedBox(height: AppSpacing.md),
 
           _field(
             controller: controller.bizStreetController,
-            hint: Tr.registerFieldBizStreet.tr,
+            hint: Tr.auth.register.fieldBizStreet.tr,
             icon: Icons.home_outlined,
           ),
           const SizedBox(height: AppSpacing.sm),
@@ -138,7 +138,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
                 width: 130,
                 child: _field(
                   controller: controller.bizPostalCodeController,
-                  hint: Tr.registerFieldBizPostalCode.tr,
+                  hint: Tr.auth.register.fieldBizPostalCode.tr,
                   keyboard: TextInputType.number,
                   formatters: [PostalCodeFormatter()],
                 ),
@@ -147,7 +147,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
               Expanded(
                 child: _field(
                   controller: controller.bizCityController,
-                  hint: Tr.registerFieldBizCity.tr,
+                  hint: Tr.auth.register.fieldBizCity.tr,
                 ),
               ),
             ],
@@ -156,7 +156,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
 
           _field(
             controller: controller.bizCountryController,
-            hint: Tr.registerFieldBizCountry.tr,
+            hint: Tr.auth.register.fieldBizCountry.tr,
             icon: Icons.flag_outlined,
             action: TextInputAction.done,
             onFieldSubmitted: (_) => controller.goToNextStep(),
@@ -216,11 +216,12 @@ class RegisterStepStudio extends GetView<RegisterController> {
           hintText: hint,
           prefixIcon: icon != null ? Icon(icon, size: 18) : null,
         ),
-        validator: validator ??
+        validator:
+            validator ??
             (required
                 ? (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return Tr.registerFieldRequired.tr;
+                      return Tr.auth.register.fieldRequired.tr;
                     }
                     return null;
                   }
@@ -232,14 +233,14 @@ class RegisterStepStudio extends GetView<RegisterController> {
 
 extension LegalFormTr on LegalForm {
   String get trKey => switch (this) {
-    LegalForm.autoEntrepreneur => Tr.legalFormAutoEntrepreneur,
-    LegalForm.ei => Tr.legalFormEi,
-    LegalForm.eurl => Tr.legalFormEurl,
-    LegalForm.sarl => Tr.legalFormSarl,
-    LegalForm.sas => Tr.legalFormSas,
-    LegalForm.sasu => Tr.legalFormSasu,
-    LegalForm.microEntreprise => Tr.legalFormMicroEntreprise,
-    LegalForm.association => Tr.legalFormAssociation,
-    LegalForm.other => Tr.legalFormOther,
+    LegalForm.autoEntrepreneur => Tr.common.legalForm.autoEntrepreneur,
+    LegalForm.ei => Tr.common.legalForm.ei,
+    LegalForm.eurl => Tr.common.legalForm.eurl,
+    LegalForm.sarl => Tr.common.legalForm.sarl,
+    LegalForm.sas => Tr.common.legalForm.sas,
+    LegalForm.sasu => Tr.common.legalForm.sasu,
+    LegalForm.microEntreprise => Tr.common.legalForm.microEntreprise,
+    LegalForm.association => Tr.common.legalForm.association,
+    LegalForm.other => Tr.common.legalForm.other,
   };
 }

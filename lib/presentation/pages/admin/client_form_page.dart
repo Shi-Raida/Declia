@@ -19,8 +19,8 @@ class ClientFormPage extends GetView<ClientFormController> {
     return Obx(
       () => AdminLayout(
         title: controller.isEditing
-            ? Tr.adminClientFormTitleEdit.tr
-            : Tr.adminClientFormTitleCreate.tr,
+            ? Tr.admin.clientForm.titleEdit.tr
+            : Tr.admin.clientForm.titleCreate.tr,
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Center(
@@ -67,26 +67,26 @@ class _AddressSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClientFormSectionCard(
-      title: Tr.adminClientFormSectionAddress.tr,
+      title: Tr.admin.clientForm.sectionAddress.tr,
       children: [
         ClientFormTextField(
-          label: Tr.adminClientFormStreet.tr,
+          label: Tr.admin.clientForm.street.tr,
           controller: controller.streetCtrl,
         ),
         ClientFormRow(
           children: [
             ClientFormTextField(
-              label: Tr.adminClientFormCity.tr,
+              label: Tr.admin.clientForm.city.tr,
               controller: controller.cityCtrl,
             ),
             ClientFormTextField(
-              label: Tr.adminClientFormPostalCode.tr,
+              label: Tr.admin.clientForm.postalCode.tr,
               controller: controller.postalCodeCtrl,
             ),
           ],
         ),
         ClientFormTextField(
-          label: Tr.adminClientFormCountry.tr,
+          label: Tr.admin.clientForm.country.tr,
           controller: controller.countryCtrl,
         ),
       ],
@@ -107,7 +107,7 @@ class _FormActions extends StatelessWidget {
         TextButton(
           onPressed: () => controller.cancel(),
           child: Text(
-            Tr.adminClientFormCancel.tr,
+            Tr.admin.clientForm.cancel.tr,
             style: AppTypography.button().copyWith(color: AppColors.pierre),
           ),
         ),
@@ -130,7 +130,7 @@ class _FormActions extends StatelessWidget {
                       color: Colors.white,
                     ),
                   )
-                : Text(Tr.adminClientFormSave.tr),
+                : Text(Tr.admin.clientForm.save.tr),
           ),
         ),
       ],

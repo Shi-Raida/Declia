@@ -37,7 +37,10 @@ class QuickActionsGrid extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(Tr.dashboardQuickActions.tr, style: AppTypography.heading4()),
+        Text(
+          Tr.admin.dashboard.quickActions.tr,
+          style: AppTypography.heading4(),
+        ),
         const SizedBox(height: 12),
         Row(
           children: _actions.map((action) {

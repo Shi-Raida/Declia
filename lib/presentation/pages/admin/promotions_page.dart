@@ -11,10 +11,10 @@ class PromotionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdminLayout(
-      title: Tr.adminSidebarPromotions.tr,
+      title: Tr.admin.sidebar.promotions.tr,
       body: Center(
         child: Text(
-          Tr.adminPlaceholderComingSoon.tr,
+          Tr.admin.placeholder.comingSoon.tr,
           style: AppTypography.heading3(),
         ),
       ),

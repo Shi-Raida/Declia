@@ -47,7 +47,7 @@ class DashboardPage extends GetView<DashboardController> {
     final now = DateTime.now();
 
     return AdminLayout(
-      title: Tr.dashboardTitle.tr,
+      title: Tr.admin.dashboard.title.tr,
       topbarSubtitle: _formatDate(now),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -68,7 +68,7 @@ class DashboardPage extends GetView<DashboardController> {
                     child: StatCard(
                       icon: Icons.euro_outlined,
                       iconColor: AppColors.or,
-                      label: Tr.dashboardStatRevenue.tr,
+                      label: Tr.admin.dashboard.statRevenue.tr,
                       value: '—',
                     ),
                   ),
@@ -77,7 +77,7 @@ class DashboardPage extends GetView<DashboardController> {
                     child: StatCard(
                       icon: Icons.camera_alt_outlined,
                       iconColor: AppColors.bleuOuvert,
-                      label: Tr.dashboardStatSessions.tr,
+                      label: Tr.admin.dashboard.statSessions.tr,
                       value: '—',
                     ),
                   ),
@@ -86,7 +86,7 @@ class DashboardPage extends GetView<DashboardController> {
                     child: StatCard(
                       icon: Icons.people_outline,
                       iconColor: AppColors.terracotta,
-                      label: Tr.dashboardStatClients.tr,
+                      label: Tr.admin.dashboard.statClients.tr,
                       value: '—',
                     ),
                   ),
@@ -95,7 +95,7 @@ class DashboardPage extends GetView<DashboardController> {
                     child: StatCard(
                       icon: Icons.shopping_bag_outlined,
                       iconColor: AppColors.equestrian,
-                      label: Tr.dashboardStatOrders.tr,
+                      label: Tr.admin.dashboard.statOrders.tr,
                       value: '—',
                     ),
                   ),
@@ -156,7 +156,7 @@ class _WelcomeBanner extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: '${Tr.dashboardWelcomeGreeting.tr} ',
+                        text: '${Tr.admin.dashboard.welcomeGreeting.tr} ',
                         style: GoogleFonts.cormorantGaramond(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
@@ -177,7 +177,7 @@ class _WelcomeBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  Tr.dashboardWelcomeSubtitle.tr,
+                  Tr.admin.dashboard.welcomeSubtitle.tr,
                   style: GoogleFonts.outfit(
                     fontSize: 14,
                     color: Colors.white.withValues(alpha: 0.6),
