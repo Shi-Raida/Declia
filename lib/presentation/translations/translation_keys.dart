@@ -132,6 +132,7 @@ abstract final class Tr {
   static const String adminClientsAllSources = 'adminClientsAllSources';
 
   // Client form
+  static const String adminClientFormCompany = 'adminClientFormCompany';
   static const String adminClientFormTitleCreate = 'adminClientFormTitleCreate';
   static const String adminClientFormTitleEdit = 'adminClientFormTitleEdit';
   static const String adminClientFormSectionIdentity =
@@ -461,10 +462,18 @@ abstract final class Tr {
   static const String registerFieldVatNumber = 'registerFieldVatNumber';
   static const String registerFieldBizStreet = 'registerFieldBizStreet';
   static const String registerFieldBizPostalCode = 'registerFieldBizPostalCode';
+  static const String registerFieldCountry = 'registerFieldCountry';
+  static const String registerFieldBizCountry = 'registerFieldBizCountry';
   static const String registerFieldBizCity = 'registerFieldBizCity';
   static const String registerFieldAcquisitionSource =
       'registerFieldAcquisitionSource';
   static const String registerFieldNotes = 'registerFieldNotes';
+  static const String registerFieldInvitationCode = 'registerFieldInvitationCode';
+  static const String registerFieldInvitationCodeHint =
+      'registerFieldInvitationCodeHint';
+  static const String registerFieldInvitationCodeRequired =
+      'registerFieldInvitationCodeRequired';
+  static const String registerFieldCompany = 'registerFieldCompany';
   static const String registerFieldRequired = 'registerFieldRequired';
   static const String registerConsentCgu = 'registerConsentCgu';
   static const String registerConsentCguPrefix = 'registerConsentCguPrefix';
@@ -503,6 +512,7 @@ abstract final class Tr {
   static const String registerAvatarComingSoon = 'registerAvatarComingSoon';
   static const String registerPasswordHint = 'registerPasswordHint';
   static const String registerPasswordTooWeak = 'registerPasswordTooWeak';
+  static const String registerVatInvalid = 'registerVatInvalid';
 
   // Legal form labels
   static const String legalFormAutoEntrepreneur = 'legalFormAutoEntrepreneur';
@@ -511,6 +521,8 @@ abstract final class Tr {
   static const String legalFormSarl = 'legalFormSarl';
   static const String legalFormSas = 'legalFormSas';
   static const String legalFormSasu = 'legalFormSasu';
+  static const String legalFormMicroEntreprise = 'legalFormMicroEntreprise';
+  static const String legalFormAssociation = 'legalFormAssociation';
   static const String legalFormOther = 'legalFormOther';
   static const String legalFormOtherSpecify = 'legalFormOtherSpecify';
 

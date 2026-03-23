@@ -130,6 +130,7 @@ final Map<String, String> enUs = {
   Tr.adminClientsAllSources: 'All sources',
 
   // Client form
+  Tr.adminClientFormCompany: 'Company',
   Tr.adminClientFormTitleCreate: 'New client',
   Tr.adminClientFormTitleEdit: 'Edit client',
   Tr.adminClientFormSectionIdentity: 'Identity',
@@ -428,9 +429,15 @@ final Map<String, String> enUs = {
   Tr.registerFieldVatNumber: 'VAT number',
   Tr.registerFieldBizStreet: 'Business address',
   Tr.registerFieldBizPostalCode: 'Business postal code',
+  Tr.registerFieldCountry: 'Country',
+  Tr.registerFieldBizCountry: 'Country',
   Tr.registerFieldBizCity: 'Business city',
   Tr.registerFieldAcquisitionSource: 'How did you hear about us?',
   Tr.registerFieldNotes: 'Notes (optional)',
+  Tr.registerFieldInvitationCode: 'Invitation code',
+  Tr.registerFieldInvitationCodeHint: 'E.g.: my-studio',
+  Tr.registerFieldInvitationCodeRequired: 'The invitation code is required',
+  Tr.registerFieldCompany: 'Company (optional)',
   Tr.registerFieldRequired: 'This field is required',
   Tr.registerConsentCgu: 'I accept the T&C and the privacy policy',
   Tr.registerConsentCguPrefix: 'I accept the ',
@@ -469,6 +476,7 @@ final Map<String, String> enUs = {
   Tr.registerPasswordHint:
       'Min. 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special character',
   Tr.registerPasswordTooWeak: 'Password too weak',
+  Tr.registerVatInvalid: 'Invalid VAT number',
 
   // Legal form labels
   Tr.legalFormAutoEntrepreneur: 'Sole proprietor',
@@ -477,6 +485,8 @@ final Map<String, String> enUs = {
   Tr.legalFormSarl: 'SARL',
   Tr.legalFormSas: 'SAS',
   Tr.legalFormSasu: 'SASU',
+  Tr.legalFormMicroEntreprise: 'Micro-enterprise',
+  Tr.legalFormAssociation: 'Association',
   Tr.legalFormOther: 'Other',
   Tr.legalFormOtherSpecify: 'Specify legal form',
 

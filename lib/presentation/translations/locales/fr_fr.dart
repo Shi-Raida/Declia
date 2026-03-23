@@ -136,6 +136,7 @@ final Map<String, String> frFr = {
   Tr.adminClientsAllSources: 'Toutes les sources',
 
   // Client form
+  Tr.adminClientFormCompany: 'Société',
   Tr.adminClientFormTitleCreate: 'Nouveau client',
   Tr.adminClientFormTitleEdit: 'Modifier le client',
   Tr.adminClientFormSectionIdentity: 'Identité',
@@ -439,9 +440,16 @@ final Map<String, String> frFr = {
   Tr.registerFieldVatNumber: 'N° TVA',
   Tr.registerFieldBizStreet: 'Adresse professionnelle',
   Tr.registerFieldBizPostalCode: 'Code postal professionnel',
+  Tr.registerFieldCountry: 'Pays',
+  Tr.registerFieldBizCountry: 'Pays',
   Tr.registerFieldBizCity: 'Ville professionnelle',
   Tr.registerFieldAcquisitionSource: 'Comment nous avez-vous connu ?',
   Tr.registerFieldNotes: 'Notes (optionnel)',
+  Tr.registerFieldInvitationCode: 'Code d\'invitation',
+  Tr.registerFieldInvitationCodeHint: 'Ex : mon-studio',
+  Tr.registerFieldInvitationCodeRequired:
+      'Le code d\'invitation est requis',
+  Tr.registerFieldCompany: 'Société (optionnel)',
   Tr.registerFieldRequired: 'Ce champ est requis',
   Tr.registerConsentCgu:
       'J\'accepte les CGU et la politique de confidentialité',
@@ -481,6 +489,7 @@ final Map<String, String> frFr = {
   Tr.registerPasswordHint:
       'Min. 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial',
   Tr.registerPasswordTooWeak: 'Mot de passe trop faible',
+  Tr.registerVatInvalid: 'Numéro de TVA invalide',
 
   // Legal form labels
   Tr.legalFormAutoEntrepreneur: 'Auto-entrepreneur',
@@ -489,6 +498,8 @@ final Map<String, String> frFr = {
   Tr.legalFormSarl: 'SARL',
   Tr.legalFormSas: 'SAS',
   Tr.legalFormSasu: 'SASU',
+  Tr.legalFormMicroEntreprise: 'Micro-entreprise',
+  Tr.legalFormAssociation: 'Association',
   Tr.legalFormOther: 'Autre',
   Tr.legalFormOtherSpecify: 'Précisez la forme juridique',
 
