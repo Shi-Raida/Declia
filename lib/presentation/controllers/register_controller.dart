@@ -144,6 +144,12 @@ final class RegisterController extends GetxController
       return;
     }
 
+    // Client must provide an invitation code
+    if (isClient && tenantSlugController.text.trim().isEmpty) {
+      errorMessage.value = Tr.registerFieldInvitationCodeRequired.tr;
+      return;
+    }
+
     isLoading.value = true;
     errorMessage.value = null;
 
@@ -193,6 +199,9 @@ final class RegisterController extends GetxController
     };
 
     if (isClient) {
+      if (clientCompanyController.text.trim().isNotEmpty) {
+        meta['company'] = clientCompanyController.text.trim();
+      }
       final address = <String, String>{};
       if (streetController.text.trim().isNotEmpty) {
         address['street'] = streetController.text.trim();
@@ -202,6 +211,9 @@ final class RegisterController extends GetxController
       }
       if (cityController.text.trim().isNotEmpty) {
         address['city'] = cityController.text.trim();
+      }
+      if (countryController.text.trim().isNotEmpty) {
+        address['country'] = countryController.text.trim();
       }
       if (address.isNotEmpty) meta['address'] = address;
     } else {
@@ -233,6 +245,9 @@ final class RegisterController extends GetxController
       }
       if (bizCityController.text.trim().isNotEmpty) {
         bizAddress['city'] = bizCityController.text.trim();
+      }
+      if (bizCountryController.text.trim().isNotEmpty) {
+        bizAddress['country'] = bizCountryController.text.trim();
       }
       if (bizAddress.isNotEmpty) meta['address'] = bizAddress;
     }

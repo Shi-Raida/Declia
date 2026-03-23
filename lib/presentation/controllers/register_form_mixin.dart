@@ -17,6 +17,10 @@ mixin RegisterFormMixin on GetxController, LoginFormMixin {
   final streetController = TextEditingController();
   final postalCodeController = TextEditingController();
   final cityController = TextEditingController();
+  final countryController = TextEditingController(text: 'France');
+
+  // Step 1 — Client-only
+  final clientCompanyController = TextEditingController();
 
   // Step 1 — Photographer-only
   final studioNameController = TextEditingController();
@@ -27,6 +31,7 @@ mixin RegisterFormMixin on GetxController, LoginFormMixin {
   final bizStreetController = TextEditingController();
   final bizPostalCodeController = TextEditingController();
   final bizCityController = TextEditingController();
+  final bizCountryController = TextEditingController(text: 'France');
 
   // Avatar
   final avatarBytes = Rxn<Uint8List>();
@@ -51,6 +56,8 @@ mixin RegisterFormMixin on GetxController, LoginFormMixin {
     streetController.dispose();
     postalCodeController.dispose();
     cityController.dispose();
+    countryController.dispose();
+    clientCompanyController.dispose();
     studioNameController.dispose();
     companyNameController.dispose();
     siretController.dispose();
@@ -58,6 +65,7 @@ mixin RegisterFormMixin on GetxController, LoginFormMixin {
     bizStreetController.dispose();
     bizPostalCodeController.dispose();
     bizCityController.dispose();
+    bizCountryController.dispose();
     legalFormOtherController.dispose();
     notesController.dispose();
     super.onClose();

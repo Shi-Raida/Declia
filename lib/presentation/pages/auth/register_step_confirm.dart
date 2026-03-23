@@ -54,6 +54,18 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                   '${controller.firstNameController.text} '
                   '${controller.lastNameController.text}',
                 ),
+                if (isClient &&
+                    controller.tenantSlugController.text.trim().isNotEmpty)
+                  _summaryRow(
+                    '${Tr.registerFieldInvitationCode.tr}: '
+                    '${controller.tenantSlugController.text}',
+                  ),
+                if (isClient &&
+                    controller.clientCompanyController.text.trim().isNotEmpty)
+                  _summaryRow(
+                    '${Tr.registerFieldCompany.tr}: '
+                    '${controller.clientCompanyController.text}',
+                  ),
                 const SizedBox(height: AppSpacing.sm),
 
                 // Contact
@@ -78,6 +90,8 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                       controller.cityController.text.trim(),
                     ].where((s) => s.isNotEmpty).join(' '),
                   ),
+                  if (controller.countryController.text.trim().isNotEmpty)
+                    _summaryRow(controller.countryController.text),
                   const SizedBox(height: AppSpacing.sm),
                 ],
 
@@ -131,6 +145,8 @@ class RegisterStepConfirm extends GetView<RegisterController> {
                       controller.bizCityController.text.trim(),
                     ].where((s) => s.isNotEmpty).join(' '),
                   ),
+                  if (controller.bizCountryController.text.trim().isNotEmpty)
+                    _summaryRow(controller.bizCountryController.text),
                   const SizedBox(height: AppSpacing.sm),
                 ],
 

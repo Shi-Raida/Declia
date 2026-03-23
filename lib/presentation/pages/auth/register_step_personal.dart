@@ -21,6 +21,20 @@ class RegisterStepPersonal extends GetView<RegisterController> {
       key: controller.registerStep1Key,
       child: StaggeredFadeSlideColumn(
         children: [
+          // ── INVITATION CODE (client only) ──
+          if (controller.isClient) ...[
+            _label(Tr.registerFieldInvitationCode.tr, required: true),
+            const SizedBox(height: 6),
+            _field(
+              controller: controller.tenantSlugController,
+              hint: Tr.registerFieldInvitationCodeHint.tr,
+              icon: Icons.vpn_key_outlined,
+              required: true,
+              action: TextInputAction.next,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+          ],
+
           // Avatar placeholder
           _avatarPlaceholder(),
           const SizedBox(height: AppSpacing.lg),
@@ -85,6 +99,19 @@ class RegisterStepPersonal extends GetView<RegisterController> {
             action: TextInputAction.next,
             formatters: [FrenchPhoneFormatter()],
           ),
+          const SizedBox(height: AppSpacing.md),
+
+          // Company (client only, optional)
+          if (controller.isClient) ...[
+            _label(Tr.registerFieldCompany.tr),
+            const SizedBox(height: 6),
+            _field(
+              controller: controller.clientCompanyController,
+              hint: Tr.registerFieldCompany.tr,
+              icon: Icons.business_outlined,
+              action: TextInputAction.next,
+            ),
+          ],
           const SizedBox(height: AppSpacing.lg),
 
           // ── ADRESSE ───────────────────────
@@ -116,11 +143,19 @@ class RegisterStepPersonal extends GetView<RegisterController> {
                 child: _field(
                   controller: controller.cityController,
                   hint: Tr.registerFieldCity.tr,
-                  action: TextInputAction.done,
-                  onFieldSubmitted: (_) => controller.goToNextStep(),
+                  action: TextInputAction.next,
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+
+          _field(
+            controller: controller.countryController,
+            hint: Tr.registerFieldCountry.tr,
+            icon: Icons.flag_outlined,
+            action: TextInputAction.done,
+            onFieldSubmitted: (_) => controller.goToNextStep(),
           ),
         ],
       ),

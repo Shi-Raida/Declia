@@ -9,6 +9,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../translations/translation_keys.dart';
 import '../../utils/input_formatters.dart';
+import '../../utils/validators.dart';
 import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 
@@ -116,6 +117,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
             controller: controller.vatNumberController,
             hint: 'FRXX XXX XXX XXX',
             formatters: [VatNumberFormatter()],
+            validator: (v) => validateFrenchVat(v)?.tr,
           ),
           const SizedBox(height: AppSpacing.lg),
 
@@ -146,11 +148,18 @@ class RegisterStepStudio extends GetView<RegisterController> {
                 child: _field(
                   controller: controller.bizCityController,
                   hint: Tr.registerFieldBizCity.tr,
-                  action: TextInputAction.done,
-                  onFieldSubmitted: (_) => controller.goToNextStep(),
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+
+          _field(
+            controller: controller.bizCountryController,
+            hint: Tr.registerFieldBizCountry.tr,
+            icon: Icons.flag_outlined,
+            action: TextInputAction.done,
+            onFieldSubmitted: (_) => controller.goToNextStep(),
           ),
         ],
       ),
@@ -191,6 +200,7 @@ class RegisterStepStudio extends GetView<RegisterController> {
     TextInputAction action = TextInputAction.next,
     List<TextInputFormatter>? formatters,
     ValueChanged<String>? onFieldSubmitted,
+    FormFieldValidator<String>? validator,
   }) {
     return AnimatedSize(
       duration: const Duration(milliseconds: 200),
@@ -206,14 +216,15 @@ class RegisterStepStudio extends GetView<RegisterController> {
           hintText: hint,
           prefixIcon: icon != null ? Icon(icon, size: 18) : null,
         ),
-        validator: required
-            ? (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return Tr.registerFieldRequired.tr;
-                }
-                return null;
-              }
-            : null,
+        validator: validator ??
+            (required
+                ? (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return Tr.registerFieldRequired.tr;
+                    }
+                    return null;
+                  }
+                : null),
       ),
     );
   }
@@ -227,6 +238,8 @@ extension LegalFormTr on LegalForm {
     LegalForm.sarl => Tr.legalFormSarl,
     LegalForm.sas => Tr.legalFormSas,
     LegalForm.sasu => Tr.legalFormSasu,
+    LegalForm.microEntreprise => Tr.legalFormMicroEntreprise,
+    LegalForm.association => Tr.legalFormAssociation,
     LegalForm.other => Tr.legalFormOther,
   };
 }
