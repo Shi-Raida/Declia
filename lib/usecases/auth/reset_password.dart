@@ -7,7 +7,7 @@ import 'params.dart';
 final class ResetPassword extends UseCase<void, ResetPasswordParams> {
   const ResetPassword(this._authRepository);
 
-  final AuthRepository _authRepository;
+  final AuthCommands _authRepository;
 
   @override
   Future<Result<void, Failure>> call(ResetPasswordParams params) =>

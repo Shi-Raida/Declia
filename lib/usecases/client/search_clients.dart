@@ -8,7 +8,7 @@ import 'params.dart';
 final class SearchClients extends UseCase<List<Client>, SearchClientsParams> {
   const SearchClients(this._clientRepository);
 
-  final ClientRepository _clientRepository;
+  final ClientReader _clientRepository;
 
   @override
   Future<Result<List<Client>, Failure>> call(SearchClientsParams params) =>

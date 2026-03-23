@@ -8,7 +8,7 @@ import 'params.dart';
 final class GetClient extends UseCase<Client, GetClientParams> {
   const GetClient(this._clientRepository);
 
-  final ClientRepository _clientRepository;
+  final ClientReader _clientRepository;
 
   @override
   Future<Result<Client, Failure>> call(GetClientParams params) =>

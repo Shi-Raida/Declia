@@ -10,7 +10,7 @@ import 'params.dart';
 final class CreateClient extends UseCase<Client, CreateClientParams> {
   const CreateClient(this._clientRepository, this._clock);
 
-  final ClientRepository _clientRepository;
+  final ClientWriter _clientRepository;
   final Clock _clock;
 
   @override

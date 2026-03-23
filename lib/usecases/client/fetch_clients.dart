@@ -7,7 +7,7 @@ import '../usecase.dart';
 final class FetchClients extends UseCase<List<Client>, NoParams> {
   const FetchClients(this._clientRepository);
 
-  final ClientRepository _clientRepository;
+  final ClientReader _clientRepository;
 
   @override
   Future<Result<List<Client>, Failure>> call(NoParams params) =>

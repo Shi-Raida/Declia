@@ -7,7 +7,7 @@ import 'params.dart';
 final class SignUp extends UseCase<void, SignUpParams> {
   const SignUp(this._authRepository);
 
-  final AuthRepository _authRepository;
+  final AuthCommands _authRepository;
 
   @override
   Future<Result<void, Failure>> call(SignUpParams params) =>

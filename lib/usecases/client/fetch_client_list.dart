@@ -10,7 +10,7 @@ final class FetchClientList
     extends UseCase<PagedResult<Client>, FetchClientsParams> {
   const FetchClientList(this._clientRepository);
 
-  final ClientRepository _clientRepository;
+  final ClientReader _clientRepository;
 
   @override
   Future<Result<PagedResult<Client>, Failure>> call(

@@ -7,7 +7,7 @@ import 'params.dart';
 final class DeleteClient extends UseCase<void, DeleteClientParams> {
   const DeleteClient(this._clientRepository);
 
-  final ClientRepository _clientRepository;
+  final ClientWriter _clientRepository;
 
   @override
   Future<Result<void, Failure>> call(DeleteClientParams params) =>

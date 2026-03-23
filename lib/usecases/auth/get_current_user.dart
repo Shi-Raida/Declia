@@ -7,7 +7,7 @@ import '../usecase.dart';
 final class GetCurrentUser extends UseCase<AppUser?, NoParams> {
   const GetCurrentUser(this._authRepository);
 
-  final AuthRepository _authRepository;
+  final AuthStateReader _authRepository;
 
   @override
   Future<Result<AppUser?, Failure>> call(NoParams params) =>

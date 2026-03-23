@@ -6,7 +6,7 @@ import '../usecase.dart';
 final class FetchDistinctTags extends UseCase<List<String>, NoParams> {
   const FetchDistinctTags(this._clientRepository);
 
-  final ClientRepository _clientRepository;
+  final ClientReader _clientRepository;
 
   @override
   Future<Result<List<String>, Failure>> call(NoParams params) =>

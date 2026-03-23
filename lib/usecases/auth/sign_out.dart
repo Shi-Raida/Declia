@@ -6,7 +6,7 @@ import '../usecase.dart';
 final class SignOut extends UseCase<void, NoParams> {
   const SignOut(this._authRepository);
 
-  final AuthRepository _authRepository;
+  final AuthCommands _authRepository;
 
   @override
   Future<Result<void, Failure>> call(NoParams params) =>

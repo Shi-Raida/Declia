@@ -7,13 +7,13 @@ import '../usecase.dart';
 import 'params.dart';
 
 final class SignIn extends UseCase<AppUser, SignInParams> {
-  const SignIn(this._authRepository);
+  const SignIn(this._auth);
 
-  final AuthRepository _authRepository;
+  final AuthCommands _auth;
 
   @override
   Future<Result<AppUser, Failure>> call(SignInParams params) async {
-    final result = await _authRepository.signIn(
+    final result = await _auth.signIn(
       email: params.email,
       password: params.password,
     );
@@ -29,7 +29,7 @@ final class SignIn extends UseCase<AppUser, SignInParams> {
   Future<Result<AppUser, Failure>> _signOutAndReject(
     Set<UserRole> roles,
   ) async {
-    await _authRepository.signOut();
+    await _auth.signOut();
     return Err(UnauthorisedRoleFailure(roles.toString()));
   }
 }
