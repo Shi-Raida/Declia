@@ -34,6 +34,7 @@ final class ClientFormController extends GetxController {
   late final TextEditingController cityCtrl;
   late final TextEditingController postalCodeCtrl;
   late final TextEditingController countryCtrl;
+  late final TextEditingController companyCtrl;
   late final TextEditingController notesCtrl;
 
   // Reactive fields
@@ -59,7 +60,8 @@ final class ClientFormController extends GetxController {
     streetCtrl = TextEditingController(text: c?.address?.street ?? '');
     cityCtrl = TextEditingController(text: c?.address?.city ?? '');
     postalCodeCtrl = TextEditingController(text: c?.address?.postalCode ?? '');
-    countryCtrl = TextEditingController(text: c?.address?.country ?? '');
+    countryCtrl = TextEditingController(text: c?.address?.country ?? 'France');
+    companyCtrl = TextEditingController(text: c?.company ?? '');
     notesCtrl = TextEditingController(text: c?.notes ?? '');
 
     dateOfBirth.value = c?.dateOfBirth;
@@ -82,6 +84,7 @@ final class ClientFormController extends GetxController {
     cityCtrl.dispose();
     postalCodeCtrl.dispose();
     countryCtrl.dispose();
+    companyCtrl.dispose();
     notesCtrl.dispose();
     super.onClose();
   }
@@ -121,12 +124,16 @@ final class ClientFormController extends GetxController {
       country: countryCtrl.text.trim().isEmpty ? null : countryCtrl.text.trim(),
     );
 
+    final company =
+        companyCtrl.text.trim().isEmpty ? null : companyCtrl.text.trim();
+
     final client = isEditing
         ? existingClient!.copyWith(
             firstName: firstNameCtrl.text.trim(),
             lastName: lastNameCtrl.text.trim(),
             email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
             phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+            company: company,
             dateOfBirth: dateOfBirth.value,
             address: address,
             acquisitionSource: acquisitionSource.value,
@@ -141,6 +148,7 @@ final class ClientFormController extends GetxController {
             lastName: lastNameCtrl.text.trim(),
             email: emailCtrl.text.trim().isEmpty ? null : emailCtrl.text.trim(),
             phone: phoneCtrl.text.trim().isEmpty ? null : phoneCtrl.text.trim(),
+            company: company,
             dateOfBirth: dateOfBirth.value,
             address: address,
             acquisitionSource: acquisitionSource.value,

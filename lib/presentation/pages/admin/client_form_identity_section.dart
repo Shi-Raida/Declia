@@ -46,6 +46,10 @@ class ClientFormIdentitySection extends StatelessWidget {
             ),
           ],
         ),
+        ClientFormTextField(
+          label: Tr.adminClientFormCompany.tr,
+          controller: controller.companyCtrl,
+        ),
         _DobField(controller: controller),
       ],
     );

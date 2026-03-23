@@ -18,6 +18,7 @@ class Client with _$Client {
     @JsonKey(name: 'last_name') required String lastName,
     String? email,
     String? phone,
+    String? company,
     @JsonKey(name: 'date_of_birth') DateTime? dateOfBirth,
     Address? address,
     @JsonKey(name: 'acquisition_source') AcquisitionSource? acquisitionSource,
