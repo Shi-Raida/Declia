@@ -3,19 +3,19 @@ import 'package:get/get.dart';
 import '../../core/enums/consent_type.dart';
 import '../../usecases/consent/params.dart';
 import '../../usecases/usecase.dart';
-import '../services/navigation_service.dart';
+import '../services/shell_navigation_service.dart';
 
 final class CookieConsentController extends GetxController {
   CookieConsentController({
     required UseCase<void, SaveCookieConsentParams> saveCookieConsent,
-    required NavigationService navigationService,
+    required ShellNavigationService navigationService,
     required bool hasExistingConsent,
   }) : _saveCookieConsent = saveCookieConsent,
        _nav = navigationService,
        _hasExistingConsent = hasExistingConsent;
 
   final UseCase<void, SaveCookieConsentParams> _saveCookieConsent;
-  final NavigationService _nav;
+  final ShellNavigationService _nav;
   final bool _hasExistingConsent;
 
   final showBanner = false.obs;

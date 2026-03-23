@@ -7,19 +7,19 @@ import '../../domain/entities/client.dart';
 import '../../domain/entities/communication_preferences.dart';
 import '../../usecases/client/params.dart';
 import '../../usecases/usecase.dart';
-import '../services/navigation_service.dart';
+import '../services/client_navigation_service.dart';
 
 final class ClientFormController extends GetxController {
   ClientFormController(
     this._saveClient, {
-    required NavigationService navigationService,
+    required ClientNavigationService navigationService,
     required UseCase<List<String>, NoParams> fetchDistinctTags,
     this.existingClient,
   }) : _nav = navigationService,
        _fetchDistinctTags = fetchDistinctTags;
 
   final UseCase<Client, SaveClientParams> _saveClient;
-  final NavigationService _nav;
+  final ClientNavigationService _nav;
   final UseCase<List<String>, NoParams> _fetchDistinctTags;
   final Client? existingClient;
 

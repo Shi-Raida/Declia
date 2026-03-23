@@ -4,7 +4,7 @@ import '../../core/logger/app_logger.dart';
 import '../../usecases/auth/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/user_view_model.dart';
-import '../services/navigation_service.dart';
+import '../services/auth_navigation_service.dart';
 import 'auth_state_controller.dart';
 
 final class HomeController extends GetxController {
@@ -17,7 +17,7 @@ final class HomeController extends GetxController {
 
   final GetCurrentUserUseCase _getCurrentUser;
   final AuthStateController _authState;
-  final NavigationService _nav;
+  final AuthNavigationService _nav;
   final AppLogger _logger;
 
   @override

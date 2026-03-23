@@ -6,7 +6,7 @@ import '../../usecases/client/params.dart';
 import '../../usecases/client_history/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/client_view_model.dart';
-import '../services/navigation_service.dart';
+import '../services/client_navigation_service.dart';
 
 final class ClientDetailController extends GetxController {
   ClientDetailController(
@@ -18,7 +18,7 @@ final class ClientDetailController extends GetxController {
 
   final UseCase<ClientHistory, FetchClientHistoryParams> _fetchClientHistory;
   final UseCase<void, DeleteClientParams> _deleteClient;
-  final NavigationService _nav;
+  final ClientNavigationService _nav;
   final UseCase<Client, GetClientParams> _getClient;
 
   final client = Rxn<ClientViewModel>();

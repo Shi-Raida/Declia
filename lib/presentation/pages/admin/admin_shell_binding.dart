@@ -9,10 +9,12 @@ class AdminShellBinding extends Bindings {
   @override
   void dependencies() {
     Get.find<AppLogger>().trace('AdminShellBinding: registering dependencies');
+    final nav = Get.find<NavigationService>();
     Get.lazyPut<AdminShellController>(
       () => AdminShellController(
         Get.find<AuthStateController>(),
-        Get.find<NavigationService>(),
+        nav,
+        nav,
         Get.find<AppLogger>(),
       ),
     );

@@ -1,24 +1,31 @@
 import 'package:get/get.dart';
 
 import '../../core/enums/calendar_view.dart';
+import '../../core/utils/clock.dart';
 import '../../domain/entities/calendar_event.dart';
 import '../../domain/entities/external_calendar_event.dart';
 import '../../usecases/calendar/params.dart';
 import '../../usecases/google_calendar/params.dart';
 import '../../usecases/usecase.dart';
-import '../services/navigation_service.dart';
+import '../services/client_navigation_service.dart';
 
 final class PlanningController extends GetxController {
-  PlanningController(this._fetchSessions, this._nav, this._fetchExternalEvents);
+  PlanningController(
+    this._fetchSessions,
+    this._nav,
+    this._fetchExternalEvents,
+    this._clock,
+  );
 
   final UseCase<List<CalendarEvent>, FetchCalendarSessionsParams>
   _fetchSessions;
-  final NavigationService _nav;
+  final ClientNavigationService _nav;
   final UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams>
   _fetchExternalEvents;
+  final Clock _clock;
 
   final currentView = CalendarView.month.obs;
-  final focusedDate = DateTime.now().obs;
+  late final focusedDate = _clock.now().obs;
   final selectedTab = 0.obs; // 0 = Calendrier, 1 = Éditeur
   final events = <CalendarEvent>[].obs;
   final isLoading = false.obs;
@@ -99,7 +106,7 @@ final class PlanningController extends GetxController {
   }
 
   void goToToday() {
-    focusedDate.value = DateTime.now();
+    focusedDate.value = _clock.now();
     loadSessions();
   }
 
