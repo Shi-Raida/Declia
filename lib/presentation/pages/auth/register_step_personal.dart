@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../translations/translation_keys.dart';
@@ -12,7 +12,7 @@ import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 
 /// Client step 1: avatar, name, email, phone, address.
-class RegisterStepPersonal extends GetView<AuthController> {
+class RegisterStepPersonal extends GetView<RegisterController> {
   const RegisterStepPersonal({super.key});
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../translations/translation_keys.dart';
@@ -12,7 +12,7 @@ import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 
 /// Photographer step 0: avatar, name, email, phone.
-class RegisterStepBusiness extends GetView<AuthController> {
+class RegisterStepBusiness extends GetView<RegisterController> {
   const RegisterStepBusiness({super.key});
 
   @override

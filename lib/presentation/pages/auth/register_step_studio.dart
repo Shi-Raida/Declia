@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/legal_form.dart';
-import '../../controllers/auth_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../translations/translation_keys.dart';
@@ -13,7 +13,7 @@ import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 
 /// Photographer step 1: studio info + business address.
-class RegisterStepStudio extends GetView<AuthController> {
+class RegisterStepStudio extends GetView<RegisterController> {
   const RegisterStepStudio({super.key});
 
   @override

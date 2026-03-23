@@ -3,16 +3,16 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/acquisition_source.dart';
-import '../../controllers/auth_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/section_divider.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
-import '../admin/clients_filter_bar.dart';
+import '../admin/acquisition_source_tr.dart';
 
 /// Step 2 (shared): password, confirm password, acquisition source & notes.
-class RegisterStepSecurity extends GetView<AuthController> {
+class RegisterStepSecurity extends GetView<RegisterController> {
   const RegisterStepSecurity({super.key});
 
   @override

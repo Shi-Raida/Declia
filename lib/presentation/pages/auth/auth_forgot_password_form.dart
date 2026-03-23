@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../controllers/forgot_password_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
@@ -10,7 +10,7 @@ import '../../translations/translation_keys.dart';
 import '../../widgets/animated_error_banner.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 
-class AuthForgotPasswordForm extends GetView<AuthController> {
+class AuthForgotPasswordForm extends GetView<ForgotPasswordController> {
   const AuthForgotPasswordForm({super.key});
 
   @override
@@ -27,7 +27,7 @@ class AuthForgotPasswordForm extends GetView<AuthController> {
 class _SuccessView extends StatelessWidget {
   const _SuccessView({required this.controller});
 
-  final AuthController controller;
+  final ForgotPasswordController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class _SuccessView extends StatelessWidget {
 class _FormView extends StatelessWidget {
   const _FormView({required this.controller});
 
-  final AuthController controller;
+  final ForgotPasswordController controller;
 
   @override
   Widget build(BuildContext context) {

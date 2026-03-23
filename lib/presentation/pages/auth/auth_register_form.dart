@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/animated_error_banner.dart';
+import 'register_navigation_bar.dart';
+import 'register_progress_bar.dart';
 import 'register_step_business.dart';
 import 'register_step_confirm.dart';
 import 'register_step_personal.dart';
 import 'register_step_security.dart';
 import 'register_step_studio.dart';
 
-class AuthRegisterForm extends GetView<AuthController> {
+class AuthRegisterForm extends GetView<RegisterController> {
   const AuthRegisterForm({super.key});
 
   @override
@@ -31,7 +33,7 @@ class AuthRegisterForm extends GetView<AuthController> {
 class _SuccessView extends StatelessWidget {
   const _SuccessView({required this.controller});
 
-  final AuthController controller;
+  final RegisterController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,7 @@ class _SuccessView extends StatelessWidget {
 class _WizardView extends StatelessWidget {
   const _WizardView({required this.controller});
 
-  final AuthController controller;
+  final RegisterController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,7 @@ class _WizardView extends StatelessWidget {
           const SizedBox(height: 20),
 
           // Progress bar
-          _ProgressBar(
+          RegisterProgressBar(
             currentStep: step,
             totalSteps: totalSteps,
             accentColor: accentColor,
@@ -139,7 +141,7 @@ class _WizardView extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
 
           // Navigation buttons
-          _NavigationBar(
+          RegisterNavigationBar(
             step: step,
             totalSteps: totalSteps,
             controller: controller,
@@ -187,129 +189,5 @@ class _WizardView extends StatelessWidget {
       2 => const RegisterStepSecurity(),
       _ => const RegisterStepConfirm(),
     };
-  }
-}
-
-class _ProgressBar extends StatelessWidget {
-  const _ProgressBar({
-    required this.currentStep,
-    required this.totalSteps,
-    required this.accentColor,
-  });
-
-  final int currentStep;
-  final int totalSteps;
-  final Color accentColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(totalSteps, (i) {
-        final isDone = i < currentStep;
-        final isActive = i == currentStep;
-
-        Color color;
-        if (isDone) {
-          color = AppColors.success;
-        } else if (isActive) {
-          color = accentColor;
-        } else {
-          color = AppColors.border;
-        }
-
-        return Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            height: 4,
-            margin: EdgeInsets.only(right: i < totalSteps - 1 ? 6 : 0),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-        );
-      }),
-    );
-  }
-}
-
-class _NavigationBar extends StatelessWidget {
-  const _NavigationBar({
-    required this.step,
-    required this.totalSteps,
-    required this.controller,
-    required this.accentColor,
-  });
-
-  final int step;
-  final int totalSteps;
-  final AuthController controller;
-  final Color accentColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final isLastStep = step == totalSteps - 1;
-
-    return Row(
-      children: [
-        // Back button
-        if (step > 0)
-          Expanded(
-            child: OutlinedButton(
-              onPressed: controller.goToPreviousStep,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppColors.encre,
-                side: const BorderSide(color: AppColors.border),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Text(Tr.registerBtnBack.tr, style: AppTypography.button()),
-            ),
-          ),
-        if (step > 0) const SizedBox(width: 12),
-
-        // Continue / Submit button
-        Expanded(
-          flex: step > 0 ? 2 : 1,
-          child: Obx(
-            () => ElevatedButton(
-              onPressed: controller.isLoading.value
-                  ? null
-                  : isLastStep
-                  ? controller.register
-                  : controller.goToNextStep,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: accentColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: controller.isLoading.value
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(
-                      isLastStep
-                          ? Tr.registerBtnSubmit.tr
-                          : Tr.registerBtnContinue.tr,
-                      style: AppTypography.button().copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

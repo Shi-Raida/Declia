@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/enums/legal_form.dart';
-import '../../controllers/auth_controller.dart';
+import '../../controllers/register_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
 import '../../translations/translation_keys.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
-import '../admin/clients_filter_bar.dart';
+import '../admin/acquisition_source_tr.dart';
 import 'register_step_studio.dart';
 
 /// Step 3 (shared): summary card + consent checkboxes.
-class RegisterStepConfirm extends GetView<AuthController> {
+class RegisterStepConfirm extends GetView<RegisterController> {
   const RegisterStepConfirm({super.key});
 
   @override

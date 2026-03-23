@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controllers/auth_controller.dart';
+import '../../controllers/login_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_typography.dart';
@@ -10,7 +10,7 @@ import '../../translations/translation_keys.dart';
 import '../../widgets/animated_error_banner.dart';
 import '../../widgets/staggered_fade_slide_column.dart';
 
-class AuthLoginForm extends GetView<AuthController> {
+class AuthLoginForm extends GetView<LoginController> {
   const AuthLoginForm({super.key});
 
   @override
