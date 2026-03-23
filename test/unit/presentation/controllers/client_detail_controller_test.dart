@@ -4,11 +4,12 @@ import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_history.dart';
 import 'package:declia/presentation/controllers/client_detail_controller.dart';
 import 'package:declia/presentation/models/client_view_model.dart';
-import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/client/params.dart';
 import 'package:declia/usecases/client_history/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../../helpers/fakes.dart';
 
 final _now = DateTime(2026, 3, 20);
 
@@ -81,34 +82,6 @@ final class _FakeFetchClientHistory
   }
 }
 
-final class _FakeNavigationService implements NavigationService {
-  @override
-  String get currentRoute => '';
-  @override
-  void toLogin({String? reason}) {}
-  @override
-  void toHome(dynamic role) {}
-  @override
-  void toDashboard() {}
-  @override
-  void toAdminPage(String route) {}
-  void toClientLogin({String? tenantSlug}) {}
-  @override
-  void toClientHome() {}
-  void toClientRegister({String? tenantSlug}) {}
-  void toClientForgotPassword() {}
-  @override
-  void toLegalPrivacy() {}
-  @override
-  void toClientDetail(String id, {dynamic arguments}) {}
-  @override
-  void toClientEdit(String id, {dynamic arguments}) {}
-  @override
-  void toClientNew() {}
-  @override
-  void goBack() {}
-}
-
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -118,7 +91,7 @@ void main() {
       final controller = ClientDetailController(
         fetch,
         _FakeDeleteClient(),
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         _FakeGetClient(),
       );
 
@@ -137,7 +110,7 @@ void main() {
       final controller = ClientDetailController(
         fetch,
         _FakeDeleteClient(),
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         _FakeGetClient(),
       );
 
@@ -153,7 +126,7 @@ void main() {
       final controller = ClientDetailController(
         fetch,
         _FakeDeleteClient(),
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         _FakeGetClient(),
       );
 
@@ -170,7 +143,7 @@ void main() {
       final controller = ClientDetailController(
         _FakeFetchClientHistory(),
         _FakeDeleteClient(),
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         getClient,
       );
 
@@ -186,7 +159,7 @@ void main() {
       final controller = ClientDetailController(
         fetch,
         _FakeDeleteClient(),
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         _FakeGetClient(),
       );
 
@@ -202,7 +175,7 @@ void main() {
         final controller = ClientDetailController(
           _FakeFetchClientHistory(),
           _FakeDeleteClient(),
-          _FakeNavigationService(),
+          FakeClientNavigationService(),
           getClient,
         );
 
@@ -223,7 +196,7 @@ void main() {
   group('ClientDetailController.deleteClient', () {
     test('calls delete use case and navigates back on success', () async {
       final delete = _FakeDeleteClient();
-      final nav = _FakeNavigationService();
+      final nav = FakeClientNavigationService();
       final controller = ClientDetailController(
         _FakeFetchClientHistory(),
         delete,
@@ -244,7 +217,7 @@ void main() {
       final controller = ClientDetailController(
         _FakeFetchClientHistory(),
         delete,
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         _FakeGetClient(),
       );
       await controller.initialize('client-1', _fixtureVm);
@@ -259,7 +232,7 @@ void main() {
       final controller = ClientDetailController(
         _FakeFetchClientHistory(),
         delete,
-        _FakeNavigationService(),
+        FakeClientNavigationService(),
         _FakeGetClient(),
       );
       // Do not initialize — client remains null

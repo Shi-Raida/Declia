@@ -63,16 +63,23 @@ final class _FakeLogger implements AppLogger {
 
 void main() {
   late _FakeSignOut signOut;
-  late MockNavigationService nav;
+  late MockAuthNavigationService authNav;
+  late MockShellNavigationService shellNav;
   late AuthStateController authState;
   late AdminShellController controller;
 
   setUp(() {
     signOut = _FakeSignOut();
-    nav = MockNavigationService();
+    authNav = MockAuthNavigationService();
+    shellNav = MockShellNavigationService();
     authState = AuthStateController(signOut);
-    controller = AdminShellController(authState, nav, _FakeLogger());
-    when(() => nav.currentRoute).thenReturn('');
+    controller = AdminShellController(
+      authState,
+      authNav,
+      shellNav,
+      _FakeLogger(),
+    );
+    when(() => shellNav.currentRoute).thenReturn('');
     controller.onInit();
   });
 
@@ -92,7 +99,7 @@ void main() {
       test('calls navigation service with the given route', () {
         controller.navigateTo(AppRoutes.adminClients);
 
-        verify(() => nav.toAdminPage(AppRoutes.adminClients)).called(1);
+        verify(() => shellNav.toAdminPage(AppRoutes.adminClients)).called(1);
       });
 
       test('updates currentRoute on each navigation', () {
@@ -114,7 +121,7 @@ void main() {
       test('calls toLogin on navigation service', () async {
         await controller.logout();
 
-        verify(() => nav.toLogin()).called(1);
+        verify(() => authNav.toLogin()).called(1);
       });
     });
 

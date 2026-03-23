@@ -2,11 +2,12 @@ import 'package:declia/core/enums/consent_type.dart';
 import 'package:declia/core/errors/failures.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/presentation/controllers/cookie_consent_controller.dart';
-import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/consent/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
+
+import '../../../helpers/fakes.dart';
 
 final class _FakeSaveCookieConsent
     extends UseCase<void, SaveCookieConsentParams> {
@@ -21,34 +22,6 @@ final class _FakeSaveCookieConsent
   }
 }
 
-final class _FakeNavigationService implements NavigationService {
-  @override
-  String get currentRoute => '';
-  @override
-  void toLogin({String? reason}) {}
-  @override
-  void toHome(dynamic role) {}
-  @override
-  void toDashboard() {}
-  @override
-  void toAdminPage(String route) {}
-  void toClientLogin({String? tenantSlug}) {}
-  @override
-  void toClientHome() {}
-  void toClientRegister({String? tenantSlug}) {}
-  void toClientForgotPassword() {}
-  @override
-  void toLegalPrivacy() {}
-  @override
-  void toClientDetail(String id, {dynamic arguments}) {}
-  @override
-  void toClientEdit(String id, {dynamic arguments}) {}
-  @override
-  void toClientNew() {}
-  @override
-  void goBack() {}
-}
-
 void main() {
   late _FakeSaveCookieConsent saveConsent;
   late CookieConsentController controller;
@@ -56,7 +29,7 @@ void main() {
   void makeController({bool hasExistingConsent = false}) {
     controller = CookieConsentController(
       saveCookieConsent: saveConsent,
-      navigationService: _FakeNavigationService(),
+      navigationService: FakeShellNavigationService(),
       hasExistingConsent: hasExistingConsent,
     );
     controller.onInit();

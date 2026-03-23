@@ -3,18 +3,21 @@ import 'package:declia/core/enums/payment_status.dart';
 import 'package:declia/core/enums/session_status.dart';
 import 'package:declia/core/enums/session_type.dart';
 import 'package:declia/core/errors/failures.dart';
+import 'package:declia/core/utils/clock.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/calendar_event.dart';
 import 'package:declia/domain/entities/external_calendar_event.dart';
 import 'package:declia/domain/entities/session.dart';
 import 'package:declia/presentation/controllers/planning_controller.dart';
-import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/calendar/params.dart';
 import 'package:declia/usecases/google_calendar/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../helpers/fakes.dart';
+
 final _now = DateTime(2026, 3, 19);
+final Clock _clock = FakeClock(_now);
 
 CalendarEvent _event() => CalendarEvent(
   session: Session(
@@ -59,45 +62,15 @@ final class _FakeFetchExternalEvents
   ) async => const Ok([]);
 }
 
-final class _FakeNavigationService implements NavigationService {
-  String? lastClientId;
-
-  @override
-  String get currentRoute => '';
-  @override
-  void toLogin({String? reason}) {}
-  @override
-  void toHome(dynamic role) {}
-  @override
-  void toDashboard() {}
-  @override
-  void toAdminPage(String route) {}
-  void toClientLogin({String? tenantSlug}) {}
-  @override
-  void toClientHome() {}
-  void toClientRegister({String? tenantSlug}) {}
-  void toClientForgotPassword() {}
-  @override
-  void toLegalPrivacy() {}
-  @override
-  void toClientDetail(String id, {dynamic arguments}) {
-    lastClientId = id;
-  }
-
-  @override
-  void toClientEdit(String id, {dynamic arguments}) {}
-  @override
-  void toClientNew() {}
-  @override
-  void goBack() {}
-}
-
-PlanningController _makeController({_FakeFetchCalendarSessions? fetch}) =>
-    PlanningController(
-      fetch ?? _FakeFetchCalendarSessions(),
-      _FakeNavigationService(),
-      _FakeFetchExternalEvents(),
-    );
+PlanningController _makeController({
+  _FakeFetchCalendarSessions? fetch,
+  Clock? clock,
+}) => PlanningController(
+  fetch ?? _FakeFetchCalendarSessions(),
+  FakeClientNavigationService(),
+  _FakeFetchExternalEvents(),
+  clock ?? _clock,
+);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -174,10 +147,9 @@ void main() {
         controller.goToToday();
         await controller.loadSessions();
 
-        final now = DateTime.now();
-        expect(controller.focusedDate.value.year, now.year);
-        expect(controller.focusedDate.value.month, now.month);
-        expect(controller.focusedDate.value.day, now.day);
+        expect(controller.focusedDate.value.year, _now.year);
+        expect(controller.focusedDate.value.month, _now.month);
+        expect(controller.focusedDate.value.day, _now.day);
       });
     });
 
@@ -220,11 +192,12 @@ void main() {
 
     group('goToClientProfile', () {
       test('delegates to navigation service', () {
-        final nav = _FakeNavigationService();
+        final nav = FakeClientNavigationService();
         final controller = PlanningController(
           _FakeFetchCalendarSessions(),
           nav,
           _FakeFetchExternalEvents(),
+          _clock,
         );
 
         controller.goToClientProfile('client-42');

@@ -29,7 +29,10 @@ import 'package:declia/infrastructure/datasources/contract/client_history_data_s
 import 'package:declia/infrastructure/datasources/contract/consent_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/google_calendar_data_source.dart';
 import 'package:declia/infrastructure/datasources/contract/tenant_data_source.dart';
+import 'package:declia/presentation/services/auth_navigation_service.dart';
+import 'package:declia/presentation/services/client_navigation_service.dart';
 import 'package:declia/presentation/services/navigation_service.dart';
+import 'package:declia/presentation/services/shell_navigation_service.dart';
 import 'package:declia/usecases/auth/params.dart';
 import 'package:declia/usecases/availability/params.dart';
 import 'package:declia/usecases/calendar/params.dart';
@@ -67,6 +70,14 @@ class MockClientDataSource extends Mock implements ClientDataSource {}
 class MockLocalStorage extends Mock implements LocalStorage {}
 
 class MockNavigationService extends Mock implements NavigationService {}
+
+class MockAuthNavigationService extends Mock implements AuthNavigationService {}
+
+class MockShellNavigationService extends Mock
+    implements ShellNavigationService {}
+
+class MockClientNavigationService extends Mock
+    implements ClientNavigationService {}
 
 // Use cases mocked against the abstract UseCase interface (concrete classes are final)
 class MockSignIn extends Mock implements UseCase<AppUser, SignInParams> {}

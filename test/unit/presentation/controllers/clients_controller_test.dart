@@ -2,17 +2,21 @@ import 'package:declia/core/enums/acquisition_source.dart';
 import 'package:declia/core/enums/client_sort_field.dart';
 import 'package:declia/core/enums/sort_direction.dart';
 import 'package:declia/core/errors/failures.dart';
+import 'package:declia/core/utils/clock.dart';
 import 'package:declia/core/utils/paged_result.dart';
 import 'package:declia/core/utils/result.dart';
 import 'package:declia/domain/entities/client.dart';
 import 'package:declia/domain/entities/client_list_query.dart';
 import 'package:declia/domain/entities/client_summary_stats.dart';
 import 'package:declia/presentation/controllers/clients_controller.dart';
-import 'package:declia/presentation/services/navigation_service.dart';
 import 'package:declia/usecases/client/params.dart';
 import 'package:declia/usecases/client_history/params.dart';
 import 'package:declia/usecases/usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../../helpers/fakes.dart';
+
+final Clock _clock = FakeClock(DateTime(2026, 3, 18));
 
 final _now = DateTime(2026, 3, 18);
 
@@ -90,46 +94,20 @@ final class _FakeFetchDistinctTags extends UseCase<List<String>, NoParams> {
   }
 }
 
-final class _FakeNavigationService implements NavigationService {
-  @override
-  String get currentRoute => '';
-  @override
-  void toLogin({String? reason}) {}
-  @override
-  void toHome(dynamic role) {}
-  @override
-  void toDashboard() {}
-  @override
-  void toAdminPage(String route) {}
-  void toClientLogin({String? tenantSlug}) {}
-  @override
-  void toClientHome() {}
-  void toClientRegister({String? tenantSlug}) {}
-  void toClientForgotPassword() {}
-  @override
-  void toLegalPrivacy() {}
-  @override
-  void toClientDetail(String id, {dynamic arguments}) {}
-  @override
-  void toClientEdit(String id, {dynamic arguments}) {}
-  @override
-  void toClientNew() {}
-  @override
-  void goBack() {}
-}
-
 ClientsController _makeController({
   _FakeFetchClientList? fetch,
   _FakeDeleteClient? delete,
   _FakeFetchSummaryStats? stats,
   _FakeFetchDistinctTags? tags,
+  Clock? clock,
 }) {
   return ClientsController(
     fetch ?? _FakeFetchClientList(),
     delete ?? _FakeDeleteClient(),
-    _FakeNavigationService(),
+    FakeClientNavigationService(),
     stats ?? _FakeFetchSummaryStats(),
     tags ?? _FakeFetchDistinctTags(),
+    clock ?? _clock,
   );
 }
 
@@ -477,6 +455,89 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 350));
 
         expect(controller.query.value.page, 0);
+      });
+    });
+
+    group('selection', () {
+      test('toggleSelect adds and removes ID', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.toggleSelect('1');
+        expect(controller.selectedIds, contains('1'));
+
+        controller.toggleSelect('1');
+        expect(controller.selectedIds, isNot(contains('1')));
+      });
+
+      test('isAllSelected is true when all items selected', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.toggleSelect('1');
+        controller.toggleSelect('2');
+        expect(controller.isAllSelected, isTrue);
+      });
+
+      test('isAllSelected is false when partial selection', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.toggleSelect('1');
+        expect(controller.isAllSelected, isFalse);
+      });
+
+      test('toggleSelectAll selects all visible then clears', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.toggleSelectAll();
+        expect(controller.selectedIds.length, 2);
+        expect(controller.isAllSelected, isTrue);
+
+        controller.toggleSelectAll();
+        expect(controller.selectedIds, isEmpty);
+      });
+
+      test('loadClients clears selection', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final controller = _makeController(fetch: fetch);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.toggleSelect('1');
+        expect(controller.selectedIds, isNotEmpty);
+
+        await controller.loadClients();
+        expect(controller.selectedIds, isEmpty);
+      });
+
+      test('removeClient deselects deleted ID', () async {
+        final fetch = _FakeFetchClientList()
+          ..result = PagedResult(items: _fixtureClients, totalCount: 2);
+        final delete = _FakeDeleteClient();
+        final controller = _makeController(fetch: fetch, delete: delete);
+        controller.onInit();
+        await Future<void>.delayed(Duration.zero);
+
+        controller.toggleSelect('1');
+        expect(controller.selectedIds, contains('1'));
+
+        await controller.removeClient('1');
+        expect(controller.selectedIds, isNot(contains('1')));
       });
     });
 
