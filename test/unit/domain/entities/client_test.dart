@@ -15,6 +15,7 @@ void main() {
     lastName: 'Dupont',
     email: 'alice@test.com',
     phone: '+33612345678',
+    company: 'Dupont Photo',
     dateOfBirth: DateTime(1990, 5, 15),
     address: const Address(
       street: '12 rue de la Paix',
@@ -46,6 +47,7 @@ void main() {
       expect(restored.lastName, fixtureClient.lastName);
       expect(restored.email, fixtureClient.email);
       expect(restored.phone, fixtureClient.phone);
+      expect(restored.company, fixtureClient.company);
       expect(restored.acquisitionSource, fixtureClient.acquisitionSource);
       expect(restored.tags, fixtureClient.tags);
       expect(restored.notes, fixtureClient.notes);
