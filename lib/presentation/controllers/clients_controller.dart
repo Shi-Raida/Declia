@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../core/utils/clock.dart';
 import '../../core/utils/paged_result.dart';
 import '../../domain/entities/client.dart';
 import '../../domain/entities/client_summary_stats.dart';
@@ -7,26 +8,29 @@ import '../../usecases/client/params.dart';
 import '../../usecases/client_history/params.dart';
 import '../../usecases/usecase.dart';
 import '../models/client_view_model.dart';
-import '../services/navigation_service.dart';
+import '../services/client_navigation_service.dart';
 import 'client_list_query_mixin.dart';
 import 'client_pagination_mixin.dart';
+import 'client_selection_mixin.dart';
 
 final class ClientsController extends GetxController
-    with ClientListQueryMixin, ClientPaginationMixin {
+    with ClientListQueryMixin, ClientPaginationMixin, ClientSelectionMixin {
   ClientsController(
     this._fetchClientList,
     this._deleteClient,
     this._nav,
     this._fetchSummaryStats,
     this._fetchDistinctTags,
+    this._clock,
   );
 
   final UseCase<PagedResult<Client>, FetchClientsParams> _fetchClientList;
   final UseCase<void, DeleteClientParams> _deleteClient;
-  final NavigationService _nav;
+  final ClientNavigationService _nav;
   final UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams>
   _fetchSummaryStats;
   final UseCase<List<String>, NoParams> _fetchDistinctTags;
+  final Clock _clock;
 
   final clients = <ClientViewModel>[].obs;
   final _entityMap = <String, Client>{};
@@ -35,28 +39,11 @@ final class ClientsController extends GetxController
   final errorMessage = Rxn<String>();
   final availableTags = <String>[].obs;
 
-  // Selection state for checkbox column
-  final selectedIds = <String>{}.obs;
+  @override
+  List<String> get allItemIds => _allViewModels.map((vm) => vm.id).toList();
 
-  bool get isAllSelected =>
-      _allViewModels.isNotEmpty &&
-      _allViewModels.every((vm) => selectedIds.contains(vm.id));
-
-  void toggleSelect(String id) {
-    if (selectedIds.contains(id)) {
-      selectedIds.remove(id);
-    } else {
-      selectedIds.add(id);
-    }
-  }
-
-  void toggleSelectAll() {
-    if (isAllSelected) {
-      selectedIds.clear();
-    } else {
-      selectedIds.assignAll(clients.map((vm) => vm.id));
-    }
-  }
+  @override
+  List<String> get visibleItemIds => clients.map((vm) => vm.id).toList();
 
   Client? entityById(String id) => _entityMap[id];
 
@@ -81,7 +68,7 @@ final class ClientsController extends GetxController
   Future<void> loadClients() async {
     isLoading.value = true;
     errorMessage.value = null;
-    selectedIds.clear();
+    clearSelection();
     final result = await _fetchClientList((query: query.value));
     result.fold(
       ok: (paged) {
@@ -128,7 +115,7 @@ final class ClientsController extends GetxController
     var filtered = _allViewModels.toList();
     if (q.statusFilter != null) {
       filtered = filtered
-          .where((vm) => vm.clientStatus == q.statusFilter)
+          .where((vm) => vm.clientStatus(_clock.now()) == q.statusFilter)
           .toList();
     }
     if (q.sessionTypeFilter != null) {
@@ -151,7 +138,7 @@ final class ClientsController extends GetxController
       ok: (_) {
         _entityMap.remove(id);
         _allViewModels.removeWhere((c) => c.id == id);
-        selectedIds.remove(id);
+        deselectId(id);
         clients.removeWhere((c) => c.id == id);
         if (totalCount.value > 0) totalCount.value--;
         return true;

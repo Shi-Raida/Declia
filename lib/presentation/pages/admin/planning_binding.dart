@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../core/logger/app_logger.dart';
+import '../../../core/utils/clock.dart';
 import '../../../domain/entities/availability_rule.dart';
 import '../../../domain/entities/calendar_event.dart';
 import '../../../domain/entities/external_calendar_event.dart';
@@ -35,6 +36,7 @@ class PlanningBinding extends Bindings {
         Get.find<
           UseCase<List<ExternalCalendarEvent>, FetchExternalEventsParams>
         >(),
+        Get.find<Clock>(),
       ),
     );
   }

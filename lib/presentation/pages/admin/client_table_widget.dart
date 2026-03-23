@@ -157,8 +157,8 @@ class ClientsTable extends StatelessWidget {
         // Status
         DataCell(
           StatusBadge(
-            text: vm.clientStatus.label,
-            color: vm.clientStatus.color,
+            text: vm.clientStatus(DateTime.now()).label,
+            color: vm.clientStatus(DateTime.now()).color,
           ),
         ),
         DataCell(

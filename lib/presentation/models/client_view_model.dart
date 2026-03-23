@@ -90,14 +90,12 @@ class ClientViewModel {
             '${lastShooting!.year}'
       : '—';
 
-  ClientStatus get clientStatus {
-    final daysSinceCreation = DateTime.now().difference(createdAt).inDays;
+  ClientStatus clientStatus(DateTime now) {
+    final daysSinceCreation = now.difference(createdAt).inDays;
     if (daysSinceCreation <= 30) return ClientStatus.nouveau;
     if (totalSpent != null && totalSpent! > 1000) return ClientStatus.vip;
     if (lastShooting != null) {
-      final daysSinceLastShooting = DateTime.now()
-          .difference(lastShooting!)
-          .inDays;
+      final daysSinceLastShooting = now.difference(lastShooting!).inDays;
       if (daysSinceLastShooting > 180) return ClientStatus.inactif;
     }
     return ClientStatus.actif;

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../core/logger/app_logger.dart';
+import '../../../core/utils/clock.dart';
 import '../../../core/utils/paged_result.dart';
 import '../../../domain/entities/client.dart';
 import '../../../domain/entities/client_summary_stats.dart';
@@ -23,6 +24,7 @@ class ClientsBinding extends Bindings {
           UseCase<Map<String, ClientSummaryStats>, FetchSummaryStatsParams>
         >(),
         Get.find<UseCase<List<String>, NoParams>>(tag: 'fetchDistinctTags'),
+        Get.find<Clock>(),
       ),
     );
   }
