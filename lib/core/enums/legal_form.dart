@@ -13,6 +13,10 @@ enum LegalForm {
   sas,
   @JsonValue('sasu')
   sasu,
+  @JsonValue('micro_entreprise')
+  microEntreprise,
+  @JsonValue('association')
+  association,
   @JsonValue('other')
   other,
 }
@@ -25,6 +29,8 @@ extension LegalFormJson on LegalForm {
     LegalForm.sarl => 'sarl',
     LegalForm.sas => 'sas',
     LegalForm.sasu => 'sasu',
+    LegalForm.microEntreprise => 'micro_entreprise',
+    LegalForm.association => 'association',
     LegalForm.other => 'other',
   };
 }
