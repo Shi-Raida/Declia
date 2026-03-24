@@ -28,23 +28,24 @@ Design system: `docs/visuals/harmonized/design-system.css`
 
 ## Milestone Overview
 
-| # | Milestone | Description | Deps |
-|---|-----------|-------------|------|
-| M1 | Foundations & Admin Shell | Flutter init, Supabase, multi-role auth, multi-tenant, admin shell | - |
-| M2 | CRM & Planning | Client profiles, calendar, availability, Google Calendar sync | M1 |
-| M3 | Public Showcase | Public pages, portfolio, pricing, SEO, contact, responsive | M1 |
-| M4 | Booking System | Formula booking, event quotes, Stripe, questionnaire, reminders | M1-M3 |
-| M5 | Delivery Galleries | Upload, galleries, sub-folders, favorites, download, sharing, expiration | M1-M2 |
-| M6 | Client Space & Premium Experience | Client account, Client Journey, Coffret Numerique, Before/After, Selection | M1-M5 |
-| M7 | Integrated Shop | Product catalog, contextual purchase, cart, payment, order management | M1-M2, M5-M6 |
-| M8 | Gift Cards, Loyalty & Promotions | Gift cards, referral, points, 4 Seasons subscription, promo offers | M1-M4, M7 |
-| M9 | Mini-Sessions & School Module | Automated mini-session events, Parent Gallery for school photography | M1-M5, M7 |
-| M10 | Workflow & Task Automation | Multi-view tasks, templates, auto-creation, Client Journey link | M1-M2, M4, M6 |
-| M11 | Emails, SMS & Education Hub | Email/SMS templates, dynamic variables, 9 pre-shooting guides | M1-M2, M4-M5, M10 |
-| M12 | Marketing Automation V1 | 6 campaigns, Session Recap, Referral Proof, campaign dashboard | M1-M2, M5, M7-M8, M10-M11 |
-| M13 | Invoicing & Accounting Export | Factur-X, quotes, invoices, URSSAF, exports, financial dashboard | M1-M2, M4, M7 |
-| M14 | Statistics, Notifications & Referral Proof | KPI dashboard, push notifications, social proof on showcase | M1-M2, M4-M5, M7-M8, M12-M13 |
-| M15 | Security, GDPR & Launch | Security, compliance, final SEO, messaging center, admin content, performance | M1-M14 |
+| # | Milestone | Stories | Est. days | Deps | Status |
+|---|-----------|---------|-----------|------|--------|
+| M1 | Foundations & Admin Shell | 8 | 10 | - | Done |
+| M2 | CRM & Planning | 6 | 7 | M1 | Done |
+| M3 | Public Showcase | 8 | 10 | M1 | Not started |
+| M4 | Booking System | 5 | 15 | M1-M3 | Not started |
+| M5 | Delivery Galleries | 5 | 12 | M1-M2 | Not started |
+| M6 | Client Space & Premium Experience | 5 | 15 | M1-M5 | Not started |
+| M7 | Integrated Shop | 4 | 12 | M1-M2, M5-M6 | Not started |
+| M8 | Gift Cards, Loyalty & Promotions | 6 | 15 | M1-M4, M7 | Not started |
+| M9 | Mini-Sessions & School Module | 8 | 20 | M1-M5, M7 | Not started |
+| M10 | Workflow & Task Automation | 5 | 10 | M1-M2, M4, M6 | Not started |
+| M11 | Emails, SMS & Education Hub | 6 | 15 | M1-M2, M4-M5, M10 | Not started |
+| M12 | Marketing Automation V1 | 7 | 15 | M1-M2, M5, M7-M8, M10-M11 | Not started |
+| M13 | Invoicing & Accounting Export | 5 | 15 | M1-M2, M4, M7 | Not started |
+| M14 | Statistics, Notifications & Referral Proof | 4 | 10 | M1-M2, M4-M5, M7-M8, M12-M13 | Not started |
+| M15 | Security, GDPR & Launch | 6 | 12 | M1-M14 | Not started |
+|  | **Total** | **80** | **193** |  |  |
 
 ## Dependency Graph
 
@@ -62,11 +63,13 @@ M1 ──┬──> M2 ──┬──> M4 ──┐
 
 Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
+Estimates assume AI-assisted development (Claude Code). Total: **193 days** of effort (~176 remaining).
+
 ## Progress Tracking
 
 | Step | Description | Status |
 |------|-------------|--------|
-| **M1** | **Foundations & Admin Shell** | **Done** |
+| **M1** | **Foundations & Admin Shell (10d)** | **Done** |
 | M1-S1 | Flutter project initialization | Done |
 | M1-S2 | Supabase setup & database | Done |
 | M1-S3 | Multi-tenant architecture | Done |
@@ -75,14 +78,14 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M1-S6 | Admin shell & navigation | Done |
 | M1-S7 | Role management & access control | Done |
 | M1-S8 | Base security & GDPR foundations | Done |
-| **M2** | **CRM & Planning** | **In progress** |
+| **M2** | **CRM & Planning (7d)** | **Done** |
 | M2-S1 | Client CRM profiles | Done |
 | M2-S2 | Client list & filtering | Done |
 | M2-S3 | Client history | Done |
 | M2-S4 | Calendar & planning view | Done |
 | M2-S5 | Availability management | Done |
 | M2-S6 | Google Calendar sync | Done |
-| **M3** | **Public Showcase** | **Not started** |
+| **M3** | **Public Showcase (10d)** | **Not started** |
 | M3-S1 | Home page with seasonal mode | Not started |
 | M3-S2 | Portfolio by specialty | Not started |
 | M3-S3 | Pricing & formulas page | Not started |
@@ -91,37 +94,37 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M3-S6 | FAQ & Contact pages | Not started |
 | M3-S7 | Legal pages & social links | Not started |
 | M3-S8 | SEO & performance foundations | Not started |
-| **M4** | **Booking System** | **Not started** |
+| **M4** | **Booking System (15d)** | **Not started** |
 | M4-S1 | Standard formula booking | Not started |
 | M4-S2 | Event booking via quote | Not started |
 | M4-S3 | Pre-shooting questionnaire | Not started |
 | M4-S4 | Booking automations | Not started |
 | M4-S5 | Stripe integration & payment | Not started |
-| **M5** | **Delivery Galleries** | **Not started** |
+| **M5** | **Delivery Galleries (12d)** | **Not started** |
 | M5-S1 | Upload & gallery creation (admin) | Not started |
 | M5-S2 | Client gallery access | Not started |
 | M5-S3 | Gallery features (favorites, comments, download) | Not started |
 | M5-S4 | Gallery sharing with guests | Not started |
 | M5-S5 | Expiration & gallery management | Not started |
-| **M6** | **Client Space & Premium Experience** | **Not started** |
+| **M6** | **Client Space & Premium Experience (15d)** | **Not started** |
 | M6-S1 | Complete client space | Not started |
 | M6-S2 | Visual Client Journey | Not started |
 | M6-S3 | Coffret Numerique -- premium delivery | Not started |
 | M6-S4 | Before/After retouching | Not started |
 | M6-S5 | Selection galleries | Not started |
-| **M7** | **Integrated Shop** | **Not started** |
+| **M7** | **Integrated Shop (12d)** | **Not started** |
 | M7-S1 | Product catalog (admin) | Not started |
 | M7-S2 | Contextual purchase from gallery | Not started |
 | M7-S3 | Cart & shop payment | Not started |
 | M7-S4 | Order management (admin) | Not started |
-| **M8** | **Gift Cards, Loyalty & Promotions** | **Not started** |
+| **M8** | **Gift Cards, Loyalty & Promotions (15d)** | **Not started** |
 | M8-S1 | Gift cards | Not started |
 | M8-S2 | Gift card management center (admin) | Not started |
 | M8-S3 | Loyalty program | Not started |
 | M8-S4 | Referral system | Not started |
 | M8-S5 | 4 Seasons subscription | Not started |
 | M8-S6 | Promotional offers system | Not started |
-| **M9** | **Mini-Sessions & School Module** | **Not started** |
+| **M9** | **Mini-Sessions & School Module (20d)** | **Not started** |
 | M9-S1 | Mini-session event creation (admin) | Not started |
 | M9-S2 | Mini-session public page | Not started |
 | M9-S3 | Mini-session booking & payment | Not started |
@@ -130,20 +133,20 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M9-S6 | School gallery creation (admin) | Not started |
 | M9-S7 | Parent journey -- school gallery | Not started |
 | M9-S8 | School order management | Not started |
-| **M10** | **Workflow & Task Automation** | **Not started** |
+| **M10** | **Workflow & Task Automation (10d)** | **Not started** |
 | M10-S1 | Task management views | Not started |
 | M10-S2 | Detailed task management | Not started |
 | M10-S3 | Workflow templates per session type | Not started |
 | M10-S4 | Automatic task creation on booking | Not started |
 | M10-S5 | Workflow-Client Journey connection | Not started |
-| **M11** | **Emails, SMS & Education Hub** | **Not started** |
+| **M11** | **Emails, SMS & Education Hub (15d)** | **Not started** |
 | M11-S1 | Email template system | Not started |
 | M11-S2 | Booking-related emails | Not started |
 | M11-S3 | Gallery-related emails | Not started |
 | M11-S4 | Post-shooting emails | Not started |
 | M11-S5 | Automated SMS | Not started |
 | M11-S6 | Education Hub -- preparation guides | Not started |
-| **M12** | **Marketing Automation V1** | **Not started** |
+| **M12** | **Marketing Automation V1 (15d)** | **Not started** |
 | M12-S1 | Avant-Premiere campaign | Not started |
 | M12-S2 | Abandoned Cart campaign | Not started |
 | M12-S3 | Last Chance campaign | Not started |
@@ -151,18 +154,18 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 | M12-S5 | Session Recap (mobile form) | Not started |
 | M12-S6 | Referral Proof -- social proof | Not started |
 | M12-S7 | Marketing campaign dashboard | Not started |
-| **M13** | **Invoicing & Accounting Export** | **Not started** |
+| **M13** | **Invoicing & Accounting Export (15d)** | **Not started** |
 | M13-S1 | Automatic quote generation | Not started |
 | M13-S2 | Automatic invoice generation | Not started |
 | M13-S3 | Payment tracking | Not started |
 | M13-S4 | Financial dashboard | Not started |
 | M13-S5 | Accounting exports | Not started |
-| **M14** | **Statistics, Notifications & Referral Proof** | **Not started** |
+| **M14** | **Statistics, Notifications & Referral Proof (10d)** | **Not started** |
 | M14-S1 | Global KPI dashboard | Not started |
 | M14-S2 | Multi-platform push notifications | Not started |
 | M14-S3 | Notification preferences | Not started |
 | M14-S4 | Referral Proof showcase integration | Not started |
-| **M15** | **Security, GDPR & Launch** | **Not started** |
+| **M15** | **Security, GDPR & Launch (12d)** | **Not started** |
 | M15-S1 | Infrastructure security | Not started |
 | M15-S2 | GDPR compliance | Not started |
 | M15-S3 | SEO finalization | Not started |
@@ -175,6 +178,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M1: Foundations & Admin Shell
 
 **Description:** Flutter project init, Supabase setup, multi-role auth (photographer + client), multi-tenant architecture, and base admin shell.
+
+**Estimated days:** 10
 
 **Dependencies:** None (first milestone)
 
@@ -291,6 +296,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Complete client profiles with history, availability calendar and Google Calendar sync.
 
+**Estimated days:** 7
+
 **Dependencies:** M1
 
 **CDC Ref:** 15.1, 15.2
@@ -378,6 +385,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M3: Public Showcase
 
 **Description:** All public pages with responsive mobile-first design and SEO foundations.
+
+**Estimated days:** 10
 
 **Dependencies:** M1
 
@@ -494,6 +503,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Complete booking flow for standard sessions (formulas) and events (quotes), with Stripe payments and automations.
 
+**Estimated days:** 15
+
 **Dependencies:** M1, M2, M3
 
 **CDC Ref:** 3.1, 3.2, 3.3, 3.4
@@ -573,6 +584,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Photo upload, gallery creation with sub-folders, secure client access, and browsing features.
 
+**Estimated days:** 12
+
 **Dependencies:** M1, M2
 
 **CDC Ref:** 4.1, 4.3
@@ -645,6 +658,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M6: Client Space & Premium Experience
 
 **Description:** Complete client account, visual Client Journey, premium Coffret Numerique delivery, Before/After retouching, and selection galleries.
+
+**Estimated days:** 15
 
 **Dependencies:** M1, M2, M3, M4, M5
 
@@ -723,6 +738,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Product catalog, contextual purchase from galleries, multi-product cart, Stripe payment and order management.
 
+**Estimated days:** 12
+
 **Dependencies:** M1, M2, M5, M6
 
 **CDC Ref:** 5.1, 5.2, 5.3
@@ -786,6 +803,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M8: Gift Cards, Loyalty & Promotions
 
 **Description:** Gift cards, loyalty program, referral, 4 Seasons subscription, and promotional offers system.
+
+**Estimated days:** 15
 
 **Dependencies:** M1, M2, M3, M4, M7
 
@@ -873,6 +892,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M9: Mini-Sessions & School Module
 
 **Description:** Automated mini-session events with slot management, and Parent Gallery module for school photography.
+
+**Estimated days:** 20
 
 **Dependencies:** M1, M2, M3, M4, M5, M7
 
@@ -988,6 +1009,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Multi-view task management system with customizable workflow templates and Client Journey connection.
 
+**Estimated days:** 10
+
 **Dependencies:** M1, M2, M4, M6
 
 **CDC Ref:** 15.3
@@ -1061,6 +1084,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M11: Emails, SMS & Education Hub
 
 **Description:** Automated communication system with customizable templates, dynamic variables, and pre-shooting guide library.
+
+**Estimated days:** 15
 
 **Dependencies:** M1, M2, M4, M5, M10
 
@@ -1149,6 +1174,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M12: Marketing Automation V1
 
 **Description:** 6 automated marketing campaigns with performance dashboard and CRM-powered targeting.
+
+**Estimated days:** 15
 
 **Dependencies:** M1, M2, M5, M7, M8, M10, M11
 
@@ -1252,6 +1279,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Factur-X quotes and invoices, payment tracking, financial dashboard, URSSAF module and accounting exports.
 
+**Estimated days:** 15
+
 **Dependencies:** M1, M2, M4, M7
 
 **CDC Ref:** 15.4, 15.5
@@ -1328,6 +1357,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 
 **Description:** Complete statistics dashboard, multi-platform push notifications, and social proof integration on the showcase.
 
+**Estimated days:** 10
+
 **Dependencies:** M1, M2, M4, M5, M7, M8, M12, M13
 
 **CDC Ref:** 15.6, 16
@@ -1390,6 +1421,8 @@ Parallelizable: M9, M10, M13 can be developed in parallel after M8.
 ## M15: Security, GDPR & Launch
 
 **Description:** Final security hardening, GDPR compliance, SEO, messaging center, admin content management, and performance optimization for production launch.
+
+**Estimated days:** 12
 
 **Dependencies:** M1-M14
 

@@ -4,6 +4,8 @@
 
 > Detailed milestone breakdown with user stories: [roadmap-v1.md](roadmap-v1.md)
 
+_15 milestones, 80 user stories, 193 estimated days of effort._
+
 Core platform covering the full photographer workflow end-to-end.
 
 **Public-facing:**
