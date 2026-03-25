@@ -120,6 +120,11 @@ class TrAdminClients {
   String get tableCategory => 'adminClientsTableCategory';
   String get tableRevenue => 'adminClientsTableRevenue';
   String get export => 'adminClientsExport';
+  String get tableClient => 'adminClientsTableClient';
+  String get activeClients => 'adminClientsActiveClients';
+  String get vipClients => 'adminClientsVipClients';
+  String get avgRevenuePerClient => 'adminClientsAvgRevenuePerClient';
+  String get trendPercentOfTotal => 'adminClientsTrendPercentOfTotal';
 }
 
 class TrAdminClientForm {
@@ -160,6 +165,7 @@ class TrAdminClientDetail {
   String get edit => 'adminClientDetailEdit';
   String get delete => 'adminClientDetailDelete';
   String get view => 'adminClientDetailView';
+  String get message => 'adminClientDetailMessage';
   String get noEmail => 'adminClientDetailNoEmail';
   String get noPhone => 'adminClientDetailNoPhone';
   String get noAddress => 'adminClientDetailNoAddress';

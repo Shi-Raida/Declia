@@ -36,7 +36,7 @@ final Map<String, String> frFrAdmin = {
   // Clients list
   Tr.admin.clients.title: 'Clients',
   Tr.admin.clients.add: 'Nouveau client',
-  Tr.admin.clients.search: 'Rechercher un client...',
+  Tr.admin.clients.search: 'Rechercher un client (nom, e-mail, téléphone)...',
   Tr.admin.clients.empty: 'Aucun client trouvé',
   Tr.admin.clients.tableName: 'Nom',
   Tr.admin.clients.tableEmail: 'Email',
@@ -65,6 +65,11 @@ final Map<String, String> frFrAdmin = {
   Tr.admin.clients.tableLastShooting: 'Dernière séance',
   Tr.admin.clients.paginationInfo: 'Page @page sur @total',
   Tr.admin.clients.allSources: 'Toutes les sources',
+  Tr.admin.clients.tableClient: 'Client',
+  Tr.admin.clients.activeClients: 'Clients actifs',
+  Tr.admin.clients.vipClients: 'Clients VIP',
+  Tr.admin.clients.avgRevenuePerClient: 'CA moyen / client',
+  Tr.admin.clients.trendPercentOfTotal: '@pct% du total',
 
   // Client form
   Tr.admin.clientForm.company: 'Société',
@@ -101,6 +106,7 @@ final Map<String, String> frFrAdmin = {
   Tr.admin.clientDetail.edit: 'Modifier',
   Tr.admin.clientDetail.delete: 'Supprimer',
   Tr.admin.clientDetail.view: 'Voir',
+  Tr.admin.clientDetail.message: 'Message',
   Tr.admin.clientDetail.noEmail: 'Email non renseigné',
   Tr.admin.clientDetail.noPhone: 'Téléphone non renseigné',
   Tr.admin.clientDetail.noAddress: 'Adresse non renseignée',

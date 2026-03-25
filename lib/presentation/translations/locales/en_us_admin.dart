@@ -36,7 +36,7 @@ final Map<String, String> enUsAdmin = {
   // Clients list
   Tr.admin.clients.title: 'Clients',
   Tr.admin.clients.add: 'New client',
-  Tr.admin.clients.search: 'Search a client...',
+  Tr.admin.clients.search: 'Search a client (name, email, phone)...',
   Tr.admin.clients.empty: 'No clients found',
   Tr.admin.clients.tableName: 'Name',
   Tr.admin.clients.tableEmail: 'Email',
@@ -65,6 +65,11 @@ final Map<String, String> enUsAdmin = {
   Tr.admin.clients.tableLastShooting: 'Last shooting',
   Tr.admin.clients.paginationInfo: 'Page @page of @total',
   Tr.admin.clients.allSources: 'All sources',
+  Tr.admin.clients.tableClient: 'Client',
+  Tr.admin.clients.activeClients: 'Active clients',
+  Tr.admin.clients.vipClients: 'VIP clients',
+  Tr.admin.clients.avgRevenuePerClient: 'Avg rev. / client',
+  Tr.admin.clients.trendPercentOfTotal: '@pct% of total',
 
   // Client form
   Tr.admin.clientForm.company: 'Company',
@@ -101,6 +106,7 @@ final Map<String, String> enUsAdmin = {
   Tr.admin.clientDetail.edit: 'Edit',
   Tr.admin.clientDetail.delete: 'Delete',
   Tr.admin.clientDetail.view: 'View',
+  Tr.admin.clientDetail.message: 'Message',
   Tr.admin.clientDetail.noEmail: 'No email provided',
   Tr.admin.clientDetail.noPhone: 'No phone provided',
   Tr.admin.clientDetail.noAddress: 'No address provided',
