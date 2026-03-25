@@ -64,22 +64,57 @@ class ClientsPaginationBar extends StatelessWidget {
   List<Widget> _buildPageNumbers(int currentPage, int totalPages) {
     if (totalPages <= 1) return [];
 
-    final maxVisible = 5;
-    int start = max(0, currentPage - maxVisible ~/ 2);
-    final end = min(totalPages, start + maxVisible);
-    start = max(0, end - maxVisible);
+    // Build the set of page indices to show
+    final pages = <int>{};
+    pages.add(0);
+    pages.add(totalPages - 1);
+    for (var p = currentPage - 1; p <= currentPage + 1; p++) {
+      if (p >= 0 && p < totalPages) pages.add(p);
+    }
+    final sorted = pages.toList()..sort();
 
-    return List.generate(end - start, (i) {
-      final pageNum = start + i;
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2),
-        child: _NumberButton(
-          pageNum: pageNum + 1,
-          isActive: pageNum == currentPage,
-          onPressed: () => controller.goToPage(pageNum),
+    final widgets = <Widget>[];
+    int? prev;
+    for (final page in sorted) {
+      if (prev != null && page - prev > 1) {
+        widgets.add(
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: _EllipsisWidget(),
+          ),
+        );
+      }
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: _NumberButton(
+            pageNum: page + 1,
+            isActive: page == currentPage,
+            onPressed: () => controller.goToPage(page),
+          ),
         ),
       );
-    });
+      prev = page;
+    }
+    return widgets;
+  }
+}
+
+class _EllipsisWidget extends StatelessWidget {
+  const _EllipsisWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 24,
+      height: 32,
+      child: Center(
+        child: Text(
+          '...',
+          style: AppTypography.bodySmall(),
+        ),
+      ),
+    );
   }
 }
 
