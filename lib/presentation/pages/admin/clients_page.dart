@@ -50,48 +50,61 @@ class ClientsPage extends GetView<ClientsController> {
         children: [
           // Stats row
           Obx(
-            () => Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.people_outline,
-                      iconColor: AppColors.bleuOuvert,
-                      label: Tr.admin.clients.totalClients.tr,
-                      value: '${controller.totalCount.value}',
+            () {
+              final total = controller.totalCount.value;
+              final active = controller.activeCount;
+              final vip = controller.vipCount;
+              final pct =
+                  total > 0 ? (active * 100 ~/ total).toString() : '0';
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                    Expanded(
+                      child: StatCard(
+                        icon: Icons.people_outline,
+                        iconColor: AppColors.bleuOuvert,
+                        label: Tr.admin.clients.totalClients.tr,
+                        value: '$total',
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.check_circle_outline,
-                      iconColor: AppColors.success,
-                      label: Tr.admin.clients.active.tr,
-                      value: '—',
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: StatCard(
+                        icon: Icons.check_circle_outline,
+                        iconColor: AppColors.success,
+                        label: Tr.admin.clients.activeClients.tr,
+                        value: '$active',
+                        trend: Tr.admin.clients.trendPercentOfTotal.trParams(
+                          {'pct': pct},
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.person_add_outlined,
-                      iconColor: AppColors.or,
-                      label: Tr.admin.clients.statNew.tr,
-                      value: '—',
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: StatCard(
+                        icon: Icons.star_outline,
+                        iconColor: AppColors.or,
+                        label: Tr.admin.clients.vipClients.tr,
+                        value: '$vip',
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: StatCard(
-                      icon: Icons.euro_outlined,
-                      iconColor: AppColors.terracotta,
-                      label: Tr.admin.clients.avgRevenue.tr,
-                      value: '—',
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: StatCard(
+                        icon: Icons.euro_outlined,
+                        iconColor: AppColors.terracotta,
+                        label: Tr.admin.clients.avgRevenuePerClient.tr,
+                        value: controller.avgRevenueDisplay,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  ],
+                ),
+                ),
+              );
+            },
           ),
           const SizedBox(height: 16),
           ClientsFilterBar(controller: controller),

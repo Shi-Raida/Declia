@@ -65,7 +65,7 @@ class ClientsTable extends StatelessWidget {
                 ),
               ),
               DataColumn(
-                label: Text(Tr.admin.clients.tableName.tr),
+                label: Text(Tr.admin.clients.tableClient.tr),
                 onSort: (_, ascending) => controller.setSort(
                   ClientSortField.name,
                   ascending
@@ -164,7 +164,14 @@ class ClientsTable extends StatelessWidget {
         DataCell(
           Text(vm.lastShootingDisplay, style: AppTypography.bodySmall()),
         ),
-        DataCell(Text(vm.totalSpentDisplay, style: AppTypography.bodySmall())),
+        DataCell(
+          Text(
+            vm.totalSpentDisplay,
+            style: AppTypography.bodySmall().copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
         DataCell(_ActionsCell(vm: vm, controller: controller)),
       ],
     );
@@ -193,6 +200,14 @@ class _ActionsCell extends StatelessWidget {
           color: AppColors.pierre,
           tooltip: Tr.admin.clientDetail.edit.tr,
           onPressed: () => controller.editClient(vm),
+        ),
+        IconButton(
+          icon: const Icon(Icons.mail_outline, size: 18),
+          color: AppColors.pierre,
+          tooltip: Tr.admin.clientDetail.message.tr,
+          onPressed: vm.email != null
+              ? () => controller.messageClient(vm)
+              : null,
         ),
         IconButton(
           icon: const Icon(Icons.delete_outline, size: 18),

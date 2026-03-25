@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/clock.dart';
 import '../../core/utils/paged_result.dart';
+import '../../core/enums/client_status.dart';
 import '../../domain/entities/client.dart';
 import '../../domain/entities/client_summary_stats.dart';
 import '../../usecases/client/params.dart';
@@ -46,6 +48,24 @@ final class ClientsController extends GetxController
   List<String> get visibleItemIds => clients.map((vm) => vm.id).toList();
 
   Client? entityById(String id) => _entityMap[id];
+
+  int get activeCount => _allViewModels
+      .where((vm) => vm.clientStatus(_clock.now()) == ClientStatus.actif)
+      .length;
+
+  int get vipCount => _allViewModels
+      .where((vm) => vm.clientStatus(_clock.now()) == ClientStatus.vip)
+      .length;
+
+  String get avgRevenueDisplay {
+    final withSpent =
+        _allViewModels.where((vm) => vm.totalSpent != null).toList();
+    if (withSpent.isEmpty) return '—';
+    final avg =
+        withSpent.fold<double>(0, (sum, vm) => sum + vm.totalSpent!) /
+        withSpent.length;
+    return '${avg.toStringAsFixed(0)} €';
+  }
 
   @override
   void onQueryChanged() => loadClients();
@@ -131,6 +151,11 @@ final class ClientsController extends GetxController
   void editClient(ClientViewModel vm) =>
       _nav.toClientEdit(vm.id, arguments: vm);
   void createNewClient() => _nav.toClientNew();
+  Future<void> messageClient(ClientViewModel vm) async {
+    if (vm.email == null) return;
+    final uri = Uri(scheme: 'mailto', path: vm.email);
+    if (await canLaunchUrl(uri)) await launchUrl(uri);
+  }
 
   Future<bool> removeClient(String id) async {
     final result = await _deleteClient((id: id));
