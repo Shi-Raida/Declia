@@ -27,6 +27,7 @@ class StyledDropdown<T> extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border),
       ),
+      alignment: AlignmentDirectional.centerStart,
       child: DropdownButton<T>(
         value: value,
         hint: Text(hint, style: AppTypography.bodySmall()),
